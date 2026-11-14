@@ -21,5 +21,13 @@
       "color": "#8A999F",
       "icon": "?"
     }
+  },
+  "design": {
+    "name": "Monolith Glass",
+    "trust": "#2F7FD8",
+    "trust_soft": "#6FB1F0",
+    "deep": "#081423",
+    "aurora_warm": "#FF8A4C",
+    "note": "Trust blue tints the background and chrome only. Red, amber and green are reserved for states; cyan is reserved for interaction."
   }
 }

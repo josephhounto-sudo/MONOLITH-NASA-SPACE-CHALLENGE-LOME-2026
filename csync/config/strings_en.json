@@ -43,7 +43,9 @@
     "override_logged": "{t} — Commander override logged. Decision unchanged: {d}",
     "log_title": "Log",
     "no_nasa_reference": "No NASA in-flight reference",
-    "technical_log": "Technical log"
+    "technical_log": "Technical log",
+    "brand_tag": "Care Sync · crew health operations, offline",
+    "brand_name": "C-Sync"
   },
   "indicator_names": {
     "PH01": "heart-rate",
