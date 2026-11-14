@@ -146,6 +146,17 @@ html,body,[data-testid="stApp"]{background:var(--cs-surface)!important}
 .stButton>button:hover:not(:disabled){transform:none;box-shadow:none!important}
 """
 
+# Profile "hybrid": glass kept on the three state cards and the decision panel only; no looping motion, no uppercase labels,
+# no blur on controls or alerts. Select with CSYNC_STYLE=hybrid. M1 decision 14/11 21:30: "glass with a little quiet" (not yet human-tested).
+_HYBRID = """
+.cs-bg,.cs-bg *{animation:none!important}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"],.stButton>button,.cs-kicker{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"]{background:var(--cs-panel)!important}
+.cs-card .dim{font-size:.82rem;font-weight:600;letter-spacing:0;text-transform:none}
+.cs-kicker{letter-spacing:0;text-transform:none}
+.stButton>button:hover:not(:disabled){transform:none;box-shadow:none!important}
+"""
+
 def _uri(svg):
     return "url(\"data:image/svg+xml;utf8," + quote(svg) + "\")"
 
@@ -191,7 +202,8 @@ def _tokens():
 def inject(name, tag):
     """Call once, right after set_page_config. st.html keeps the CSS out of the markdown stream."""
     tk = _tokens()
-    extra = _QUIET if os.environ.get("CSYNC_STYLE", "glass") == "quiet" else ""
+    style = os.environ.get("CSYNC_STYLE", "hybrid")
+    extra = {"quiet": _QUIET, "hybrid": _HYBRID}.get(style, "")
     st.html("<style>" + _CSS % tk + _art(tk) + extra + "</style>" + _SHAPES)
     st.html(_TOP % {**tk, "name": name, "tag": tag})
 
