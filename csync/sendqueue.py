@@ -21,7 +21,7 @@ def deliver(messages, link_down, link_up, ground_delay_min=20, duplicates=(), re
 def ground_view(arrivals):
     """Ground side: drop duplicates by message_id, order by creation time, never rewrite timestamps."""
     seen, kept = set(), []
-    for a in arrivals:
+    for a in sorted(arrivals, key=lambda x: x["received"]):   # keep the earliest reception of a duplicated message (DEV-03)
         if a["message_id"] not in seen:
             seen.add(a["message_id"]); kept.append(a)
     return sorted(kept, key=lambda x: x["created"])

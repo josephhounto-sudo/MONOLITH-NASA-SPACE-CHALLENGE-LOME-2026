@@ -1,4 +1,4 @@
-# C-Sync — contexte pour IA (généré le 14/11/2026 16:39 UTC, base commit ba11ee3)
+# C-Sync — contexte pour IA (généré le 14/11/2026 16:58 UTC, base commit f725d0c)
 Source unique : ce dépôt public. Si ce fichier date de plus de 6 h, demande à M1 de le régénérer (P5/P8).
 Règles pour l'IA qui lit ceci : ne lis que ce qui est ici ; si une page est inaccessible, dis-le ; n'invente rien ; réponds en français ; écris « NON VÉRIFIÉ » pour toute affirmation sans source ici.
 Rôles : M1 chef/PO, M5 communication/soumission ; M2 capsule de décision ; M3 interface ; M4 procédures/scénarios. Pitch dim. 12:00-14:00 (5 min, sans questions) ; soumission dim. 23:59. Démo sur données SYNTHÉTIQUES, non validée sur de vrais équipages.
@@ -127,7 +127,7 @@ Five dimensions: **Body, Attention, Morale, Mission, Habitat**. Four states: **N
 ## Data
 | Data | Origin | Use |
 |---|---|---|
-| ISS cabin CO2, temperature, humidity, radiation — NASA OSDR **Environmental Data App**, mission RR-1 (2014) | **Real, NASA** | Habitat dimension of the story; data-quality checks (a real run of constant CO2 values, 2,646 ppm for 153 h in the raw 5-minute series, is flagged ARTIFACT; origin unknown: sensor or data fill) |
+| ISS cabin CO2, temperature, humidity, radiation — NASA OSDR **Environmental Data App**, mission RR-1 (2014) | **Real, NASA** | Habitat **context** and data-quality checks only: the screen shows Habitat as "Context only", it is not scored (a real run of constant CO2 values, 2,646 ppm for 153 h in the raw 5-minute series, is flagged ARTIFACT; origin unknown: sensor or data fill) |
 | PhysioNet Wearable Device Dataset v1.0.1 (Empatica E4, 33 valid sessions) | Real, open (ODC-By) | Wrist-sensor noise model (5.1 bpm) and beat coverage (~55 %) |
 | Crew physiology, sleep, PVT-B, check-ins | **Synthetic**, labelled, generator `csync-synth-0.1`, seed 42 | The story; the demo uses only synthetic crew data |
 
@@ -161,7 +161,7 @@ streamlit run csync/ui/app.py       # the interface (work in progress)
 | Part | Status |
 |---|---|
 | Contracts v0 | drafted, to be validated |
-| Rules engine, resume gate, send queue | implemented; 137 automated tests (software stability, not clinical validation) |
+| Rules engine, resume gate, send queue | implemented; 153 automated tests (software stability, not clinical validation) |
 | Generator + story data | implemented |
 | Decision capsule, UI screens, procedure files | in progress (body map: static mock-up, not in the app) |
 
@@ -237,6 +237,7 @@ V1 Produit à partir du 14/11 (début confirmé par les organisateurs) · V2 Auc
 - 14/11 11:45 MAJ 9 : intégration des 3 rendus (code MAJ5 : 127 tests ; pitch phase 3 : deck, silhouette, script FR, vidéo ; audit indépendant). Captures C1–C6 insérées, C6 refaite en anglais, sources NASA dans la silhouette (cœur, tension, sommeil). OUTLINE.md obsolète, RESULTS.md marqué partiellement obsolète.
 - 14/11 14:50 MAJ 10 : passation Cursor (AGENTS.md, docs/CURSOR_HANDOFF.md) ; pré-mortem de l'artefact Parcours (PREMORTEM_ARTEFACT_14-11.md) ; artefact simplifié 8→4 onglets.
 - 14/11 15:05 MAJ 11 : D6, D9, D10, D11 tranchées par M1 ; logo intégré ; SCRIPT_FR v3 (formulations absolues adoucies), SCRIPT_EN v1 ; diapo 5 « Stale data is flagged as expired » ; bloc lourd Cursor.
+- 14/11 17:35 MAJ 12 : travail M4 (Jean) intégré : branches m4-procedures (5 tests, en-têtes « validation humaine M4 : à faire ») et m4-expected (tests de scénarios, `scripts/recette_m4.py`, `docs/RECETTE_M4.md`, DEV-03). DEV-03 corrigé dans `sendqueue.ground_view` et clos ; README/STORY : Habitat = contexte, non évalué. 153 tests. Non repris : modification non commitée de HELP_CARD_SOURCES.md (en-tête « VÉRIFIÉ PAR M4 » sans preuve, tableau reformaté).
 
 
 ---

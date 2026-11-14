@@ -108,8 +108,6 @@ def test_report_reaches_the_ground_exactly_once():
     assert q["ground_order_by_creation"]
 
 
-@pytest.mark.xfail(strict=True, reason="DEV-03 (docs/TEST_DEVIATIONS.md): sendqueue.ground_view keeps the first copy "
-                                       "in list order, a duplicate received at 19:25, not the original at 19:20")
 def test_report_reception_time_recorded_by_the_ground():
     e = event("histoire", "REPORT")
     q = run_story_module().send_status({"day": e["day"]})

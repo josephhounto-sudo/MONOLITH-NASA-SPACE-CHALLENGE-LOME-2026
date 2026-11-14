@@ -1,13 +1,12 @@
 # Rapport de recette M4 (données et tests)
-Généré le 14/11/2026 15:30 UTC (= heure de Lomé) par `python scripts/recette_m4.py`, version `e2579bb-dirty`. Données de démonstration **SYNTHÉTIQUES** (générateur csync-synth-0.1, graine 42). Aucun seuil clinique.
+Généré le 14/11/2026 16:57 UTC (= heure de Lomé) par `python scripts/recette_m4.py`, version `f725d0c-dirty`. Données de démonstration **SYNTHÉTIQUES** (générateur csync-synth-0.1, graine 42). Aucun seuil clinique.
 Attendus : `data/scenarios/*.json`, écrits **avant** toute exécution et jamais modifiés après coup (écarts : `docs/TEST_DEVIATIONS.md`). Obtenus : paramètres de `scripts/run_story.py`, donc ce que montre l'écran.
 Gravité : **BLOQUANT** = un acte de l'histoire ou un garde-fou tombe · **MAJEUR** = décision ou écran annoncé faux · **MINEUR** = écart sans effet sur l'écran · **INFO** = à savoir pour le pitch.
 
 ## Bilan
-- Contrôles : 123 · écarts : 5 (BLOQUANT 0, MAJEUR 1, MINEUR 3, INFO 1).
+- Contrôles : 123 · écarts : 4 (BLOQUANT 0, MAJEUR 1, MINEUR 2, INFO 1).
 - **MINEUR** · histoire jour 1-10 · jeu crédible : MISSING et ARTIFACT présents : attendu oui, obtenu MISSING 0, ARTIFACT 0.
 - **MINEUR** · temoin jour 1-10 · jeu crédible : MISSING et ARTIFACT présents : attendu oui, obtenu MISSING 0, ARTIFACT 0.
-- **MINEUR (DEV-03)** · histoire jour 9 · compte rendu : réception gardée par le sol : attendu 19:20, obtenu 19:25.
 - **MAJEUR** · histoire jour 1-10 · Habitat : vraies données NASA EDA RR-1 (STORY.md) : attendu état calculé, obtenu états affichés : UNKNOWN.
 - **INFO** · histoire jour 6-9 · somnolence en hausse visible (STORY.md) : attendu Morale hors NORMAL un jour au moins, obtenu Morale : NORMAL.
 
@@ -17,7 +16,7 @@ Gravité : **BLOQUANT** = un acte de l'histoire ou un garde-fou tombe · **MAJEU
 | histoire | 9 | urgence guidée (T4) | jour 9 14:10 PROC-EMERGENCY-01 CRITICAL | jour 9 14:10 PROC-EMERGENCY-01 CRITICAL | non | — |
 | histoire | 9 | compte rendu : remises au sol (T5) | 1 | 1 | non | — |
 | histoire | 9 | compte rendu : réception affichée | 19:20 | 19:20 | non | — |
-| histoire | 9 | compte rendu : réception gardée par le sol | 19:20 | 19:25 | **oui** | MINEUR (DEV-03) |
+| histoire | 9 | compte rendu : réception gardée par le sol | 19:20 | 19:20 | non | — |
 | histoire | 10 | reprise refusée (G3) | REFUSE_RESUME · PH01 is stale (14 min > 10 min) | REFUSE_RESUME · G3: PH01 is stale (14 min > 10 min) | non | — |
 | histoire | 10 | même avec forçage (G6) | REFUSE_RESUME | G3: PH01 is stale (14 min > 10 min); G6: Commander override logged; it never authorises a resume on its own | non | — |
 | histoire | 1-10 | Habitat : vraies données NASA EDA RR-1 (STORY.md) | état calculé | états affichés : UNKNOWN | **oui** | MAJEUR |
