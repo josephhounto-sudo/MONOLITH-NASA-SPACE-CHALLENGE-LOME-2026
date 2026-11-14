@@ -34,3 +34,20 @@ La checklist n'a pas été cochée (réservé à M5).
 | V10 Relu par quelqu'un d'autre que l'auteur | NON VÉRIFIÉ |
 | V11 `AI_USAGE.md` à jour | ÉCART — cette session n'y est pas ajoutée (fichier hors de la liste autorisée par la tâche) |
 | V12 Liste du code, textes et images à jour | NON VÉRIFIÉ |
+
+## E5 — cohérence des textes
+
+Chiffres recalculés par `tests/test_claims.py` : 2/300 = 0,666… % (affiché 0,7 %), 143/150 = 95,333… % (95,3 %), 89/150 = 59,333… % (59,3 %). Plateau CO2 brut : (1837 − 1) × 5 min = 153 h. Porte de reprise 10 min. Délai sol de la démo 20 min.
+
+Concordances vérifiées dans le dépôt : jours 7 / 9 / 10 (`pitch/deck/deck.html` lignes 130, 149, 181 ; `pitch/deck/SCRIPT_EN.md` lignes 17, 19, 25 ; `pitch/deck/SCRIPT_FR.md` lignes 19, 23, 29). Jour 7 : Attention DEGRADED et Body WATCH (`SCRIPT_EN.md` ligne 17, `SCRIPT_FR.md` ligne 19), comme les capsules de l'histoire. États NORMAL, WATCH, DEGRADED, UNKNOWN : `README.md` ligne 29. Délai de démo 20 min : `README.md` ligne 27. 0,7 % sur 300 équipages : `README.md` ligne 41 et `deck.html` ligne 203.
+
+Écarts (scripts et deck non modifiés) :
+
+- `pitch/deck/SCRIPT_EN.md` ligne 29 et `pitch/deck/SCRIPT_FR.md` ligne 34 disent 95 % et 59 %. Le calcul donne 95,3 % et 59,3 %, déjà écrits dans `README.md` ligne 41. Arrondi oral à l'entier.
+- `SCRIPT_EN.md` ligne 29 et `SCRIPT_FR.md` ligne 34 disent « plus de six jours » de CO2 constant. La série brute mesure 153 h (`README.md` ligne 34), soit 6,375 jours.
+- `pitch/deck/deck.html` ligne 203 ne donne que 0,7 % sur 300 équipages. Les 95,3 % et 59,3 % n'y sont pas.
+- `pitch/deck/deck.html` ligne 134 ne cite que « Attention Degraded » au jour 7. Les capsules et les deux scripts citent aussi Body WATCH.
+- `README.md` ligne 6 dit « 20 minutes away ». `deck.html` ligne 108 et `SCRIPT_EN.md` ligne 11 disent « up to ~20 minutes » / « up to twenty minutes ». Le paramètre de démo est 20 min exactement. Phrase du README laissée telle quelle : elle correspond au délai simulé, pas au plafond NASA.
+- `README.md` ligne 49 (« work in progress ») et ligne 70 (« in progress ») : les trois écrans ont des tests AppTest verts. Statut d'équipe, non modifié.
+
+Correction README : ligne 68, « 128 automated tests » remplacé par « 137 automated tests » (comptage `pytest` de cette branche).
