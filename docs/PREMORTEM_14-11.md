@@ -15,7 +15,7 @@ Question posée : « Dimanche 14:00, le pitch a échoué. Pourquoi ? » Reste �
 |---|---|---|---|---|---|
 | R1 | Un juré ouvre EDA/RR-1 : le plateau fait 6 jours, pas 37 h → crédibilité du seul résultat « donnée réelle » entamée | Élevée | Élevé | Dire « plus de six jours de valeur constante » (153 h, série brute RR-1) ; ne pas affirmer « capteur figé » (cause inconnue : capteur ou remplissage) mais « valeur constante signalée ARTIFACT par notre contrôle » ; corriger script diapo 6, README, commentaire du test | D1 |
 | R2 | Départ avant l'ouverture officielle (1er commit 04:47, début équipe 09:30, permission **orale**) → contestation ou disqualification | Moyenne | **Critique** | Obtenir une trace écrite (message/mail des organisateurs, capture) et la mettre dans `docs/` ; laisser `AI_USAGE.md` factuel ; ne rien cacher | D10 |
-| R3 | Démo live en panne (clic, navigateur, projecteur, polices Google bloquées hors ligne) | Moyenne | Élevé | Copie locale hors ligne, polices embarquées ou système (le test de page signale déjà un blocage de police externe), capture C5 en secours, état « jour 10 » préchargé, 3 répétitions avec le vrai matériel, 2e appareil | — |
+| R3 | Démo live en panne (clic, navigateur, projecteur, polices Google bloquées hors ligne) | Moyenne | Élevé | Copie locale hors ligne (le deck est autonome, polices système, aucune ressource externe : test automatique), capture C5 en secours, état « jour 10 » préchargé, 3 répétitions avec le vrai matériel, 2e appareil | — |
 | R4 | Dépassement de 5:00 coupé net (630 mots = 4:51 à 130 mots/min, + 2 clics + 2 s de silence ; zéro marge) | Élevée | Moyen-élevé | Viser 4:45 : appliquer les deux coupes déjà écrites + 1 phrase en diapo 3 ; 3 lectures chronométrées (une avec la démo) ; orateur A parle 190 s, B 110 s : à rééquilibrer ? | D6 |
 | R5 | Question de fond sur le seuil : « réglé sur les mêmes scénarios que l'évaluation » (section 7.10) absent des diapos → paraît du sur-ajustement caché | Moyenne | Moyen-élevé | Ajouter en diapo 6 : « seuil réglé sur les mêmes scénarios simulés » (≤ 8 mots) ; une phrase de réponse prête | D2 |
 | R6 | « Données NASA » (diapo 6) lu comme « santé d'équipage réelle de la NASA » | Moyenne | Élevé | Dire : « Équipage simulé. Seule donnée réelle : la télémétrie de cabine de l'ISS, pour le contrôle qualité » | D3 |
@@ -39,7 +39,7 @@ Rejetées : « Care and synchronization » (c'est le nom du produit « Care Sync
 À trancher : la légende « English figure » (diapo 6) est ambiguë : la retirer ? (D4)
 
 ## 4. README — assouplissements retenus / refusés
-Retenus : « never hides missing data » → « never shows missing data as normal » (c'est ce que les tests vérifient) ; « opens instantly » → « opens offline, in the demo » (non mesuré) ; « no team or personal data is ever collected » → « the demo uses only synthetic crew data » ; « implemented, tested » → « implemented; 127 automated tests (software stability, not clinical validation) ».
+Retenus : « never hides missing data » → « never shows missing data as normal » (c'est ce que les tests vérifient) ; « opens instantly » → « opens offline, in the demo » (non mesuré) ; « no team or personal data is ever collected » → « the demo uses only synthetic crew data » ; « implemented, tested » → « implemented; 128 automated tests (software stability, not clinical validation) ».
 Refusés : « exactly once » (couvert par `test_sendqueue.py`) ; attribution Artemis II (sourcée, formule « inspiration, not endorsement » déjà dans RESULTS.md). À corriger : « 37-hour » (R1).
 
 ## 5. Questions prévisibles (pas de Q&A officiel, mais utiles en couloir) — réponses honnêtes
@@ -58,3 +58,20 @@ Refusés : « exactly once » (couvert par `test_sendqueue.py`) ; attribution Ar
 - **D10** Trace écrite de l'autorisation de démarrer avant 09:00 : la retrouver/obtenir ce soir.
 - **D11** Langue du jury : à confirmer.
 - **D12** Appliquer les 4 assouplissements README (section 4).
+
+## 7. Décisions prises le 14/11 à 14:16 (M1 : « mes recommandations sont acceptées ») et leur état à 15:20 UTC
+| Décision | État | Où |
+|---|---|---|
+| D1 CO2 « plus de six jours (153 h) », sans « capteur figé » | **Appliquée** | script diapo 6 (v2), README, nouvelle figure C6 (série brute, EN/FR), test `test_raw_series_plateau_is_153h` ; temp. et humidité sont aussi plates sur la même période → origine inconnue (capteur ou remplissage) |
+| D2 « seuil réglé sur les mêmes scénarios simulés » | **Appliquée** | diapo 6, script diapo 6, README |
+| D3 « Données NASA » reformulé | **Appliquée** | diapo 6 (« Real data: ISS cabin telemetry, quality checks only »), script diapo 6 |
+| D4 anglais (5 corrections), légende « English figure » retirée | **Appliquée** | deck v3 ; « 0.7% », « five days », « limit 10 minutes », « compared with », « Not yet measured … crew radiation dose » |
+| D5 diapo 4 : maquette gardée, libellé honnête | **Appliquée** | « Static mock-up · not in the app yet » ; « À CONFIRMER M1 » retiré |
+| D7 PDF + .pptx de secours | **Faits** | `pitch/deck/C-Sync_pitch_7_slides.pdf` ; `C-Sync_pitch_SECOURS_images.pptx` (images des diapos, texte non éditable) |
+| D8 calendrier (gel sam. 18:00 …) | Accepté | à tenir ; je ne modifie plus le code après le gel sauf bug |
+| D12 assouplissements README | **Appliquée** | README (+ pilote 3 avec chiffres et réserve, « 128 tests ») |
+| D6 orateurs A/B | **En attente de M1** | noms + rééquilibrage 190 s / 110 s |
+| D9 suppléant de soumission | **En attente de M1** | règle git (branches + pull --rebase) acceptée de mon côté |
+| D10 trace écrite de l'autorisation de démarrer | **En attente de M1** | à retrouver/obtenir |
+| D11 langue du jury | **En attente de M1** | |
+Reste ouvert : logo (fichier non reçu), `scripts/check_consistency.py` plante (octet 0x95 dans un fichier lu en UTF-8, ancien problème, non lié à ces changements).

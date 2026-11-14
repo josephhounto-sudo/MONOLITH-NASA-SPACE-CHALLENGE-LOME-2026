@@ -1,5 +1,5 @@
 # FICHIER: pitch/deck/SCRIPT_FR.md
-Date/heure : sam. 14/11/2026 08:25 Lomé (UTC) · Commit de référence : dc61786 · Version v1
+Date/heure : sam. 14/11/2026 ~15:10 UTC · Version v2 (décisions D1–D3 du pré-mortem appliquées ; diapo 1, 6, 7 modifiées)
 Statut : FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
 
 Pitch oral en français, 5:00 exactes, **sans questions du jury** (`docs/PROGRAMME_OFFICIEL.md`). Diapositives : `deck.html`. Démo en direct : Acte 3 (diapo 5).
@@ -8,7 +8,7 @@ Rôles : orateur A et orateur B (aucun nom dans ce fichier).
 
 ---
 ## Diapo 1 · 0:00 → 0:25 (25 s) · orateur A
-« À mi-chemin de Mars, un astronaute signale une douleur vive à la poitrine. La Terre est à vingt minutes, et il n'y a pas de médecin à bord. Pendant ces vingt minutes, qui aide l'équipage à mesurer, à comprendre ce qui change, et à décider ? Nous sommes l'équipe MONOLITH, et notre réponse s'appelle C-Sync. »
+« À mi-chemin de Mars, un astronaute signale une douleur vive à la poitrine. Un message met jusqu'à vingt minutes pour atteindre la Terre, et il n'y a pas de médecin à bord. Pendant ce délai, qui aide l'équipage à mesurer, à comprendre ce qui change, et à décider ? Nous sommes l'équipe MONOLITH, et notre réponse s'appelle C-Sync. »
 **Transition :** clic sur « vingt minutes ».
 
 ## Diapo 2 · 0:25 → 1:05 (40 s) · orateur A
@@ -31,25 +31,25 @@ Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et
 **Transition :** retour au clavier de l'orateur A.
 
 ## Diapo 6 · 3:45 → 4:25 (40 s) · orateur A
-« Nos preuves. Données NASA, et une logique de référence individuelle dans l'esprit du défi méthodologique Artemis II. Sur trois cents équipages simulés en bonne santé, zéro virgule sept pour cent déclenchent une procédure à tort. Sur des dérives progressives simulées, quatre-vingt-quinze pour cent sont repérées. Mais sur un saut brutal, seulement cinquante-neuf pour cent : c'est notre limite connue. Tous ces chiffres viennent de données simulées, et nous le disons. Et sur la vraie télémétrie de l'ISS, notre contrôle qualité repère un capteur de CO2 figé pendant trente-sept heures. »
-**Si on est en retard : coupe** la dernière phrase (capteur figé, −18 mots, environ 8 s). [À VALIDER M1 : écart avec la consigne A6, voir le rapport de phase 3.]
+« Nos preuves, dans l'esprit du défi méthodologique Artemis II : une référence individuelle. Sur trois cents équipages simulés en bonne santé, zéro virgule sept pour cent déclenchent une procédure à tort. Dérives progressives simulées : quatre-vingt-quinze pour cent repérées. Saut brutal : seulement cinquante-neuf pour cent, notre limite connue. Tout est simulé, et le seuil a été réglé sur ces mêmes scénarios. Seule donnée réelle : la télémétrie de cabine de l'ISS, où notre contrôle qualité repère un CO2 constant pendant plus de six jours. »
+**Si on est en retard : coupe** la dernière phrase (CO2 constant, −22 mots, environ 10 s).
 
 ## Diapo 7 · 4:25 → 5:00 (35 s) · orateur A
-« Nos limites : l'équipage est simulé, rien n'est validé cliniquement. Les os, l'immunité et la dose de rayonnement ne sont pas encore mesurés ; ils sont affichés inconnus, jamais normaux. Nous avons choisi un moteur simple, testé et explicable, plutôt qu'une boîte noire. La suite : de vraies données si elles s'ouvrent, et des adaptateurs pour de vrais capteurs. Et rien de ce que nous montrons ne pose d'étiquette sur une personne. C-Sync : hors ligne, explicable, et c'est l'humain qui décide. Merci. »
+« Nos limites : l'équipage est simulé, rien n'est validé cliniquement. Les os, l'immunité et la dose de rayonnement reçue par l'équipage ne sont pas encore mesurés ; ils sont affichés inconnus, jamais normaux. Nous avons choisi un moteur simple, testé et explicable, plutôt qu'une boîte noire. La suite : de vraies données si elles s'ouvrent, et des adaptateurs pour de vrais capteurs. Et rien de ce que nous montrons ne pose d'étiquette sur une personne. C-Sync : hors ligne, explicable, et c'est l'humain qui décide. Merci. »
 
 ---
 ## Comptes et minutage (calculés par script)
 | Diapo | Début → fin | Durée | Mots dits | Mots/min |
 |---|---|---|---|---|
-| 1 | 0:00 → 0:25 | 25 s | 54 | 130 |
+| 1 | 0:00 → 0:25 | 25 s | 57 | 137 |
 | 2 | 0:25 → 1:05 | 40 s | 87 | 130 |
 | 3 | 1:05 → 1:55 | 50 s | 116 | 139 |
 | 4 | 1:55 → 2:55 | 60 s | 135 | 135 |
 | 5 | 2:55 → 3:45 | 50 s | 71 | 85 |
-| 6 | 3:45 → 4:25 | 40 s | 88 | 132 |
-| 7 | 4:25 → 5:00 | 35 s | 79 | 135 |
-| **Total** | **0:00 → 5:00** | **300 s** | **630** | **126** |
+| 6 | 3:45 → 4:25 | 40 s | 81 | 122 |
+| 7 | 4:25 → 5:00 | 35 s | 82 | 141 |
+| **Total** | **0:00 → 5:00** | **300 s** | **629** | **126** |
 
-Lecture : les diapos parlées (1–4, 6, 7) sont entre 130 et 139 mots/min, dans la cible. La moyenne sur 5:00 (126) est plus basse parce que la diapo 5 est volontairement lente (environ 85 mots/min) : elle laisse le temps des deux clics de la démo et de 2 s de silence après « Refusée ».
-Répétition : chronométrer une lecture complète à voix haute ; si elle dépasse 5:00, appliquer les deux lignes « coupe » (environ −12 s au total).
-Méthode de comptage : mots entre guillemets, un mot = suite de lettres ou de chiffres, apostrophes incluses (« l'équipage » = 1).
+Lecture : les diapos parlées (1–4, 6, 7) vont de 122 à 141 mots/min (cible 130–145 ; la diapo 6, chargée en chiffres, est volontairement plus lente). La moyenne sur 5:00 (126) est plus basse parce que la diapo 5 est volontairement lente (environ 85 mots/min) : elle laisse le temps des deux clics de la démo et de 2 s de silence après « Refusée ».
+Répétition : chronométrer une lecture complète à voix haute ; si elle dépasse 5:00, appliquer les deux lignes « coupe » (environ −14 s au total).
+Méthode de comptage : mots entre guillemets, un mot = suite de lettres ou de chiffres, apostrophes incluses (« l'équipage » = 1) ; un mot composé avec trait d'union compte pour un (« quatre-vingt-quinze » = 1).

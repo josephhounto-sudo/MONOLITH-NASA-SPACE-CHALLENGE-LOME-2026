@@ -147,7 +147,7 @@ Mesuré sur 300 équipages témoins : `Params()` par défaut (seuil 1,0, sans pl
 
 ### 7.8 Limites restantes
 
-Modèle de bruit unique ; pas d'étiquettes réelles ; pas de scénario de signaux contradictoires ni de données manquantes dans le pilote 3 ; seuils choisis sur les mêmes familles de scénarios que l'évaluation (risque de sur-ajustement léger) ; 127 tests (état au 14/11) = stabilité logicielle, pas validité scientifique.
+Modèle de bruit unique ; pas d'étiquettes réelles ; pas de scénario de signaux contradictoires ni de données manquantes dans le pilote 3 ; seuils choisis sur les mêmes familles de scénarios que l'évaluation (risque de sur-ajustement léger) ; 128 tests (état au 14/11) = stabilité logicielle, pas validité scientifique.
 
 ### 7.9 Pistes après le hackathon
 

@@ -14,7 +14,7 @@ import os
 import re
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-PATTERN = re.compile(r'(<div class="capture" data-capture="(C\d)" data-file="([^"]+)">)(.*?)(</div>)', re.S)
+PATTERN = re.compile(r'(<div class="capture"(?: style="[^"]*")? data-capture="(C\d)" data-file="([^"]+)">)(.*?)(</div>)', re.S)
 
 
 def main():
@@ -32,6 +32,16 @@ def main():
         return f'{start}{banner.group(0) if banner else ""}<img alt="Capture {cid}" src="data:image/png;base64,{b64}">{end}'
 
     out = PATTERN.sub(repl, src)
+    # Logo: embed pitch/deck/captures/LOGO_ACTUEL_horizontal.png if present, otherwise drop the placeholder frame.
+    logo = os.path.join(HERE, "captures", "LOGO_ACTUEL_horizontal.png")
+    placeholder = '<div class="logo">LOGO_À_FOURNIR</div>'
+    if os.path.exists(logo):
+        b64 = base64.b64encode(open(logo, "rb").read()).decode("ascii")
+        out = out.replace(placeholder, f'<img class="logo-img" alt="Team logo" src="data:image/png;base64,{b64}">')
+        print("LOGO: inserted")
+    else:
+        out = out.replace(placeholder, "<div></div>")
+        print("LOGO: MISSING (captures/LOGO_ACTUEL_horizontal.png), placeholder removed")
     open(os.path.join(HERE, "deck_final.html"), "w", encoding="utf8").write(out)
     print("OK: pitch/deck/deck_final.html")
 

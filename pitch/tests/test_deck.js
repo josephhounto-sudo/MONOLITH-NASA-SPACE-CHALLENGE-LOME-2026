@@ -12,4 +12,5 @@ s.forEach((el,k)=>{const t=[...el.querySelectorAll('[data-count]')].map(e=>e.tex
 const press=k=>d.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:k}));
 press('ArrowRight');ok(s[1].classList.contains('active'),'→ passe à la diapo 2');press('End');ok(s[6].classList.contains('active'),'Fin → diapo 7');press('ArrowLeft');ok(s[5].classList.contains('active'),'← revient à la diapo 6');press('Home');ok(s[0].classList.contains('active'),'Début → diapo 1');
 for(const bad of ['EWMA','23 tests','13/13','17 %','2.7','2,7','validated by NASA','uses our method'])ok(!all.includes(bad),`absent : « ${bad} »`);
+if(/final/.test(process.argv[2])){for(const bad of ['[CAPTURE','LOGO_À_FOURNIR','À CONFIRMER','à insérer','English figure','37 h','37 hours'])ok(!src.replace(/data:[^"]{100,}/g,'').includes(bad),`version finale : absent « ${bad} »`);}
 fs.writeFileSync(process.argv[3],all);console.log(f?'ÉCHECS '+f:'TOUS LES TESTS PASSENT');process.exit(f?1:0);

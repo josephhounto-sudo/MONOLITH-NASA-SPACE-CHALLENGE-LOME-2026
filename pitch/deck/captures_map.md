@@ -32,3 +32,8 @@ Mettre les PNG dans `pitch/deck/captures/` avec ces noms exacts, puis lancer `py
 - **C4** : l'interface coche « Delivered to ground (once) ». `run_story.py` signale aussi que la vue sol garde la première copie reçue (19:25, un doublon). C'est un écart connu, déjà notifié à M1 dans le code. La diapo dit seulement « delivered once », ce qui est exact.
 - **C5** : chaque appui sur « Commander override » ajoute **une** ligne de journal, et non deux comme le disait le storyboard v3.
 - Format : 1920×1080 PNG, même thème pour toutes les captures, aucune notification, aucun nom.
+
+## Mise à jour 14/11 ~15:20 UTC (deck v3)
+- C1–C5 : le deck utilise des **recadrages sans retouche** (`captures/crops/Cn_crop.png`, script `crop_captures.py`) ; les originaux restent dans `captures/`.
+- **C6 remplacée** : figure tirée de la série brute 5 min de RR-1 (`pitch/figures/make_eda_habitat_fig.py`) ; plateau de CO2 de 153 h (21/09 04:24 → 27/09 13:25), et non plus 37 h (extrait horaire du 26/09 au 05/10).
+- Logo : déposer `captures/LOGO_ACTUEL_horizontal.png` puis `python pitch/deck/embed_captures.py` ; exports : `python pitch/deck/export_pdf_pptx.py`.

@@ -1,4 +1,4 @@
-# C-Sync — contexte pour IA (généré le 14/11/2026 14:00 UTC, base commit e31ad43)
+# C-Sync — contexte pour IA (généré le 14/11/2026 14:24 UTC, base commit dca82da)
 Source unique : ce dépôt public. Si ce fichier date de plus de 6 h, demande à M1 de le régénérer (P5/P8).
 Règles pour l'IA qui lit ceci : ne lis que ce qui est ici ; si une page est inaccessible, dis-le ; n'invente rien ; réponds en français ; écris « NON VÉRIFIÉ » pour toute affirmation sans source ici.
 Rôles : M1 chef/PO, M5 communication/soumission ; M2 capsule de décision ; M3 interface ; M4 procédures/scénarios. Pitch dim. 12:00-14:00 (5 min, sans questions) ; soumission dim. 23:59. Démo sur données SYNTHÉTIQUES, non validée sur de vrais équipages.
@@ -14,7 +14,7 @@ Rôles : M1 chef/PO, M5 communication/soumission ; M2 capsule de décision ; M3 
 
 > When the ground is 20 minutes away, who protects the decision?
 
-C-Sync helps a crew on a deep-space mission notice unusual changes in health and performance, guides them step by step in an emergency, and protects the decision to resume work — **without needing the ground**. It compares each astronaut to **their own personal baseline**, shows how sure it is, and never hides missing data. The decision always stays human.
+C-Sync helps a crew on a deep-space mission notice unusual changes in health and performance, guides them step by step in an emergency, and protects the decision to resume work — **without needing the ground**. It compares each astronaut to **their own personal baseline**, shows how sure it is, and never shows missing data as normal. The decision stays human by design.
 
 **What C-Sync does, and where it stops:** C-Sync flags what changed against the astronaut's own baseline and proposes the next step. It points to fixed procedure files, shows how sure it is, and leaves every decision to the crew and the crew medical officer. It proposes no treatment or drug and uses no clinical threshold. NASA has not reviewed C-Sync, and it has no clinical validation.
 
@@ -23,7 +23,7 @@ C-Sync helps a crew on a deep-space mission notice unusual changes in health and
 |---|---|---|
 | Baseline | 1-5 | C-Sync learns this astronaut's normal (screen says *baseline being built*, never "normal") |
 | 1 · Drift | 6-9 | Sleep drops below 6 h; reaction time and sleepiness rise; dimensions go WATCH then DEGRADED; a fatigue procedure is proposed |
-| 2 · Emergency | 9 | A crewmate ticks *chest pain*. The guided procedure opens instantly: safety, where, measurements one by one, report. The link is down for 6 h: the report waits in the send queue and arrives **exactly once** |
+| 2 · Emergency | 9 | A crewmate ticks *chest pain*. The guided procedure opens offline: safety, where, measurements one by one, report. The link is down for 6 h: the report waits in the send queue and arrives **exactly once** (deduplicated by message ID, covered by `tests/test_sendqueue.py`) |
 | 3 · Return | 10 | Resume requested with a heart-rate reading that is 14 min old → **REFUSE_RESUME**, even with a Commander override |
 
 ## Architecture
@@ -40,14 +40,14 @@ Five dimensions: **Body, Attention, Morale, Mission, Habitat**. Four states: **N
 ## Data
 | Data | Origin | Use |
 |---|---|---|
-| ISS cabin CO2, temperature, humidity, radiation — NASA OSDR **Environmental Data App**, mission RR-1 (2014) | **Real, NASA** | Habitat dimension of the story; data-quality checks (a real 37-hour frozen CO2 value is flagged ARTIFACT) |
+| ISS cabin CO2, temperature, humidity, radiation — NASA OSDR **Environmental Data App**, mission RR-1 (2014) | **Real, NASA** | Habitat dimension of the story; data-quality checks (a real run of constant CO2 values, 2,646 ppm for 153 h in the raw 5-minute series, is flagged ARTIFACT; origin unknown: sensor or data fill) |
 | PhysioNet Wearable Device Dataset v1.0.1 (Empatica E4, 33 valid sessions) | Real, open (ODC-By) | Wrist-sensor noise model (5.1 bpm) and beat coverage (~55 %) |
-| Crew physiology, sleep, PVT-B, check-ins | **Synthetic**, labelled, generator `csync-synth-0.1`, seed 42 | The story; no team or personal data is ever collected |
+| Crew physiology, sleep, PVT-B, check-ins | **Synthetic**, labelled, generator `csync-synth-0.1`, seed 42 | The story; the demo uses only synthetic crew data |
 
 Details and limits: [`data/real/`](data/real), [`SOURCES.md`](SOURCES.md), [`HYPOTHESES.md`](HYPOTHESES.md).
 
 ## Analysis pilot
-[`research/pilot/`](research/pilot) compares three detection methods on 400 control runs and 600 drift runs (false alarms vs detection), reproducibly. Inspired by NASA HRP's Artemis II Data Methodology Challenge, which favoured individual-level, small-sample methods; C-Sync keeps a simplified, deterministic version that can run offline.
+Detection methods are compared at equal false-alarm rates in pilot 3 (300 healthy crews, 150 gradual-drift and 150 abrupt-change crews, synthetic; [`docs/METHODES_NASA_DOSSIER.md`](docs/METHODES_NASA_DOSSIER.md) section 7). The engine is the rule v3 (threshold 1.5, two consecutive days): 0.7 % of healthy simulated crews trigger, 95.3 % of gradual drifts and 59.3 % of abrupt changes are detected; the threshold was tuned on the same scenario families, so these figures are not validation. [`research/pilot/`](research/pilot) keeps the earlier pilots, reproducibly. Inspired by NASA HRP's Artemis II Data Methodology Challenge, which favoured individual-level, small-sample methods; C-Sync keeps a simplified, deterministic version that can run offline.
 
 ## Quick start
 ```bash
@@ -74,9 +74,9 @@ streamlit run csync/ui/app.py       # the interface (work in progress)
 | Part | Status |
 |---|---|
 | Contracts v0 | drafted, to be validated |
-| Rules engine, resume gate, send queue | implemented, tested |
+| Rules engine, resume gate, send queue | implemented; 128 automated tests (software stability, not clinical validation) |
 | Generator + story data | implemented |
-| Decision capsule, UI screens, procedure files | in progress |
+| Decision capsule, UI screens, procedure files | in progress (body map: static mock-up, not in the app) |
 
 ## Team & AI use
 Team MONOLITH, five members (M1-M5). AI tools were used and are declared in [`AI_USAGE.md`](AI_USAGE.md). License: [MIT](LICENSE).

@@ -1,3 +1,5 @@
+> **SUPERSEDED (14/11/2026, pilot 3).** The recommendation below (EWMA as main detector) was **not adopted**: the engine is the rule v3 and EWMA is not coded. Current figures and decision: `docs/METHODES_NASA_DOSSIER.md` sections 7.3–7.10.
+
 <!-- 14/11/2026 11:30 | PARTIELLEMENT OBSOLÈTE : les sections 1 à 5 recommandent EWMA ; elles sont remplacées par la section 7 de docs/METHODES_NASA_DOSSIER.md (comparaison calibrée, aucun gagnant démontré, EWMA non codée). -->
 # Analysis pilot — results (14/11/2026)
 

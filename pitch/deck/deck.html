@@ -3,15 +3,15 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>C-Sync — pitch deck v2</title>
+<title>C-Sync — pitch deck v3</title>
 <!-- FICHIER: pitch/deck/deck.html
-     Date/heure : sam. 14/11/2026 08:05 Lomé (UTC) · Commit de référence : dc61786 · Version v2
+     Date/heure : sam. 14/11/2026 ~14:45 UTC · Version v3 (décisions D1–D5 du pré-mortem appliquées)
      Statut : FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
      Autonome : aucune ressource externe. Texte à l'écran ≤ 25 mots par diapo (titre + puces + ligne obligatoire ;
      ne comptent pas : bandeau SYNTHETIC DATA, cadres de capture, numéro, pied de page, ligne « Sources »).
-     Captures : cadres [CAPTURE Cx — à insérer] ; voir captures_map.md et embed_captures.py.
+     Captures : cadres remplacés par embed_captures.py ; voir captures_map.md.
      Navigation : ← → / Espace / PageUp PageDown / Home End. Impression : 1 diapo par page (16:9).
-     TODO_M1 : logo (cadre LOGO_À_FOURNIR) ; captures C1–C6 ; version EDA (crédit diapo 6). -->
+     Logo : déposer pitch/deck/captures/LOGO_ACTUEL_horizontal.png puis lancer embed_captures.py (sans fichier, le cadre est retiré). -->
 <style>
   :root {
     --bg: #05090B; --panel: #0E161B; --text: #F0F0F0; --muted: #9AABB1; --accent: #00E0F5;
@@ -35,7 +35,18 @@
   .capture small { font-size: 18px; margin-top: 8px; }
   .capture + .capture { margin-top: 18px; }
   .capture .sb, .sbanner { position: absolute; top: 0; left: 0; right: 0; background: var(--banner); color: #05090B; font-weight: 700; font-size: 16px; padding: 4px; border-radius: 9px 9px 0 0; }
-  .capture img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .capture { overflow: hidden; }
+  .capture img { width: 100%; flex: 1 1 0; min-height: 0; max-height: 100%; object-fit: contain; object-position: top center; }
+  .capture:has(img) { border: 2px solid var(--panel); padding: 30px 0 0; justify-content: flex-start; }
+  .capture:has(img):not(:has(.sb)) { padding: 0; justify-content: center; }
+  .col.side { flex: 0 0 540px; }
+  .row.v { flex-direction: column; gap: 14px; }
+  .row.v > .col:first-child { flex: 0 0 auto; }
+  .row.v .capture + .capture { margin-top: 0; }
+  .logo-img { max-width: 360px; max-height: 120px; object-fit: contain; }
+  .compact h1 { font-size: 54px; margin-bottom: 14px; }
+  .compact ul.pts { font-size: 32px; }
+  .compact ul.pts li { margin-bottom: 8px; }
   .must { font-size: 24px; color: var(--muted); margin-top: auto; }
   .tag { display: inline-block; font-size: 22px; font-weight: 700; color: #05090B; background: var(--accent); padding: 4px 14px; border-radius: 20px; margin-bottom: 14px; align-self: flex-start; }
   .foot { position: absolute; left: 90px; right: 90px; bottom: 22px; display: flex; justify-content: space-between; color: var(--muted); font-size: 18px; }
@@ -70,7 +81,7 @@
       <p class="sub" data-count>Care Sync for deep-space crews</p>
       <ul class="pts" data-count>
         <li>Offline health operations for a crew far from Earth</li>
-        <li>Each astronaut against their own baseline</li>
+        <li>Each astronaut compared with their own baseline</li>
         <li>The human decides</li>
       </ul>
     </div>
@@ -115,29 +126,29 @@
 </section>
 
 <!-- 3 · Acte 1 — mots : Act 1 Drift (day 7) (5) + 7 + 6 + 3 = 21 -->
-<section class="slide" id="s3" data-n="3" aria-label="Slide 3">
+<section class="slide compact" id="s3" data-n="3" aria-label="Slide 3">
   <h1 data-count><span class="act">Act 1 ·</span> Drift (day 7)</h1>
-  <div class="row">
+  <div class="row v">
     <div class="col">
       <ul class="pts" data-count>
-        <li>Compared with their own first 5 days</li>
+        <li>Compared with their own first five days</li>
         <li>Attention Degraded: what changed, when, how sure</li>
         <li>Human decision: pending</li>
       </ul>
     </div>
     <div class="col">
-      <div class="capture" data-capture="C1" data-file="C1_dimensions_j7_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C1 — à insérer]<small>5 dimensions, day 7</small></div>
-      <div class="capture" data-capture="C2" data-file="C2_capsule_j7_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C2 — à insérer]<small>Decision capsule, day 7</small></div>
+      <div class="capture" style="flex:124 1 0" data-capture="C1" data-file="crops/C1_crop.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C1 — à insérer]<small>5 dimensions, day 7</small></div>
+      <div class="capture" style="flex:184 1 0" data-capture="C2" data-file="crops/C2_crop.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C2 — à insérer]<small>Decision capsule, day 7</small></div>
     </div>
   </div>
   <div class="foot"><span>C-Sync</span><span>AI use declared</span></div>
 </section>
 
 <!-- 4 · Acte 2 — mots : Act 2 Emergency (day 9) compteur du test : 25 -->
-<section class="slide" id="s4" data-n="4" aria-label="Slide 4">
+<section class="slide compact" id="s4" data-n="4" aria-label="Slide 4">
   <h1 data-count><span class="act">Act 2 ·</span> Emergency (day 9)</h1>
   <div class="row">
-    <div class="col">
+    <div class="col side">
       <ul class="pts" data-count>
         <li>Sharp chest pain reported → Critical procedure</li>
         <li>Guided measurements, one at a time: how to take each</li>
@@ -153,12 +164,12 @@
           <rect x="152" y="326" width="42" height="208" rx="20" fill="var(--panel)" stroke="var(--unknown)" stroke-width="3" stroke-dasharray="6 4"/>
           <rect x="206" y="326" width="42" height="208" rx="20" fill="var(--panel)" stroke="var(--unknown)" stroke-width="3" stroke-dasharray="6 4"/>
         </svg>
-        <p>Static mock-up · not in the app yet<br>À CONFIRMER M1 — non codée</p>
+        <p>Static mock-up · not in the app yet</p>
       </div>
     </div>
     <div class="col">
-      <div class="capture" data-capture="C3" data-file="C3_procedure_j9_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C3 — à insérer]<small>Guided emergency, day 9</small></div>
-      <div class="capture" data-capture="C4" data-file="C4_file_envoi_j9_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C4 — à insérer]<small>Report queue, link down then restored</small></div>
+      <div class="capture" style="flex:1065 1 0" data-capture="C3" data-file="crops/C3_crop.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C3 — à insérer]<small>Guided emergency, day 9</small></div>
+      <div class="capture" style="flex:445 1 0" data-capture="C4" data-file="crops/C4_crop.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C4 — à insérer]<small>Report queue, link down then restored</small></div>
     </div>
   </div>
   <div class="foot"><span>C-Sync</span><span>AI use declared</span></div>
@@ -169,15 +180,15 @@
   <span class="tag">LIVE DEMO</span>
   <h1 data-count><span class="act">Act 3 ·</span> Return (day 10)</h1>
   <div class="row">
-    <div class="col">
+    <div class="col side">
       <ul class="pts" data-count>
-        <li>Heart rate data 14 minutes old; limit 10</li>
+        <li>Heart rate 14 minutes old; limit 10 minutes</li>
         <li>Commander override: logged. Resume: refused.</li>
         <li>Stale data is never shown as normal</li>
       </ul>
     </div>
     <div class="col">
-      <div class="capture" data-capture="C5" data-file="C5_reprise_j10_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C5 — à insérer]<small>Fallback if the live demo fails</small></div>
+      <div class="capture" data-capture="C5" data-file="crops/C5_crop.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C5 — à insérer]<small>Fallback if the live demo fails</small></div>
     </div>
   </div>
   <div class="foot"><span>C-Sync</span><span>AI use declared</span></div>
@@ -187,15 +198,15 @@
 <section class="slide has-src" id="s6" data-n="6" aria-label="Slide 6">
   <h1 data-count>Evidence</h1>
   <div class="row">
-    <div class="col">
+    <div class="col side">
       <ul class="pts" data-count>
-        <li>0.7 % of healthy simulated crews triggered a procedure</li>
-        <li>Real NASA ISS cabin telemetry used for data-quality checks</li>
+        <li>0.7% of 300 simulated healthy crews triggered a procedure</li>
+        <li>Real data: ISS cabin telemetry, quality checks only</li>
       </ul>
-      <p class="must" data-count>Synthetic data, 300 simulated healthy crews</p>
+      <p class="must" data-count>Threshold tuned on the same simulated scenarios</p>
     </div>
     <div class="col">
-      <div class="capture" data-capture="C6" data-file="C6_habitat_eda_rr1_en.png">[CAPTURE C6 — à insérer]<small>Real NASA ISS cabin telemetry (EDA, RR-1), English figure</small></div>
+      <div class="capture" data-capture="C6" data-file="C6_habitat_eda_rr1_en.png">[CAPTURE C6 — à insérer]<small>Real NASA ISS cabin telemetry (EDA, RR-1)</small></div>
     </div>
   </div>
   <div class="src">Data courtesy of the Environmental Data App (EDA), visualization.osdr.nasa.gov/eda/ · accessed 14 Nov 2026</div>
@@ -207,7 +218,7 @@
   <h1 data-count>Limits</h1>
   <ul class="pts" data-count>
     <li>Synthetic crew data, not clinically validated</li>
-    <li>Not measured yet: bones, immunity, radiation dose</li>
+    <li>Not yet measured: bones, immunity, crew radiation dose</li>
     <li>Next: real data, sensor adapters</li>
   </ul>
   <p class="closing" data-count>Offline. Explainable. The human decides.</p>
