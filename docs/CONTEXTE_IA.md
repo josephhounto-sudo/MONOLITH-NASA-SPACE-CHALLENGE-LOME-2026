@@ -1,4 +1,4 @@
-# C-Sync — contexte pour IA (généré le 14/11/2026 16:58 UTC, base commit f725d0c)
+# C-Sync — contexte pour IA (généré le 14/11/2026 20:43 UTC, base commit 688457a)
 Source unique : ce dépôt public. Si ce fichier date de plus de 6 h, demande à M1 de le régénérer (P5/P8).
 Règles pour l'IA qui lit ceci : ne lis que ce qui est ici ; si une page est inaccessible, dis-le ; n'invente rien ; réponds en français ; écris « NON VÉRIFIÉ » pour toute affirmation sans source ici.
 Rôles : M1 chef/PO, M5 communication/soumission ; M2 capsule de décision ; M3 interface ; M4 procédures/scénarios. Pitch dim. 12:00-14:00 (5 min, sans questions) ; soumission dim. 23:59. Démo sur données SYNTHÉTIQUES, non validée sur de vrais équipages.
@@ -142,7 +142,7 @@ python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\act
 pip install -r requirements.txt
 python -m pytest -q                 # resume gate G1-G10, rules, send queue, wording
 python scripts/run_story.py         # regenerate the story and its outputs
-streamlit run csync/ui/app.py       # the interface (work in progress)
+streamlit run csync/ui/app.py       # the interface
 ```
 
 ## Repository map
@@ -163,7 +163,7 @@ streamlit run csync/ui/app.py       # the interface (work in progress)
 | Contracts v0 | drafted, to be validated |
 | Rules engine, resume gate, send queue | implemented; 153 automated tests (software stability, not clinical validation) |
 | Generator + story data | implemented |
-| Decision capsule, UI screens, procedure files | in progress (body map: static mock-up, not in the app) |
+| Decision capsule, UI screens, procedure files | implemented; the three screens (days 7, 9, 10) are covered by automated screen tests (body map: static mock-up, not in the app) |
 
 ## Team & AI use
 Team MONOLITH, five members (M1-M5). AI tools were used and are declared in [`AI_USAGE.md`](AI_USAGE.md). License: [MIT](LICENSE).
