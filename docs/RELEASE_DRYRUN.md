@@ -1,5 +1,26 @@
 # Répétition de livraison — branche cursor-heavy-1
 
+## État
+
+`python -m pytest -q` : **137 passed** (départ 128 ; +3 écrans, +6 chiffres). `scripts/check_consistency.py` : 0 erreur. Contrats : 0 fichier en échec. `scripts/run_story.py` deux fois : sorties identiques. Moteur, seuils, `contracts/` et `pitch/deck/` non modifiés.
+
+## Écarts ouverts
+
+- Oral et `deck.html` : 95 % et 59 % (scripts) au lieu de 95,3 % et 59,3 % ; la diapo 6 ne montre que 0,7 % ; le CO2 y est « plus de six jours » au lieu de 153 h ; la diapo 3 omet Body WATCH. Détail en E5. Non corrigé, comme demandé.
+- `node pitch/tests/test_deck.js pitch/deck/deck_final.html` sort en erreur : il manque le fichier de sortie (`process.argv[3]`). Toutes les assertions passent si on fournit ce fichier.
+- `data/real/physionet_s10_docs/data_constraints.txt` contient encore l'octet 0x95. Le lecteur le tolère ; le fichier n'a pas été réencodé.
+- `AI_USAGE.md` ligne 7 (commit `24ce5f0` sur main) déclare déjà une session Cursor du 14/11/2026 sur Grok 4.7. Le détail des fichiers de cette branche n'y est pas repris.
+- `README.md` lignes 49 et 70 disent encore l'interface « in progress ».
+
+## Non vérifié
+
+- Jours 9 et 10 dans le navigateur : le clic sur le curseur a été refusé par le contrôle de l'outil. Le jour 7 a été lu sur l'app lancée (`streamlit run csync/ui/app.py`, port 8765) : bandeau SYNTHETIC DATA, Body Watch, Attention Degraded. Les jours 9 et 10 sont couverts par AppTest.
+- V1, V2, V3, V5 (au-delà du moteur), V10, V12.
+- Lecture à voix haute des scripts. Images non revues une par une.
+- `jsdom` a été installé hors dépôt pour lancer le test du deck. Aucune dépendance ajoutée au projet.
+
+# Détail des étapes
+
 ## E3 — `scripts/check_consistency.py`
 
 Fichier fautif : `data/real/physionet_s10_docs/data_constraints.txt` (octet 0x95, 10 occurrences). Lecture passée en `encoding="utf-8", errors="replace"` dans `R()`.
@@ -32,7 +53,7 @@ La checklist n'a pas été cochée (réservé à M5).
 | V8 Message de commit `Mx:` | OK sur cette branche (`M2:`) |
 | V9 Licence MIT | OK — `README.md` ligne 73 et fichier `LICENSE` |
 | V10 Relu par quelqu'un d'autre que l'auteur | NON VÉRIFIÉ |
-| V11 `AI_USAGE.md` à jour | ÉCART — cette session n'y est pas ajoutée (fichier hors de la liste autorisée par la tâche) |
+| V11 `AI_USAGE.md` à jour | OK pour la déclaration du 14/11 (`AI_USAGE.md` ligne 7, arrivée sur main pendant cette session). Le détail des fichiers touchés ici n'y figure pas |
 | V12 Liste du code, textes et images à jour | NON VÉRIFIÉ |
 
 ## E5 — cohérence des textes
