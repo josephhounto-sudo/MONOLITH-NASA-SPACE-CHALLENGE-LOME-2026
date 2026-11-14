@@ -147,7 +147,7 @@ Mesuré sur 300 équipages témoins : `Params()` par défaut (seuil 1,0, sans pl
 
 ### 7.8 Limites restantes
 
-Modèle de bruit unique ; pas d'étiquettes réelles ; pas de scénario de signaux contradictoires ni de données manquantes dans le pilote 3 ; seuils choisis sur les mêmes familles de scénarios que l'évaluation (risque de sur-ajustement léger) ; 23 tests = stabilité logicielle, pas validité scientifique.
+Modèle de bruit unique ; pas d'étiquettes réelles ; pas de scénario de signaux contradictoires ni de données manquantes dans le pilote 3 ; seuils choisis sur les mêmes familles de scénarios que l'évaluation (risque de sur-ajustement léger) ; 127 tests (état au 14/11) = stabilité logicielle, pas validité scientifique.
 
 ### 7.9 Pistes après le hackathon
 
@@ -164,4 +164,4 @@ Livrables : audit des pilotes (raisonné, **non exécuté sur le banc complet**)
 - **Ne pas citer :** les p-values de `pilot3_paired.csv` opposant EWMA L = 2,5 (2,7 % de fausses alertes) à la règle 1,5 (0,7 %) : les taux de fausses alertes ne sont pas égaux.
 - **Vérifié par moi (Claude) le 14/11 :** la critique sur le scénario brutal (déclenchements avant l'injection, jours 6–7) est fondée mais sans effet sur les chiffres : 1 équipage sur 150 déclenche avant le jour 8, et la détection à partir du jour 8 reste 59,3 % (règle 1,5), 51,3 % (EWMA 3,0), 61,3 % (CUSUM 4) ; délais médians 1 / 2 / 2 jours.
 - **Précision à garder :** `csync/rules.py` évalue 3 dimensions (Body, Attention, Morale) ; Mission et Habitat sont en contexte seulement.
-- **Catalogue G2 :** à refaire avec accès web ; rien n'est utilisable tel quel.
+- **Catalogue G2 :** refait et vérifié en ligne par Claude le 14/11 (`docs/audit_gemini/NASA_DATA_CATALOG_VERIFIE.md`) ; la version G2 de l'autre IA n'est pas utilisable.
