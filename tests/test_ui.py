@@ -1,6 +1,7 @@
 """2026-11-14 ~07:00 Lome (UTC) | reference commit dc61786 | FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
 
 M3-1..M3-3: headless checks of the Streamlit screens (streamlit.testing). A human still has to look at the screens."""
+import json
 import os
 import re
 
@@ -9,6 +10,15 @@ from streamlit.testing.v1 import AppTest
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP = os.path.join(ROOT, "csync", "ui", "app.py")
+CFG = os.path.join(ROOT, "csync", "config")
+STRINGS = json.load(open(os.path.join(CFG, "strings_en.json"), encoding="utf8"))
+THEME = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
+UI = STRINGS["ui"]
+CONTEXT = ("Mission", "Habitat")
+# Daily capsules of the story (seed 42, drift_amp 2.5): evaluated states, context dims stay UNKNOWN.
+DAY7 = {"Body": "WATCH", "Attention": "DEGRADED", "Morale": "NORMAL", "Mission": "UNKNOWN", "Habitat": "UNKNOWN"}
+DAY9 = DAY7
+DAY10 = {"Body": "NORMAL", "Attention": "NORMAL", "Morale": "NORMAL", "Mission": "UNKNOWN", "Habitat": "UNKNOWN"}
 
 
 def page(day):
@@ -92,3 +102,57 @@ def test_day10_resume_refused_even_with_override():
 def test_no_hardcoded_colours_in_app():
     src = open(APP, encoding="utf8").read()
     assert not re.search(r"#[0-9A-Fa-f]{6}\b", src)
+
+
+def dimension_label(dim, state):
+    if dim in CONTEXT:
+        return UI["context_only"]
+    return STRINGS["states"][state]
+
+
+def assert_dimensions(h, states):
+    """Each card uses the icon, word and colour stored in theme.json / strings_en.json."""
+    allowed = {THEME["surface"], THEME["panel"], THEME["text"], THEME["text_secondary"], THEME["interactive"]}
+    allowed.update(s["color"] for s in THEME["state"].values())
+    for colour in re.findall(r"#[0-9A-Fa-f]{6}", h):
+        assert colour in allowed, colour
+    for dim, state in states.items():
+        look = THEME["state"][state]
+        label = dimension_label(dim, state)
+        assert re.search(
+            rf">{dim}</div><div style='color:{look['color']};font-size:1.1em'>{re.escape(look['icon'])} {re.escape(label)}<",
+            h,
+        ), dim
+
+
+def assert_synthetic(at):
+    assert any(STRINGS["synthetic_banner"] in w.value for w in at.warning)
+
+
+def test_screen_nominal_day7():
+    at = page(7)
+    h = html(at)
+    assert_synthetic(at)
+    assert any(s.value.startswith("Day 7:") for s in at.subheader)
+    assert_dimensions(h, DAY7)
+
+
+def test_screen_action_day9():
+    at = page(9)
+    h = html(at)
+    assert_synthetic(at)
+    assert UI["emergency_title"] in h
+    assert_dimensions(h, DAY9)
+    assert any(m.value.startswith(f"**{UI['step_counter'].format(n=1, total=6)}**") for m in at.markdown)
+
+
+def test_screen_resume_refused_day10():
+    at = page(10)
+    assert_synthetic(at)
+    assert UI["resume_title"] in html(at)
+    assert_dimensions(html(at), DAY10)
+    next(b for b in at.button if b.label == UI["request_resume"]).click().run()
+    h = html(at)
+    reason = STRINGS["gate_reasons"]["G3"].format(name=STRINGS["indicator_names"]["PH01"], age=14, limit=10)
+    assert reason in h
+    assert "heart-rate" in h and "14 min old" in h and "limit is 10 min" in h
