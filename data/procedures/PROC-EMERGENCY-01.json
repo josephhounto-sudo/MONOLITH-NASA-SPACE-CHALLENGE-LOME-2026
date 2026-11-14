@@ -10,7 +10,7 @@
      "measures": [
        {"indicator_id": "PH01", "measure": "Heart rate", "unit": "bpm",
         "how_to": "Use the onboard device for heart rate and confirm the value shown on screen.",
-        "why": "NASA's Human Research Program reports that weightlessness changes how the heart and blood vessels work, and lists heart arrhythmias among the possible effects.",
+        "why": "NASA's Human Research Program reports that low gravity can alter the heart and blood vessels, and lists heart arrhythmias among the possible effects.",
         "hrp_source_url": "https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/"},
        {"indicator_id": "PH10", "measure": "Blood pressure", "unit": "mmHg",
         "how_to": "Use the onboard device for blood pressure and confirm both values (SYS and DIA).",
