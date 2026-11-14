@@ -65,7 +65,7 @@ streamlit run csync/ui/app.py       # the interface (work in progress)
 | Part | Status |
 |---|---|
 | Contracts v0 | drafted, to be validated |
-| Rules engine, resume gate, send queue | implemented; 128 automated tests (software stability, not clinical validation) |
+| Rules engine, resume gate, send queue | implemented; 137 automated tests (software stability, not clinical validation) |
 | Generator + story data | implemented |
 | Decision capsule, UI screens, procedure files | in progress (body map: static mock-up, not in the app) |
 
