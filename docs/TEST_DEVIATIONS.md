@@ -16,3 +16,11 @@ M1 chose the scientifically best-calibrated detector setting: `Params()` now use
 
 ## DEV-02 — Input parameter of `data/scenarios/histoire.json` changed, expected outputs untouched (14/11/2026)
 `generate_kwargs.drift_amp` 2.0 → 2.5, following M1's calibration decision (see DEV-01). Only the scenario *input* changed; every expected state/decision is as written before the first run. Consequence to know: with the calibrated rule, the old amplitude 2.0 gives Attention WATCH on day 7 (DEGRADED on day 9).
+
+## DEV-03 — The ground records the report as received at 19:25, not 19:20 (14/11/2026, M4)
+- **Expected (already in `data/scenarios/histoire.json`, event `REPORT`, commit 67d0fa4 11:52):** report created day 9 14:20, `received_utc` 19:20, 1 delivery.
+- **Observed (`scripts/run_story.py` `send_status`, `csync/sendqueue.py`):** 1 delivery and order by creation: OK. But the copy kept by `ground_view` is a **duplicate received at 19:25**: `ground_view_received_utc` = 19:25. The screen shows 19:20 because `run_story.py` displays the first physical arrival (`min(received)`), not what the ground keeps.
+- **Mechanism:** `deliver()` puts duplicates (sent link_up + 5 min) before the queued batch in its output list; `ground_view()` keeps the first copy **in list order**, not the earliest reception.
+- **Impact:** "exactly once" holds; the creation time is never rewritten. The ground-side reception time of a duplicated message is 5 min late. No change on the demo screen.
+- **Possible fix (M2, `sendqueue.py`, not done by M4):** in `ground_view`, sort the arrivals by `received` before removing duplicates.
+- **Test status:** `tests/test_scenarios.py::test_report_reception_time_recorded_by_the_ground` is `xfail(strict=True)`: it turns red (XPASS) as soon as the fix lands; then remove the marker and close DEV-03 here. Already noted by M2 in a comment of `run_story.py` ("reported to M1").
