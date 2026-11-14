@@ -31,7 +31,7 @@ En attente de M1 : D6 orateurs A/B (A 190 s, B 110 s ; Jean pas d'oral), D9 supp
 - `scripts/check_consistency.py` plante (UnicodeDecodeError octet 0x95) : ancien bug, hors périmètre sauf demande.
 - Le test des mots interdits scanne README, chaînes et procédures : relancer `pytest` après toute phrase ajoutée.
 - Ne pas régénérer à la main `deck_final.html` : passer par `embed_captures.py` ; tests du deck : `pitch/tests/test_deck.js`.
-- Logo : non fourni (à joindre par M1 dans `pitch/deck/captures/`).
+- Logo : intégré (Drive, LOGO_ACTUEL_horizontal.png, fond blanc affiché en plaque sur la diapo 1).
 - Un rapport d'IA externe n'est jamais une preuve : vérifier ligne par ligne contre le dépôt avant de corriger (un audit a cité des lignes de README inexistantes).
 
 ## 5. Après chaque changement important
