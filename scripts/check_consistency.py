@@ -4,7 +4,7 @@ import json, os, re, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)
 errs, notes = [], []
 def err(m): errs.append(m)
-R = lambda p: open(os.path.join(ROOT, p), encoding="utf-8").read()
+R = lambda p: open(os.path.join(ROOT, p), encoding="utf-8", errors="replace").read()
 
 # 1 tests
 r = subprocess.run([sys.executable, "-m", "pytest", "-q"], cwd=ROOT, capture_output=True, text=True)
