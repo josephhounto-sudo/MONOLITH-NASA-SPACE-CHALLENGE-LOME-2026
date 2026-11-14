@@ -1,5 +1,5 @@
 {
-  "_header": "2026-11-14 ~07:00 Lome (UTC) | reference commit dc61786 | FAIT PAR L'IA | 14/11 ~15:45 : structure, sources et formulations relues pour M4 par l'assistant (Claude Code), voir tests/test_procedures.py | VALIDATION HUMAINE M4 : À FAIRE | NASA pages opened and read 2026-11-14, see docs/HELP_CARD_SOURCES.md",
+  "_header": "2026-11-14 ~07:00 Lome (UTC) | reference commit dc61786 | FAIT PAR L'IA | 14/11 ~15:25 : structure, sources et formulations relues pour M4 par l'assistant (Claude Code), voir tests/test_procedures.py | VALIDATION HUMAINE M4 : À FAIRE | NASA pages opened and read 2026-11-14, see docs/HELP_CARD_SOURCES.md",
   "procedure_id": "PROC-FATIGUE-01",
   "title": "Several signals away from the personal baseline",
   "fixed_sentence": "Follow the onboard medical checklist and the crew medical officer.",

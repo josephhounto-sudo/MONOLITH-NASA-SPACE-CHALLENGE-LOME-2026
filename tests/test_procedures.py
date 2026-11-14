@@ -1,5 +1,5 @@
 """2026-11-14 ~07:00 Lome (UTC) | reference commit dc61786 | FAIT PAR L'IA
-14/11 ~15:45 : relu et complété pour M4 par l'assistant (Claude Code) | VALIDATION HUMAINE M4 : À FAIRE
+14/11 ~15:25 : relu et complété pour M4 par l'assistant (Claude Code) | VALIDATION HUMAINE M4 : À FAIRE
 
 M4-1: procedure files are valid, carry the fixed sentence and contain no banned wording.
 Added for M4 (14/11): step order of the task card, units consistent with the measurement data, no number
