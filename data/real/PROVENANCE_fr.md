@@ -50,3 +50,8 @@ Contrôle : hr_base_mean est identique pour les 37 participants entre ce fichier
 Dossier physionet_s10_docs/ : README, Data_Dictionary, data_constraints, LICENSE (ODC-By 1.0) et SHA256SUMS copiés tels quels.
 Non intégrés (volume) : séries brutes ACC/BVP/EDA/HR/IBI/TEMP des dossiers AEROBIC et ANAEROBIC, et séries brutes STRESS ; elles restent dans le ZIP de M1 (Téléchargements) et sur PhysioNet.
 Rappel des contraintes officielles : S02 données dupliquées ; f07 PPG et TEMP invalides ; f14 fichier scindé. Les statistiques de ces trois participants sont à ne pas citer sans précaution.
+
+# Séries brutes EDA — 24 missions (14/11/2026, 12:31 UTC)
+data/real/raw/eda_all_missions.json.gz (4,05 Mo ; 35,4 Mo décompressé ; sha256 dans data/real/raw/SHA256SUMS.txt) : télémétrie et rayonnement bruts des 24 missions listées par l'API, tels que fournis par les pages /eda/dashboard_<mission>. Téléchargé par M1 (accord donné). Lecture : python scripts/eda_load.py.
+Contrôle : les 94 lignes de eda_mission_stats.csv (nombre de valeurs valides et moyenne) sont retrouvées à l'identique à partir de ce fichier (0 écart).
+Brut PhysioNet : trop lourd pour git (69,7 Mo). Pour le récupérer : https://physionet.org/content/wearable-device-dataset/1.0.1/ (bouton « Download the ZIP file »), puis vérifier avec SHA256SUMS.txt du ZIP.
