@@ -12,7 +12,7 @@ Source unique : ce dépôt public. Si ce fichier date de plus de 6 h, demande à
 Règles pour l'IA qui lit ceci : ne lis que ce qui est ici ; si une page est inaccessible, dis-le ; n'invente rien ; réponds en français ; écris « NON VÉRIFIÉ » pour toute affirmation sans source ici.
 Rôles : M1 chef/PO, M5 communication/soumission ; M2 capsule de décision ; M3 interface ; M4 procédures/scénarios. Pitch dim. 12:00-14:00 (5 min, sans questions) ; soumission dim. 23:59. Démo sur données SYNTHÉTIQUES, non validée sur de vrais équipages.
 """
-parts = [("README.md", "README"), ("docs/ARCHITECTURE.md", "ARCHITECTURE"), ("HYPOTHESES.md", "HYPOTHÈSES"),
+parts = [("AGENTS.md", "RÈGLES POUR L'IA (AGENTS)"), ("docs/CURSOR_HANDOFF.md", "PASSATION : ÉTAT ET TÂCHES"), ("README.md", "README"), ("docs/ARCHITECTURE.md", "ARCHITECTURE"), ("HYPOTHESES.md", "HYPOTHÈSES"),
          ("docs/OPEN_DECISIONS.md", "DÉCISIONS OUVERTES"), ("docs/RELEASE_CHECKLIST.md", "CHECKLIST DE LIVRAISON"),
          ("docs/MAJ_LOG.md", "JOURNAL DES MISES À JOUR"), ("docs/PROGRAMME_OFFICIEL.md", "PROGRAMME OFFICIEL"),
          ("docs/team/roles/TOUS.md", "CONSIGNES POUR TOUS")]

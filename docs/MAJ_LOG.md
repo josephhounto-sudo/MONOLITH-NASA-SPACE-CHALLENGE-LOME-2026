@@ -14,3 +14,4 @@
 - 14/11 MAJ 7 : validation phase 2 pitch + phase 3 (silhouette, deck, script FR, vidéo 30 s, fiches). Sources NASA délai/blackouts vérifiées en lecture complète.
 - 14/11 MAJ 8 : bloc Gemini Pro v2 (G1 audit des pilotes, G2 catalogue de données NASA, G3 ré-implémentation contre vecteurs). Parcours v10 : avancement principal/accessoire, comptes à rebours, états des tâches.
 - 14/11 11:45 MAJ 9 : intégration des 3 rendus (code MAJ5 : 127 tests ; pitch phase 3 : deck, silhouette, script FR, vidéo ; audit indépendant). Captures C1–C6 insérées, C6 refaite en anglais, sources NASA dans la silhouette (cœur, tension, sommeil). OUTLINE.md obsolète, RESULTS.md marqué partiellement obsolète.
+- 14/11 14:50 MAJ 10 : passation Cursor (AGENTS.md, docs/CURSOR_HANDOFF.md) ; pré-mortem de l'artefact Parcours (PREMORTEM_ARTEFACT_14-11.md) ; artefact simplifié 8→4 onglets.

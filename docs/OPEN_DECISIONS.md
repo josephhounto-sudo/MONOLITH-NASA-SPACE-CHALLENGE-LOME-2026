@@ -1,4 +1,5 @@
 # Décisions ouvertes — M1, samedi 09:30-10:30
+> **État au 14/11 14:50 :** tableau d'origine ; les chiffres de la colonne « pilote » datent d'avant la calibration. Fait foi : `csync/rules.py` (seuil 1,5 + planchers) et `docs/PREMORTEM_14-11.md` §7 (D1–D12). Mesure actuelle (synthétique, seuil réglé sur les mêmes scénarios) : 0,7 % de faux déclenchements, 95,3 % dérive progressive.
 | N° | Question | Défaut proposé | Chiffres du pilote | Décision M1 |
 |---|---|---|---|---|
 | 1 | Détecteur de dérive | Recommandé : EWMA + plancher d'écart-type (repli : d ≥ 1,5 + plancher). **Codé aujourd'hui : règle v3 seule, seuil 1,5 + planchers absolus (csync/rules.py, Params(), calibré le 14/11). EWMA n'est pas codée ; ne la coder que si M1 le décide.** | fausses procédures 17 % → 2,7 % ; détection 1,5 ET 99,3 % ; 94,7 % avec 10 % de données manquantes (research/pilot/RESULTS.md) | |
