@@ -20,6 +20,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
+from csync.ui import style  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
 theme = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
@@ -74,8 +75,9 @@ def card(dim, state, day):
         label = strings["baseline_building"].format(n=day)
     else:
         label = strings["states"][state]
-    return (f"<div style='background:{theme['panel']};border-left:6px solid {s['color']};padding:10px;border-radius:4px'>"
-            f"<div style='color:{theme['text']};font-weight:600'>{dim}</div>"
+    ctx = " ctx" if dim in CONTEXT_DIMENSIONS else ""
+    return (f"<div class='cs-card{ctx}' style='{style.card_vars(s['color'])}'>"
+            f"<div class='dim'>{dim}</div>"
             f"<div style='color:{s['color']};font-size:1.1em'>{s['icon']} {label}</div></div>")
 
 
@@ -88,8 +90,9 @@ def nominal(cap, day):
     cols = st.columns(len(DIMENSIONS))
     for col, dim in zip(cols, DIMENSIONS):
         col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day), unsafe_allow_html=True)
-    st.markdown(f"**{UI['why_label']}** — {cap['explanation']}")
-    st.markdown(f"**{UI['action_label']}** — {cap['action'].get('text', '')}")
+    with st.container(border=True):
+        st.markdown(f"**{UI['why_label']}** — {cap['explanation']}")
+        st.markdown(f"**{UI['action_label']}** — {cap['action'].get('text', '')}")
     with st.expander(UI["signals_label"]):
         st.dataframe([{k: s.get(k) for k in ("indicator_id", "name", "value", "unit", "baseline_mean", "d", "flagged")}
                       for s in cap["signals"]], hide_index=True)
@@ -98,7 +101,7 @@ def nominal(cap, day):
 
 
 def action_screen(cap):
-    st.markdown(f"### {UI['emergency_title']}")
+    st.markdown(f"<div class='cs-kicker'>{UI['emergency_title']}</div>", unsafe_allow_html=True)
     st.subheader(cap["situation"])
     fixed_sentence()
     proc = load_procedure(cap["action"]["procedure_id"])
@@ -144,7 +147,7 @@ def action_screen(cap):
 
 
 def resume_screen(cap):
-    st.markdown(f"### {UI['resume_title']}")
+    st.markdown(f"<div class='cs-kicker'>{UI['resume_title']}</div>", unsafe_allow_html=True)
     st.subheader(cap["situation"])
     gi = cap["gate_inputs"]
     proc = load_procedure(gi["procedure_id"]) or {}
@@ -162,11 +165,12 @@ def resume_screen(cap):
     if "resume_result" in st.session_state:
         d, reasons = st.session_state["resume_result"]
         colour = theme["state"]["DEGRADED" if d == "REFUSE_RESUME" else "NORMAL"]["color"]
-        st.markdown(f"<div style='color:{colour};font-size:1.4em;font-weight:700'>{UI['decision']}: {d}</div>",
+        st.markdown(f"<div class='cs-decision' style='color:{colour};{style.card_vars(colour)}'>{UI['decision']}: {d}</div>",
                     unsafe_allow_html=True)
-        st.markdown(f"**{UI['reasons']}**")
-        for r in reasons:
-            st.markdown(f"- {human_reason(r)}")
+        with st.container(border=True):
+            st.markdown(f"**{UI['reasons']}**")
+            for r in reasons:
+                st.markdown(f"- {human_reason(r)}")
         with st.expander(UI["technical_log"]):
             for r in reasons:
                 st.text(r)
@@ -182,6 +186,7 @@ def resume_screen(cap):
 
 # ------------------------------------------------------------------ page
 st.set_page_config(page_title=strings["app_title"], layout="wide")
+style.inject(UI["brand_name"], UI["brand_tag"])
 st.warning(strings["synthetic_banner"])
 caps, fallback = load_capsules()
 if fallback:

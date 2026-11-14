@@ -1,0 +1,11 @@
+# Dark base so native widgets (slider, buttons, inputs) match the C-Sync look; colours come from csync/config/theme.json.
+[theme]
+base = "dark"
+primaryColor = "#00E0F5"
+backgroundColor = "#05090B"
+secondaryBackgroundColor = "#0E161B"
+textColor = "#F0F0F0"
+font = "sans serif"
+
+[browser]
+gatherUsageStats = false
