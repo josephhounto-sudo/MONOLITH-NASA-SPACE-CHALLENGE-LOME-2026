@@ -31,7 +31,7 @@ Five dimensions: **Body, Attention, Morale, Mission, Habitat**. Four states: **N
 ## Data
 | Data | Origin | Use |
 |---|---|---|
-| ISS cabin CO2, temperature, humidity, radiation — NASA OSDR **Environmental Data App**, mission RR-1 (2014) | **Real, NASA** | Habitat dimension of the story; data-quality checks (a real run of constant CO2 values, 2,646 ppm for 153 h in the raw 5-minute series, is flagged ARTIFACT; origin unknown: sensor or data fill) |
+| ISS cabin CO2, temperature, humidity, radiation — NASA OSDR **Environmental Data App**, mission RR-1 (2014) | **Real, NASA** | Habitat **context** and data-quality checks only: the screen shows Habitat as "Context only", it is not scored (a real run of constant CO2 values, 2,646 ppm for 153 h in the raw 5-minute series, is flagged ARTIFACT; origin unknown: sensor or data fill) |
 | PhysioNet Wearable Device Dataset v1.0.1 (Empatica E4, 33 valid sessions) | Real, open (ODC-By) | Wrist-sensor noise model (5.1 bpm) and beat coverage (~55 %) |
 | Crew physiology, sleep, PVT-B, check-ins | **Synthetic**, labelled, generator `csync-synth-0.1`, seed 42 | The story; the demo uses only synthetic crew data |
 
@@ -65,7 +65,7 @@ streamlit run csync/ui/app.py       # the interface (work in progress)
 | Part | Status |
 |---|---|
 | Contracts v0 | drafted, to be validated |
-| Rules engine, resume gate, send queue | implemented; 137 automated tests (software stability, not clinical validation) |
+| Rules engine, resume gate, send queue | implemented; 153 automated tests (software stability, not clinical validation) |
 | Generator + story data | implemented |
 | Decision capsule, UI screens, procedure files | in progress (body map: static mock-up, not in the app) |
 
