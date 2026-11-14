@@ -70,8 +70,8 @@ Refusés : « exactly once » (couvert par `test_sendqueue.py`) ; attribution Ar
 | D7 PDF + .pptx de secours | **Faits** | `pitch/deck/C-Sync_pitch_7_slides.pdf` ; `C-Sync_pitch_SECOURS_images.pptx` (images des diapos, texte non éditable) |
 | D8 calendrier (gel sam. 18:00 …) | Accepté | à tenir ; je ne modifie plus le code après le gel sauf bug |
 | D12 assouplissements README | **Appliquée** | README (+ pilote 3 avec chiffres et réserve, « 128 tests ») |
-| D6 orateurs A/B | **En attente de M1** | noms + rééquilibrage 190 s / 110 s |
-| D9 suppléant de soumission | **En attente de M1** | règle git (branches + pull --rebase) acceptée de mon côté |
-| D10 trace écrite de l'autorisation de démarrer | **En attente de M1** | à retrouver/obtenir |
-| D11 langue du jury | **En attente de M1** | |
-Reste ouvert : logo (fichier non reçu), `scripts/check_consistency.py` plante (octet 0x95 dans un fichier lu en UTF-8, ancien problème, non lié à ces changements).
+| D6 orateurs A/B | **Tranchée 14/11 14:50** : A = M1 (niveau C1 en anglais), B = M2 ; A 190 s (diapos 1, 2, 3, 6, 7), B 110 s (diapos 4, 5 + démo) ; Jean pas d'oral | `SCRIPT_FR.md` v3, `SCRIPT_EN.md` v1 |
+| D9 suppléant de soumission | **Reportée par M1** (« pas un problème pour le moment » : Yves et Youssouf n'ont fait que leurs premiers blocs). À rouvrir au GO/NO-GO de 22:30 | règle git (branches + pull --rebase) maintenue |
+| D10 trace écrite de l'autorisation de démarrer | **Tranchée** : pas de preuve écrite ; tous les participants ont entendu l'autorisation orale. Dit tel quel dans `AI_USAGE.md` | risque R2 inchangé : accepté par M1 |
+| D11 langue du jury | **Tranchée** : bilingue ; jury surtout anglophone → oral en anglais en principe, français en repli | `SCRIPT_EN.md` v1 (traduction non répétée), `SCRIPT_FR.md` v3 |
+Reste ouvert : `scripts/check_consistency.py` plante (octet 0x95 dans un fichier lu en UTF-8, ancien problème, non lié à ces changements).

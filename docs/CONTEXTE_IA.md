@@ -1,4 +1,4 @@
-# C-Sync — contexte pour IA (généré le 14/11/2026 14:44 UTC, base commit bba3bdd)
+# C-Sync — contexte pour IA (généré le 14/11/2026 14:53 UTC, base commit bba3bdd)
 Source unique : ce dépôt public. Si ce fichier date de plus de 6 h, demande à M1 de le régénérer (P5/P8).
 Règles pour l'IA qui lit ceci : ne lis que ce qui est ici ; si une page est inaccessible, dis-le ; n'invente rien ; réponds en français ; écris « NON VÉRIFIÉ » pour toute affirmation sans source ici.
 Rôles : M1 chef/PO, M5 communication/soumission ; M2 capsule de décision ; M3 interface ; M4 procédures/scénarios. Pitch dim. 12:00-14:00 (5 min, sans questions) ; soumission dim. 23:59. Démo sur données SYNTHÉTIQUES, non validée sur de vrais équipages.
@@ -49,11 +49,12 @@ Projet : C-Sync, NASA Space Apps 2026 Lomé, équipe MONOLITH. Réponds en fran�
 | M1-3 | M1 | Une page NASA HRP citée par fiche d'aide | `docs/HELP_CARD_SOURCES.md` complet | M1-3 |
 | M5-1/2 | M5 | Assemblage GO/NO-GO 13:30, 17:30, 22:30, dim. 10:30, 12:00 ; page de soumission | `docs/RELEASE_CHECKLIST.md` coché | M5-1, M5-2 |
 
+Session longue prévue : `docs/CURSOR_TACHE_LOURDE.md` (E1–E6).
 Étapes détaillées et prompts : `docs/team/tasks.json`, `docs/team/roles/`. Suivi en direct : artefact Parcours (onglet « Maintenant »).
 
 ## 3. Décisions (voir `docs/PREMORTEM_14-11.md` §7)
 Appliquées : D1 CO2 153 h, D2 « seuil réglé sur les mêmes scénarios », D3 « Données NASA » reformulé, D4 anglais du deck, D5 maquette corps = statique (non intégrée à l'app, à dire), D7 PDF/pptx de secours, D8 calendrier, D12 README.
-En attente de M1 : D6 orateurs A/B (A 190 s, B 110 s ; Jean pas d'oral), D9 suppléant de soumission, D10 trace écrite de l'autorisation de démarrer, D11 langue du jury. Ne pas trancher à sa place.
+Tranchées le 14/11 14:50 : D6 orateurs A = M1 (190 s), B = M2 (110 s) ; D9 suppléant reporté (à rouvrir à 22:30) ; D10 pas de preuve écrite (autorisation orale entendue de tous, dite telle quelle dans AI_USAGE.md) ; D11 bilingue, oral anglais en principe (`pitch/deck/SCRIPT_EN.md`, `SCRIPT_FR.md`). Rien n'est en attente de M1 sur ces points.
 `docs/OPEN_DECISIONS.md` : tableau d'origine, chiffres antérieurs au 14/11 ; fait foi : `rules.py` + PREMORTEM §7.
 
 ## 4. Pièges connus
@@ -65,6 +66,29 @@ En attente de M1 : D6 orateurs A/B (A 190 s, B 110 s ; Jean pas d'oral), D9 supp
 
 ## 5. Après chaque changement important
 `python scripts/build_context.py` puis commit/push : régénère `docs/CONTEXTE_IA.md` (URL brute stable lue par les IA des membres).
+
+
+---
+# TÂCHE LOURDE CURSOR
+
+# Tâche lourde Cursor — session longue (≈ 2 h 30, gel des fonctionnalités à 18:00 Lomé)
+Lis `AGENTS.md`, puis `docs/CURSOR_HANDOFF.md`. Branche : `cursor-heavy-1` (jamais `main`). `git pull --rebase` avant tout push. `python -m pytest -q` après chaque étape (128 tests verts au départ : aucun test ne doit disparaître). Ouvre une pull request à la fin ; M1 fusionne.
+Modèle : choisi à la main (Claude, GPT ou Gemini), pas de mode automatique. Aucune dépendance nouvelle. Aucun nom ni donnée personnelle.
+
+## Règle de fond
+Tu ne crées aucune affirmation nouvelle. Tu vérifies, tu testes, tu corriges ce qui est faux. Chaque chiffre de l'oral doit être calculé par le code, pas copié. Si un test révèle un écart, tu le signales dans le rapport final et tu corriges le texte, jamais le test pour qu'il passe.
+Interdit : intégrer la carte du corps à l'app (décision D5 : maquette statique, dite telle quelle) ; changer `contracts/` ; changer `csync/rules.py` ou ses seuils ; toucher au deck (`pitch/deck/`).
+
+## Étapes (dans l'ordre ; 1 commit par étape ; s'arrêter et rapporter si une étape échoue deux fois)
+**E1 — Interface (M3-1..3), 45 min.** Lance `streamlit run csync/ui/app.py`. Pour les capsules de l'histoire (jours 7, 9, 10, graine 42, amplitude 2.5) vérifie que les trois écrans (Nominal, Action, Reprise refusée) s'affichent sans erreur et que chaque texte vient de `csync/config/strings_en.json`, chaque couleur de `theme.json`. Utilise `streamlit.testing.v1.AppTest` pour étendre `tests/test_ui.py` : un test par écran (titre, état de chaque dimension, raison de refus lisible « last heart rate 14 min old, limit 10 min », mention SYNTHETIC DATA). Corrige les défauts trouvés, sans changer le comportement du moteur.
+**E2 — Test des chiffres annoncés, 30 min.** Crée `tests/test_claims.py` qui recalcule avec le code et compare : faux déclenchements 0,7 % sur 300 équipages sains (tolérance ±0,3 point), détection 95,3 % (dérive progressive, ±1,5 point), 59,3 % (saut brutal, ±3 points), plateau CO2 153 h (`flag_plateaus` sur la série brute RR-1), porte de reprise 10 min, délai sol 20 min. Les graines et paramètres sont ceux de `docs/METHODES_NASA_DOSSIER.md`. Si un chiffre sort de la tolérance : ne pas modifier le test ; écrire l'écart dans `docs/RELEASE_DRYRUN.md` pour M1.
+**E3 — `scripts/check_consistency.py`, 15 min.** Il plante (UnicodeDecodeError, octet 0x95). Ouvre les fichiers en `encoding="utf8", errors="replace"` ou trouve le fichier fautif et signale-le. Lance-le et recopie sa sortie dans `docs/RELEASE_DRYRUN.md`.
+**E4 — Répétition de la livraison, 30 min.** Déroule `docs/RELEASE_CHECKLIST.md` point par point : `pytest`, `scripts/validate_contracts.py`, `scripts/run_story.py` (sortie rejouable identique deux fois), `node pitch/tests/test_deck.js pitch/deck/deck_final.html`. Écris `docs/RELEASE_DRYRUN.md` : une ligne par point, OK / ÉCART + sortie. Ne coche pas la checklist toi-même : c'est M5.
+**E5 — Cohérence texte, 30 min.** Compare `README.md`, `pitch/deck/SCRIPT_EN.md`, `SCRIPT_FR.md` et `deck.html` : chiffres, jours (jour 7 / 9 / 10), états (NORMAL, WATCH, DEGRADED, UNKNOWN), durées. Liste chaque écart dans `docs/RELEASE_DRYRUN.md` avec le fichier et la ligne vérifiés par toi dans le dépôt (jamais de ligne citée de mémoire). Corrige seulement `README.md` si l'écart est un fait vérifiable ; pour les scripts et le deck, rapporte sans corriger.
+**E6 — Rapport final.** `docs/RELEASE_DRYRUN.md` en tête : état (tests, nombre), écarts ouverts, ce que tu n'as pas pu vérifier. Puis `python scripts/build_context.py`, commit, push de la branche, pull request.
+
+## Critères de fin
+`pytest` vert (≥ 128 + nouveaux tests), aucun mot interdit, `RELEASE_DRYRUN.md` complet, pull request ouverte, rien d'autre modifié que les fichiers cités.
 
 
 ---
@@ -212,6 +236,7 @@ V1 Produit à partir du 14/11 (début confirmé par les organisateurs) · V2 Auc
 - 14/11 MAJ 8 : bloc Gemini Pro v2 (G1 audit des pilotes, G2 catalogue de données NASA, G3 ré-implémentation contre vecteurs). Parcours v10 : avancement principal/accessoire, comptes à rebours, états des tâches.
 - 14/11 11:45 MAJ 9 : intégration des 3 rendus (code MAJ5 : 127 tests ; pitch phase 3 : deck, silhouette, script FR, vidéo ; audit indépendant). Captures C1–C6 insérées, C6 refaite en anglais, sources NASA dans la silhouette (cœur, tension, sommeil). OUTLINE.md obsolète, RESULTS.md marqué partiellement obsolète.
 - 14/11 14:50 MAJ 10 : passation Cursor (AGENTS.md, docs/CURSOR_HANDOFF.md) ; pré-mortem de l'artefact Parcours (PREMORTEM_ARTEFACT_14-11.md) ; artefact simplifié 8→4 onglets.
+- 14/11 15:05 MAJ 11 : D6, D9, D10, D11 tranchées par M1 ; logo intégré ; SCRIPT_FR v3 (formulations absolues adoucies), SCRIPT_EN v1 ; diapo 5 « Stale data is flagged as expired » ; bloc lourd Cursor.
 
 
 ---

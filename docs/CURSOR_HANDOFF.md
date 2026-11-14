@@ -20,11 +20,12 @@
 | M1-3 | M1 | Une page NASA HRP citée par fiche d'aide | `docs/HELP_CARD_SOURCES.md` complet | M1-3 |
 | M5-1/2 | M5 | Assemblage GO/NO-GO 13:30, 17:30, 22:30, dim. 10:30, 12:00 ; page de soumission | `docs/RELEASE_CHECKLIST.md` coché | M5-1, M5-2 |
 
+Session longue prévue : `docs/CURSOR_TACHE_LOURDE.md` (E1–E6).
 Étapes détaillées et prompts : `docs/team/tasks.json`, `docs/team/roles/`. Suivi en direct : artefact Parcours (onglet « Maintenant »).
 
 ## 3. Décisions (voir `docs/PREMORTEM_14-11.md` §7)
 Appliquées : D1 CO2 153 h, D2 « seuil réglé sur les mêmes scénarios », D3 « Données NASA » reformulé, D4 anglais du deck, D5 maquette corps = statique (non intégrée à l'app, à dire), D7 PDF/pptx de secours, D8 calendrier, D12 README.
-En attente de M1 : D6 orateurs A/B (A 190 s, B 110 s ; Jean pas d'oral), D9 suppléant de soumission, D10 trace écrite de l'autorisation de démarrer, D11 langue du jury. Ne pas trancher à sa place.
+Tranchées le 14/11 14:50 : D6 orateurs A = M1 (190 s), B = M2 (110 s) ; D9 suppléant reporté (à rouvrir à 22:30) ; D10 pas de preuve écrite (autorisation orale entendue de tous, dite telle quelle dans AI_USAGE.md) ; D11 bilingue, oral anglais en principe (`pitch/deck/SCRIPT_EN.md`, `SCRIPT_FR.md`). Rien n'est en attente de M1 sur ces points.
 `docs/OPEN_DECISIONS.md` : tableau d'origine, chiffres antérieurs au 14/11 ; fait foi : `rules.py` + PREMORTEM §7.
 
 ## 4. Pièges connus

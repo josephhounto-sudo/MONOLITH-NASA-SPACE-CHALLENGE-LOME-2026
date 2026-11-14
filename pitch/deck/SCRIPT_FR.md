@@ -1,10 +1,10 @@
 # FICHIER: pitch/deck/SCRIPT_FR.md
-Date/heure : sam. 14/11/2026 ~15:10 UTC · Version v2 (décisions D1–D3 du pré-mortem appliquées ; diapo 1, 6, 7 modifiées)
+Date/heure : sam. 14/11/2026 ~15:00 UTC · Version v3 (D6 orateurs ; formulations absolues adoucies : « jamais » remplacé par ce que le code fait réellement)
 Statut : FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
 
 Pitch oral en français, 5:00 exactes, **sans questions du jury** (`docs/PROGRAMME_OFFICIEL.md`). Diapositives : `deck.html`. Démo en direct : Acte 3 (diapo 5).
 Débit visé : 130 à 145 mots par minute. Les comptes de mots ont été faits par script sur le texte entre guillemets ; voir le tableau à la fin.
-Rôles : orateur A et orateur B (aucun nom dans ce fichier).
+Rôles (décision D6, 14/11) : orateur A = M1 (diapos 1, 2, 3, 6, 7 = 190 s) ; orateur B = M2 (diapos 4 et 5 = 110 s, dont la démo). Aucun nom dans ce fichier.
 
 ---
 ## Diapo 1 · 0:00 → 0:25 (25 s) · orateur A
@@ -12,21 +12,21 @@ Rôles : orateur A et orateur B (aucun nom dans ce fichier).
 **Transition :** clic sur « vingt minutes ».
 
 ## Diapo 2 · 0:25 → 1:05 (40 s) · orateur A
-« Selon le programme de recherche humaine de la NASA, un message entre Mars et la Terre met jusqu'à vingt minutes dans un sens. Et la NASA prévoit des coupures de communication qui peuvent durer des semaines. Pour toute mission habitée vers Mars, ces retards sont inévitables. L'équipage est donc seul pour mesurer et agir. Or les astronautes ne sont pas médecins. Il leur faut un outil qui fonctionne hors ligne, qui guide chaque mesure, et qui ne laisse jamais une donnée absente passer pour une bonne nouvelle. »
+« Selon le programme de recherche humaine de la NASA, un message entre Mars et la Terre met jusqu'à vingt minutes dans un sens. Et la NASA prévoit des coupures de communication qui peuvent durer des semaines. Pour toute mission habitée vers Mars, ces retards sont inévitables. L'équipage est donc seul pour mesurer et agir. Or les astronautes ne sont pas médecins. Il leur faut un outil qui fonctionne hors ligne, qui guide chaque mesure, et qui signale toute donnée absente au lieu de la faire passer pour normale. »
 **Transition :** « Voici comment, en trois actes. »
 
 ## Diapo 3 · 1:05 → 1:55 (50 s) · orateur A
-« Premier acte : une dérive lente. C-Sync compare chaque astronaute à lui-même, sur ses cinq premiers jours, et non à une norme universelle. Pendant ces cinq jours, rien n'est jugé : la référence se construit, et l'écran le dit. Au jour sept de notre histoire simulée, le temps de réaction et les erreurs d'attention s'éloignent de sa référence deux jours de suite. La carte Attention passe en dégradée, et la carte Corps en surveillance : deux dimensions sortent de la normale. C-Sync affiche ce qui a changé, depuis quand, et avec quelle certitude. Il ouvre une procédure de fatigue et propose de revoir les signaux avec l'officier médical de bord. La décision reste humaine : elle est affichée en attente. »
+« Premier acte : une dérive lente. C-Sync compare chaque astronaute à lui-même, sur ses cinq premiers jours, et non à une norme universelle. Pendant ces cinq jours, aucune alerte de dérive n'est évaluée : la référence se construit, et l'écran le dit. Au jour sept de notre histoire simulée, le temps de réaction et les erreurs d'attention s'éloignent de sa référence deux jours de suite. La carte Attention passe en dégradée, et la carte Corps en surveillance : deux dimensions sortent de la normale. C-Sync affiche ce qui a changé, depuis quand, et avec quelle certitude. Il ouvre une procédure de fatigue et propose de revoir les signaux avec l'officier médical de bord. La décision reste humaine : elle est affichée en attente. »
 **Transition :** passage de main à l'orateur B.
 
 ## Diapo 4 · 1:55 → 2:55 (60 s) · orateur B
-« Deuxième acte, jour neuf : l'urgence de la vidéo du défi. L'astronaute signale une douleur vive à la poitrine. Une règle d'événement ouvre aussitôt une procédure critique. L'écran guide les mesures, une par une : fréquence cardiaque, tension, température, glycémie. Pour chacune, il explique comment la prendre. La glycémie est marquée sans référence NASA en vol. C-Sync ne propose aucun médicament et n'interprète pas le symptôme : il enregistre les valeurs telles qu'elles sont mesurées, chacune avec son heure et son origine. Une phrase fixe rappelle de suivre la check-list médicale de bord et l'officier médical. Le compte rendu part dans une file d'envoi, et l'écran affiche l'état de la liaison. La liaison est coupée ; dès qu'elle revient, le rapport arrive au sol une seule fois. Ici, une carte du corps à cliquer, encore en maquette, non codée. »
+« Deuxième acte, jour neuf : l'urgence de la vidéo du défi. L'astronaute signale une douleur vive à la poitrine. Une règle d'événement ouvre directement une procédure critique. L'écran guide les mesures, une par une : fréquence cardiaque, tension, température, glycémie. Pour chacune, il explique comment la prendre. La glycémie est marquée sans référence NASA en vol. C-Sync est conçu sans recommandation de médicament ni interprétation du symptôme : il enregistre les valeurs telles qu'elles sont mesurées, chacune avec son heure et son origine. Une phrase fixe rappelle de suivre la check-list médicale de bord et l'officier médical. Le compte rendu part dans une file d'envoi, et l'écran affiche l'état de la liaison. La liaison est coupée ; dès qu'elle revient, le rapport est envoyé une seule fois, sans doublon. Ici, une carte du corps à cliquer, encore en maquette, non codée. »
 **Transition :** « Le lendemain, l'équipage veut reprendre le travail. »
 **Si on est en retard : coupe** la phrase « La glycémie est marquée sans référence NASA en vol. » (−9 mots, environ 4 s).
 
 ## Diapo 5 · 2:55 → 3:45 (50 s) · orateur B · DÉMO EN DIRECT
 Manipulation : interface déjà ouverte au jour 10. Appui sur « Request resume », puis sur « Commander override ».
-« Troisième acte, jour dix, en direct. Je demande la reprise. Refusée. [2 s de silence] Le commandant force la reprise. Le forçage est consigné dans le journal, mais la décision ne change pas : la dernière fréquence cardiaque date de quatorze minutes, la limite est de dix. Le système donne la raison en clair, sur l'écran. Une donnée périmée n'est jamais présentée comme normale. Un forçage ne suffit jamais, seul, à reprendre. »
+« Troisième acte, jour dix, en direct. Je demande la reprise. Refusée. [2 s de silence] Le commandant force la reprise. Le forçage est consigné dans le journal, mais la décision ne change pas : la dernière fréquence cardiaque date de quatorze minutes, la limite est de dix. Le système donne la raison en clair, sur l'écran. Une donnée périmée est signalée comme expirée, pas comme normale. Dans nos règles, un forçage seul ne suffit pas à reprendre. »
 Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et dire le même texte.
 **Transition :** retour au clavier de l'orateur A.
 
@@ -35,21 +35,21 @@ Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et
 **Si on est en retard : coupe** la dernière phrase (CO2 constant, −22 mots, environ 10 s).
 
 ## Diapo 7 · 4:25 → 5:00 (35 s) · orateur A
-« Nos limites : l'équipage est simulé, rien n'est validé cliniquement. Les os, l'immunité et la dose de rayonnement reçue par l'équipage ne sont pas encore mesurés ; ils sont affichés inconnus, jamais normaux. Nous avons choisi un moteur simple, testé et explicable, plutôt qu'une boîte noire. La suite : de vraies données si elles s'ouvrent, et des adaptateurs pour de vrais capteurs. Et rien de ce que nous montrons ne pose d'étiquette sur une personne. C-Sync : hors ligne, explicable, et c'est l'humain qui décide. Merci. »
+« Nos limites : l'équipage est simulé, rien n'est validé cliniquement. Les os, l'immunité et la dose de rayonnement reçue par l'équipage ne sont pas encore mesurés ; ils sont affichés comme inconnus. Nous avons choisi un moteur simple, testé et explicable, plutôt qu'une boîte noire. La suite : de vraies données si elles s'ouvrent, et des adaptateurs pour de vrais capteurs. L'interface n'affiche que des écarts statistiques, sans qualification médicale. C-Sync : hors ligne, explicable, et c'est l'humain qui décide. Merci. »
 
 ---
 ## Comptes et minutage (calculés par script)
 | Diapo | Début → fin | Durée | Mots dits | Mots/min |
 |---|---|---|---|---|
-| 1 | 0:00 → 0:25 | 25 s | 57 | 137 |
-| 2 | 0:25 → 1:05 | 40 s | 87 | 130 |
-| 3 | 1:05 → 1:55 | 50 s | 116 | 139 |
-| 4 | 1:55 → 2:55 | 60 s | 135 | 135 |
-| 5 | 2:55 → 3:45 | 50 s | 71 | 85 |
-| 6 | 3:45 → 4:25 | 40 s | 81 | 122 |
-| 7 | 4:25 → 5:00 | 35 s | 82 | 141 |
-| **Total** | **0:00 → 5:00** | **300 s** | **629** | **126** |
+| 1 | 0:00 → 0:25 | 25 s | 59 | 142 |
+| 2 | 0:25 → 1:05 | 40 s | 88 | 132 |
+| 3 | 1:05 → 1:55 | 50 s | 122 | 146 |
+| 4 | 1:55 → 2:55 | 60 s | 139 | 139 |
+| 5 | 2:55 → 3:45 | 50 s | 72 | 86 |
+| 6 | 3:45 → 4:25 | 40 s | 84 | 126 |
+| 7 | 4:25 → 5:00 | 35 s | 78 | 134 |
+| **Total** | **0:00 → 5:00** | **300 s** | **642** | **128** |
 
-Lecture : les diapos parlées (1–4, 6, 7) vont de 122 à 141 mots/min (cible 130–145 ; la diapo 6, chargée en chiffres, est volontairement plus lente). La moyenne sur 5:00 (126) est plus basse parce que la diapo 5 est volontairement lente (environ 85 mots/min) : elle laisse le temps des deux clics de la démo et de 2 s de silence après « Refusée ».
+Lecture : les diapos parlées (1–4, 6, 7) vont de 126 à 146 mots/min (cible 130–145 ; la diapo 3 est un peu au-dessus, la diapo 6, chargée en chiffres, un peu en dessous). La moyenne sur 5:00 (128) est plus basse parce que la diapo 5 est volontairement lente (environ 85 mots/min) : elle laisse le temps des deux clics de la démo et de 2 s de silence après « Refusée ».
 Répétition : chronométrer une lecture complète à voix haute ; si elle dépasse 5:00, appliquer les deux lignes « coupe » (environ −14 s au total).
 Méthode de comptage : mots entre guillemets, un mot = suite de lettres ou de chiffres, apostrophes incluses (« l'équipage » = 1) ; un mot composé avec trait d'union compte pour un (« quatre-vingt-quinze » = 1).

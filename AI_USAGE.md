@@ -2,7 +2,7 @@
 
 | Tool | Used for | Human review |
 |---|---|---|
-| Claude (Anthropic) | Planning documents before the event (no code); from 14/11/2026 04:15 (after the organizers confirmed work could start): data analysis, synthetic generator, rules engine, tests, documentation drafts | Every change is reviewed by a team member before merge (checklist V10) |
+| Claude (Anthropic) | Planning documents before the event (no code); from 14/11/2026 04:15 (after the organizers confirmed work could start; the confirmation was given orally and heard by all participants, no written trace): data analysis, synthetic generator, rules engine, tests, documentation drafts | Every change is reviewed by a team member before merge (checklist V10) |
 | ChatGPT (OpenAI), Gemini (Google) | Research notes, idea review | Facts re-checked against the cited sources |
 | Cursor (with a manually selected model: Claude, GPT or Gemini) | Code assistance during the event | Pull-request review |
 
