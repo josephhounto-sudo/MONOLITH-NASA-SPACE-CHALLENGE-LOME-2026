@@ -46,7 +46,7 @@ python -m venv .venv && source .venv/bin/activate   # Windows: .venv\Scripts\act
 pip install -r requirements.txt
 python -m pytest -q                 # resume gate G1-G10, rules, send queue, wording
 python scripts/run_story.py         # regenerate the story and its outputs
-streamlit run csync/ui/app.py       # the interface (work in progress)
+streamlit run csync/ui/app.py       # the interface
 ```
 
 ## Repository map
@@ -67,7 +67,7 @@ streamlit run csync/ui/app.py       # the interface (work in progress)
 | Contracts v0 | drafted, to be validated |
 | Rules engine, resume gate, send queue | implemented; 153 automated tests (software stability, not clinical validation) |
 | Generator + story data | implemented |
-| Decision capsule, UI screens, procedure files | in progress (body map: static mock-up, not in the app) |
+| Decision capsule, UI screens, procedure files | implemented; the three screens (days 7, 9, 10) are covered by automated screen tests (body map: static mock-up, not in the app) |
 
 ## Team & AI use
 Team MONOLITH, five members (M1-M5). AI tools were used and are declared in [`AI_USAGE.md`](AI_USAGE.md). License: [MIT](LICENSE).

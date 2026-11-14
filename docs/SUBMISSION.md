@@ -1,6 +1,6 @@
 # Page de soumission — textes à copier (anglais) · M5
 **Project name:** C-Sync
-**High-Level Summary (draft):** C-Sync is an offline-first assistant that helps a deep-space crew notice unusual changes in their health and performance, guides them step by step through a medical emergency, and refuses to resume work when the supporting data are stale, with a ground delay of up to about 20 minutes or no link at all. It compares each astronaut to their own baseline, shows its confidence, flags missing data as unknown instead of normal, and leaves the final decision to a human operator. It uses real NASA ISS cabin telemetry (OSDR Environmental Data App) and labelled synthetic crew data.
+**High-Level Summary (draft):** C-Sync is an offline-first assistant that helps a deep-space crew notice unusual changes in their health and performance, guides them step by step through a medical emergency, and, under the demo's rules, refuses to resume work when the supporting data are stale, with a ground delay of up to about 20 minutes or no link at all. It compares each astronaut to their own baseline, shows its confidence, flags missing data as unknown instead of normal, and leaves the final decision to a human operator. It uses real NASA ISS cabin telemetry (OSDR Environmental Data App) and labelled synthetic crew data.
 **Project Demo:** PDF of the 7 slides (`pitch/`) or 30-second video with English subtitles.
 **Final Project Link:** https://github.com/josephhounto-sudo/MONOLITH-NASA-SPACE-CHALLENGE-LOME-2026
 **Project Details (draft, M5 verifies against README.md before pasting):**
@@ -14,3 +14,7 @@ AI: Claude (Anthropic) for planning documents before the event and, after the or
 NASA data and resources: OSDR Environmental Data App (ISS cabin telemetry, RR-1) for quality checks; NASA Human Research Program risk pages, paraphrased in our own words for the help cards; ASCEND report on Mars communication delays; methodological inspiration from the Artemis II Data Methodology Challenge winners. Full list with links: SOURCES.md.
 **References:** SOURCES.md.
 Checklist: all members registered on the team page; repository public; last version submitted before 23:59 local time.
+
+## Contrôle du formulaire officiel (14/11/2026 ~21:00 UTC)
+Page lue : https://www.spaceappschallenge.org/resources/project-submission-guide/. **Aucune limite de mots** n'y est indiquée pour le résumé ni pour les détails (un avis de ChatGPT parlait de 60 mots : non confirmé par la page). Démo : vidéo de 30 s au plus ou diapos (7 au plus, titre compris), en anglais, sous-titres anglais pour la vidéo, hébergée ailleurs, lien sans mot de passe ni inscription ; dépôt public sans mot de passe. IA : nommer les outils et l'usage ; images et vidéos IA avec filigrane visible ; code et données : mention dans le texte et les métadonnées ; ne pas reprendre ni modifier l'image de la NASA.
+Source d'une relecture externe : conversation ChatGPT « Continuer NASA Space Apps » (14:03), qui recommande une formulation prudente ; ses numéros de lignes du README datent d'une version antérieure.
