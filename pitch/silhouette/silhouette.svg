@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 640" role="group" aria-labelledby="sil-title sil-desc" id="csync-silhouette">
+  <!-- FICHIER: pitch/silhouette/silhouette.svg
+       Date/heure : sam. 14/11/2026 07:40 Lomé (UTC) · Commit de référence : dc61786 · Version v1
+       Statut : FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
+       Silhouette originale (formes simples, sans visage). Image fixe : NON CODÉE dans l'application (À CONFIRMER M1).
+       Couleurs : variables CSS ci-dessous (reprises de csync/config/theme.json). Aucune couleur dans les formes. -->
+  <title id="sil-title">C-Sync body map (static mock-up)</title>
+  <desc id="sil-desc">Front view of a neutral human figure with 7 clickable regions and a cabin (Habitat) zone. Static mock-up, not in the app yet.</desc>
+  <style>
+    :root, svg {
+      --sil-bg: #05090B;
+      --sil-panel: #0E161B;
+      --sil-fill: #1B2A31;
+      --sil-stroke: #9AABB1;
+      --sil-text: #F0F0F0;
+      --sil-focus: #00E0F5;
+      --sil-measured: #4CD6A0;
+      --sil-unknown: #8A999F;
+      --sil-context: #5A6B72;
+    }
+    .region { cursor: pointer; outline: none; }
+    .region .shape { fill: var(--sil-fill); stroke: var(--sil-stroke); stroke-width: 2; transition: fill .15s; }
+    .region.measured .shape { stroke: var(--sil-measured); }
+    .region.unknown .shape { stroke: var(--sil-unknown); stroke-dasharray: 6 4; }
+    .region.context .shape { stroke: var(--sil-context); stroke-dasharray: 2 4; }
+    .region:hover .shape, .region:focus .shape, .region.selected .shape { fill: var(--sil-panel); stroke: var(--sil-focus); stroke-width: 3; }
+    .lbl { fill: var(--sil-text); font: 600 13px system-ui, sans-serif; pointer-events: none; }
+    .sub { fill: var(--sil-stroke); font: 11px system-ui, sans-serif; pointer-events: none; }
+    .deco { fill: var(--sil-fill); stroke: var(--sil-stroke); stroke-width: 2; }
+  </style>
+
+  <!-- décor non cliquable : cou -->
+  <rect class="deco" x="186" y="104" width="28" height="20" rx="6"/>
+
+  <g id="region-head" class="region measured" role="button" tabindex="0" aria-label="Head: attention, sleepiness, mood, sleep">
+    <title>Head</title>
+    <circle class="shape" cx="200" cy="68" r="38"/>
+    <text class="lbl" x="200" y="72" text-anchor="middle">Head</text>
+  </g>
+
+  <g id="region-chest" class="region measured" role="button" tabindex="0" aria-label="Chest: heart rate, reported symptom">
+    <title>Chest</title>
+    <rect class="shape" x="140" y="122" width="120" height="108" rx="24"/>
+    <text class="lbl" x="200" y="180" text-anchor="middle">Chest</text>
+  </g>
+
+  <g id="region-abdomen" class="region unknown" role="button" tabindex="0" aria-label="Abdomen: not measured">
+    <title>Abdomen</title>
+    <rect class="shape" x="148" y="234" width="104" height="88" rx="16"/>
+    <text class="lbl" x="200" y="282" text-anchor="middle">Abdomen</text>
+  </g>
+
+  <g id="region-arm" class="region measured" role="button" tabindex="0" aria-label="Arm: blood pressure">
+    <title>Arm</title>
+    <rect class="shape" x="98" y="128" width="36" height="168" rx="18"/>
+    <rect class="shape" x="266" y="128" width="36" height="168" rx="18"/>
+    <text class="lbl" x="116" y="214" text-anchor="middle" transform="rotate(-90 116 214)">Arm</text>
+  </g>
+
+  <g id="region-hand" class="region measured" role="button" tabindex="0" aria-label="Hand: blood glucose">
+    <title>Hand</title>
+    <circle class="shape" cx="116" cy="314" r="17"/>
+    <circle class="shape" cx="284" cy="314" r="17"/>
+    <text class="sub" x="116" y="346" text-anchor="middle">Hand</text>
+  </g>
+
+  <g id="region-legs" class="region unknown" role="button" tabindex="0" aria-label="Legs and bones: not measured">
+    <title>Legs</title>
+    <rect class="shape" x="152" y="326" width="42" height="208" rx="20"/>
+    <rect class="shape" x="206" y="326" width="42" height="208" rx="20"/>
+    <text class="lbl" x="200" y="552" text-anchor="middle">Legs</text>
+  </g>
+
+  <g id="region-body" class="region measured" role="button" tabindex="0" aria-label="Whole body: temperature; immune system and radiation dose not measured">
+    <title>Whole body</title>
+    <rect class="shape" x="12" y="20" width="118" height="40" rx="10"/>
+    <text class="lbl" x="71" y="45" text-anchor="middle">Whole body</text>
+  </g>
+
+  <g id="region-habitat" class="region context" role="button" tabindex="0" aria-label="Habitat: real ISS cabin telemetry, context only">
+    <title>Habitat</title>
+    <rect class="shape" x="20" y="568" width="360" height="56" rx="12"/>
+    <text class="lbl" x="200" y="592" text-anchor="middle">Habitat · ISS cabin</text>
+    <text class="sub" x="200" y="610" text-anchor="middle">real NASA telemetry · context only</text>
+  </g>
+</svg>

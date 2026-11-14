@@ -1,0 +1,70 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DimensionState",
+  "description": "Base contract #2.",
+  "type": "object",
+  "required": [
+    "dimension",
+    "state",
+    "confidence",
+    "evidence",
+    "window"
+  ],
+  "properties": {
+    "dimension": {
+      "enum": [
+        "Body",
+        "Attention",
+        "Morale",
+        "Mission",
+        "Habitat"
+      ]
+    },
+    "state": {
+      "enum": [
+        "NORMAL",
+        "WATCH",
+        "DEGRADED",
+        "UNKNOWN"
+      ]
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "confounders": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "evidence": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "indicator_id": {
+            "type": "string"
+          },
+          "value": {
+            "type": [
+              "number",
+              "null"
+            ]
+          },
+          "baseline": {
+            "type": "number"
+          },
+          "d": {
+            "type": "number"
+          }
+        }
+      }
+    },
+    "window": {
+      "type": "string",
+      "description": "e.g. day 7, baseline days 1-5"
+    }
+  }
+}

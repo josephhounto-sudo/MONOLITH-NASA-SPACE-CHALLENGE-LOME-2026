@@ -1,0 +1,106 @@
+{
+  "scenario_id": "capteur",
+  "generator_version": "csync-synth-0.1",
+  "seed": 42,
+  "measurements": "data/out/measurements_capteur.csv",
+  "events": [
+    {
+      "day": 7,
+      "type": "SENSOR_OUTAGE",
+      "from_utc": "01:00",
+      "to_utc": "07:00",
+      "indicator_id": "PH01"
+    }
+  ],
+  "expected": {
+    "written_before_run": "2026-11-14",
+    "generate_kwargs": {
+      "seed": 42,
+      "drift": false,
+      "event": false,
+      "fast": false,
+      "outage": [
+        "day 7 01:00",
+        "day 7 07:00"
+      ]
+    },
+    "detector": "rule v3, Params() default",
+    "days": {
+      "1": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "2": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "3": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "4": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "5": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "6": {
+        "Body": "NORMAL",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      },
+      "7": {
+        "Body": "UNKNOWN",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      },
+      "8": {
+        "Body": "NORMAL",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      },
+      "9": {
+        "Body": "NORMAL",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      },
+      "10": {
+        "Body": "NORMAL",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      }
+    },
+    "procedure_days": 0,
+    "note": "null = the story documents (STORY.md, MAJ n°1) do not state this value; it is not checked.",
+    "sources": "STORY.md (sensor outage day 7 01:00-07:00 -> Body UNKNOWN that day); MAJ n°1 (0 procedure days). fast=False because the generator applies the outage only in full wrist mode."
+  },
+  "banned_words": [
+    "cause",
+    "caused by",
+    "because of",
+    "diagnosis",
+    "diagnose",
+    "disease",
+    "disorder",
+    "suffers from",
+    "proves",
+    "guaranteed"
+  ]
+}

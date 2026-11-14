@@ -1,0 +1,25 @@
+{
+  "surface": "#05090B",
+  "panel": "#0E161B",
+  "text": "#F0F0F0",
+  "text_secondary": "#9AABB1",
+  "interactive": "#00E0F5",
+  "state": {
+    "NORMAL": {
+      "color": "#4CD6A0",
+      "icon": "✓"
+    },
+    "WATCH": {
+      "color": "#F2A33A",
+      "icon": "!"
+    },
+    "DEGRADED": {
+      "color": "#FF6B5E",
+      "icon": "▲"
+    },
+    "UNKNOWN": {
+      "color": "#8A999F",
+      "icon": "?"
+    }
+  }
+}

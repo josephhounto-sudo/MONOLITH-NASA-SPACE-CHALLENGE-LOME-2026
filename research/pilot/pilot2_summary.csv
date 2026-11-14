@@ -1,0 +1,43 @@
+scenario,missing,method,runs,pct_procedure,median_first_day,ms
+"abrupt change 2 SD, day 8, 2 dimensions",0.0,A rule v3 (d>=1),150,91.3,9.0,12.339511999982733
+"abrupt change 2 SD, day 8, 2 dimensions",0.0,B rule proposed (d>=1.5 + floor),150,59.3,9.0,12.274497999982259
+"abrupt change 2 SD, day 8, 2 dimensions",0.0,C EWMA,150,76.0,9.0,11.140807499998573
+"abrupt change 2 SD, day 8, 2 dimensions",0.0,F EWMA + shrunk SD,150,76.7,9.0,11.288812499998357
+"abrupt change 2 SD, day 8, 2 dimensions",0.0,G Kalman local level,150,38.0,10.0,11.207247500010453
+"abrupt change 2 SD, day 8, 2 dimensions",0.0,H Mahalanobis (shrunk cov.),150,4.0,9.0,26.31856250002329
+"abrupt change 2 SD, day 8, 2 dimensions",0.0,I hybrid EWMA OR rule B,150,81.3,9.0,13.813952499987181
+control (no change),0.0,A rule v3 (d>=1),300,17.0,8.0,12.683158999990951
+control (no change),0.0,B rule proposed (d>=1.5 + floor),300,0.7,8.5,12.434844000011935
+control (no change),0.0,C EWMA,300,2.7,8.5,11.38206250001872
+control (no change),0.0,F EWMA + shrunk SD,300,2.0,8.5,11.657700500009582
+control (no change),0.0,G Kalman local level,300,0.7,8.0,11.490929000004257
+control (no change),0.0,H Mahalanobis (shrunk cov.),300,0.0,,27.099746000004643
+control (no change),0.0,I hybrid EWMA OR rule B,300,4.0,8.5,14.096432000002324
+control (no change),0.1,A rule v3 (d>=1),300,9.0,8.0,12.737310500000376
+control (no change),0.1,B rule proposed (d>=1.5 + floor),300,0.0,,12.784778999986202
+control (no change),0.1,C EWMA,300,1.0,8.0,11.788266500019517
+control (no change),0.1,F EWMA + shrunk SD,300,0.3,8.0,12.002761499985581
+control (no change),0.1,G Kalman local level,300,0.3,8.0,11.869962999980999
+control (no change),0.1,H Mahalanobis (shrunk cov.),300,0.0,,22.576555999989978
+control (no change),0.1,I hybrid EWMA OR rule B,300,1.0,8.0,14.207096999996338
+"favourable change 2 SD, 2 dimensions",0.0,A rule v3 (d>=1),150,6.0,7.0,12.385854000029894
+"favourable change 2 SD, 2 dimensions",0.0,B rule proposed (d>=1.5 + floor),150,0.0,,12.414746500013507
+"favourable change 2 SD, 2 dimensions",0.0,C EWMA,150,0.7,7.0,11.293063000039183
+"favourable change 2 SD, 2 dimensions",0.0,F EWMA + shrunk SD,150,0.7,7.0,11.42503950001128
+"favourable change 2 SD, 2 dimensions",0.0,G Kalman local level,150,0.0,,11.408899999992173
+"favourable change 2 SD, 2 dimensions",0.0,H Mahalanobis (shrunk cov.),150,7.3,9.0,26.665143000002445
+"favourable change 2 SD, 2 dimensions",0.0,I hybrid EWMA OR rule B,150,0.7,7.0,14.14985000002389
+gradual drift 1.5 SD,0.0,A rule v3 (d>=1),150,100.0,7.0,12.335327000016605
+gradual drift 1.5 SD,0.0,B rule proposed (d>=1.5 + floor),150,95.3,7.0,12.227172999985214
+gradual drift 1.5 SD,0.0,C EWMA,150,99.3,7.0,11.121208500014745
+gradual drift 1.5 SD,0.0,F EWMA + shrunk SD,150,99.3,7.0,11.491902499983553
+gradual drift 1.5 SD,0.0,G Kalman local level,150,95.3,8.0,11.176546000001508
+gradual drift 1.5 SD,0.0,H Mahalanobis (shrunk cov.),150,40.7,9.0,26.368963499976417
+gradual drift 1.5 SD,0.0,I hybrid EWMA OR rule B,150,99.3,7.0,13.918541000009554
+gradual drift 1.5 SD,0.1,A rule v3 (d>=1),150,93.3,7.0,12.783347500004538
+gradual drift 1.5 SD,0.1,B rule proposed (d>=1.5 + floor),150,80.7,8.0,12.886358499997641
+gradual drift 1.5 SD,0.1,C EWMA,150,94.7,7.0,11.798319000007496
+gradual drift 1.5 SD,0.1,F EWMA + shrunk SD,150,96.7,7.0,12.077475000012328
+gradual drift 1.5 SD,0.1,G Kalman local level,150,92.0,8.0,11.845339999979387
+gradual drift 1.5 SD,0.1,H Mahalanobis (shrunk cov.),150,18.7,9.0,23.276894500014578
+gradual drift 1.5 SD,0.1,I hybrid EWMA OR rule B,150,95.3,7.0,14.232108000015842

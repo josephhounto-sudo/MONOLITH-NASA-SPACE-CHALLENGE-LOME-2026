@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "SendEnvelope",
+  "description": "Format #6: package sent to ground. message_id is the anti-duplicate key.",
+  "type": "object",
+  "required": [
+    "message_id",
+    "created_utc",
+    "payload_type",
+    "payload"
+  ],
+  "properties": {
+    "message_id": {
+      "type": "string",
+      "minLength": 16
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "payload_type": {
+      "enum": [
+        "capsule",
+        "heartbeat",
+        "report"
+      ]
+    },
+    "payload": {
+      "type": "object"
+    },
+    "attempts": {
+      "type": "integer",
+      "minimum": 0
+    }
+  }
+}

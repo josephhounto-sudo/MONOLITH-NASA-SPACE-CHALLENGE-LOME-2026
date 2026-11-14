@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ProcedureFile",
+  "description": "Format #7: fixed procedure text, designated by a capsule. Never a treatment or a drug.",
+  "type": "object",
+  "required": [
+    "procedure_id",
+    "title",
+    "steps",
+    "prerequisites"
+  ],
+  "properties": {
+    "procedure_id": {
+      "type": "string"
+    },
+    "title": {
+      "type": "string"
+    },
+    "fixed_sentence": {
+      "const": "Follow the onboard medical checklist and the crew medical officer."
+    },
+    "steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": [
+          "n",
+          "text"
+        ],
+        "properties": {
+          "n": {
+            "type": "integer"
+          },
+          "text": {
+            "type": "string"
+          },
+          "measure": {
+            "type": "string"
+          },
+          "how_to": {
+            "type": "string"
+          },
+          "why": {
+            "type": "string"
+          },
+          "hrp_source_url": {
+            "type": "string",
+            "format": "uri"
+          }
+        }
+      }
+    },
+    "prerequisites": {
+      "type": "array"
+    },
+    "no_physical_prereq": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

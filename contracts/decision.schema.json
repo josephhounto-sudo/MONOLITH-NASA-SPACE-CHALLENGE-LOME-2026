@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Decision",
+  "description": "Base contract #3.",
+  "type": "object",
+  "required": [
+    "action",
+    "criticality",
+    "rationale",
+    "confidence",
+    "data_origin",
+    "ground_delay_min"
+  ],
+  "properties": {
+    "action": {
+      "enum": [
+        "CONTINUE",
+        "PAUSE",
+        "OPEN_PROCEDURE",
+        "REFUSE_RESUME"
+      ]
+    },
+    "procedure_id": {
+      "type": "string"
+    },
+    "criticality": {
+      "enum": [
+        "ROUTINE",
+        "IMPORTANT",
+        "CRITICAL"
+      ],
+      "description": "ROUTINE=self-care, IMPORTANT=crew medical officer, CRITICAL=flight surgeon"
+    },
+    "rationale": {
+      "type": "string"
+    },
+    "confidence": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "data_origin": {
+      "enum": [
+        "SYNTHETIC",
+        "REAL_OPEN",
+        "MIXED"
+      ]
+    },
+    "ground_delay_min": {
+      "const": 20
+    }
+  }
+}

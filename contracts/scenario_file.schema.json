@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "ScenarioFile",
+  "description": "Format #5: data and events of the story + expected result.",
+  "type": "object",
+  "required": [
+    "scenario_id",
+    "generator_version",
+    "seed",
+    "measurements",
+    "events",
+    "expected"
+  ],
+  "properties": {
+    "scenario_id": {
+      "enum": [
+        "histoire",
+        "temoin",
+        "capteur"
+      ]
+    },
+    "generator_version": {
+      "type": "string"
+    },
+    "seed": {
+      "type": "integer"
+    },
+    "measurements": {
+      "type": "string",
+      "description": "path to CSV of Measurement rows"
+    },
+    "events": {
+      "type": "array"
+    },
+    "expected": {
+      "type": "object",
+      "description": "expected states/decisions per day, written BEFORE running"
+    },
+    "banned_words": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

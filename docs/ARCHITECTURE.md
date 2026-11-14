@@ -1,0 +1,2 @@
+# Architecture (résumé)
+Monolithe modulaire, hors ligne. Un seul format d'entrée (Measurement), un seul format pour l'écran (DecisionCapsule). Modules : `synthetic/generator.py` (sources simulées), `csync/rules.py` (référence personnelle, écarts, états, décisions), `csync/gate.py` (porte de reprise), `csync/sendqueue.py` (file d'envoi, message_id), `csync/language.py` (mots interdits), `csync/ui/app.py` (Streamlit). À venir : `csync/capsule.py` (M2), `csync/quality.py` (M2), fichiers procédure (M4).

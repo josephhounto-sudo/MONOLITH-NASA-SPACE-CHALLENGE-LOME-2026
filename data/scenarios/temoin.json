@@ -1,0 +1,94 @@
+{
+  "scenario_id": "temoin",
+  "generator_version": "csync-synth-0.1",
+  "seed": 42,
+  "measurements": "data/out/measurements_temoin.csv",
+  "events": [],
+  "expected": {
+    "written_before_run": "2026-11-14",
+    "generate_kwargs": {
+      "seed": 42,
+      "drift": false,
+      "event": false,
+      "fast": true
+    },
+    "detector": "rule v3, Params() default",
+    "days": {
+      "1": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "2": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "3": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "4": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "5": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "6": {
+        "Body": "NORMAL",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      },
+      "7": {
+        "Body": "NORMAL",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      },
+      "8": {
+        "Body": "NORMAL",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      },
+      "9": {
+        "Body": "NORMAL",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      },
+      "10": {
+        "Body": "NORMAL",
+        "Attention": "NORMAL",
+        "Morale": "NORMAL",
+        "decision": "CONTINUE"
+      }
+    },
+    "procedure_days": 0,
+    "note": "null = the story documents (STORY.md, MAJ n°1) do not state this value; it is not checked.",
+    "sources": "STORY.md (control: no drift, no event); MAJ n°1 (0 procedure days)"
+  },
+  "banned_words": [
+    "cause",
+    "caused by",
+    "because of",
+    "diagnosis",
+    "diagnose",
+    "disease",
+    "disorder",
+    "suffers from",
+    "proves",
+    "guaranteed"
+  ]
+}

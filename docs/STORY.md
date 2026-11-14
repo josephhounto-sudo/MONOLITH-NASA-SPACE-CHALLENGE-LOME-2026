@@ -1,0 +1,4 @@
+# L'histoire « Vol vers Mars, jours 1 à 10 » (référence pour tous)
+Jours 1-5 : référence personnelle (UNKNOWN « baseline being built »). Jours 6-9 : sommeil déclaré < 6 h, temps de réaction et somnolence en hausse (dérive 1,5 ET par défaut ; 2,0 ET proposé). Jour 9, 13:00-19:00 : liaison coupée. Jour 9, 14:10 : symptôme « chest pain » coché → urgence guidée CRITICAL ; mesures guidées FC 104, TA 142/91, T 36,9 °C, glycémie 112 mg/dL (sans seuil). Compte rendu créé 14:20, reçu par le sol 19:20, une seule fois. Jour 10, 08:46 : FC guidée ; 09:00 : demande de reprise → REFUSE_RESUME (14 min > 10 min), même avec override.
+Variantes : témoin (aucune dérive, aucun événement) ; capteur en panne (jour 7, 01:00-07:00 : la FC de repos manque → Body UNKNOWN ce jour-là).
+Habitat : vraies données NASA EDA RR-1 (26/09 → 05/10/2014 = jours 1 → 10).

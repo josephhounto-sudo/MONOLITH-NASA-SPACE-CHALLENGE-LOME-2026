@@ -1,0 +1,21 @@
+{
+  "_header": "2026-11-14 ~07:00 Lome (UTC) | reference commit dc61786 | FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ | NASA pages opened and read 2026-11-14, see docs/HELP_CARD_SOURCES.md",
+  "procedure_id": "PROC-FATIGUE-01",
+  "title": "Several signals away from the personal baseline",
+  "fixed_sentence": "Follow the onboard medical checklist and the crew medical officer.",
+  "steps": [
+    {"n": 1, "text": "Review the signals shown on screen with the crew medical officer."},
+    {"n": 2, "text": "Sleep: record last night's sleep duration.", "measure": "Sleep (PH09)",
+     "how_to": "Enter the number of hours slept, as estimated by the crew member.",
+     "why": "NASA's Human Research Program names chronic sleep loss and disrupted biological clocks as spaceflight stressors that can affect health and mission success.",
+     "hrp_source_url": "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/"},
+    {"n": 3, "text": "Attention: repeat the 3-minute reaction-time test.", "measure": "Reaction time (CO01)",
+     "how_to": "Run the 3-minute reaction-time test on the onboard tablet.",
+     "why": "NASA's Human Research Program lists performance decrements from sleep loss, circadian desynchronization and work overload as a spaceflight risk.",
+     "hrp_source_url": "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/"},
+    {"n": 4, "text": "Log: record the human decision (accepted or rejected) and the time."}
+  ],
+  "prerequisites": [],
+  "no_physical_prereq": false,
+  "override_policy": {"override_never_resumes_alone": true}
+}

@@ -1,0 +1,124 @@
+{
+  "scenario_id": "histoire",
+  "generator_version": "csync-synth-0.1",
+  "seed": 42,
+  "measurements": "data/out/measurements_histoire.csv",
+  "events": [
+    {
+      "day": 9,
+      "time_utc": "14:10",
+      "type": "SY01",
+      "value_text": "chest_pain;zone=thorax",
+      "expected_action": "OPEN_PROCEDURE",
+      "procedure_id": "PROC-EMERGENCY-01",
+      "criticality": "CRITICAL"
+    },
+    {
+      "day": 9,
+      "type": "LINK_DOWN",
+      "from_utc": "13:00",
+      "to_utc": "19:00"
+    },
+    {
+      "day": 9,
+      "type": "REPORT",
+      "created_utc": "14:20",
+      "received_utc": "19:20",
+      "deliveries": 1
+    },
+    {
+      "day": 10,
+      "type": "RESUME_REQUEST",
+      "time_utc": "09:00",
+      "expected": "REFUSE_RESUME",
+      "expected_reason": "PH01 is stale (14 min > 10 min)",
+      "with_override": "REFUSE_RESUME"
+    }
+  ],
+  "expected": {
+    "written_before_run": "2026-11-14",
+    "generate_kwargs": {
+      "seed": 42,
+      "drift_amp": 2.5,
+      "fast": true
+    },
+    "detector": "rule v3, Params() default",
+    "days": {
+      "1": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "2": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "3": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "4": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "5": {
+        "Body": "UNKNOWN",
+        "Attention": "UNKNOWN",
+        "Morale": "UNKNOWN",
+        "decision": "CONTINUE"
+      },
+      "6": {
+        "Body": null,
+        "Attention": null,
+        "Morale": null,
+        "decision": "CONTINUE"
+      },
+      "7": {
+        "Body": null,
+        "Attention": "DEGRADED",
+        "Morale": null,
+        "decision": "OPEN_PROCEDURE"
+      },
+      "8": {
+        "Body": null,
+        "Attention": null,
+        "Morale": null,
+        "decision": "OPEN_PROCEDURE"
+      },
+      "9": {
+        "Body": null,
+        "Attention": null,
+        "Morale": null,
+        "decision": "OPEN_PROCEDURE"
+      },
+      "10": {
+        "Body": null,
+        "Attention": null,
+        "Morale": null,
+        "decision": "CONTINUE"
+      }
+    },
+    "procedure_days": 3,
+    "note": "null = the story documents (STORY.md, MAJ n°1) do not state this value; it is not checked.",
+    "sources": "STORY.md (drift days 6-9, 2-day confirmation -> first procedure day 7); MAJ n°1 (day 7 Attention DEGRADED with Params() + drift_amp 2.0; 3 procedure days)"
+  },
+  "banned_words": [
+    "cause",
+    "caused by",
+    "because of",
+    "diagnosis",
+    "diagnose",
+    "disease",
+    "disorder",
+    "suffers from",
+    "proves",
+    "guaranteed"
+  ]
+}

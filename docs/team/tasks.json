@@ -1,0 +1,265 @@
+{
+ "version": "1 — samedi 14/11/2026 05:30",
+ "regle_prompts": "Dans Cursor : choisis le modèle à la main (Claude, GPT ou Gemini). Jamais le mode automatique, jamais un modèle d'origine chinoise. Ouvre le dossier du dépôt (MONOLITH-NASA-SPACE-CHALLENGE-LOME-2026), colle le prompt tel quel dans le chat de Cursor, puis lis ce que l'IA propose avant d'accepter.",
+ "tasks": [
+  {
+   "id": "S0",
+   "role": "Tous",
+   "quand": "Sam 09:30",
+   "titre": "Installer et lancer le projet sur ton ordinateur",
+   "pourquoi": "Tout le monde travaille sur la même copie du code ; si les tests passent chez toi, ton poste est prêt.",
+   "etapes": [
+    "Installe Python 3.11 (python.org), Git (git-scm.com) et Cursor (cursor.com). Redémarre le terminal après.",
+    "Envoie ton nom d'utilisateur GitHub à M1 dans le groupe, pour être ajouté au dépôt. Attends sa confirmation.",
+    "Ouvre un terminal et tape : git clone https://github.com/josephhounto-sudo/MONOLITH-NASA-SPACE-CHALLENGE-LOME-2026.git",
+    "Puis : cd MONOLITH-NASA-SPACE-CHALLENGE-LOME-2026",
+    "Puis : python -m venv .venv",
+    "Active l'environnement. Windows : .venv\\Scripts\\activate — Mac/Linux : source .venv/bin/activate",
+    "Puis : pip install -r requirements.txt",
+    "Puis : python -m pytest -q  → tu dois lire « 23 passed » (ou plus). Sinon, copie le message d'erreur dans le groupe.",
+    "Ouvre le dossier du dépôt (MONOLITH-NASA-SPACE-CHALLENGE-LOME-2026) dans Cursor (File > Open Folder)."
+   ],
+   "fini_quand": "« passed » sans « failed » dans le terminal.",
+   "prompt": "Je débute. Dans ce dépôt C-Sync, explique-moi en 10 lignes maximum, en français simple, à quoi sert chaque dossier (contracts, csync, synthetic, data, research, tests, docs, pitch). Ne modifie aucun fichier."
+  },
+  {
+   "id": "S1",
+   "role": "Tous",
+   "quand": "À chaque tâche",
+   "titre": "Envoyer ton travail (Git, sans casser celui des autres)",
+   "pourquoi": "Chacun travaille sur sa branche ; seul M5 réunit les branches aux assemblages.",
+   "etapes": [
+    "Avant de commencer une tâche : git checkout main puis git pull",
+    "Crée ta branche : git checkout -b m2-capsule (remplace par ton rôle et un mot sur la tâche)",
+    "Travaille, puis lance python -m pytest -q : tout doit passer.",
+    "git add -A",
+    "git commit -m \"M2: capsule builder + tests\" (ton rôle, deux-points, ce que tu as fait)",
+    "git push -u origin m2-capsule",
+    "Sur github.com, ouvre le dépôt : un bandeau jaune propose « Compare & pull request ». Clique, puis « Create pull request ».",
+    "Préviens M5 dans le groupe : « PR prête : m2-capsule »."
+   ],
+   "fini_quand": "La pull request est ouverte et M5 est prévenu.",
+   "prompt": "J'ai fini ma tâche. Vérifie mes changements avec git diff : y a-t-il un nom de personne, un numéro de téléphone, une clé secrète, un mot interdit (cause, diagnostic, maladie, prouve, garanti) ou un seuil clinique sans source ? Lance python -m pytest -q et dis-moi si tout passe. Ne pousse rien toi-même."
+  },
+  {
+   "id": "M1-1",
+   "role": "M1",
+   "quand": "Sam 09:30-10:30",
+   "titre": "Trancher les 8 décisions ouvertes",
+   "pourquoi": "Le moteur ne peut pas être figé tant que le seuil, la référence et le sens des indicateurs ne sont pas choisis.",
+   "etapes": [
+    "Ouvre docs/OPEN_DECISIONS.md et research/pilot/RESULTS.md.",
+    "Pour chaque ligne, écris « défaut » ou ta valeur dans la colonne « Décision M1 ».",
+    "Si tu changes le seuil ou le plancher : modifie Params dans csync/rules.py (ou demande à M2).",
+    "Lance python -m pytest -q.",
+    "Commit sur une branche m1-decisions, puis pull request (fiche S1).",
+    "Annonce les décisions dans le groupe à 10:30."
+   ],
+   "fini_quand": "Les 8 lignes ont une décision et les tests passent.",
+   "prompt": "Lis docs/OPEN_DECISIONS.md, csync/rules.py et research/pilot/RESULTS.md. Pour chacune des 8 décisions, résume en 2 lignes l'option par défaut, son coût et son bénéfice, avec les chiffres du pilote. Ne change rien : je décide."
+  },
+  {
+   "id": "M1-2",
+   "role": "M1",
+   "quand": "Sam 09:30",
+   "titre": "Ajouter les membres au dépôt GitHub",
+   "pourquoi": "Sans accès, personne ne peut pousser sa branche.",
+   "etapes": [
+    "Sur github.com/josephhounto-sudo/MONOLITH-NASA-SPACE-CHALLENGE-LOME-2026 : Settings > Collaborators > Add people.",
+    "Ajoute le nom GitHub de chaque membre reçu dans le groupe (rôle « Write »).",
+    "Chaque membre doit accepter l'invitation reçue par e-mail."
+   ],
+   "fini_quand": "Chaque membre a pu faire git push (fiche S1).",
+   "prompt": ""
+  },
+  {
+   "id": "M1-3",
+   "role": "M1",
+   "quand": "Sam 11:00-13:00",
+   "titre": "Citer une page NASA HRP pour chaque fiche d'aide",
+   "pourquoi": "Chaque symptôme, mesure et risque affiché doit citer sa source NASA (règle des fiches d'aide).",
+   "etapes": [
+    "Ouvre https://www.nasa.gov/hrp/risks/ et les pages : Inadequate Sleep, Behavioral Conditions, Cardiovascular Adaptations.",
+    "Pour chaque mesure de l'urgence (FC, tension, température, glycémie, symptômes), copie l'adresse de la page la plus proche.",
+    "Remplis le tableau docs/HELP_CARD_SOURCES.md (mesure, URL, phrase « pourquoi » en 1 ligne, à tes propres mots).",
+    "Donne le fichier à M4 pour les fichiers procédure."
+   ],
+   "fini_quand": "Chaque ligne a une URL NASA ouverte et lue.",
+   "prompt": "Voici le texte d'une page NASA HRP que j'ai copié : [colle le texte]. En 1 phrase simple, en anglais, sans les mots cause, diagnosis, disease, proves, explique pourquoi un équipage mesure [la mesure]. N'invente rien qui ne soit pas dans le texte."
+  },
+  {
+   "id": "M1-4",
+   "role": "M1 + M4",
+   "quand": "Sam 15:30 → Dim 11:45",
+   "titre": "Pitch de 5 minutes + 7 diapositives",
+   "pourquoi": "Le pitch est dimanche entre 12:00 et 14:00 ; les diapositives servent aussi de démo de soumission.",
+   "etapes": [
+    "Ouvre pitch/OUTLINE.md : 7 diapositives en anglais, minutage, phrase par diapositive.",
+    "Prends les figures dans pitch/figures/ (pilote) et les captures de l'écran C-Sync (M3, samedi 22:30).",
+    "Écris le texte oral en français, 5 minutes chrono, sans les questions du jury.",
+    "Répétition générale dimanche 11:00 ; M3 chronomètre.",
+    "Exporte les diapositives en PDF dans pitch/ ; M5 les met sur la page de soumission."
+   ],
+   "fini_quand": "Répétition sous 5 minutes et PDF exporté.",
+   "prompt": "Lis pitch/OUTLINE.md et research/pilot/RESULTS.md. Écris le texte oral en français pour la diapositive [n], 45 secondes maximum, phrases courtes, sans les mots cause, diagnostic, maladie, prouve, garanti, et sans promettre une validation clinique."
+  },
+  {
+   "id": "M2-1",
+   "role": "M2",
+   "quand": "Sam 13:30-17:30",
+   "titre": "Construire la capsule de décision",
+   "pourquoi": "L'écran ne lit que la capsule : sans elle, M3 n'a rien à afficher.",
+   "etapes": [
+    "Branche m2-capsule (fiche S1).",
+    "Crée csync/capsule.py avec une fonction build_capsule(day, states, decisions, z, reference) qui renvoie un dict conforme à contracts/decision_capsule.schema.json.",
+    "Ajoute tests/test_capsule.py : la capsule du jour 7 de l'histoire est valide (jsonschema) et son explication passe banned_hits().",
+    "python -m pytest -q, puis pull request."
+   ],
+   "fini_quand": "tests/test_capsule.py passe ; une capsule par jour est produite.",
+   "prompt": "Dans ce dépôt, lis contracts/decision_capsule.schema.json, csync/rules.py (evaluate) et csync/language.py. Crée csync/capsule.py avec build_capsule(day, states, decisions, z, reference) qui renvoie un dict conforme au schéma : 8 blocs + ui_hint (valeurs provisoires, M1 valide : CONTINUE -> NOMINAL ; OPEN_PROCEDURE avec criticité CRITICAL -> ACTION ; OPEN_PROCEDURE ROUTINE ou IMPORTANT, PAUSE et REFUSE_RESUME -> FOCUS). L'explication cite les indicateurs marqués, leur valeur, l'unité et la référence personnelle, en anglais, et ne contient aucun mot de banned_hits. human_decision vaut toujours \"pending\". Écris tests/test_capsule.py (valide le jour 7 de generate('histoire', seed=42, drift_amp=2.5, fast=True) avec jsonschema). Ne modifie pas les contrats. Lance python -m pytest -q."
+  },
+  {
+   "id": "M2-2",
+   "role": "M2",
+   "quand": "Sam 17:30-22:30",
+   "titre": "Script qui rejoue toute l'histoire",
+   "pourquoi": "Une seule commande doit produire tout ce que l'écran affiche.",
+   "etapes": [
+    "Branche m2-runner.",
+    "Complète scripts/run_story.py pour écrire data/out/capsules_<variante>.json (une capsule par jour + l'urgence du jour 9 + la reprise du jour 10).",
+    "Vérifie : python scripts/run_story.py puis ouvre data/out/capsules_histoire.json.",
+    "Tests, pull request."
+   ],
+   "fini_quand": "Les 3 fichiers de capsules existent et sont valides.",
+   "prompt": "Lis scripts/run_story.py, csync/capsule.py, csync/gate.py et csync/sendqueue.py. Complète run_story.py pour produire data/out/capsules_histoire.json, capsules_temoin.json et capsules_capteur.json : une capsule par jour, la capsule d'urgence du jour 9 (procédure PROC-EMERGENCY-01, criticité CRITICAL) et la capsule de reprise du jour 10 (REFUSE_RESUME avec les raisons de resume_gate). Valide chaque capsule avec le schéma. Ajoute un test qui lance le script."
+  },
+  {
+   "id": "M2-3",
+   "role": "M2",
+   "quand": "Dim 09:15-10:30",
+   "titre": "Contrôle qualité de l'habitat (valeurs figées)",
+   "pourquoi": "Montrer au jury qu'une valeur figée réelle de la NASA (37 h de CO2 identique) n'est jamais prise pour normale.",
+   "etapes": [
+    "Branche m2-quality.",
+    "Crée csync/quality.py avec flag_plateaus(series, min_hours=6).",
+    "Test sur data/real/eda_rr1_iss_hourly_2014-09-26_to_10-05.csv : 1 plateau de 37 h à 2646 ppm.",
+    "Pull request."
+   ],
+   "fini_quand": "Le test trouve exactement ce plateau.",
+   "prompt": "Crée csync/quality.py avec flag_plateaus(values, min_len=6) qui renvoie les plages où la valeur reste identique au moins min_len points consécutifs, et mark_quality(df) qui met quality=ARTIFACT sur ces points. Teste sur data/real/eda_rr1_iss_hourly_2014-09-26_to_10-05.csv (colonne co2_ppm, attendu : un plateau de 37 heures à 2646). N'utilise aucun seuil clinique."
+  },
+  {
+   "id": "M3-1",
+   "role": "M3",
+   "quand": "Sam 13:30-17:30",
+   "titre": "Écran Nominal : les 5 dimensions",
+   "pourquoi": "C'est l'écran que le jury voit en premier.",
+   "etapes": [
+    "Branche m3-nominal.",
+    "Ouvre csync/ui/app.py (Streamlit).",
+    "Lance : streamlit run csync/ui/app.py",
+    "Affiche pour le jour choisi (curseur 1 à 10) une carte par dimension : couleur + icône + mot (NORMAL, WATCH, DEGRADED, UNKNOWN), et le bandeau SYNTHETIC DATA.",
+    "Couleurs et textes viennent de csync/config/theme.json et strings_en.json, jamais écrits en dur.",
+    "Pull request."
+   ],
+   "fini_quand": "Le jour 7 montre Attention en DEGRADED (histoire générée avec seed=42, drift_amp=2.5 et Params() par défaut) ; les jours 1-5 montrent « baseline being built ».",
+   "prompt": "Lis csync/ui/app.py, csync/config/theme.json, csync/config/strings_en.json et contracts/decision_capsule.schema.json. Complète l'écran Nominal en Streamlit : un curseur de jour (1 à 10), une carte par dimension avec couleur + icône + mot, le texte de la situation et l'explication de la capsule, et un bandeau permanent « SYNTHETIC DATA ». Les jours 1 à 5 affichent « Personal baseline being built (day n of 5) », jamais NORMAL. Lis uniquement les capsules (data/out/capsules_histoire.json) ; si elles n'existent pas encore, utilise la fonction de secours déjà présente dans app.py. Aucune couleur ni texte écrit en dur."
+  },
+  {
+   "id": "M3-2",
+   "role": "M3",
+   "quand": "Sam 17:30-22:30",
+   "titre": "Écran Action : l'urgence guidée",
+   "pourquoi": "Réponse directe à la vidéo officielle du défi.",
+   "etapes": [
+    "Branche m3-action.",
+    "Quand la capsule a ui_hint = ACTION, afficher les étapes du fichier procédure (data/procedures/PROC-EMERGENCY-01.json), une à la fois.",
+    "Afficher « Waiting for link — report queued » tant que la liaison est coupée (pas un compte à rebours qui s'arrête à zéro).",
+    "Toujours la phrase fixe : « Follow the onboard medical checklist and the crew medical officer. »",
+    "Pull request."
+   ],
+   "fini_quand": "On peut dérouler les 6 étapes et voir l'état de la file d'envoi.",
+   "prompt": "Dans csync/ui/app.py, ajoute l'écran Action : si la capsule a ui_hint ACTION, lis le fichier procédure désigné (data/procedures/<procedure_id>.json, schéma contracts/procedure_file.schema.json) et affiche les étapes une par une avec boutons Suivant/Précédent, la fiche « how to measure / why » et le lien source NASA. Affiche l'état de la file d'envoi : « Waiting for link — report queued » puis le texte de la clé delivered_once de csync/config/strings_en.json (« Delivered to ground (once) »), jamais écrit en dur après le retour de liaison. N'affiche jamais de traitement ni de médicament."
+  },
+  {
+   "id": "M3-3",
+   "role": "M3",
+   "quand": "Dim 09:15-10:30",
+   "titre": "Écran Reprise refusée",
+   "pourquoi": "Le moment fort du pitch : un refus qui protège l'équipage.",
+   "etapes": [
+    "Branche m3-resume.",
+    "Bouton « Request resume » au jour 10 ; afficher REFUSE_RESUME et les raisons (« PH01 is stale (14 min > 10 min) »).",
+    "Bouton « Commander override » : journalisé, la décision ne change pas.",
+    "Pull request."
+   ],
+   "fini_quand": "La démonstration du jour 10 se joue en 20 secondes.",
+   "prompt": "Ajoute dans csync/ui/app.py l'écran de reprise du jour 10 : bouton Request resume qui appelle csync.gate.resume_gate avec les mesures guidées de l'histoire, affiche la décision et les raisons ; bouton Commander override qui ajoute une ligne au journal affiché mais ne change pas la décision. Teste que la décision reste REFUSE_RESUME."
+  },
+  {
+   "id": "M4-1",
+   "role": "M4",
+   "quand": "Sam 13:30-22:30 (à distance possible)",
+   "titre": "Écrire les fichiers procédure",
+   "pourquoi": "L'écran d'urgence lit un fichier fixe, jamais du texte inventé.",
+   "etapes": [
+    "Branche m4-procedures.",
+    "Crée data/procedures/PROC-EMERGENCY-01.json (6 étapes : sécurité, où, mesures guidées, compte rendu, envoi, journal) et PROC-FATIGUE-01.json.",
+    "Pour chaque mesure : how_to, why (1 phrase) et hrp_source_url (fournies par M1, fiche M1-3).",
+    "Valide avec python scripts/validate_contracts.py.",
+    "Pull request."
+   ],
+   "fini_quand": "Les 2 fichiers passent la validation.",
+   "prompt": "Lis contracts/procedure_file.schema.json et docs/HELP_CARD_SOURCES.md. Crée data/procedures/PROC-EMERGENCY-01.json avec 6 étapes (1 safety: stop, alert crew ; 2 where: body zone ; 3 guided measurements one by one: heart rate, blood pressure, body temperature, blood glucose labelled 'no NASA in-flight reference' ; 4 report generated ; 5 queued for ground with link status ; 6 log) et PROC-FATIGUE-01.json. Chaque mesure a how_to, why et hrp_source_url pris dans HELP_CARD_SOURCES.md uniquement. Jamais de traitement, de médicament, ni des mots cause, diagnosis, disease, proves. Ajoute la phrase fixe. Valide avec scripts/validate_contracts.py."
+  },
+  {
+   "id": "M4-2",
+   "role": "M4",
+   "quand": "Sam 13:30 → 22:30 (à distance possible)",
+   "titre": "Écrire le résultat attendu AVANT de lancer",
+   "pourquoi": "On fixe la cible avant de mesurer : c'est ce qui rend nos tests honnêtes.",
+   "etapes": [
+    "Branche m4-expected.",
+    "Crée data/scenarios/histoire.json, temoin.json, capteur.json (schéma scenario_file) avec, jour par jour, l'état attendu de chaque dimension et la décision attendue.",
+    "Ajoute tests/test_scenarios.py qui compare l'attendu au résultat.",
+    "Si un écart apparaît, ne change PAS l'attendu : signale-le à M1.",
+    "Pull request avant 22:30."
+   ],
+   "fini_quand": "Les 3 fichiers existent ; les écarts éventuels sont signalés.",
+   "prompt": "Lis contracts/scenario_file.schema.json, docs/STORY.md et research/pilot/RESULTS.md. Crée data/scenarios/histoire.json, temoin.json et capteur.json avec seed 42, generator_version csync-synth-0.1, et l'attendu jour par jour (état de Body, Attention, Morale ; décision). Puis écris tests/test_scenarios.py qui génère chaque variante avec synthetic.generator.generate et compare. Si le test échoue, n'ajuste pas l'attendu : écris l'écart dans docs/TEST_DEVIATIONS.md."
+  },
+  {
+   "id": "M5-1",
+   "role": "M5 (tenu par M1)",
+   "quand": "13:30, 17:30, 22:30, dim 10:30, 12:00",
+   "titre": "Assemblage et tour GO / NO-GO",
+   "pourquoi": "Un seul point d'assemblage évite que les travaux se cassent entre eux.",
+   "etapes": [
+    "Sur GitHub, onglet Pull requests : ouvre chaque PR.",
+    "Vérifie la liste docs/RELEASE_CHECKLIST.md (V1 à V12).",
+    "Clique « Merge pull request » si tout est vert ; sinon commente ce qui manque.",
+    "En local : git checkout main && git pull && python -m pytest -q.",
+    "Tour de 5 minutes : chacun dit GO ou NO-GO en une phrase.",
+    "Samedi 22:30 : git tag checkpoint-sat && git push --tags. Dimanche 10:30 : tag freeze."
+   ],
+   "fini_quand": "main passe les tests après chaque assemblage.",
+   "prompt": "Pour la pull request [nom de la branche], liste les fichiers modifiés et vérifie un par un les points V1 à V12 de docs/RELEASE_CHECKLIST.md. Réponds par un tableau : point, OK ou PROBLÈME, explication en une ligne. Ne fusionne rien."
+  },
+  {
+   "id": "M5-2",
+   "role": "M5 (tenu par M1)",
+   "quand": "Dim 14:00-23:59 (viser 16:00)",
+   "titre": "Remplir la page de soumission",
+   "pourquoi": "Seule la soumission en ligne compte pour l'évaluation mondiale ; elle doit utiliser des données NASA.",
+   "etapes": [
+    "Ouvre docs/SUBMISSION.md : textes en anglais prêts à copier pour chaque champ.",
+    "Champs : High-Level Summary, Project Demo (PDF des 7 diapositives ou vidéo de 30 s), Final Project Link (lien du dépôt GitHub public), Project Details, Use of AI & NASA data, References.",
+    "Vérifie que tous les membres sont inscrits sur la page d'équipe.",
+    "Soumets ; tu peux re-soumettre jusqu'à 23:59.",
+    "git tag submitted && git push --tags."
+   ],
+   "fini_quand": "Page soumise, lien du dépôt public testé dans une fenêtre privée.",
+   "prompt": "Lis README.md, AI_USAGE.md, SOURCES.md et research/pilot/RESULTS.md. Rédige en anglais le champ « Use of AI and NASA data » (120 mots maximum) : quelles données NASA (OSDR EDA RR-1, pages HRP), comment elles sont utilisées, quels outils d'IA et pour quoi. Ne prétends jamais que la NASA a validé le projet."
+  }
+ ]
+}

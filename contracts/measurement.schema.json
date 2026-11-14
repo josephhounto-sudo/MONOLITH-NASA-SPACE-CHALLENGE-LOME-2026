@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Measurement",
+  "description": "One observation. Base contract #1. Every source adapter produces only this.",
+  "type": "object",
+  "required": [
+    "timestamp_utc",
+    "indicator_id",
+    "value",
+    "unit",
+    "quality",
+    "origin",
+    "source_id",
+    "evidence_kind"
+  ],
+  "properties": {
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "indicator_id": {
+      "type": "string",
+      "pattern": "^(PH|CO|PS|MI|HA|SY)[0-9]{2}$"
+    },
+    "value": {
+      "type": [
+        "number",
+        "null"
+      ]
+    },
+    "value_text": {
+      "type": "string",
+      "description": "category (symptom, zone) or SYS/DIA for PH10"
+    },
+    "unit": {
+      "type": "string"
+    },
+    "quality": {
+      "enum": [
+        "OK",
+        "MISSING",
+        "ARTIFACT"
+      ]
+    },
+    "origin": {
+      "enum": [
+        "REAL_OPEN",
+        "SYNTHETIC"
+      ]
+    },
+    "source_id": {
+      "type": "string"
+    },
+    "evidence_kind": {
+      "enum": [
+        "DIRECT_MEASUREMENT",
+        "BIOLOGICAL_TEST",
+        "SELF_REPORTED",
+        "OPERATIONAL_PROXY",
+        "MISSION_CONTEXT"
+      ]
+    },
+    "generator_version": {
+      "type": "string"
+    },
+    "seed": {
+      "type": [
+        "integer",
+        "string"
+      ]
+    }
+  }
+}

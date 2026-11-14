@@ -1,0 +1,13 @@
+reference,other,scenario,only_other,only_ewma,mcnemar_p
+EWMA L=2.5,EWMA + shrunk SD (L=thr) 2.5,gradual 1.5 SD (onset day 6),0,0,1.0
+EWMA L=2.5,EWMA + shrunk SD (L=thr) 2.5,abrupt 2 SD (onset day 8),3,2,1.0
+EWMA L=2.5,EWMA + shrunk SD (L=thr) 2.5,control,0,2,0.5
+EWMA L=2.5,"Rule (d>=thr, 2 days, SD floor) 1.5",gradual 1.5 SD (onset day 6),0,6,0.0312
+EWMA L=2.5,"Rule (d>=thr, 2 days, SD floor) 1.5",abrupt 2 SD (onset day 8),5,30,0.0
+EWMA L=2.5,"Rule (d>=thr, 2 days, SD floor) 1.5",control,1,7,0.0703
+EWMA L=2.5,"CUSUM (k 0.5, h=thr) 3.0",gradual 1.5 SD (onset day 6),0,0,1.0
+EWMA L=2.5,"CUSUM (k 0.5, h=thr) 3.0",abrupt 2 SD (onset day 8),10,2,0.0386
+EWMA L=2.5,"CUSUM (k 0.5, h=thr) 3.0",control,8,3,0.2266
+EWMA L=2.5,"Kalman level (q 0.05, L=thr) 1.0",gradual 1.5 SD (onset day 6),1,0,1.0
+EWMA L=2.5,"Kalman level (q 0.05, L=thr) 1.0",abrupt 2 SD (onset day 8),29,0,0.0
+EWMA L=2.5,"Kalman level (q 0.05, L=thr) 1.0",control,132,0,0.0

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>C-Sync — pitch deck v2</title>
+<!-- FICHIER: pitch/deck/deck.html
+     Date/heure : sam. 14/11/2026 08:05 Lomé (UTC) · Commit de référence : dc61786 · Version v2
+     Statut : FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
+     Autonome : aucune ressource externe. Texte à l'écran ≤ 25 mots par diapo (titre + puces + ligne obligatoire ;
+     ne comptent pas : bandeau SYNTHETIC DATA, cadres de capture, numéro, pied de page, ligne « Sources »).
+     Captures : cadres [CAPTURE Cx — à insérer] ; voir captures_map.md et embed_captures.py.
+     Navigation : ← → / Espace / PageUp PageDown / Home End. Impression : 1 diapo par page (16:9).
+     TODO_M1 : logo (cadre LOGO_À_FOURNIR) ; captures C1–C6 ; version EDA (crédit diapo 6). -->
+<style>
+  :root {
+    --bg: #05090B; --panel: #0E161B; --text: #F0F0F0; --muted: #9AABB1; --accent: #00E0F5;
+    --normal: #4CD6A0; --watch: #F2A33A; --degraded: #FF6B5E; --unknown: #8A999F; --banner: #F2A33A;
+    --w: 1600px; --h: 900px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; background: #000; color: var(--text); font-family: system-ui, "Segoe UI", Roboto, sans-serif; }
+  #viewport { position: fixed; inset: 0; display: grid; place-items: center; overflow: hidden; }
+  #stage { width: var(--w); height: var(--h); position: relative; transform-origin: center center; }
+  .slide { position: absolute; inset: 0; background: var(--bg); padding: 70px 90px 60px; display: none; flex-direction: column; }
+  .slide.active { display: flex; }
+  h1 { font-size: 64px; margin: 0 0 28px; letter-spacing: -.01em; }
+  h1 .act { color: var(--accent); }
+  ul.pts { list-style: none; padding: 0; margin: 0; font-size: 38px; line-height: 1.3; }
+  ul.pts li { margin: 0 0 22px; padding-left: 34px; position: relative; }
+  ul.pts li::before { content: ""; position: absolute; left: 0; top: .55em; width: 14px; height: 14px; border-radius: 3px; background: var(--accent); }
+  .row { display: flex; gap: 48px; flex: 1; min-height: 0; }
+  .col { flex: 1; min-width: 0; display: flex; flex-direction: column; }
+  .capture { flex: 1; border: 3px dashed var(--muted); border-radius: 12px; display: flex; flex-direction: column; justify-content: center; align-items: center; color: var(--muted); font-size: 26px; text-align: center; padding: 16px; position: relative; min-height: 0; }
+  .capture small { font-size: 18px; margin-top: 8px; }
+  .capture + .capture { margin-top: 18px; }
+  .capture .sb, .sbanner { position: absolute; top: 0; left: 0; right: 0; background: var(--banner); color: #05090B; font-weight: 700; font-size: 16px; padding: 4px; border-radius: 9px 9px 0 0; }
+  .capture img { max-width: 100%; max-height: 100%; object-fit: contain; }
+  .must { font-size: 24px; color: var(--muted); margin-top: auto; }
+  .tag { display: inline-block; font-size: 22px; font-weight: 700; color: #05090B; background: var(--accent); padding: 4px 14px; border-radius: 20px; margin-bottom: 14px; align-self: flex-start; }
+  .foot { position: absolute; left: 90px; right: 90px; bottom: 22px; display: flex; justify-content: space-between; color: var(--muted); font-size: 18px; }
+  .slide.has-src .row { margin-bottom: 56px; }
+  .src { position: absolute; left: 90px; right: 90px; bottom: 50px; color: var(--muted); font-size: 16px; }
+  .logo { width: 220px; height: 110px; border: 3px dashed var(--muted); border-radius: 10px; display: grid; place-items: center; color: var(--muted); font-size: 20px; }
+  .big { font-size: 96px; margin: 0 0 6px; }
+  .sub { font-size: 40px; color: var(--muted); margin: 0 0 40px; }
+  .mini { display: flex; align-items: center; gap: 14px; border: 2px solid var(--muted); border-radius: 10px; padding: 8px 14px; margin-top: 4px; align-self: flex-start; }
+  .mini p { margin: 0; font-size: 18px; color: var(--muted); }
+  .closing { font-size: 40px; color: var(--accent); font-weight: 700; margin-top: 18px; }
+  #counter { position: fixed; right: 14px; bottom: 10px; color: var(--muted); font: 14px system-ui; }
+  @media print {
+    @page { size: 16in 9in; margin: 0; }
+    html, body { background: var(--bg); height: auto; }
+    #viewport { position: static; display: block; }
+    #stage { transform: none !important; width: 16in; height: auto; }
+    .slide { display: flex !important; position: relative; width: 16in; height: 9in; page-break-after: always; break-after: page; padding: .7in .9in .6in; }
+    #counter { display: none; }
+    * { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  }
+</style>
+</head>
+<body>
+<div id="viewport"><div id="stage">
+
+<!-- 1 · Titre — mots : C-Sync / Care Sync for deep-space crews / 3 puces = 24 -->
+<section class="slide" id="s1" data-n="1" aria-label="Slide 1">
+  <div class="row">
+    <div class="col">
+      <h1 class="big" data-count>C-Sync</h1>
+      <p class="sub" data-count>Care Sync for deep-space crews</p>
+      <ul class="pts" data-count>
+        <li>Offline health operations for a crew far from Earth</li>
+        <li>Each astronaut against their own baseline</li>
+        <li>The human decides</li>
+      </ul>
+    </div>
+    <div class="col" style="flex:0 0 520px; justify-content:space-between; align-items:flex-end">
+      <div class="logo">LOGO_À_FOURNIR</div>
+      <svg viewBox="0 0 500 300" width="500" height="300" aria-label="Earth to Mars line" role="img">
+        <circle cx="60" cy="230" r="34" fill="none" stroke="var(--accent)" stroke-width="4"/>
+        <circle cx="440" cy="70" r="22" fill="none" stroke="var(--degraded)" stroke-width="4"/>
+        <line x1="92" y1="214" x2="420" y2="82" stroke="var(--muted)" stroke-width="3" stroke-dasharray="10 8"/>
+        <text x="60" y="290" fill="var(--muted)" font-size="20" text-anchor="middle">Earth</text>
+        <text x="440" y="30" fill="var(--muted)" font-size="20" text-anchor="middle">Mars</text>
+      </svg>
+    </div>
+  </div>
+  <div class="foot"><span>Team MONOLITH · NASA Space Apps Challenge 2026 · Lomé</span><span>AI use declared</span></div>
+</section>
+
+<!-- 2 · Problème — mots : Far from help (3) + 8 + 7 + 7 = 25 -->
+<section class="slide has-src" id="s2" data-n="2" aria-label="Slide 2">
+  <h1 data-count>Far from help</h1>
+  <div class="row">
+    <div class="col">
+      <ul class="pts" data-count>
+        <li>Up to ~20 minutes one way (NASA HRP)</li>
+        <li>Communication blackouts that can last weeks (NASA)</li>
+        <li>The crew must measure and act alone</li>
+      </ul>
+    </div>
+    <div class="col" style="flex:0 0 560px; justify-content:center">
+      <svg viewBox="0 0 560 260" width="560" height="260" role="img" aria-label="Delay of up to 20 minutes, then a blackout">
+        <rect x="20" y="70" width="300" height="40" rx="8" fill="none" stroke="var(--accent)" stroke-width="3"/>
+        <text x="170" y="98" fill="var(--accent)" font-size="26" text-anchor="middle" font-weight="700">20:00</text>
+        <rect x="340" y="70" width="200" height="40" rx="8" fill="var(--panel)" stroke="var(--degraded)" stroke-width="3" stroke-dasharray="8 6"/>
+        <text x="440" y="98" fill="var(--degraded)" font-size="22" text-anchor="middle">blackout</text>
+        <text x="20" y="160" fill="var(--muted)" font-size="20">one-way delay</text>
+        <text x="340" y="160" fill="var(--muted)" font-size="20">weeks</text>
+      </svg>
+    </div>
+  </div>
+  <div class="src">Sources: nasa.gov/hrp/hazard-distance-from-earth/ · nasa.gov/wp-content/uploads/2024/01/mars-communications-disruption-and-delay.pdf</div>
+  <div class="foot"><span>C-Sync</span><span>AI use declared</span></div>
+</section>
+
+<!-- 3 · Acte 1 — mots : Act 1 Drift (day 7) (5) + 7 + 6 + 3 = 21 -->
+<section class="slide" id="s3" data-n="3" aria-label="Slide 3">
+  <h1 data-count><span class="act">Act 1 ·</span> Drift (day 7)</h1>
+  <div class="row">
+    <div class="col">
+      <ul class="pts" data-count>
+        <li>Compared with their own first 5 days</li>
+        <li>Attention Degraded: what changed, when, how sure</li>
+        <li>Human decision: pending</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="capture" data-capture="C1" data-file="C1_dimensions_j7_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C1 — à insérer]<small>5 dimensions, day 7</small></div>
+      <div class="capture" data-capture="C2" data-file="C2_capsule_j7_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C2 — à insérer]<small>Decision capsule, day 7</small></div>
+    </div>
+  </div>
+  <div class="foot"><span>C-Sync</span><span>AI use declared</span></div>
+</section>
+
+<!-- 4 · Acte 2 — mots : Act 2 Emergency (day 9) compteur du test : 25 -->
+<section class="slide" id="s4" data-n="4" aria-label="Slide 4">
+  <h1 data-count><span class="act">Act 2 ·</span> Emergency (day 9)</h1>
+  <div class="row">
+    <div class="col">
+      <ul class="pts" data-count>
+        <li>Sharp chest pain reported → Critical procedure</li>
+        <li>Guided measurements, one at a time: how to take each</li>
+        <li>Report queued, delivered once</li>
+      </ul>
+      <div class="mini" id="mini-silhouette" aria-label="Body map, static mock-up">
+        <svg viewBox="80 0 240 560" width="96" role="img" aria-label="Static body map">
+          <circle cx="200" cy="68" r="38" fill="var(--panel)" stroke="var(--muted)" stroke-width="3"/>
+          <rect x="140" y="122" width="120" height="108" rx="24" fill="var(--panel)" stroke="var(--accent)" stroke-width="5"/>
+          <rect x="148" y="234" width="104" height="88" rx="16" fill="var(--panel)" stroke="var(--unknown)" stroke-width="3" stroke-dasharray="6 4"/>
+          <rect x="98" y="128" width="36" height="168" rx="18" fill="var(--panel)" stroke="var(--muted)" stroke-width="3"/>
+          <rect x="266" y="128" width="36" height="168" rx="18" fill="var(--panel)" stroke="var(--muted)" stroke-width="3"/>
+          <rect x="152" y="326" width="42" height="208" rx="20" fill="var(--panel)" stroke="var(--unknown)" stroke-width="3" stroke-dasharray="6 4"/>
+          <rect x="206" y="326" width="42" height="208" rx="20" fill="var(--panel)" stroke="var(--unknown)" stroke-width="3" stroke-dasharray="6 4"/>
+        </svg>
+        <p>Static mock-up · not in the app yet<br>À CONFIRMER M1 — non codée</p>
+      </div>
+    </div>
+    <div class="col">
+      <div class="capture" data-capture="C3" data-file="C3_procedure_j9_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C3 — à insérer]<small>Guided emergency, day 9</small></div>
+      <div class="capture" data-capture="C4" data-file="C4_file_envoi_j9_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C4 — à insérer]<small>Report queue, link down then restored</small></div>
+    </div>
+  </div>
+  <div class="foot"><span>C-Sync</span><span>AI use declared</span></div>
+</section>
+
+<!-- 5 · Acte 3 — mots : Act 3 Return (day 10) (5) + 8 + 5 + 7 = 25 -->
+<section class="slide" id="s5" data-n="5" aria-label="Slide 5">
+  <span class="tag">LIVE DEMO</span>
+  <h1 data-count><span class="act">Act 3 ·</span> Return (day 10)</h1>
+  <div class="row">
+    <div class="col">
+      <ul class="pts" data-count>
+        <li>Heart rate data 14 minutes old; limit 10</li>
+        <li>Commander override: logged. Resume: refused.</li>
+        <li>Stale data is never shown as normal</li>
+      </ul>
+    </div>
+    <div class="col">
+      <div class="capture" data-capture="C5" data-file="C5_reprise_j10_seed42_amp25.png"><span class="sb">SYNTHETIC DATA — demo story, not a real astronaut</span>[CAPTURE C5 — à insérer]<small>Fallback if the live demo fails</small></div>
+    </div>
+  </div>
+  <div class="foot"><span>C-Sync</span><span>AI use declared</span></div>
+</section>
+
+<!-- 6 · Preuves — mots : Evidence (1) + 9 + 6 (ligne obligatoire) + 8 = 24 -->
+<section class="slide has-src" id="s6" data-n="6" aria-label="Slide 6">
+  <h1 data-count>Evidence</h1>
+  <div class="row">
+    <div class="col">
+      <ul class="pts" data-count>
+        <li>0.7 % of healthy simulated crews triggered a procedure</li>
+        <li>Real NASA ISS cabin telemetry used for data-quality checks</li>
+      </ul>
+      <p class="must" data-count>Synthetic data, 300 simulated healthy crews</p>
+    </div>
+    <div class="col">
+      <div class="capture" data-capture="C6" data-file="C6_habitat_eda_rr1_en.png">[CAPTURE C6 — à insérer]<small>Real NASA ISS cabin telemetry (EDA, RR-1), English figure</small></div>
+    </div>
+  </div>
+  <div class="src">Data courtesy of the Environmental Data App (EDA), visualization.osdr.nasa.gov/eda/ · accessed 14 Nov 2026</div>
+  <div class="foot"><span>C-Sync</span><span>AI use declared</span></div>
+</section>
+
+<!-- 7 · Limites — mots : Limits (1) + 6 + 7 + 5 + 5 (phrase finale) = 24 -->
+<section class="slide" id="s7" data-n="7" aria-label="Slide 7">
+  <h1 data-count>Limits</h1>
+  <ul class="pts" data-count>
+    <li>Synthetic crew data, not clinically validated</li>
+    <li>Not measured yet: bones, immunity, radiation dose</li>
+    <li>Next: real data, sensor adapters</li>
+  </ul>
+  <p class="closing" data-count>Offline. Explainable. The human decides.</p>
+  <div class="foot"><span>C-Sync · Synthetic data · AI use declared</span><span>Team MONOLITH</span></div>
+</section>
+
+</div></div>
+<div id="counter" aria-live="polite"></div>
+<script>
+(function () {
+  var slides = Array.prototype.slice.call(document.querySelectorAll('.slide'));
+  var i = 0;
+  function fit() {
+    var s = Math.min(window.innerWidth / 1600, window.innerHeight / 900);
+    document.getElementById('stage').style.transform = 'scale(' + s + ')';
+  }
+  function go(n) {
+    i = Math.max(0, Math.min(slides.length - 1, n));
+    slides.forEach(function (el, k) { el.classList.toggle('active', k === i); });
+    document.getElementById('counter').textContent = (i + 1) + ' / ' + slides.length;
+    try { history.replaceState(null, '', '#' + (i + 1)); } catch (e) {}
+  }
+  document.addEventListener('keydown', function (e) {
+    if (['ArrowRight', 'PageDown', ' ', 'Enter'].indexOf(e.key) >= 0) { e.preventDefault(); go(i + 1); }
+    else if (['ArrowLeft', 'PageUp', 'Backspace'].indexOf(e.key) >= 0) { e.preventDefault(); go(i - 1); }
+    else if (e.key === 'Home') go(0);
+    else if (e.key === 'End') go(slides.length - 1);
+  });
+  document.addEventListener('click', function (e) { if (e.clientX > window.innerWidth / 2) go(i + 1); else go(i - 1); });
+  window.addEventListener('resize', fit);
+  var h = parseInt((location.hash || '#1').slice(1), 10);
+  fit(); go(isNaN(h) ? 0 : h - 1);
+})();
+</script>
+</body>
+</html>

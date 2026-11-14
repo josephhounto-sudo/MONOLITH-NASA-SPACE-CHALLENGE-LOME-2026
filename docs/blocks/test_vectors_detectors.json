@@ -1,0 +1,402 @@
+{
+ "flat_zero": {
+  "z_days_1_to_10": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0
+  ],
+  "ewma_lambda0.3_L2.5_flags_days_1_to_10": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false
+  ],
+  "cusum_k0.5_h3_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false
+  ],
+  "rule_d1.5_two_consecutive_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false
+  ]
+ },
+ "gradual_ramp": {
+  "z_days_1_to_10": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0.5,
+   1.0,
+   1.5,
+   2.0,
+   2.5
+  ],
+  "ewma_lambda0.3_L2.5_flags_days_1_to_10": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true
+  ],
+  "cusum_k0.5_h3_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true
+  ],
+  "rule_d1.5_two_consecutive_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true
+  ]
+ },
+ "step_2_at_day8": {
+  "z_days_1_to_10": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   2,
+   2,
+   2
+  ],
+  "ewma_lambda0.3_L2.5_flags_days_1_to_10": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true
+  ],
+  "cusum_k0.5_h3_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true
+  ],
+  "rule_d1.5_two_consecutive_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true
+  ]
+ },
+ "single_spike_4_day7": {
+  "z_days_1_to_10": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   4,
+   0,
+   0,
+   0
+  ],
+  "ewma_lambda0.3_L2.5_flags_days_1_to_10": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   false,
+   false,
+   false
+  ],
+  "cusum_k0.5_h3_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   false,
+   false,
+   false
+  ],
+  "rule_d1.5_two_consecutive_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false
+  ]
+ },
+ "persistent_1_5": {
+  "z_days_1_to_10": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   1.5,
+   1.5,
+   1.5,
+   1.5,
+   1.5
+  ],
+  "ewma_lambda0.3_L2.5_flags_days_1_to_10": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true
+  ],
+  "cusum_k0.5_h3_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true
+  ],
+  "rule_d1.5_two_consecutive_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true,
+   true,
+   true
+  ]
+ },
+ "missing_day8": {
+  "z_days_1_to_10": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   1.0,
+   2.0,
+   null,
+   2.0,
+   2.0
+  ],
+  "ewma_lambda0.3_L2.5_flags_days_1_to_10": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true
+  ],
+  "cusum_k0.5_h3_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true,
+   true
+  ],
+  "rule_d1.5_two_consecutive_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true
+  ]
+ },
+ "favourable_negative": {
+  "z_days_1_to_10": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   -2,
+   -2,
+   -2,
+   -2,
+   -2
+  ],
+  "ewma_lambda0.3_L2.5_flags_days_1_to_10": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false
+  ],
+  "cusum_k0.5_h3_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false
+  ],
+  "rule_d1.5_two_consecutive_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false
+  ]
+ },
+ "late_step_3_at_day9": {
+  "z_days_1_to_10": [
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   0,
+   3,
+   3
+  ],
+  "ewma_lambda0.3_L2.5_flags_days_1_to_10": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true
+  ],
+  "cusum_k0.5_h3_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true
+  ],
+  "rule_d1.5_two_consecutive_flags": [
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   false,
+   true
+  ]
+ }
+}

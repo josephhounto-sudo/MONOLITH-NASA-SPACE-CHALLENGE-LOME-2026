@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "DecisionCapsule",
+  "description": "Base contract #4. The ONLY object the UI reads. Invalid capsule -> error screen, never NORMAL.",
+  "type": "object",
+  "required": [
+    "situation",
+    "signals",
+    "evidence",
+    "explanation",
+    "reliability",
+    "action",
+    "human_decision",
+    "reevaluation",
+    "ui_hint"
+  ],
+  "properties": {
+    "situation": {
+      "type": "string"
+    },
+    "signals": {
+      "type": "array"
+    },
+    "evidence": {
+      "type": "string",
+      "description": "where the data come from (origin, generator, source)"
+    },
+    "explanation": {
+      "type": "string",
+      "description": "must pass csync.language.banned_hits()"
+    },
+    "reliability": {
+      "type": "object"
+    },
+    "action": {
+      "type": "object",
+      "properties": {
+        "procedure_id": {
+          "type": "string"
+        },
+        "criticality": {
+          "type": "string"
+        },
+        "text": {
+          "type": "string"
+        }
+      }
+    },
+    "human_decision": {
+      "enum": [
+        "pending",
+        "accepted",
+        "rejected"
+      ],
+      "default": "pending"
+    },
+    "reevaluation": {
+      "type": "string"
+    },
+    "ui_hint": {
+      "enum": [
+        "NOMINAL",
+        "ACTION",
+        "FOCUS"
+      ]
+    }
+  }
+}

@@ -1,0 +1,40 @@
+"""FICHIER: pitch/deck/embed_captures.py
+Date/heure : sam. 14/11/2026 08:10 Lomé (UTC) · Commit de référence : dc61786 · Version v1
+Statut : FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
+
+Inserts the real captures into the deck while keeping a single self-contained file.
+1. Put the PNG files in pitch/deck/captures/ with the exact names of captures_map.md.
+2. Run from the repo root:  python pitch/deck/embed_captures.py
+3. Output: pitch/deck/deck_final.html (deck.html is never modified). Missing captures stay as frames.
+Expected output: one line per capture ("C2: inserted" or "C2: MISSING, frame kept"), then "OK: pitch/deck/deck_final.html".
+Python 3 standard library only.
+"""
+import base64
+import os
+import re
+
+HERE = os.path.dirname(os.path.abspath(__file__))
+PATTERN = re.compile(r'(<div class="capture" data-capture="(C\d)" data-file="([^"]+)">)(.*?)(</div>)', re.S)
+
+
+def main():
+    src = open(os.path.join(HERE, "deck.html"), encoding="utf8").read()
+
+    def repl(m):
+        start, cid, fname, inner, end = m.groups()
+        path = os.path.join(HERE, "captures", fname)
+        if not os.path.exists(path):
+            print(f"{cid}: MISSING ({fname}), frame kept")
+            return m.group(0)
+        b64 = base64.b64encode(open(path, "rb").read()).decode("ascii")
+        banner = re.search(r'<span class="sb">.*?</span>', inner)
+        print(f"{cid}: inserted ({fname})")
+        return f'{start}{banner.group(0) if banner else ""}<img alt="Capture {cid}" src="data:image/png;base64,{b64}">{end}'
+
+    out = PATTERN.sub(repl, src)
+    open(os.path.join(HERE, "deck_final.html"), "w", encoding="utf8").write(out)
+    print("OK: pitch/deck/deck_final.html")
+
+
+if __name__ == "__main__":
+    main()
