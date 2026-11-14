@@ -44,7 +44,7 @@ html,body,[data-testid="stApp"]{background:
 h1,h2,h3,h4{font-family:var(--cs-font);letter-spacing:-.015em}
 h3{font-size:clamp(1.45rem,2.6vw,2.05rem)!important;font-weight:650!important;line-height:1.2;margin:.9rem 0 .8rem!important}
 p,li,label,[data-testid="stMarkdownContainer"]{font-feature-settings:"tnum" 1,"cv11" 1}
-[data-testid="stCaptionContainer"]{color:var(--cs-text2)!important}
+[data-testid="stCaptionContainer"],[data-testid="stCaptionContainer"] *{color:var(--cs-text2)!important;opacity:1!important}
 
 [data-testid="stToolbar"],[data-testid="stDecoration"],[data-testid="stStatusWidget"]{display:none!important}
 [data-testid="stHorizontalBlock"]{margin-bottom:.9rem}
@@ -131,6 +131,21 @@ _TOP = """
 """
 
 
+# Profile "quiet": the unslop-style pass (docs/DESIGN_SKILL_SOURCES.md). Same markup, CSS only. Select with CSYNC_STYLE=quiet.
+_QUIET = """
+html,body,[data-testid="stApp"]{background:var(--cs-surface)!important}
+.cs-bg .blob,.cs-bg .rings,.cs-bg .dots,.cs-bg .lines{display:none}
+.cs-bg .poly{animation:none;opacity:.22}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"],.stButton>button,.cs-kicker{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"]{background:var(--cs-panel)!important;border-radius:12px}
+.cs-card,.cs-decision,[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{background:var(--cs-panel)!important;
+  box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:12px!important}
+.cs-card .dim{font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none}
+.cs-kicker{padding:0;border:0;background:none!important;color:var(--cs-text2);font-size:.9rem;font-weight:500;letter-spacing:0;text-transform:none}
+.stButton>button{border-radius:10px;background:var(--cs-panel);font-weight:500}
+.stButton>button:hover:not(:disabled){transform:none;box-shadow:none!important}
+"""
+
 def _uri(svg):
     return "url(\"data:image/svg+xml;utf8," + quote(svg) + "\")"
 
@@ -176,7 +191,8 @@ def _tokens():
 def inject(name, tag):
     """Call once, right after set_page_config. st.html keeps the CSS out of the markdown stream."""
     tk = _tokens()
-    st.html("<style>" + _CSS % tk + _art(tk) + "</style>" + _SHAPES)
+    extra = _QUIET if os.environ.get("CSYNC_STYLE", "glass") == "quiet" else ""
+    st.html("<style>" + _CSS % tk + _art(tk) + extra + "</style>" + _SHAPES)
     st.html(_TOP % {**tk, "name": name, "tag": tag})
 
 

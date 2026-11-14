@@ -1,0 +1,14 @@
+{
+ "profile": "A_glass",
+ "scores": {
+  "performance": 0.3,
+  "accessibility": 1,
+  "best-practices": 1
+ },
+ "tbt": "1,470\u00a0ms",
+ "lcp": "16.7\u00a0s",
+ "cls": "0.262",
+ "lighthouse": "13.6.0",
+ "form_factor": "mobile",
+ "throttling": "simulate"
+}
