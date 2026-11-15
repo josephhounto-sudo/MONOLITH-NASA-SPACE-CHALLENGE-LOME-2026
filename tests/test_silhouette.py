@@ -37,13 +37,17 @@ def test_symptom_zone_mapping():
     assert silhouette.region_for_zone("thorax") == "region-chest" and silhouette.region_for_zone("x") is None
 
 
+def _zone_pills(at):
+    return [w for w in at.get("button_group") if str(getattr(w, "key", "")).startswith("body_zone_")]
+
+
 @pytest.mark.parametrize("day,preselected", [(7, None), (9, "region-chest")])
 def test_app_shows_body_map_and_preselects_symptom_zone(day, preselected):
     at = AppTest.from_file(ROOT + "/csync/ui/app.py", default_timeout=30).run()
     at.slider[0].set_value(day).run()
     assert not at.exception
     assert any("Body map" in s.value for s in at.subheader)
-    pills = [w for w in at.main if type(w).__name__ == "ButtonGroup"] or at.get("button_group")
+    pills = _zone_pills(at)
     assert pills, "zone selector missing"
     value = pills[0].value
     assert (value == preselected) if preselected else (value in (None, []))
@@ -51,6 +55,6 @@ def test_app_shows_body_map_and_preselects_symptom_zone(day, preselected):
 
 def test_selecting_a_zone_shows_how_why_when():
     at = AppTest.from_file(ROOT + "/csync/ui/app.py", default_timeout=30).run()
-    at.get("button_group")[0].set_value("region-head").run()
+    _zone_pills(at)[0].set_value("region-head").run()
     md = " ".join(m.value for m in at.markdown)
     assert "How it is measured" in md and "Why it matters" in md and "When C-Sync alerts" in md

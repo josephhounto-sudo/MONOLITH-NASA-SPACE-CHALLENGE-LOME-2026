@@ -114,7 +114,61 @@
         "use": "The demo story and every detection result",
         "limit": "No real crew; nothing is clinically validated"
       }
-    ]
+    ],
+    "trend_title": "Indicators over time — each against this astronaut's own baseline",
+    "trend_intro": "The line is the daily value, the flat line is the personal baseline (days 1 to 5), and the third line is the point where the rule starts counting a day as unfavourable (1.5 standard deviations on the unfavourable side). A day is flagged when two days in a row cross it. These are design parameters, not clinical limits. Synthetic crew.",
+    "trend_select": "Indicator",
+    "trend_value": "Daily value",
+    "trend_base": "Personal baseline (days 1-5)",
+    "trend_thr": "Rule threshold (design parameter)",
+    "trend_flagged": "Flagged days up to day {day}: {days}.",
+    "trend_none": "No flagged day up to day {day}.",
+    "trend_building": "Days 1 to 5 build the personal baseline: no drift is evaluated yet.",
+    "trend_names": {
+      "PH01": "Resting heart rate",
+      "PH09": "Reported sleep",
+      "CO01": "Reaction time",
+      "CO02": "Reaction-time lapses",
+      "PS01": "Sleepiness",
+      "PS02": "Stress",
+      "PS03": "Mood",
+      "PS04": "Workload"
+    },
+    "hazard_title": "The five NASA hazards of human spaceflight — and what C-Sync does about each",
+    "hazard_intro": "Hazard names are those of the NASA Human Research Program. A hazard that C-Sync does not measure is shown as such, never as fine.",
+    "hazard_cols": {
+      "hazard": "Hazard",
+      "watched": "What C-Sync watches",
+      "status": "Status"
+    },
+    "hazard_rows": [
+      {
+        "hazard": "Space radiation",
+        "watched": "No personal dose. ISS cabin radiation of mission RR-1 is shown as context in the Habitat panel.",
+        "status": "Not measured for the crew — context only"
+      },
+      {
+        "hazard": "Isolation and confinement",
+        "watched": "Reported sleep, sleepiness, stress, mood and workload against the personal baseline (Morale).",
+        "status": "Measured (synthetic crew)"
+      },
+      {
+        "hazard": "Distance from Earth",
+        "watched": "Works offline; reports wait in a send queue and arrive once; resume is refused on stale data. Ground delay in the demo: 20 min (NASA: up to 22 min one way).",
+        "status": "Handled by design"
+      },
+      {
+        "hazard": "Gravity fields",
+        "watched": "Resting heart rate against the personal baseline; blood pressure in the guided procedure. Bone density and immune changes are not measured.",
+        "status": "Partly measured"
+      },
+      {
+        "hazard": "Hostile closed environments",
+        "watched": "Cabin CO2, temperature and humidity from real NASA ISS data, with data-quality flags (Habitat panel).",
+        "status": "Context only — not scored"
+      }
+    ],
+    "hazard_source": "Source: NASA Human Research Program, 5 Hazards of Human Spaceflight, https://www.nasa.gov/hrp/hazards/ ; delay: NASA ASCEND 2022, NTRS 20220013418."
   },
   "indicator_names": {
     "PH01": "heart-rate",

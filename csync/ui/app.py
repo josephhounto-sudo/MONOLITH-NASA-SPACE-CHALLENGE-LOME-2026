@@ -180,6 +180,78 @@ def resume_screen(cap):
     st.caption(strings["human_decision_pending"])
 
 
+def trend_svg(rows, base, thr, label, direction):
+    """Line chart as an SVG Markdown image with alt text (Vega marks carry no alt, axe svg-img-alt)."""
+    import base64
+    W, H, L, R, T, B = 640, 220, 52, 16, 16, 34
+    vals = [r["value"] for r in rows if r["value"] is not None]
+    lo, hi = min(vals + [base, thr]), max(vals + [base, thr])
+    pad = (hi - lo) * 0.1 or 1
+    lo, hi = lo - pad, hi + pad
+    n = max(len(rows) - 1, 1)
+    X = lambda i: L + (W - L - R) * i / n
+    Y = lambda v: T + (H - T - B) * (1 - (v - lo) / (hi - lo))
+    c_val, c_base, c_thr = theme["interactive"], theme["text_secondary"], theme["state"]["WATCH"]["color"]
+    txt = theme["text_secondary"]
+    g = [f'<rect width="{W}" height="{H}" fill="{theme["surface"]}"/>']
+    for v in (lo + pad, (lo + hi) / 2, hi - pad):
+        g.append(f'<text x="{L-6}" y="{Y(v)+4:.0f}" font-size="11" text-anchor="end" fill="{txt}" font-family="sans-serif">{v:.3g}</text>')
+    for i, r in enumerate(rows):
+        g.append(f'<text x="{X(i):.0f}" y="{H-14}" font-size="11" text-anchor="middle" fill="{txt}" font-family="sans-serif">{r["day"]}</text>')
+    g.append(f'<text x="{(L+W-R)/2:.0f}" y="{H-1}" font-size="11" text-anchor="middle" fill="{txt}" font-family="sans-serif">Mission day</text>')
+    g.append(f'<line x1="{L}" x2="{W-R}" y1="{Y(base):.1f}" y2="{Y(base):.1f}" stroke="{c_base}" stroke-width="1.5" stroke-dasharray="2 4"/>')
+    g.append(f'<line x1="{L}" x2="{W-R}" y1="{Y(thr):.1f}" y2="{Y(thr):.1f}" stroke="{c_thr}" stroke-width="1.5" stroke-dasharray="6 4"/>')
+    pts = " ".join(f"{X(i):.1f},{Y(r['value']):.1f}" for i, r in enumerate(rows) if r["value"] is not None)
+    g.append(f'<polyline points="{pts}" fill="none" stroke="{c_val}" stroke-width="2"/>')
+    for i, r in enumerate(rows):
+        if r["value"] is None:
+            continue
+        fill = c_thr if r["flagged"] else c_val
+        g.append(f'<circle cx="{X(i):.1f}" cy="{Y(r["value"]):.1f}" r="{5 if r["flagged"] else 3}" fill="{fill}" stroke="{theme["surface"]}" stroke-width="2"/>')
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">' + "".join(g) + "</svg>"
+    flagged = [str(r["day"]) for r in rows if r["flagged"]]
+    alt = (f"{label}, days {rows[0]['day']} to {rows[-1]['day']}: values {min(vals):.3g} to {max(vals):.3g}; personal baseline {base:.3g}, "
+           f"threshold {thr:.3g}" + (f"; flagged days {', '.join(flagged)}." if flagged else "; no flagged day."))
+    uri = "data:image/svg+xml;base64," + base64.b64encode(svg.encode()).decode()
+    return f"![{alt}]({uri})"
+
+
+def trends_panel(day):
+    """Dynamic chart per indicator up to the chosen day, against the personal baseline (reads data/out/trends_histoire.json)."""
+    path = os.path.join(ROOT, "data", "out", "trends_histoire.json")
+    if not os.path.exists(path):
+        return
+    data = json.load(open(path, encoding="utf8"))["indicators"]
+    st.divider()
+    st.subheader(UI["trend_title"])
+    st.markdown(UI["trend_intro"])
+    names = UI["trend_names"]
+    ind = st.pills(UI["trend_select"], list(names), format_func=names.get, selection_mode="single",
+                   default="PH09", key="trend_indicator")
+    if not ind:
+        return
+    t = data[ind]
+    rows = [r for r in t["days"] if r["day"] <= day]
+    frame = {UI["trend_value"]: [r["value"] for r in rows], UI["trend_base"]: [t["baseline_mean"]] * len(rows),
+             UI["trend_thr"]: [t["threshold"]] * len(rows)}
+    vals = [r["value"] for r in rows]
+    st.markdown(trend_svg(rows, t["baseline_mean"], t["threshold"], f"{names[ind]} ({t['unit']})", t["direction"]),
+                unsafe_allow_html=False)
+    flagged = [str(r["day"]) for r in rows if r["flagged"]]
+    st.markdown(UI["trend_flagged"].format(day=day, days=", ".join(flagged)) if flagged else UI["trend_none"].format(day=day))
+    if day <= 5:
+        st.caption(UI["trend_building"])
+
+
+def hazards_panel():
+    st.divider()
+    st.subheader(UI["hazard_title"])
+    st.markdown(UI["hazard_intro"])
+    cols = UI["hazard_cols"]
+    st.dataframe([{cols[k]: r[k] for k in cols} for r in UI["hazard_rows"]], hide_index=True)
+    st.caption(UI["hazard_source"])
+
+
 def body_map(symptom_zone=None, day=None):
     """Body map section: 8 selectable zones (pills) next to a neutral figure; text comes from pitch/silhouette/fiches.json."""
     st.divider()
@@ -289,6 +361,8 @@ for _c in today:
     if _c.get("capsule_type") == "emergency":
         _m = re.search(r"zone: ([a-z]+)", _c.get("situation", ""))
         _zone = _m.group(1) if _m else None
+trends_panel(day)
 body_map(_zone, day)
+hazards_panel()
 habitat_panel()
 provenance_table()
