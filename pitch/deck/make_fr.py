@@ -27,7 +27,6 @@ MAP = [
  ("Sharp chest pain reported → Critical procedure", "Douleur thoracique vive signalée → procédure critique"),
  ("Guided measurements, one at a time: how to take each", "Mesures guidées, une à la fois : comment les prendre"),
  ("Report queued, delivered once", "Rapport en file, livré une seule fois"),
- ("Clickable body map in the app · 8 zones · chest selected", "Carte du corps cliquable dans l'app · 8 zones · thorax sélectionné"),
  ("Guided emergency, day 9", "Urgence guidée, jour 9"), ("Report queue, link down then restored", "File d'envoi : liaison coupée puis rétablie"),
  ("LIVE DEMO", "DÉMO EN DIRECT"), ("Act 3 ·", "Acte 3 ·"), ("Return (day 10)", "Reprise (jour 10)"),
  ("Heart rate 14 minutes old; limit 10 minutes", "Fréquence cardiaque vieille de 14 min ; limite 10 min"),
@@ -43,6 +42,8 @@ MAP = [
  ("Not yet measured: bones, immunity, radiation dose", "Pas encore mesurés : os, immunité, dose de rayonnement"),
  ("Next: expert review, analog data, sensors", "Après : relecture d'experts, données d'analogue, capteurs"),
  ("Offline. Explainable. The human decides.", "Hors ligne. Explicable. L'humain décide."),
+ (">Body<", ">Corps<"), (">Watch<", ">Surveillance<"), (">Degraded<", ">Dégradé<"), (">Morale<", ">Moral<"),
+ ("Habitat · context only", "Habitat · contexte seulement"), (">gradual<", ">progressive<"), (">abrupt<", ">brusque<"),
  ('<html lang="en">', '<html lang="fr">'),
 ]
 h = open(os.path.join(HERE, "deck.html"), encoding="utf8").read()
