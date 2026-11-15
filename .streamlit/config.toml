@@ -1,10 +1,12 @@
-# Dark base so native widgets (slider, buttons, inputs) match the C-Sync look; colours come from csync/config/theme.json.
+# Light base for the "fusion" look (CSYNC_STYLE default): native widgets match the light glass.
+# Values mirror csync/config/theme.json -> fusion (paper, glass, ink, stone). The dark profiles (glass, quiet, hybrid,
+# calm, signal) still work but their native widgets will be light: set base = "dark" again to use them.
 [theme]
-base = "dark"
-primaryColor = "#00E0F5"
-backgroundColor = "#05090B"
-secondaryBackgroundColor = "#0E161B"
-textColor = "#F0F0F0"
+base = "light"
+primaryColor = "#1F2A3D"
+backgroundColor = "#F6F2F5"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#141618"
 font = "sans serif"
 
 [browser]

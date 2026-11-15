@@ -22,3 +22,9 @@ Résultat : tableau testeur × image × critère, puis ouvrir la clé et attribu
 
 ## Limites
 3 à 5 personnes ne donnent pas de statistique. Les captures sont à 1280 px sur écran de bureau, pas sur le projecteur de Lomé. Les captures du deck ne correspondent à aucun des deux profils.
+
+## v2 — 15/11/2026 ~07:40 : fusion contre signal (critères écrits AVANT tout avis humain)
+Matériel : `docs/design_ab/blind_5s_v2/` (premier écran 1280×900, jours 7, 9 étape 3, 10 après « Request resume »), X/Y tirés au hasard (graine 20261115). **Clé : `blind_5s_v2_KEY_ne_pas_montrer.json`, à ouvrir seulement à la fin.** 3 à 5 personnes qui n'ont jamais vu le projet, pas M1 ni l'IA.
+Questions, image montrée 5 s puis cachée : (a) « Que se passe-t-il ? » (b) « Qu'est-ce qui demande une action maintenant ? » (c) « Trois mots pour décrire l'écran. » Puis sans limite de temps : critères 4 à 8 de la grille ci-dessus (notes 1 à 5).
+**Succès écrit d'avance pour la version retenue** : au jour 9, au moins 4 personnes sur 5 citent l'urgence (douleur thoracique / procédure guidée) en (b) ; au jour 10, au moins 4 sur 5 citent le refus de reprise ; au jour 7, au moins 4 sur 5 nomment Attention (ou « dégradé »). Un écart de moins de 2 voix sur 5 entre X et Y ne départage pas.
+Biais connu : à 1280×900, la version « signal » cache l'urgence sous la ligne de flottaison ; la question (b) avantage donc la fusion par construction — c'est ce que l'on veut mesurer (la hiérarchie), pas l'esthétique. Pour l'esthétique seule, comparer les réponses (c) et le critère 7.

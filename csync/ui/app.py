@@ -1,4 +1,5 @@
 """2026-11-14 ~07:00 Lome (UTC) | reference commit dc61786 | FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
+2026-11-15 ~07:10 (UTC) design-v2: event first on the "stone" container, warm field per criticality — FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
 
 C-Sync interface (Streamlit). Reads capsules only. Owner: M3 (task cards M3-1..M3-3).
 Run: streamlit run csync/ui/app.py
@@ -196,16 +197,21 @@ if fallback:
 day = st.slider(UI["day_slider"], 1, 10, 7)
 today = [c for c in caps if c.get("day") == day]
 daily = next((c for c in today if c.get("capsule_type", "daily") == "daily"), None)
+# warm light field = highest criticality of the day (appearance only, fusion profile)
+crits = {c.get("action", {}).get("criticality") for c in today if is_valid(c)}
+acting = any(c.get("action", {}).get("type") not in (None, "CONTINUE") for c in today if is_valid(c))
+style.field("critical" if "CRITICAL" in crits else "watch" if acting else "calm")
+# what demands action now comes first: the CRITICAL event on the dark stone surface, then the crew state
+for c in today:
+    if c.get("capsule_type") == "emergency" and is_valid(c) and c["ui_hint"] == "ACTION":
+        with st.container(key="cs-stone"):
+            action_screen(c)
+    elif c.get("capsule_type") == "resume" and is_valid(c):
+        with st.container(key="cs-stone"):
+            resume_screen(c)
 if daily is None:
     st.error(UI["no_capsule"])
 elif not is_valid(daily):
     st.error(UI["invalid_capsule"])
 else:
     nominal(daily, day)
-for c in today:
-    if c.get("capsule_type") == "emergency" and is_valid(c) and c["ui_hint"] == "ACTION":
-        st.divider()
-        action_screen(c)
-    elif c.get("capsule_type") == "resume" and is_valid(c):
-        st.divider()
-        resume_screen(c)
