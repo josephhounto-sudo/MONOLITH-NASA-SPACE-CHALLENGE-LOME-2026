@@ -12,7 +12,7 @@ Rôles (décision D6, 14/11) : orateur A = M1 (diapos 1, 2, 3, 6, 7 = 190 s) ; o
 **Transition :** clic sur « vingt-deux minutes ».
 
 ## Diapo 2 · 0:25 → 1:05 (40 s) · orateur A
-« Selon une analyse de la NASA présentée à ASCEND 2022, un message entre Mars et la Terre met jusqu'à vingt-deux minutes dans un sens, et les coupures de communication peuvent durer de plusieurs jours à plusieurs mois. Pour toute mission habitée vers Mars, ces retards sont inévitables. L'équipage est donc seul pour mesurer et agir. Or les astronautes ne sont pas médecins. Il leur faut un outil qui fonctionne hors ligne, qui guide chaque mesure, et qui signale toute donnée absente au lieu de la faire passer pour normale. »
+« Un message met jusqu'à vingt-deux minutes pour atteindre la Terre, selon la NASA, et les coupures durent des jours. L'équipage est seul. Notre objectif a quatre volets. Guider l'urgence : fait. Aider le commandant : un prototype classe six équipiers simulés par urgence, et ne décide rien. Lire les données ouvertes de la NASA : fait, pour l'habitat seulement. Brancher de vrais capteurs : prévu ; l'application lit déjà un format de données, mais aucun appareil réel n'est branché. »
 **Transition :** « Voici comment, en trois actes. »
 
 ## Diapo 3 · 1:05 → 1:55 (50 s) · orateur A
@@ -41,15 +41,17 @@ Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et
 ## Comptes et minutage (calculés par script)
 | Diapo | Début → fin | Durée | Mots dits | Mots/min |
 |---|---|---|---|---|
-| 1 | 0:00 → 0:25 | 25 s | 59 | 142 |
-| 2 | 0:25 → 1:05 | 40 s | 88 | 132 |
-| 3 | 1:05 → 1:55 | 50 s | 122 | 146 |
-| 4 | 1:55 → 2:55 | 60 s | 139 | 139 |
-| 5 | 2:55 → 3:45 | 50 s | 72 | 86 |
+| 1 | 0:00 → 0:25 | 25 s | 57 | 137 |
+| 2 | 0:25 → 1:05 | 40 s | 74 | 111 |
+| 3 | 1:05 → 1:55 | 50 s | 119 | 143 |
+| 4 | 1:55 → 2:55 | 60 s | 142 | 142 |
+| 5 | 2:55 → 3:45 | 50 s | 80 | 96 |
 | 6 | 3:45 → 4:25 | 40 s | 82 | 123 |
-| 7 | 4:25 → 5:00 | 35 s | 78 | 134 |
-| **Total** | **0:00 → 5:00** | **300 s** | **633** | **127** |
+| 7 | 4:25 → 5:00 | 35 s | 82 | 141 |
+| **Total** | **0:00 → 5:00** | **300 s** | **636** | **127** |
 
 Lecture : les diapos parlées (1–4, 6, 7) vont de 126 à 146 mots/min (cible 130–145 ; la diapo 3 est un peu au-dessus, la diapo 6, chargée en chiffres, un peu en dessous). La moyenne sur 5:00 (128) est plus basse parce que la diapo 5 est volontairement lente (environ 85 mots/min) : elle laisse le temps des deux clics de la démo et de 2 s de silence après « Refusée ».
 Répétition : chronométrer une lecture complète à voix haute ; si elle dépasse 5:00, appliquer les deux lignes « coupe » (environ −14 s au total).
 Méthode de comptage : mots entre guillemets, un mot = suite de lettres ou de chiffres, apostrophes incluses (« l'équipage » = 1) ; un mot composé avec trait d'union compte pour un (« quatre-vingt-quinze » = 1).
+
+_Recalcul 15/11 ~10:50 UTC après la refonte de la diapo 2 (problème + objectif) et les changements des diapos 4 et 7 ; diapo 2 lente (111 mots/min), à chronométrer._

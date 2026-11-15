@@ -73,6 +73,10 @@
   .compact ul.pts li { margin-bottom: 8px; }
   .must { font-size: 24px; color: var(--muted); margin-top: auto; font-weight: 600; }
   .tag { display: inline-flex; align-items: center; gap: 10px; font-size: 20px; font-weight: 800; letter-spacing: .1em; color: var(--stone); background: #FF6B5E; padding: 6px 16px; border-radius: 999px; margin-bottom: 16px; align-self: flex-start; }
+  .lead { font-size: 34px; color: var(--muted); margin: 0 0 30px; font-weight: 500; }
+  ul.goal li { margin-bottom: 30px; }
+  .st { display: inline-block; margin-left: 22px; padding: 3px 18px; border-radius: 999px; border: 3px solid currentColor; font-size: 22px; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; vertical-align: .12em; }
+  .st.built { color: var(--normal); } .st.proto { color: var(--watch); } .st.part { color: var(--watch); border-style: dotted; } .st.plan { color: var(--unknown); border-style: dashed; }
   .foot { position: absolute; left: 90px; right: 90px; bottom: 22px; display: flex; justify-content: space-between; align-items: center; color: var(--muted); font-size: 17px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; }
   .foot span:first-child::before { content: ""; display: inline-block; width: 22px; height: 22px; margin-right: 10px; vertical-align: -5px; background: var(--mark) center/contain no-repeat; }
   .slide.has-src .row { margin-bottom: 56px; }
@@ -129,29 +133,17 @@
   <div class="foot"><span>Create Health Monitoring Software for Astronauts on Space Missions · Team MONOLITH · NASA Space Apps Challenge 2026 · Lomé</span><span>AI use declared</span></div>
 </section>
 
-<!-- 2 · Problème — mots : Far from help (3) + 8 + 7 + 7 = 25 -->
+<!-- 2 · Problème + objectif — mots : Our goal (2) + 6 + 3 + 4 + 6 + 4 = 25 -->
 <section class="slide has-src" id="s2" data-n="2" aria-label="Slide 2">
-  <h1 data-count>Far from help</h1>
-  <div class="row">
-    <div class="col">
-      <ul class="pts" data-count>
-        <li>Up to 22 min one way (NASA, 2022)</li>
-        <li>Blackouts: days to months (NASA, 2022)</li>
-        <li>The crew must measure and act alone</li>
-      </ul>
-    </div>
-    <div class="col" style="flex:0 0 560px; justify-content:center">
-      <svg viewBox="0 0 560 260" width="560" height="260" role="img" aria-label="Delay of up to 20 minutes, then a blackout">
-        <rect x="20" y="70" width="300" height="40" rx="8" fill="none" stroke="var(--accent)" stroke-width="3"/>
-        <text x="170" y="98" fill="var(--accent)" font-size="26" text-anchor="middle" font-weight="700">20:00</text>
-        <rect x="340" y="70" width="200" height="40" rx="8" fill="var(--panel)" stroke="var(--degraded)" stroke-width="3" stroke-dasharray="8 6"/>
-        <text x="440" y="98" fill="var(--degraded)" font-size="22" text-anchor="middle">blackout</text>
-        <text x="20" y="160" fill="var(--muted)" font-size="20">one-way delay (demo: 20 min)</text>
-        <text x="340" y="160" fill="var(--muted)" font-size="20">days to months</text>
-      </svg>
-    </div>
-  </div>
-  <div class="src">Source: NASA Technical Reports Server, ASCEND 2022 paper "Communication Delays, Disruptions, and Blackouts for Crewed Mars Missions" · ntrs.nasa.gov/citations/20220013418</div>
+  <h1 data-count>Our goal</h1>
+  <p class="lead" data-count>Far from help: 22 min delay</p>
+  <ul class="pts goal" data-count>
+    <li>Guide emergencies <b class="st built">Built</b></li>
+    <li>Support the commander <b class="st proto">Prototype</b></li>
+    <li>Read NASA open data <b class="st part">Habitat only</b></li>
+    <li>Connect real sensors <b class="st plan">Planned</b></li>
+  </ul>
+  <div class="src">Source: NASA Technical Reports Server, ASCEND 2022 paper "Communication Delays, Disruptions, and Blackouts for Crewed Mars Missions" · ntrs.nasa.gov/citations/20220013418 · Built = in the app today, Prototype = works on synthetic data, Planned = not started</div>
   <div class="foot"><span>C-Sync</span><span>AI use declared</span></div>
 </section>
 

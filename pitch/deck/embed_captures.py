@@ -18,7 +18,7 @@ PATTERN = re.compile(r'(<div class="capture"(?: style="[^"]*")? data-capture="(C
 
 
 def main():
-    src = open(os.path.join(HERE, "deck.html"), encoding="utf8").read()
+    src = open(os.path.join(HERE, os.environ.get("DECK", "deck") + ".html"), encoding="utf8").read()
 
     def repl(m):
         start, cid, fname, inner, end = m.groups()
@@ -52,7 +52,7 @@ def main():
                 print(f"{attr}: inserted ({os.path.basename(f)})")
             else:
                 print(f"{attr}: MISSING ({rel})")
-    open(os.path.join(HERE, "deck_final.html"), "w", encoding="utf8").write(out)
+    open(os.path.join(HERE, os.environ.get("DECK", "deck").replace("deck_fr","deck_fr").rstrip() + "_final.html"), "w", encoding="utf8").write(out)
     print("OK: pitch/deck/deck_final.html")
 
 

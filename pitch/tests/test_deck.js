@@ -5,9 +5,9 @@ const src=fs.readFileSync(process.argv[2],'utf8');let f=0;const ok=(c,m)=>{conso
 ok(!/(src|href)\s*=\s*["']?(https?:)?\/\//i.test(src),'aucune ressource externe');
 const dom=new JSDOM(src,{runScripts:'dangerously',pretendToBeVisual:true});const d=dom.window.document;
 const s=[...d.querySelectorAll('.slide')];ok(s.length===7,'7 diapositives');
-let all='';
+let all='';const CAP=+process.env.WORDCAP||25;
 s.forEach((el,k)=>{const t=[...el.querySelectorAll('[data-count]')].map(e=>e.textContent).join(' ');
- const n=(t.match(/[A-Za-z0-9][A-Za-z0-9.\-~%']*/g)||[]).length; ok(n<=25,`diapo ${k+1} : ${n} mots ≤ 25`); all+=el.textContent+'\n';});
+ const n=(t.match(/[A-Za-z0-9][A-Za-z0-9.\-~%']*/g)||[]).length; ok(n<=CAP,`diapo ${k+1} : ${n} mots ≤ ${CAP}`); all+=el.textContent+'\n';});
 ['s3','s4','s5'].forEach(id=>ok(d.querySelectorAll('#'+id+' .capture .sb').length===d.querySelectorAll('#'+id+' .capture').length,`${id} : bandeau SYNTHETIC DATA sur chaque cadre de capture`));
 const press=k=>d.dispatchEvent(new dom.window.KeyboardEvent('keydown',{key:k}));
 press('ArrowRight');ok(s[1].classList.contains('active'),'→ passe à la diapo 2');press('End');ok(s[6].classList.contains('active'),'Fin → diapo 7');press('ArrowLeft');ok(s[5].classList.contains('active'),'← revient à la diapo 6');press('Home');ok(s[0].classList.contains('active'),'Début → diapo 1');
