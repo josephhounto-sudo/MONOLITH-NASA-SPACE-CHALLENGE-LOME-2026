@@ -70,7 +70,7 @@ def load_procedure(pid):
 
 
 # ------------------------------------------------------------------ pieces
-def card(dim, state, day):
+def card(dim, state, day, hist=""):
     s = theme["state"].get(state, theme["state"]["UNKNOWN"])
     if dim in CONTEXT_DIMENSIONS:
         label = UI["context_only"]
@@ -81,7 +81,7 @@ def card(dim, state, day):
     ctx = " ctx" if dim in CONTEXT_DIMENSIONS else ""
     return (f"<div class='cs-card{ctx}' data-state='{state if state in theme['state'] else 'UNKNOWN'}' style='{style.card_vars(s['color'])}'>"
             f"<div class='dim'>{dim}</div>"
-            f"<div style='color:{s['color']};font-size:1.1em'>{s['icon']} {label}</div></div>")
+            f"<div style='color:{s['color']};font-size:1.1em'>{s['icon']} {label}</div>{hist}</div>")
 
 
 def fixed_sentence():
@@ -92,7 +92,7 @@ def nominal(cap, day):
     st.subheader(cap["situation"])
     cols = st.columns(len(DIMENSIONS))
     for col, dim in zip(cols, DIMENSIONS):
-        col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day), unsafe_allow_html=True)
+        col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day, style.history(STATES_BY_DAY, dim, day)), unsafe_allow_html=True)
     with st.container(border=True):
         st.markdown(f"**{UI['why_label']}** — {cap['explanation']}")
         st.markdown(f"<div class='cs-action'><b>{UI['action_label']}</b> — {html.escape(str(cap['action'].get('text', '')))}</div>",
@@ -190,7 +190,11 @@ def resume_screen(cap):
 
 def habitat_panel():
     """Real NASA ISS cabin data, context only. Reads data/real/habitat_*.csv (built by scripts/build_habitat.py)."""
-    st.divider()
+    with st.container(key="cs-habitat"):
+        _habitat_body()
+
+
+def _habitat_body():
     st.subheader(UI["habitat_title"])
     st.markdown(UI["habitat_intro"])
     df = habitat.rr1_hourly()
@@ -198,7 +202,7 @@ def habitat_panel():
     chart = df.set_index("hour_utc")[["co2_mmhg"]].rename(columns={"co2_mmhg": UI["habitat_series_co2"]})
     chart[UI["habitat_series_limit"]] = habitat.LIMIT_MMHG
     chart[UI["habitat_series_flat"]] = df.set_index("hour_utc")["co2_mmhg"].where(df.set_index("hour_utc")["artifact"])
-    st.line_chart(chart, color=[theme["interactive"], theme["text_secondary"], theme["state"]["UNKNOWN"]["color"]])
+    st.line_chart(chart, color=style.chart_colors(theme))
     if len(flat):
         run = habitat.missions().set_index("mission").loc["RR-1"]
         ppm = float(run["longest_run_ppm"])
@@ -219,6 +223,18 @@ if fallback:
     st.caption(UI["fallback_notice"])
 day = st.slider(UI["day_slider"], 1, 10, 7)
 today = [c for c in caps if c.get("day") == day]
+STATES_BY_DAY = {c["day"]: c["states"] for c in caps if c.get("capsule_type", "daily") == "daily" and is_valid(c)}
+_events, _link, _delay = {}, None, json.load(open(os.path.join(ROOT, "contracts", "decision.schema.json")))["properties"]["ground_delay_min"]["const"]
+for c in caps:
+    if c.get("capsule_type") == "emergency" and is_valid(c):
+        _events[c["day"]] = UI["event_emergency"]
+        q = c.get("send_queue", {})
+        _delay = q.get("ground_delay_min", _delay)
+        if c["day"] == day and q:
+            _link = (q["link_down_utc"][11:16], q["link_up_utc"][11:16])
+    elif c.get("capsule_type") == "resume" and is_valid(c) and c["action"].get("type") == "REFUSE_RESUME":
+        _events[c["day"]] = UI["event_resume"]
+style.mission_strip(UI, STATES_BY_DAY, _events, day, _link, _delay)
 daily = next((c for c in today if c.get("capsule_type", "daily") == "daily"), None)
 # warm light field = highest criticality of the day (appearance only, fusion profile)
 crits = {c.get("action", {}).get("criticality") for c in today if is_valid(c)}

@@ -54,3 +54,17 @@ def test_fonts_are_local_with_licence():
     d = os.path.join(ROOT, "csync", "ui", "fonts")
     for f in ("ClashDisplay-Variable.woff2", "Satoshi-Variable.woff2", "FFL_Fontshare_License.txt"):
         assert os.path.getsize(os.path.join(d, f)) > 1000, f
+
+
+def test_trajectory_never_shows_the_future(monkeypatch):
+    """Day 7 must not reveal day 8-10 states or the day-9 emergency."""
+    import csync.ui.style as style
+    out = []
+    monkeypatch.setattr(style, "_profile", lambda: "fusion")
+    monkeypatch.setattr(style.st, "html", lambda h: out.append(h))
+    ui = json.load(open(os.path.join(ROOT, "csync", "config", "strings_en.json"), encoding="utf8"))["ui"]
+    states = {d: {"Body": "DEGRADED", "Attention": "DEGRADED", "Morale": "NORMAL"} for d in range(1, 11)}
+    style.mission_strip(ui, states, {9: ui["event_emergency"]}, 7, None, 20)
+    h = out[0]
+    assert ui["event_emergency"] not in h
+    assert h.count("class='nd fut'") == 3 and "Day 8:" not in h and "Day 7:" in h

@@ -64,7 +64,18 @@
       "max_1h_mmhg": "Max hourly mean (mmHg)",
       "pct_hours_above_3mmhg": "Hours above 3 mmHg (%)",
       "sensor_zero_or_cap": "Zero or capped values"
-    }
+    },
+    "mission_name": "Mars transit · demo story",
+    "day_of": "Day {d:02d} / {n:02d}",
+    "link_status_down": "Ground link down {a}–{b} UTC · report queued",
+    "link_status_ok": "Ground link: no outage recorded",
+    "ground_delay": "Delay {m} min (demo)",
+    "trajectory_label": "Mission trajectory: highest state of each day",
+    "node_label": "Day {d}: {state}",
+    "event_emergency": "Emergency",
+    "event_resume": "Resume refused",
+    "baseline_short": "Baseline",
+    "history_label": "Days 1 to {d}"
   },
   "indicator_names": {
     "PH01": "heart-rate",

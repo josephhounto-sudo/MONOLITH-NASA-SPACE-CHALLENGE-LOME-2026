@@ -50,6 +50,13 @@
       "WATCH": "#8F4D00",
       "DEGRADED": "#A62A22",
       "UNKNOWN": "#56636A"
-    }
+    },
+    "chart": {
+      "series": "#1F2A3D",
+      "limit": "#0B6E85",
+      "flagged": "#56636A",
+      "note": "Light-background chart colours: series 14.4:1, requirement line 5.9:1, flagged 6.2:1 on white (graphics need 3:1). The dark-theme cyan #00E0F5 is 1.6:1 on white."
+    },
+    "teal": "#0B6E85"
   }
 }

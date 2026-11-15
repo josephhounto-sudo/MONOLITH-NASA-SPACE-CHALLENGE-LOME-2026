@@ -340,9 +340,9 @@ a{color:var(--f-stone);text-underline-offset:3px}
 .cs-card::after{content:"";position:absolute;right:16px;top:16px;width:34px;height:34px;background:var(--c);
  -webkit-mask:var(--s) center/contain no-repeat;mask:var(--s) center/contain no-repeat}
 .cs-card .dim{color:var(--f-ink2);font-size:.9rem;font-weight:600}
-.cs-card>div:last-child{color:var(--c)!important;font-family:var(--f-display);font-weight:600;font-size:clamp(1.5rem,2.3vw,2.15rem)!important;line-height:1.05;letter-spacing:-.015em}
+.cs-card>div:nth-child(2){color:var(--c)!important;font-family:var(--f-display);font-weight:600;font-size:clamp(1.5rem,2.3vw,2.15rem)!important;line-height:1.05;letter-spacing:-.015em}
 .cs-card.ctx{background:rgba(255,255,255,.22);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border:1.5px dashed rgba(86,99,106,.62)}
-.cs-card.ctx>div:last-child,.cs-card[data-state="UNKNOWN"]>div:last-child{color:var(--f-ink2)!important;font-family:var(--f-text);font-size:.98rem!important;font-weight:500;line-height:1.3;letter-spacing:0}
+.cs-card.ctx>div:nth-child(2),.cs-card[data-state="UNKNOWN"]>div:nth-child(2){color:var(--f-ink2)!important;font-family:var(--f-text);font-size:.98rem!important;font-weight:500;line-height:1.3;letter-spacing:0}
 .cs-card[data-state="UNKNOWN"]:not(.ctx){border:1.5px dashed rgba(86,99,106,.62);background:rgba(255,255,255,.4)}
 
 /* panels */
@@ -374,10 +374,46 @@ a{color:var(--f-stone);text-underline-offset:3px}
 .st-key-cs-stone hr{border-color:rgba(244,240,228,.18)!important}
 [data-testid="stCode"],.st-key-cs-stone pre{background:rgba(0,0,0,.25)!important}
 
+/* shapes as classes (trajectory nodes, card history) */
+.sh-NORMAL{--c:var(--f-normal);--s:$s_normal}.sh-WATCH{--c:var(--f-watch);--s:$s_watch}
+.sh-DEGRADED{--c:var(--f-degraded);--s:$s_degraded}.sh-UNKNOWN{--c:var(--f-unknown);--s:$s_unknown}
+/* mission strip: corner metadata + orbital trajectory (refs Lunar, 21 Grams) */
+.cs-strip{position:relative;margin:2px 0 14px;padding:14px 22px 10px;border-radius:22px;background:var(--f-glass);border:1px solid var(--f-line);
+ box-shadow:inset 0 1px 0 #fff,0 18px 46px rgba(120,60,80,.08);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px)}
+.cs-strip .meta{display:flex;justify-content:space-between;gap:16px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--f-ink2)}
+.cs-strip .meta b{color:var(--f-ink);font-weight:700}.cs-strip .meta .down{color:var(--f-watch)}
+.cs-orbit{position:relative;height:104px;margin:6px 0 2px}
+.cs-orbit .arc{position:absolute;left:0;right:0;top:12px;height:148px;border:1px solid rgba(20,22,24,.22);border-radius:50%;
+ -webkit-mask:linear-gradient(#000 0,#000 50%,transparent 50%);mask:linear-gradient(#000 0,#000 50%,transparent 50%)}
+.cs-orbit .nd{position:absolute;width:16px;height:16px;transform:translate(-50%,-50%);background:var(--c);-webkit-mask:var(--s) center/contain no-repeat;mask:var(--s) center/contain no-repeat}
+.cs-orbit .nd.now{width:26px;height:26px}
+.cs-orbit .halo{position:absolute;width:44px;height:44px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(20,22,24,.35)}
+.cs-orbit .evt{position:absolute;width:30px;height:30px;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid var(--f-degraded)}
+.cs-orbit .dn{position:absolute;transform:translate(-50%,0);font-size:.78rem;font-variant-numeric:tabular-nums;color:var(--f-ink2)}
+.cs-orbit .dn.now{color:var(--f-ink);font-weight:700}
+.cs-orbit .nd.fut{width:7px;height:7px;border-radius:50%;background:rgba(20,22,24,.28);-webkit-mask:none;mask:none}
+.cs-orbit .tag{position:absolute;transform:translate(-50%,0);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.cs-orbit .tag.crit{color:var(--f-degraded)}.cs-orbit .tag.base{color:var(--f-ink2)}
+.cs-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* card history: one small shape per day (ref Flutter: stacked layers = time) */
+.cs-card .hist{display:flex;gap:4px;align-items:center;position:relative;z-index:1}
+.cs-card .hist i{width:9px;height:9px;background:var(--c);-webkit-mask:var(--s) center/contain no-repeat;mask:var(--s) center/contain no-repeat;opacity:.9}
+.cs-card .hist i.fut{background:rgba(20,22,24,.14);-webkit-mask:none;mask:none;border-radius:50%;width:5px;height:5px}
+.cs-card .hist i.now{width:13px;height:13px;opacity:1}
+/* habitat section (real NASA data): glass panel, chart legible on light */
+.st-key-cs-habitat{background:var(--f-glass)!important;border:1px solid var(--f-line);border-radius:26px;padding:20px 22px 12px!important;
+ box-shadow:inset 0 1px 0 #fff,0 18px 46px rgba(40,80,110,.08);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px)}
+.st-key-cs-habitat h3::before{content:"NASA DATA";display:inline-block;vertical-align:middle;margin-right:10px;padding:3px 8px;border-radius:6px;
+ font-family:var(--f-text);font-size:.7rem;font-weight:800;letter-spacing:.1em;background:var(--f-stone);color:var(--f-cream)}
+/* 1 % pass: nested radii (outer - padding), one type ramp, tabular figures */
+.st-key-cs-stone [data-testid="stVerticalBlockBorderWrapper"]{border-radius:18px!important}
+[data-testid="stMarkdownContainer"] p{line-height:1.55}
+[data-testid="stDataFrame"]{border-radius:14px;overflow:hidden}
+@media (max-width:900px){.cs-orbit .tag{display:none}}
 /* motion and transparency fallbacks */
 @media (prefers-reduced-motion:reduce){.stButton>button{transition:none}}
 @media (prefers-reduced-transparency:reduce){
- .cs-top,.cs-card,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#fff!important}
+ .cs-top,.cs-card,.cs-strip,.st-key-cs-habitat,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#fff!important}
  [data-testid="stApp"]::before{display:none}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.cs-top,.cs-card,[data-testid="stSlider"]{background:#fff!important}}
 @media (max-width:760px){.cs-cage{opacity:.35}}
@@ -436,3 +472,69 @@ def inject(name, tag):
 def card_vars(colour):
     """Inline custom properties for a state card (the colour is one of the theme state colours)."""
     return f"--rail:{colour};--rail-a:{_rgba(colour, 0.14)}"
+
+
+
+# ---------------------------------------------------------------- fusion helpers used by app.py (appearance only)
+_RANK = {"UNKNOWN": 0, "NORMAL": 1, "WATCH": 2, "DEGRADED": 3}
+
+
+def worst(states):
+    """Highest state among the evaluated dimensions of one day (for the trajectory node)."""
+    vals = [v for k, v in states.items() if k in ("Body", "Attention", "Morale")]
+    return max(vals, key=lambda v: _RANK.get(v, 0)) if vals else "UNKNOWN"
+
+
+def chart_colors(theme):
+    """Habitat chart colours: legible on the light glass for the fusion profile (graphics >= 3:1)."""
+    if _profile() == "fusion":
+        c = theme["fusion"]["chart"]
+        return [c["series"], c["limit"], c["flagged"]]
+    return [theme["interactive"], theme["text_secondary"], theme["state"]["UNKNOWN"]["color"]]
+
+
+def history(states_by_day, dim, day, n_days=10):
+    """Fusion only: a row of small shapes, one per day up to `day` (the drift becomes visible), dots for days to come."""
+    if _profile() != "fusion":
+        return ""
+    cells = []
+    for d in range(1, n_days + 1):
+        if d > day:
+            cells.append("<i class='fut'></i>")
+        else:
+            s = states_by_day.get(d, {}).get(dim, "UNKNOWN")
+            cells.append(f"<i class='sh-{s}{' now' if d == day else ''}'></i>")
+    return f"<div class='hist' aria-hidden='true'>{''.join(cells)}</div>"
+
+
+def mission_strip(ui, states_by_day, events, day, link, delay_min, n_days=10):
+    """Fusion only: corner metadata and an orbital trajectory of the mission (one node per day, shaped by its highest state)."""
+    if _profile() != "fusion":
+        return
+    import math
+    nodes, labels = [], []
+    for d in range(1, n_days + 1):
+        x = 4 + (d - 1) * 92 / (n_days - 1)
+        y = 12 + 74 - 74 * math.sqrt(max(0.0, 1 - ((x - 50) / 50) ** 2))   # on the ellipse drawn by .arc
+        now = " now" if d == day else ""
+        if d > day:   # days to come: planned trajectory only, no state, no event (the screen never shows the future)
+            nodes.append(f"<span class='nd fut' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
+            labels.append(f"<span class='dn fut' style='left:{x:.2f}%;top:{y + 14:.1f}px'>{d}</span>")
+            continue
+        s = worst(states_by_day.get(d, {}))
+        lab = ui["node_label"].format(d=d, state=s.title())
+        if d == day:
+            nodes.append(f"<span class='halo' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
+        if d in events:
+            nodes.append(f"<span class='evt' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
+            labels.append(f"<span class='tag crit' style='left:{x:.2f}%;top:{y - 40:.1f}px'>{events[d]}</span>")
+        nodes.append(f"<span class='nd sh-{s}{now}' role='img' aria-label='{lab}' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
+        labels.append(f"<span class='dn{now}' style='left:{x:.2f}%;top:{y + 14:.1f}px'>{d}</span>")
+    xb = 4 + 2 * 92 / (n_days - 1)
+    labels.append(f"<span class='tag base' style='left:{xb:.2f}%;top:{12 + 74 - 74 * math.sqrt(1 - ((xb - 50) / 50) ** 2) + 32:.1f}px'>{ui['baseline_short']} 1–5</span>")
+    link_txt = (f"<span class='down'>{ui['link_status_down'].format(a=link[0], b=link[1])}</span>" if link else ui["link_status_ok"])
+    st.html(
+        f"<section class='cs-strip' aria-label='{ui['trajectory_label']}'>"
+        f"<div class='meta'><span><b>{ui['mission_name']}</b> · {ui['day_of'].format(d=day, n=n_days)}</span>"
+        f"<span>{link_txt} · {ui['ground_delay'].format(m=delay_min)}</span></div>"
+        f"<div class='cs-orbit'><div class='arc'></div>{''.join(nodes)}{''.join(labels)}</div></section>")
