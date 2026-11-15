@@ -36,3 +36,14 @@ Non repris : le rouge plein (réservé à l'alerte), les fonds blancs, les motif
 | A3 | Icône des cartes « contexte » : `?` (aujourd'hui, identique à « inconnu ») ou `○` ? | `○` : change 3 tests et `theme.json`, 10 min ; non fait sans ton accord |
 | A4 | Garder le polyèdre filaire (monolithe) comme signature ? | Oui, c'est l'écho du logo ; il peut être masqué par `prefers-reduced-motion` |
 | A5 | Page d'accueil hors démo (écran d'entrée) ? | Non avant le gel |
+
+## 6. Ce que les références Pinterest peuvent encore renforcer (14/11 ~21:00)
+Limite : je n'ai pas pu ouvrir ton Pinterest (ses onglets ne sont pas accessibles) ; je travaille sur les 10 images que tu as envoyées. Critère : une référence n'est retenue que si elle rend un **état plus lisible** ; jamais pour ajouter un effet (voir `docs/skills/csync-design/SKILL.md`, P2).
+| Référence | Retenir ? | Pourquoi |
+|---|---|---|
+| Planches de formes (« 120 shapes ») | **Oui, une seule idée** | Donner à chaque état une **forme distincte** (aujourd'hui `✓ ! ▲ ?` sont des caractères de texte de tailles variables) : cercle, triangle, carré, losange, en trait fin, même taille et même épaisseur. Renforce P8 (jamais la couleur seule) pour les daltoniens. Le `?` des cartes « contexte » est confondu avec UNKNOWN : prendre un `○` ou un tiret (décision A3). |
+| Affiche suisse rouge | **Oui, une seule idée** | La **grille** et l'aplat net : mot d'état plus grand que son étiquette, alignement sur grille de 4 px. Pas le rouge plein. |
+| Cristal filaire sur galet bleu | **Déjà utilisé** | Seul décor gardé dans le profil `quiet` (fixe). |
+| Dégradés flous orange / cyan, lignes courbes | **Non** | Pur décor : halos, lignes, mouvement. Rejeté par P2 et P7 ; ne reste que dans le profil `glass`. |
+| Look iOS 7 | **Non** | Aucun élément ne rend un état plus lisible. |
+Aucune de ces deux idées retenues n'est implémentée : elles changent les tests de `tests/test_ui.py` (icônes attendues) et attendent ton accord.

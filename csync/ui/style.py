@@ -10,8 +10,10 @@ Rules (docs/DESIGN_DIRECTION.md):
 - Frosted glass falls back to opaque panels under prefers-reduced-transparency or without backdrop-filter.
 All colours come from csync/config/theme.json.
 """
+import base64
 import json
 import os
+from string import Template
 from urllib.parse import quote
 
 import streamlit as st
@@ -44,7 +46,7 @@ html,body,[data-testid="stApp"]{background:
 h1,h2,h3,h4{font-family:var(--cs-font);letter-spacing:-.015em}
 h3{font-size:clamp(1.45rem,2.6vw,2.05rem)!important;font-weight:650!important;line-height:1.2;margin:.9rem 0 .8rem!important}
 p,li,label,[data-testid="stMarkdownContainer"]{font-feature-settings:"tnum" 1,"cv11" 1}
-[data-testid="stCaptionContainer"]{color:var(--cs-text2)!important}
+[data-testid="stCaptionContainer"],[data-testid="stCaptionContainer"] *{color:var(--cs-text2)!important;opacity:1!important}
 
 [data-testid="stToolbar"],[data-testid="stDecoration"],[data-testid="stStatusWidget"]{display:none!important}
 [data-testid="stHorizontalBlock"]{margin-bottom:.9rem}
@@ -131,6 +133,85 @@ _TOP = """
 """
 
 
+# Profile "quiet": the unslop-style pass (docs/DESIGN_SKILL_SOURCES.md). Same markup, CSS only. Select with CSYNC_STYLE=quiet.
+_QUIET = """
+html,body,[data-testid="stApp"]{background:var(--cs-surface)!important}
+.cs-bg .blob,.cs-bg .rings,.cs-bg .dots,.cs-bg .lines{display:none}
+.cs-bg .poly{animation:none;opacity:.22}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"],.stButton>button,.cs-kicker{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"]{background:var(--cs-panel)!important;border-radius:12px}
+.cs-card,.cs-decision,[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{background:var(--cs-panel)!important;
+  box-shadow:none!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-radius:12px!important}
+.cs-card .dim{font-size:.8rem;font-weight:500;letter-spacing:0;text-transform:none}
+.cs-kicker{padding:0;border:0;background:none!important;color:var(--cs-text2);font-size:.9rem;font-weight:500;letter-spacing:0;text-transform:none}
+.stButton>button{border-radius:10px;background:var(--cs-panel);font-weight:500}
+.stButton>button:hover:not(:disabled){transform:none;box-shadow:none!important}
+"""
+
+# Profile "hybrid": glass kept on the three state cards and the decision panel only; no looping motion, no uppercase labels,
+# no blur on controls or alerts. Select with CSYNC_STYLE=hybrid. M1 decision 14/11 21:30: "glass with a little quiet" (not yet human-tested).
+_HYBRID = """
+.cs-bg,.cs-bg *{animation:none!important}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"],.stButton>button,.cs-kicker{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"]{background:var(--cs-panel)!important}
+.cs-card .dim{font-size:.82rem;font-weight:600;letter-spacing:0;text-transform:none}
+.cs-kicker{letter-spacing:0;text-transform:none}
+.stButton>button:hover:not(:disabled){transform:none;box-shadow:none!important}
+"""
+
+# Profile "calm": design pass with the csync-design skill (P2 one rich zone, P3 neutral banner, P4 equal cards, P5 sentence case, P7 no motion).
+# Same markup as the others, CSS only. Select with CSYNC_STYLE=calm. Proposed 15/11 05:15, awaiting M1 preview.
+_CALM = """
+.cs-bg{display:none!important}
+html,body,[data-testid="stApp"]{background:var(--cs-surface)!important}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"],.stButton>button,.cs-kicker,.cs-card,.cs-decision,[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+.cs-top,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{background:var(--cs-panel)!important;border-radius:12px!important}
+[data-testid="stAlert"],[data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{background:var(--cs-panel)!important;border-radius:12px;border-color:var(--cs-line)!important}
+.cs-card{min-height:112px;border-radius:12px;background:linear-gradient(90deg,var(--rail-a),transparent 60%),var(--cs-panel)}
+.cs-card.ctx{background:transparent}
+.cs-card .dim{font-size:.82rem;font-weight:600;letter-spacing:0;text-transform:none}
+.cs-card .st{font-size:1.15rem;font-weight:600}
+.cs-kicker{letter-spacing:0;text-transform:none;background:none!important;border:0;padding:0}
+.cs-action{margin:.5rem 0 .2rem;padding:.75rem 1rem;border-left:4px solid var(--cs-cyan);background:var(--cs-panel);border-radius:0 12px 12px 0;font-size:1.12rem;font-weight:600}
+.stButton>button{border-radius:10px;background:var(--cs-panel);font-weight:600}
+.stButton>button:hover:not(:disabled){transform:none}
+"""
+
+# Profile "signal": built from M1's brief (futuristic, light glass, shapes) + the two Pinterest ideas kept in DESIGN_DIRECTION s6
+# (one distinct shape per state, Swiss grid with a large state word) + emil-design-eng (named transitions, strong ease-out, press feedback).
+# Glass only on the state cards and the decision; one static background; no loops. Select with CSYNC_STYLE=signal.
+_SIGNAL = """
+:root{--cs-ease:cubic-bezier(.23,1,.32,1)}
+.cs-bg,.cs-bg *{animation:none!important}
+.cs-bg .dots,.cs-bg .lines,.cs-bg .rings,.cs-bg .b3{display:none}
+.cs-bg .poly{top:47vh;right:3vw;width:min(32vw,440px);opacity:.2}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"],.stButton>button,.cs-kicker{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+.cs-top,[data-testid="stSlider"]{background:var(--cs-panel)!important;border-radius:12px}
+[data-testid="stAlert"],[data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{background:var(--cs-panel)!important;border-radius:12px;border-color:var(--cs-line)!important}
+.cs-card{min-height:136px;padding:16px 18px;border-radius:18px;justify-content:space-between;gap:12px;
+  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%),linear-gradient(135deg,var(--rail-a),transparent 70%),var(--cs-glass);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
+.cs-card::before{display:none}
+.cs-card .dim{font-size:.82rem;font-weight:600;letter-spacing:0;text-transform:none;color:var(--cs-text2)}
+.cs-card>div:last-child{font-size:1.65rem!important;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.cs-card.ctx>div:last-child{font-size:1rem!important;font-weight:500;line-height:1.35}
+.cs-card::after{content:"";position:absolute;top:14px;right:14px;width:26px;height:26px;background:var(--rail);
+  -webkit-mask:var(--shape) center/contain no-repeat;mask:var(--shape) center/contain no-repeat}
+.cs-card[data-state="NORMAL"]{--shape:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E")}
+.cs-card[data-state="WATCH"]{--shape:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5 21.5 12 12 21.5 2.5 12Z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.cs-card[data-state="DEGRADED"]{--shape:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3 22 20.5H2Z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.cs-card[data-state="UNKNOWN"]{--shape:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='3.5' y='3.5' width='17' height='17' rx='2' fill='none' stroke='white' stroke-width='2' stroke-dasharray='4 3'/%3E%3C/svg%3E")}
+.cs-card.ctx{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+.cs-card.ctx::after{opacity:.55}
+.cs-action{margin:.5rem 0 .2rem;padding:.8rem 1.1rem;border-radius:14px;border:1px solid color-mix(in srgb,var(--cs-cyan) 45%,transparent);background:var(--cs-panel);font-size:1.12rem;font-weight:600}
+.cs-kicker{letter-spacing:0;text-transform:none;background:none!important;border:0;padding:0}
+.stButton>button{border-radius:10px;background:var(--cs-panel);font-weight:600;transition:transform 160ms var(--cs-ease),border-color 160ms var(--cs-ease)}
+.stButton>button:hover:not(:disabled){transform:none;box-shadow:none!important}
+.stButton>button:active:not(:disabled){transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){.stButton>button{transition:none}}
+"""
+
 def _uri(svg):
     return "url(\"data:image/svg+xml;utf8," + quote(svg) + "\")"
 
@@ -173,13 +254,307 @@ def _tokens():
     }
 
 
+# ---------------------------------------------------------------- profile "fusion" (default from 15/11)
+# Fusion of mock-up directions 1 (Pleats: light glass, white pleats, warm and cool light fields) and 3 (Monolith: wireframe
+# cage around a dark stone). Built from M1's six reference images (docs/DESIGN_FUSION.md). One rule gives each parent a role:
+#   light glass = context and calm; the dark stone surface = only what demands action now (CRITICAL: emergency, refused resume).
+#   warm field strength = the day's highest criticality (calm / watch / critical); cool field = the link to the ground.
+# Standalone CSS (does not reuse _CSS). Colours from theme.json -> fusion; fonts are local files (Fontshare licence, offline).
+FONTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
+
+
+ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
+
+
+def _asset(name):
+    """C-Sync mark (brand/make_mark.py -> csync/ui/assets) as a data URI: st.html strips inline <svg>, not <img>."""
+    with open(os.path.join(ASSETS, name), "rb") as f:
+        return "data:image/svg+xml;base64," + base64.b64encode(f.read()).decode()
+
+
+def _font(name):
+    with open(os.path.join(FONTS, name), "rb") as f:
+        return base64.b64encode(f.read()).decode()
+
+
+def _shape(body, filled=True):
+    paint = "" if filled else " fill='none' stroke='black' stroke-width='1.8' stroke-dasharray='3.4 2.6'"
+    return _uri(f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><g{paint}>{body}</g></svg>")
+
+
+_FUSION = Template(r"""
+@font-face{font-family:"Clash Display";src:url(data:font/woff2;base64,$clash) format("woff2");font-weight:200 700;font-display:swap}
+@font-face{font-family:Satoshi;src:url(data:font/woff2;base64,$satoshi) format("woff2");font-weight:300 900;font-display:swap}
+:root{--f-paper:$paper;--f-ink:$ink;--f-ink2:$ink2;--f-stone:$stone;--f-stone2:$stone2;--f-cream:$cream;--f-cream2:$cream2;
+ --f-warm:$warm;--f-warm2:$warm2;--f-cool:$cool;--f-lilac:$lilac;--f-cyan:$cyan;
+ --f-normal:$l_normal;--f-watch:$l_watch;--f-degraded:$l_degraded;--f-unknown:$l_unknown;
+ --f-d-watch:$d_watch;--f-d-degraded:$d_degraded;
+ --f-glass:rgba(255,255,255,.58);--f-line:rgba(255,255,255,.95);--f-hair:rgba(20,22,24,.12);
+ --f-ease:cubic-bezier(.23,1,.32,1);--f-warm-o:.18;
+ --f-display:"Clash Display","Satoshi",system-ui,sans-serif;--f-text:Satoshi,-apple-system,"Segoe UI",system-ui,sans-serif}
+html,body,[data-testid="stApp"]{color:var(--f-ink);font-family:var(--f-text);
+ background:radial-gradient(560px 460px at 18% 22%,color-mix(in srgb,var(--f-warm) calc(var(--f-warm-o)*100%),transparent),transparent 72%),
+  radial-gradient(420px 360px at 30% 10%,color-mix(in srgb,var(--f-warm2) calc(var(--f-warm-o)*90%),transparent),transparent 72%),
+  radial-gradient(620px 560px at 88% 96%,color-mix(in srgb,var(--f-cool) 42%,transparent),transparent 72%),
+  radial-gradient(460px 420px at 100% 70%,color-mix(in srgb,var(--f-lilac) 32%,transparent),transparent 72%),var(--f-paper);
+ background-attachment:fixed}
+[data-testid="stApp"]::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.85;
+ background:repeating-linear-gradient(103deg,transparent 0 46px,rgba(255,255,255,.95) 46px 47.5px,transparent 47.5px 64px),
+  repeating-linear-gradient(97deg,transparent 0 88px,rgba(255,255,255,.7) 88px 89px)}
+[data-testid="stAppViewContainer"],[data-testid="stHeader"],[data-testid="stMain"],[data-testid="stBottomBlockContainer"]{background:transparent!important}
+[data-testid="stMain"],[data-testid="stMainBlockContainer"]{position:relative;z-index:1}
+[data-testid="stMainBlockContainer"]{max-width:1200px;padding-top:1.1rem}
+[data-testid="stToolbar"],[data-testid="stDecoration"],[data-testid="stStatusWidget"]{display:none!important}
+p,li,label,[data-testid="stMarkdownContainer"]{font-family:var(--f-text);font-feature-settings:"tnum" 1}
+h1,h2,h3,h4{font-family:var(--f-display)!important;font-weight:600!important;letter-spacing:-.015em;color:var(--f-ink)}
+h3{font-size:clamp(1.4rem,2.4vw,1.95rem)!important;line-height:1.15!important;margin:.6rem 0 .8rem!important}
+[data-testid="stCaptionContainer"],[data-testid="stCaptionContainer"] *{color:var(--f-ink2)!important;opacity:1!important}
+hr{border-color:var(--f-hair)!important;margin:1.4rem 0!important}
+a{color:var(--f-stone);text-underline-offset:3px}
+
+/* signature: the cage around the stone (direction 3), static, decorative */
+.cs-top{position:relative;overflow:hidden}
+.cs-cage{position:absolute;right:-6px;top:50%;width:150px;height:150px;transform:translateY(-50%);pointer-events:none;opacity:.9;
+ background:$cage center/contain no-repeat}
+
+/* top bar: light glass */
+.cs-top{display:flex;align-items:center;gap:14px;padding:12px 18px;margin:0 0 12px;border-radius:22px;background:var(--f-glass);
+ border:1px solid var(--f-line);box-shadow:inset 0 1px 0 #fff,0 18px 50px rgba(120,60,80,.10);-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%)}
+.cs-top .mark{width:30px;height:34px;flex:none;background:var(--f-ink);-webkit-mask:$mark center/contain no-repeat;mask:$mark center/contain no-repeat}
+.cs-top .mk{width:44px;height:44px;flex:none;margin:-4px 0}.cs-top .mk-static{display:none}
+.cs-top .nm{font-family:var(--f-display);font-weight:600;font-size:1.3rem}
+.cs-top .tg{color:var(--f-ink2);font-size:.88rem}
+
+/* alerts: synthetic banner = amber outline chip; info = fixed sentence */
+[data-testid="stAlert"]{border-radius:16px}
+[data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{background:rgba(255,255,255,.72)!important;border:1px solid var(--f-hair)!important;border-radius:16px!important}
+[data-testid="stAlert"] p{color:var(--f-ink)!important;font-weight:600}
+
+/* slider and native controls */
+[data-testid="stSlider"]{padding:.45rem 1rem .25rem;border-radius:18px;background:var(--f-glass);border:1px solid var(--f-line);
+ -webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+.stButton>button{border-radius:999px;font-weight:600;padding:.5rem 1.25rem;border:1px solid var(--f-hair);background:rgba(255,255,255,.85);color:var(--f-ink);
+ transition:transform 160ms var(--f-ease),background-color 160ms var(--f-ease)}
+.stButton>button:active:not(:disabled){transform:scale(.97)}
+.stButton>button:focus-visible{outline:2px solid var(--f-stone);outline-offset:3px}
+
+/* state cards: light glass, big state word, one filled shape per state (circle, diamond, triangle, dashed square) */
+[data-testid="stHorizontalBlock"]{margin-bottom:.8rem}
+.cs-card{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:10px;min-height:178px;
+ padding:16px 18px;border-radius:26px;background:var(--f-glass);border:1px solid var(--f-line);
+ box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(20,22,24,.04),0 22px 56px rgba(120,60,80,.10);-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%)}
+.cs-card[data-state="NORMAL"]{--c:var(--f-normal);--s:$s_normal}
+.cs-card[data-state="WATCH"]{--c:var(--f-watch);--s:$s_watch}
+.cs-card[data-state="DEGRADED"]{--c:var(--f-degraded);--s:$s_degraded;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,232,226,.72))}
+.cs-card[data-state="UNKNOWN"]{--c:var(--f-unknown);--s:$s_unknown}
+.cs-card::after{content:"";position:absolute;right:16px;top:16px;width:34px;height:34px;background:var(--c);
+ -webkit-mask:var(--s) center/contain no-repeat;mask:var(--s) center/contain no-repeat}
+.cs-card .dim{color:var(--f-ink2);font-size:.9rem;font-weight:600}
+.cs-card>div:nth-child(2){color:var(--c)!important;font-family:var(--f-display);font-weight:600;font-size:clamp(1.5rem,2.3vw,2.15rem)!important;line-height:1.05;letter-spacing:-.015em}
+.cs-card.ctx{background:rgba(255,255,255,.22);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border:1.5px dashed rgba(86,99,106,.62)}
+.cs-card.ctx>div:nth-child(2),.cs-card[data-state="UNKNOWN"]>div:nth-child(2){color:var(--f-ink2)!important;font-family:var(--f-text);font-size:.98rem!important;font-weight:500;line-height:1.3;letter-spacing:0}
+.cs-card[data-state="UNKNOWN"]:not(.ctx){border:1.5px dashed rgba(86,99,106,.62);background:rgba(255,255,255,.4)}
+
+/* panels */
+[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{background:var(--f-glass)!important;border:1px solid var(--f-line)!important;border-radius:22px!important;
+ box-shadow:inset 0 1px 0 #fff,0 18px 46px rgba(120,60,80,.08);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px)}
+.cs-action{margin:.5rem 0 .2rem;padding:.85rem 1.15rem;border-radius:16px;background:rgba(255,255,255,.85);border:1.5px solid var(--f-ink);font-size:1.08rem;font-weight:600;color:var(--f-ink)}
+.cs-kicker{display:inline-flex;align-items:center;gap:8px;padding:4px 12px 4px 10px;border-radius:999px;font-size:.88rem;font-weight:700}
+.cs-kicker::before{content:"";width:13px;height:12px;background:currentColor;-webkit-mask:$s_degraded center/contain no-repeat;mask:$s_degraded center/contain no-repeat}
+
+/* the stone: CRITICAL only (emergency, resume request). Dark surface, cream text, state colours of the dark theme. */
+.st-key-cs-stone{background:
+  radial-gradient(1px 1px at 12% 18%,rgba(244,240,228,.55),transparent 60%),radial-gradient(1px 1px at 37% 9%,rgba(244,240,228,.4),transparent 60%),
+  radial-gradient(1.5px 1.5px at 63% 22%,rgba(244,240,228,.5),transparent 60%),radial-gradient(1px 1px at 88% 14%,rgba(244,240,228,.45),transparent 60%),
+  radial-gradient(1px 1px at 79% 41%,rgba(244,240,228,.3),transparent 60%),radial-gradient(1.5px 1.5px at 94% 63%,rgba(244,240,228,.4),transparent 60%),
+  radial-gradient(1px 1px at 6% 72%,rgba(244,240,228,.35),transparent 60%),radial-gradient(1px 1px at 52% 88%,rgba(244,240,228,.3),transparent 60%),
+  radial-gradient(260px 160px at 100% 0%,rgba(11,110,133,.28),transparent 70%),
+  radial-gradient(1px 1px,rgba(244,240,228,.16) 50%,transparent 51%) 0 0/37px 41px,
+  radial-gradient(1px 1px,rgba(244,240,228,.10) 50%,transparent 51%) 17px 23px/53px 47px,var(--f-stone)!important;border-radius:30px;padding:26px 28px 22px!important;color:var(--f-cream);
+ box-shadow:0 0 0 1px color-mix(in srgb,var(--f-d-degraded) 45%,transparent),0 30px 80px rgba(20,24,40,.28)}
+.st-key-cs-stone *{color:var(--f-cream)}
+.st-key-cs-stone h3{color:var(--f-cream)!important}
+.st-key-cs-stone [data-testid="stCaptionContainer"],.st-key-cs-stone [data-testid="stCaptionContainer"] *{color:var(--f-cream2)!important}
+.st-key-cs-stone .cs-kicker{background:var(--f-d-degraded);color:var(--f-stone)!important}
+.st-key-cs-stone .cs-kicker *{color:var(--f-stone)!important}
+.st-key-cs-stone a{color:var(--f-cyan)!important}
+.st-key-cs-stone [data-testid="stVerticalBlockBorderWrapper"],.st-key-cs-stone [data-testid="stExpander"]{background:var(--f-stone2)!important;border:1px solid rgba(244,240,228,.16)!important;box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none}
+.st-key-cs-stone [data-testid="stAlert"] [data-baseweb="notification"],.st-key-cs-stone [data-testid="stAlertContainer"]{background:rgba(244,240,228,.08)!important;border:1px solid rgba(244,240,228,.22)!important}
+.st-key-cs-stone [data-testid="stAlert"] p{color:var(--f-cream)!important}
+.st-key-cs-stone .stButton>button{background:transparent;color:var(--f-cream);border:1px solid rgba(244,240,228,.4)}
+.st-key-cs-stone .stButton>button p{color:inherit!important}
+.st-key-cs-stone .stButton>button:disabled{opacity:.5}
+.st-key-cs-stone [data-testid="stRadio"] label,.st-key-cs-stone [data-testid="stRadio"] p{color:var(--f-cream)!important}
+.st-key-cs-stone .cs-decision{display:inline-block;margin:6px 0 2px;padding:10px 18px;border-radius:14px;font-family:var(--f-display);font-size:1.5em;font-weight:600;
+ background:rgba(244,240,228,.06);border:1px solid rgba(244,240,228,.2)}
+.st-key-cs-stone .cs-decision,.st-key-cs-stone .cs-decision *{color:inherit}
+.st-key-cs-stone hr{border-color:rgba(244,240,228,.18)!important}
+[data-testid="stCode"],.st-key-cs-stone pre{background:rgba(0,0,0,.25)!important}
+
+/* shapes as classes (trajectory nodes, card history) */
+.sh-NORMAL{--c:var(--f-normal);--s:$s_normal}.sh-WATCH{--c:var(--f-watch);--s:$s_watch}
+.sh-DEGRADED{--c:var(--f-degraded);--s:$s_degraded}.sh-UNKNOWN{--c:var(--f-unknown);--s:$s_unknown}
+/* mission strip: corner metadata + orbital trajectory (refs Lunar, 21 Grams) */
+.cs-strip{position:relative;margin:2px 0 14px;padding:14px 22px 10px;border-radius:22px;background:var(--f-glass);border:1px solid var(--f-line);
+ box-shadow:inset 0 1px 0 #fff,0 18px 46px rgba(120,60,80,.08);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px)}
+.cs-strip .meta{display:flex;justify-content:space-between;gap:16px;font-size:.78rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--f-ink2)}
+.cs-strip .meta b{color:var(--f-ink);font-weight:700}.cs-strip .meta .down{color:var(--f-watch)}
+.cs-orbit{position:relative;height:104px;margin:6px 0 2px}
+.cs-orbit .arc{position:absolute;left:0;right:0;top:12px;height:148px;border:1px solid rgba(20,22,24,.22);border-radius:50%;
+ -webkit-mask:linear-gradient(#000 0,#000 50%,transparent 50%);mask:linear-gradient(#000 0,#000 50%,transparent 50%)}
+.cs-orbit .nd{position:absolute;width:16px;height:16px;transform:translate(-50%,-50%);background:var(--c);-webkit-mask:var(--s) center/contain no-repeat;mask:var(--s) center/contain no-repeat}
+.cs-orbit .nd.now{width:26px;height:26px}
+.cs-orbit .halo{position:absolute;width:44px;height:44px;transform:translate(-50%,-50%);border-radius:50%;border:1px solid rgba(20,22,24,.35)}
+.cs-orbit .evt{position:absolute;width:30px;height:30px;transform:translate(-50%,-50%);border-radius:50%;border:1.5px solid var(--f-degraded)}
+.cs-orbit .dn{position:absolute;transform:translate(-50%,0);font-size:.78rem;font-variant-numeric:tabular-nums;color:var(--f-ink2)}
+.cs-orbit .dn.now{color:var(--f-ink);font-weight:700}
+.cs-orbit .nd.fut{width:7px;height:7px;border-radius:50%;background:rgba(20,22,24,.28);-webkit-mask:none;mask:none}
+.cs-orbit .tag{position:absolute;transform:translate(-50%,0);font-size:.72rem;font-weight:700;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+.cs-orbit .tag.crit{color:var(--f-degraded)}.cs-orbit .tag.base{color:var(--f-ink2)}
+.cs-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+/* card history: one small shape per day (ref Flutter: stacked layers = time) */
+.cs-card .hist{display:flex;gap:4px;align-items:center;position:relative;z-index:1}
+.cs-card .hist i{width:9px;height:9px;background:var(--c);-webkit-mask:var(--s) center/contain no-repeat;mask:var(--s) center/contain no-repeat;opacity:.9}
+.cs-card .hist i.fut{background:rgba(20,22,24,.14);-webkit-mask:none;mask:none;border-radius:50%;width:5px;height:5px}
+.cs-card .hist i.now{width:13px;height:13px;opacity:1}
+/* habitat section (real NASA data): glass panel, chart legible on light */
+.st-key-cs-habitat{background:var(--f-glass)!important;border:1px solid var(--f-line);border-radius:26px;padding:20px 22px 12px!important;
+ box-shadow:inset 0 1px 0 #fff,0 18px 46px rgba(40,80,110,.08);-webkit-backdrop-filter:blur(22px);backdrop-filter:blur(22px)}
+.st-key-cs-habitat h3::before{content:"NASA DATA";display:inline-block;vertical-align:middle;margin-right:10px;padding:3px 8px;border-radius:6px;
+ font-family:var(--f-text);font-size:.7rem;font-weight:800;letter-spacing:.1em;background:var(--f-stone);color:var(--f-cream)}
+/* 1 % pass: nested radii (outer - padding), one type ramp, tabular figures */
+.st-key-cs-stone [data-testid="stVerticalBlockBorderWrapper"]{border-radius:18px!important}
+[data-testid="stMarkdownContainer"] p{line-height:1.55}
+[data-testid="stDataFrame"]{border-radius:14px;overflow:hidden}
+@media (max-width:900px){.cs-orbit .tag{display:none}}
+/* motion and transparency fallbacks */
+@media (prefers-reduced-motion:reduce){.stButton>button{transition:none}.cs-top .mk-anim{display:none}.cs-top .mk-static{display:block}}
+@media (prefers-reduced-transparency:reduce){
+ .cs-top,.cs-card,.cs-strip,.st-key-cs-habitat,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#fff!important}
+ [data-testid="stApp"]::before{display:none}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.cs-top,.cs-card,[data-testid="stSlider"]{background:#fff!important}}
+@media (max-width:760px){.cs-cage{opacity:.35}}
+""")
+
+_FIELD = {"calm": ".06", "watch": ".22", "critical": ".62"}
+
+
+def _fusion_css():
+    f, t = THEME["fusion"], THEME
+    lo = f["state_on_light"]
+    cage = ("<svg xmlns='http://www.w3.org/2000/svg' viewBox='-250 -250 500 500' fill='none'>"
+            "<defs><radialGradient id='p' cx='38%' cy='32%' r='75%'><stop offset='0' stop-color='" + f["stone2"] + "'/>"
+            "<stop offset='1' stop-color='" + f["stone"] + "'/></radialGradient></defs>"
+            "<path d='M-60 -70 C 20 -120, 110 -60, 100 20 C 92 100, 10 120, -50 80 C -110 40, -110 -30, -60 -70 Z' fill='url(#p)'/>"
+            "<g stroke='" + f["stone"] + "' stroke-width='1.3' stroke-linejoin='round'><polygon points='0,-210 170,-90 130,130 -40,200 -190,60 -150,-120'/>"
+            "<polyline points='0,-210 20,10 130,130'/><polyline points='-150,-120 20,10 170,-90'/><polyline points='-190,60 20,10 -40,200'/>"
+            "<polyline points='0,-210 -190,60'/><polyline points='170,-90 -40,200'/><polyline points='-150,-120 130,130'/></g></svg>")
+    mark = ("<svg xmlns='http://www.w3.org/2000/svg' viewBox='-20 -24 40 48' fill='none' stroke='black' stroke-width='1.7' stroke-linejoin='round'>"
+            "<polygon points='0,-22 11,-9 11,14 0,22 -11,14 -11,-9'/><polyline points='0,-22 0,22'/><polyline points='-11,-9 0,-1 11,-9'/></svg>")
+    return _FUSION.substitute(
+        clash=_font("ClashDisplay-Variable.woff2"), satoshi=_font("Satoshi-Variable.woff2"),
+        paper=f["paper"], ink=f["ink"], ink2=f["ink2"], stone=f["stone"], stone2=f["stone2"], cream=f["cream"], cream2=f["cream2"],
+        warm=f["warm"], warm2=f["warm2"], cool=f["cool"], lilac=f["lilac"], cyan=t["interactive"],
+        l_normal=lo["NORMAL"], l_watch=lo["WATCH"], l_degraded=lo["DEGRADED"], l_unknown=lo["UNKNOWN"],
+        d_watch=t["state"]["WATCH"]["color"], d_degraded=t["state"]["DEGRADED"]["color"],
+        cage=_uri(cage), mark=_uri(mark),
+        s_normal=_shape("<circle cx='12' cy='12' r='10'/>"), s_watch=_shape("<path d='M12 1.5 22.5 12 12 22.5 1.5 12Z'/>"),
+        s_degraded=_shape("<path d='M12 2 22.6 21H1.4Z'/>"),
+        s_unknown=_shape("<rect x='2' y='2' width='20' height='20' rx='2'/>", filled=False))
+
+
+def field(level):
+    """Fusion profile only: the warm light field follows the day's highest criticality (calm, watch, critical)."""
+    if _profile() == "fusion":
+        st.html("<style>:root{--f-warm-o:%s}</style>" % _FIELD.get(level, _FIELD["calm"]))
+
+
+def _profile():
+    return os.environ.get("CSYNC_STYLE", "fusion")
+
+
 def inject(name, tag):
     """Call once, right after set_page_config. st.html keeps the CSS out of the markdown stream."""
     tk = _tokens()
-    st.html("<style>" + _CSS % tk + _art(tk) + "</style>" + _SHAPES)
+    style = _profile()
+    if style == "fusion":
+        st.html("<style>" + _fusion_css() + "</style>")
+        st.html("<header class='cs-top'>"
+                f"<img class='mk mk-anim' alt='' aria-hidden='true' src='{_asset('csync_mark_animated.svg')}'>"
+                f"<img class='mk mk-static' alt='' aria-hidden='true' src='{_asset('csync_mark_static.svg')}'>"
+                f"<div><div class='nm'>{name}</div><div class='tg'>{tag}</div></div></header>")
+        return
+    extra = {"quiet": _QUIET, "hybrid": _HYBRID, "calm": _CALM, "signal": _SIGNAL}.get(style, "")
+    st.html("<style>" + _CSS % tk + _art(tk) + extra + "</style>" + _SHAPES)
     st.html(_TOP % {**tk, "name": name, "tag": tag})
 
 
 def card_vars(colour):
     """Inline custom properties for a state card (the colour is one of the theme state colours)."""
     return f"--rail:{colour};--rail-a:{_rgba(colour, 0.14)}"
+
+
+
+# ---------------------------------------------------------------- fusion helpers used by app.py (appearance only)
+_RANK = {"UNKNOWN": 0, "NORMAL": 1, "WATCH": 2, "DEGRADED": 3}
+
+
+def worst(states):
+    """Highest state among the evaluated dimensions of one day (for the trajectory node)."""
+    vals = [v for k, v in states.items() if k in ("Body", "Attention", "Morale")]
+    return max(vals, key=lambda v: _RANK.get(v, 0)) if vals else "UNKNOWN"
+
+
+def chart_colors(theme):
+    """Habitat chart colours: legible on the light glass for the fusion profile (graphics >= 3:1)."""
+    if _profile() == "fusion":
+        c = theme["fusion"]["chart"]
+        return [c["series"], c["limit"], c["flagged"]]
+    return [theme["interactive"], theme["text_secondary"], theme["state"]["UNKNOWN"]["color"]]
+
+
+def history(states_by_day, dim, day, n_days=10):
+    """Fusion only: a row of small shapes, one per day up to `day` (the drift becomes visible), dots for days to come."""
+    if _profile() != "fusion":
+        return ""
+    cells = []
+    for d in range(1, n_days + 1):
+        if d > day:
+            cells.append("<i class='fut'></i>")
+        else:
+            s = states_by_day.get(d, {}).get(dim, "UNKNOWN")
+            cells.append(f"<i class='sh-{s}{' now' if d == day else ''}'></i>")
+    return f"<div class='hist' aria-hidden='true'>{''.join(cells)}</div>"
+
+
+def mission_strip(ui, states_by_day, events, day, link, delay_min, n_days=10):
+    """Fusion only: corner metadata and an orbital trajectory of the mission (one node per day, shaped by its highest state)."""
+    if _profile() != "fusion":
+        return
+    import math
+    nodes, labels = [], []
+    for d in range(1, n_days + 1):
+        x = 4 + (d - 1) * 92 / (n_days - 1)
+        y = 12 + 74 - 74 * math.sqrt(max(0.0, 1 - ((x - 50) / 50) ** 2))   # on the ellipse drawn by .arc
+        now = " now" if d == day else ""
+        if d > day:   # days to come: planned trajectory only, no state, no event (the screen never shows the future)
+            nodes.append(f"<span class='nd fut' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
+            labels.append(f"<span class='dn fut' style='left:{x:.2f}%;top:{y + 14:.1f}px'>{d}</span>")
+            continue
+        s = worst(states_by_day.get(d, {}))
+        lab = ui["node_label"].format(d=d, state=s.title())
+        if d == day:
+            nodes.append(f"<span class='halo' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
+        if d in events:
+            nodes.append(f"<span class='evt' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
+            labels.append(f"<span class='tag crit' style='left:{x:.2f}%;top:{y - 40:.1f}px'>{events[d]}</span>")
+        nodes.append(f"<span class='nd sh-{s}{now}' role='img' aria-label='{lab}' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
+        labels.append(f"<span class='dn{now}' style='left:{x:.2f}%;top:{y + 14:.1f}px'>{d}</span>")
+    xb = 4 + 2 * 92 / (n_days - 1)
+    labels.append(f"<span class='tag base' style='left:{xb:.2f}%;top:{12 + 74 - 74 * math.sqrt(1 - ((xb - 50) / 50) ** 2) + 32:.1f}px'>{ui['baseline_short']} 1–5</span>")
+    link_txt = (f"<span class='down'>{ui['link_status_down'].format(a=link[0], b=link[1])}</span>" if link else ui["link_status_ok"])
+    st.html(
+        f"<section class='cs-strip' aria-label='{ui['trajectory_label']}'>"
+        f"<div class='meta'><span><b>{ui['mission_name']}</b> · {ui['day_of'].format(d=day, n=n_days)}</span>"
+        f"<span>{link_txt} · {ui['ground_delay'].format(m=delay_min)}</span></div>"
+        f"<div class='cs-orbit'><div class='arc'></div>{''.join(nodes)}{''.join(labels)}</div></section>")
