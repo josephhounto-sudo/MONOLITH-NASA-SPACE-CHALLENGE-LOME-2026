@@ -1,5 +1,5 @@
 # FICHIER: pitch/deck/SCRIPT_FR.md
-Date/heure : sam. 14/11/2026 ~15:00 UTC · Version v3 (D6 orateurs ; formulations absolues adoucies : « jamais » remplacé par ce que le code fait réellement)
+Date/heure : sam. 14/11/2026 ~15:00 UTC · Version v4 (15/11 : diapo 6 sur les graines tenues à l'écart, VALIDATION_HOLDOUT.md) · v3 (D6 orateurs ; formulations absolues adoucies : « jamais » remplacé par ce que le code fait réellement)
 Statut : FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
 
 Pitch oral en français, 5:00 exactes, **sans questions du jury** (`docs/PROGRAMME_OFFICIEL.md`). Diapositives : `deck.html`. Démo en direct : Acte 3 (diapo 5).
@@ -31,7 +31,7 @@ Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et
 **Transition :** retour au clavier de l'orateur A.
 
 ## Diapo 6 · 3:45 → 4:25 (40 s) · orateur A
-« Nos preuves, dans l'esprit du défi méthodologique Artemis II : une référence individuelle. Sur trois cents équipages simulés en bonne santé, zéro virgule sept pour cent déclenchent une procédure à tort. Dérives progressives simulées : quatre-vingt-quinze pour cent repérées. Saut brutal : seulement cinquante-neuf pour cent, notre limite connue. Tout est simulé, et le seuil a été réglé sur ces mêmes scénarios. Seule donnée réelle : la télémétrie de cabine de l'ISS, où notre contrôle qualité repère un CO2 constant pendant plus de six jours. »
+« Nos preuves, dans l'esprit du défi méthodologique Artemis II : une référence individuelle. Nous avons réglé la règle sur un jeu d'équipages simulés, puis nous l'avons lancée, inchangée, sur trois cents nouveaux équipages en bonne santé : aucun n'a déclenché de procédure à tort. Dérives progressives : quatre-vingt-treize pour cent repérées. Saut brutal : seulement cinquante-sept pour cent, notre limite connue. Tout est simulé. Seule donnée réelle : la télémétrie de cabine de l'ISS, où notre contrôle qualité repère un CO2 constant pendant plus de six jours. »
 **Si on est en retard : coupe** la dernière phrase (CO2 constant, −22 mots, environ 10 s).
 
 ## Diapo 7 · 4:25 → 5:00 (35 s) · orateur A
@@ -46,9 +46,9 @@ Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et
 | 3 | 1:05 → 1:55 | 50 s | 122 | 146 |
 | 4 | 1:55 → 2:55 | 60 s | 139 | 139 |
 | 5 | 2:55 → 3:45 | 50 s | 72 | 86 |
-| 6 | 3:45 → 4:25 | 40 s | 84 | 126 |
+| 6 | 3:45 → 4:25 | 40 s | 82 | 123 |
 | 7 | 4:25 → 5:00 | 35 s | 78 | 134 |
-| **Total** | **0:00 → 5:00** | **300 s** | **642** | **128** |
+| **Total** | **0:00 → 5:00** | **300 s** | **633** | **127** |
 
 Lecture : les diapos parlées (1–4, 6, 7) vont de 126 à 146 mots/min (cible 130–145 ; la diapo 3 est un peu au-dessus, la diapo 6, chargée en chiffres, un peu en dessous). La moyenne sur 5:00 (128) est plus basse parce que la diapo 5 est volontairement lente (environ 85 mots/min) : elle laisse le temps des deux clics de la démo et de 2 s de silence après « Refusée ».
 Répétition : chronométrer une lecture complète à voix haute ; si elle dépasse 5:00, appliquer les deux lignes « coupe » (environ −14 s au total).

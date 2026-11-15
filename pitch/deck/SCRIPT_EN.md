@@ -1,5 +1,5 @@
 # FICHIER: pitch/deck/SCRIPT_EN.md
-Date/heure : sam. 14/11/2026 ~15:00 UTC · Version v1 · Statut : TRADUIT PAR L'IA À PARTIR DE SCRIPT_FR.md v3 — PAS ENCORE RÉPÉTÉ NI VÉRIFIÉ À VOIX HAUTE
+Date/heure : sam. 14/11/2026 ~15:00 UTC · Version v2 (15/11 : diapo 6 sur les graines tenues à l'écart) · Statut : TRADUIT PAR L'IA À PARTIR DE SCRIPT_FR.md v3 — PAS ENCORE RÉPÉTÉ NI VÉRIFIÉ À VOIX HAUTE
 
 Oral en anglais (décision D11 : jury surtout anglophone ; diapos déjà en anglais). Version française de repli : `SCRIPT_FR.md`. 5:00, sans questions du jury.
 Orateur A = M1 (diapos 1, 2, 3, 6, 7 = 190 s). Orateur B = M2 (diapos 4 et 5 = 110 s, dont la démo). Aucun nom dans ce fichier.
@@ -26,7 +26,7 @@ Demo: interface already open at day 10. Press « Request resume », then « Comm
 « Act three, day ten, live. I request the resume. Refused. [2 seconds of silence] The commander forces it. The override is logged, but the decision does not change: the last heart rate is fourteen minutes old, and the limit is ten. The system gives the reason in plain words on screen. Stale data is flagged as expired, not as normal. In our rules, an override alone is not enough to resume. »
 
 ## Slide 6 · 3:45 → 4:25 (40 s) · speaker A
-« Our evidence, in the spirit of the Artemis II methods challenge: an individual baseline. Out of three hundred simulated healthy crews, zero point seven percent trigger a procedure by mistake. Simulated gradual drifts: ninety-five percent are caught. Abrupt jumps: only fifty-nine percent, our known limit. Everything is simulated, and the threshold was tuned on these same scenarios. The only real data: ISS cabin telemetry, where our quality check flags constant CO2 for more than six days. »
+« Our evidence, in the spirit of the Artemis II methods challenge: an individual baseline. We tuned the rule on one set of simulated crews, then ran it, unchanged, on three hundred new healthy crews: none triggered a procedure by mistake. Gradual drifts: ninety-three percent caught. Abrupt jumps: only fifty-seven percent, our known limit. Everything is simulated. The only real data is ISS cabin telemetry, where our quality check flags constant CO2 for more than six days. »
 **If running late: cut** the last sentence (constant CO2).
 
 ## Slide 7 · 4:25 → 5:00 (35 s) · speaker A
@@ -41,8 +41,8 @@ Demo: interface already open at day 10. Press « Request resume », then « Comm
 | 3 | 1:05 → 1:55 | 50 | 116 | 139 |
 | 4 | 1:55 → 2:55 | 60 | 140 | 140 |
 | 5 | 2:55 → 3:45 | 50 | 67 | 80 |
-| 6 | 3:45 → 4:25 | 40 | 78 | 117 |
+| 6 | 3:45 → 4:25 | 40 | 76 | 114 |
 | 7 | 4:25 → 5:00 | 35 | 73 | 125 |
-| **Total** | **0:00 → 5:00** | **300** | **597** | **119** |
+| **Total** | **0:00 → 5:00** | **300** | **592** | **118** |
 
 English is faster than French: about 150–160 words/min is a comfortable pace. Slide 5 is slow on purpose (two clicks and 2 s of silence). Time one full read-through aloud; if it exceeds 5:00, apply the two « cut » lines.
