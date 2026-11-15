@@ -275,6 +275,35 @@ def countermeasures_panel():
     st.caption(UI["cm_source"])
 
 
+def try_panel():
+    """Typed check-in -> the same rule v3 engine (csync.live). Synthetic baseline, nothing clinical."""
+    import pandas as pd
+    from csync import live
+    st.subheader(UI["try_title"])
+    st.markdown(UI["try_intro"])
+    base = live.baseline()
+    mean = {i: round(float(base[i].mean()), 1) for i in live.INDICATORS}
+    choice = st.radio(UI["try_preset"], [UI["try_preset_base"], UI["try_preset_story"]], horizontal=True, key="try_preset")
+    a_, b_ = (mean, mean) if choice == UI["try_preset_base"] else (live.story_day(6), live.story_day(7))
+    names = UI["try_names"]
+    frame = pd.DataFrame({UI["try_col_ind"]: [names[i] for i in live.INDICATORS],
+                          UI["try_col_a"]: [a_.get(i) for i in live.INDICATORS], UI["try_col_b"]: [b_.get(i) for i in live.INDICATORS]})
+    edited = st.data_editor(frame, hide_index=True, disabled=[UI["try_col_ind"]], width="stretch",
+                            key="try_editor_" + ("b" if choice == UI["try_preset_base"] else "s"))
+    def col(c):
+        return {i: (None if pd.isna(v) else float(v)) for i, v in zip(live.INDICATORS, edited[c])}
+    out = live.try_it(col(UI["try_col_a"]), col(UI["try_col_b"]))
+    st.markdown(f"**{UI['try_result']}**")
+    cols = st.columns(3)
+    for c, dim in zip(cols, ("Body", "Attention", "Morale")):
+        c.markdown(card(dim, out["states"][dim], 7).replace("✓ ", ""), unsafe_allow_html=True)   # word + shape; the tick is kept for the slider day only
+    rows = [{"n": names[i], "d": "–" if out["z"][i] is None else f"{out['z'][i]:+.1f}",
+             "f": "✓ " + UI["try_flagged"] if out["flagged"][i] else ""} for i in live.INDICATORS]
+    st.markdown(f"**{UI['try_d_title']}**")
+    st.markdown(md_table({"n": UI["try_col_ind"], "d": "d", "f": UI["try_flagged"]}, rows))
+    st.info(UI["try_open"].format(p=out["procedure_id"]) if out["action"] == "OPEN_PROCEDURE" else UI["try_continue"])
+
+
 def body_map(symptom_zone=None, day=None):
     """Body map section: 8 selectable zones (pills) next to a neutral figure; text comes from pitch/silhouette/fiches.json."""
     st.divider()
@@ -415,16 +444,18 @@ for _c in today:
         _zone = _m.group(1) if _m else None
 st.divider()
 st.subheader(UI["more_title"])
-_tabs = st.tabs([UI["tab_trends"], UI["tab_body"], UI["tab_nasa"], UI["tab_env"], UI["tab_sources"]])
+_tabs = st.tabs([UI["tab_try"], UI["tab_trends"], UI["tab_body"], UI["tab_nasa"], UI["tab_env"], UI["tab_sources"]])
 with _tabs[0]:
-    trends_panel(day)
+    try_panel()
 with _tabs[1]:
-    body_map(_zone, day)
+    trends_panel(day)
 with _tabs[2]:
+    body_map(_zone, day)
+with _tabs[3]:
     hazards_panel()
     countermeasures_panel()
-with _tabs[3]:
-    habitat_panel()
 with _tabs[4]:
+    habitat_panel()
+with _tabs[5]:
     provenance_table()
 st.caption(version_stamp())

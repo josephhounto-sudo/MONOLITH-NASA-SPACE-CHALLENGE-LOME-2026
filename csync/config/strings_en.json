@@ -212,7 +212,31 @@
     "tab_sources": "Sources",
     "more_title": "More detail",
     "version_label": "Version {v} · capsules generated {t} UTC",
-    "body_map_pubmed": "Peer-reviewed context (PubMed, read by the team; not a clinical threshold)"
+    "body_map_pubmed": "Peer-reviewed context (PubMed, read by the team; not a clinical threshold)",
+    "tab_try": "Try it yourself",
+    "try_title": "Try it: type two days, the same rule answers",
+    "try_intro": "Your values replace days 6 and 7 of the synthetic crew member. Days 1–5 are the personal baseline. Leave a cell empty if it was not measured: that reads UNKNOWN, never NORMAL. Rule v3: a value is flagged at d ≥ 1.5 on 2 days in a row.",
+    "try_preset": "Start from",
+    "try_preset_base": "Baseline average",
+    "try_preset_story": "Story days 6 and 7",
+    "try_col_ind": "Check-in value",
+    "try_col_a": "Day 6",
+    "try_col_b": "Day 7",
+    "try_result": "Result for day 7",
+    "try_d_title": "Distance from the personal baseline (d, unfavourable side)",
+    "try_flagged": "Flagged",
+    "try_open": "Rule v3 proposes to open procedure {p}. A human decides.",
+    "try_continue": "No procedure proposed. A human decides.",
+    "try_names": {
+      "PH09": "Sleep (h)",
+      "PH01": "Resting heart rate (bpm)",
+      "CO01": "Reaction time (ms)",
+      "CO02": "Reaction lapses (count)",
+      "PS01": "Sleepiness (KSS 1–9)",
+      "PS02": "Stress (0–10)",
+      "PS03": "Mood (1–5)",
+      "PS04": "Workload (0–10)"
+    }
   },
   "indicator_names": {
     "PH01": "heart-rate",
