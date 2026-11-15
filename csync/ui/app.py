@@ -77,7 +77,7 @@ def card(dim, state, day):
     else:
         label = strings["states"][state]
     ctx = " ctx" if dim in CONTEXT_DIMENSIONS else ""
-    return (f"<div class='cs-card{ctx}' style='{style.card_vars(s['color'])}'>"
+    return (f"<div class='cs-card{ctx}' data-state='{state if state in theme['state'] else 'UNKNOWN'}' style='{style.card_vars(s['color'])}'>"
             f"<div class='dim'>{dim}</div>"
             f"<div style='color:{s['color']};font-size:1.1em'>{s['icon']} {label}</div></div>")
 

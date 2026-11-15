@@ -166,7 +166,7 @@ html,body,[data-testid="stApp"]{background:var(--cs-surface)!important}
   -webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
 .cs-top,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{background:var(--cs-panel)!important;border-radius:12px!important}
 [data-testid="stAlert"],[data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{background:var(--cs-panel)!important;border-radius:12px;border-color:var(--cs-line)!important}
-.cs-card{min-height:112px;border-radius:12px;background:linear-gradient(90deg,var(--rail-a),transparent 60%%),var(--cs-panel)}
+.cs-card{min-height:112px;border-radius:12px;background:linear-gradient(90deg,var(--rail-a),transparent 60%),var(--cs-panel)}
 .cs-card.ctx{background:transparent}
 .cs-card .dim{font-size:.82rem;font-weight:600;letter-spacing:0;text-transform:none}
 .cs-card .st{font-size:1.15rem;font-weight:600}
@@ -174,6 +174,40 @@ html,body,[data-testid="stApp"]{background:var(--cs-surface)!important}
 .cs-action{margin:.5rem 0 .2rem;padding:.75rem 1rem;border-left:4px solid var(--cs-cyan);background:var(--cs-panel);border-radius:0 12px 12px 0;font-size:1.12rem;font-weight:600}
 .stButton>button{border-radius:10px;background:var(--cs-panel);font-weight:600}
 .stButton>button:hover:not(:disabled){transform:none}
+"""
+
+# Profile "signal": built from M1's brief (futuristic, light glass, shapes) + the two Pinterest ideas kept in DESIGN_DIRECTION s6
+# (one distinct shape per state, Swiss grid with a large state word) + emil-design-eng (named transitions, strong ease-out, press feedback).
+# Glass only on the state cards and the decision; one static background; no loops. Select with CSYNC_STYLE=signal.
+_SIGNAL = """
+:root{--cs-ease:cubic-bezier(.23,1,.32,1)}
+.cs-bg,.cs-bg *{animation:none!important}
+.cs-bg .dots,.cs-bg .lines,.cs-bg .rings,.cs-bg .b3{display:none}
+.cs-bg .poly{top:47vh;right:3vw;width:min(32vw,440px);opacity:.2}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"],.stButton>button,.cs-kicker{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+.cs-top,[data-testid="stSlider"]{background:var(--cs-panel)!important;border-radius:12px}
+[data-testid="stAlert"],[data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{background:var(--cs-panel)!important;border-radius:12px;border-color:var(--cs-line)!important}
+.cs-card{min-height:136px;padding:16px 18px;border-radius:18px;justify-content:space-between;gap:12px;
+  background:linear-gradient(160deg,rgba(255,255,255,.09),rgba(255,255,255,.02) 55%),linear-gradient(135deg,var(--rail-a),transparent 70%),var(--cs-glass);
+  -webkit-backdrop-filter:blur(18px) saturate(150%);backdrop-filter:blur(18px) saturate(150%)}
+.cs-card::before{display:none}
+.cs-card .dim{font-size:.82rem;font-weight:600;letter-spacing:0;text-transform:none;color:var(--cs-text2)}
+.cs-card>div:last-child{font-size:1.65rem!important;font-weight:700;line-height:1.15;font-variant-numeric:tabular-nums}
+.cs-card.ctx>div:last-child{font-size:1rem!important;font-weight:500;line-height:1.35}
+.cs-card::after{content:"";position:absolute;top:14px;right:14px;width:26px;height:26px;background:var(--rail);
+  -webkit-mask:var(--shape) center/contain no-repeat;mask:var(--shape) center/contain no-repeat}
+.cs-card[data-state="NORMAL"]{--shape:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='9' fill='none' stroke='white' stroke-width='2'/%3E%3C/svg%3E")}
+.cs-card[data-state="WATCH"]{--shape:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2.5 21.5 12 12 21.5 2.5 12Z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.cs-card[data-state="DEGRADED"]{--shape:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 3 22 20.5H2Z' fill='none' stroke='white' stroke-width='2' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.cs-card[data-state="UNKNOWN"]{--shape:url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect x='3.5' y='3.5' width='17' height='17' rx='2' fill='none' stroke='white' stroke-width='2' stroke-dasharray='4 3'/%3E%3C/svg%3E")}
+.cs-card.ctx{background:transparent;-webkit-backdrop-filter:none;backdrop-filter:none}
+.cs-card.ctx::after{opacity:.55}
+.cs-action{margin:.5rem 0 .2rem;padding:.8rem 1.1rem;border-radius:14px;border:1px solid color-mix(in srgb,var(--cs-cyan) 45%,transparent);background:var(--cs-panel);font-size:1.12rem;font-weight:600}
+.cs-kicker{letter-spacing:0;text-transform:none;background:none!important;border:0;padding:0}
+.stButton>button{border-radius:10px;background:var(--cs-panel);font-weight:600;transition:transform 160ms var(--cs-ease),border-color 160ms var(--cs-ease)}
+.stButton>button:hover:not(:disabled){transform:none;box-shadow:none!important}
+.stButton>button:active:not(:disabled){transform:scale(.97)}
+@media (prefers-reduced-motion:reduce){.stButton>button{transition:none}}
 """
 
 def _uri(svg):
@@ -222,7 +256,7 @@ def inject(name, tag):
     """Call once, right after set_page_config. st.html keeps the CSS out of the markdown stream."""
     tk = _tokens()
     style = os.environ.get("CSYNC_STYLE", "hybrid")
-    extra = {"quiet": _QUIET, "hybrid": _HYBRID, "calm": _CALM}.get(style, "")
+    extra = {"quiet": _QUIET, "hybrid": _HYBRID, "calm": _CALM, "signal": _SIGNAL}.get(style, "")
     st.html("<style>" + _CSS % tk + _art(tk) + extra + "</style>" + _SHAPES)
     st.html(_TOP % {**tk, "name": name, "tag": tag})
 
