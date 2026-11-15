@@ -306,6 +306,8 @@ def body_map(symptom_zone=None, day=None):
         srcs = [s for s in (r.get("how_src"), r.get("when_src")) if s]
         if srcs:
             st.caption(f"{UI['body_map_source']}: " + " · ".join(srcs))
+        for ref in r.get("pubmed", []):
+            st.caption(f"{UI['body_map_pubmed']}: {ref['cite']}. {ref['title']}. [PMID {ref['pmid']}](https://pubmed.ncbi.nlm.nih.gov/{ref['pmid']}/)")
 
 
 def habitat_panel():

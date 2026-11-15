@@ -211,7 +211,8 @@
     "tab_env": "Habitat (real NASA data)",
     "tab_sources": "Sources",
     "more_title": "More detail",
-    "version_label": "Version {v} · capsules generated {t} UTC"
+    "version_label": "Version {v} · capsules generated {t} UTC",
+    "body_map_pubmed": "Peer-reviewed context (PubMed, read by the team; not a clinical threshold)"
   },
   "indicator_names": {
     "PH01": "heart-rate",

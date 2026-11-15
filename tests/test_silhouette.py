@@ -58,3 +58,11 @@ def test_selecting_a_zone_shows_how_why_when():
     _zone_pills(at)[0].set_value("region-head").run()
     md = " ".join(m.value for m in at.markdown)
     assert "How it is measured" in md and "Why it matters" in md and "When C-Sync alerts" in md
+
+
+def test_pubmed_refs_are_well_formed():
+    import json, re
+    d = json.load(open("pitch/silhouette/fiches.json", encoding="utf-8"))
+    refs = [x for r in d["regions"] for x in r.get("pubmed", [])]
+    assert {x["pmid"] for x in refs} == {"25127232", "32411017", "37531984", "31319685"}
+    assert all(re.fullmatch(r"\d{7,8}", x["pmid"]) and x["cite"] and x["title"] for x in refs)

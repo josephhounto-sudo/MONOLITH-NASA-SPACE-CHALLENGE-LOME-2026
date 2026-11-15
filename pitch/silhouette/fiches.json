@@ -22,7 +22,19 @@
    "when_src": "csync/rules.py (rule v3, threshold 1.5, 2 consecutive days)",
    "not": "No clinical threshold. No label put on the person. No treatment or medication advice. The human decides.",
    "in_app": "Coded: Attention (CO01, CO02) and Morale (PS01-PS04) in the drift rule; PH09 counts in Body.",
-   "why_src": "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/"
+   "why_src": "https://www.nasa.gov/reference/risk-from-inadequate-sleep-and-irregular-schedules/",
+   "pubmed": [
+    {
+     "pmid": "25127232",
+     "cite": "Barger LK et al., Lancet Neurol 2014;13(9):904-12",
+     "title": "Prevalence of sleep deficiency and use of hypnotic drugs in astronauts before, during, and after spaceflight"
+    },
+    {
+     "pmid": "32411017",
+     "cite": "Nasrini J et al., Front Physiol 2020;11:394",
+     "title": "Cognitive performance during confinement and sleep restriction in NASA's Human Exploration Research Analog (HERA)"
+    }
+   ]
   },
   {
    "id": "region-chest",
@@ -39,7 +51,14 @@
    "when_src": "data/scenarios/histoire.json; contracts/decision.schema.json (CRITICAL = flight surgeon); csync/gate.py",
    "not": "C-Sync does not interpret the symptom. No clinical threshold. No treatment or medication advice. Follow the onboard medical checklist and the crew medical officer.",
    "in_app": "Coded: drift rule (PH01) and guided emergency (SY01). Zone selection in the app: coded (body map section; the zone of a reported symptom is preselected).",
-   "why_src": "https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/"
+   "why_src": "https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/",
+   "pubmed": [
+    {
+     "pmid": "37531984",
+     "cite": "Krittanawong C et al., Prog Cardiovasc Dis 2023;81:33-41",
+     "title": "Cardiovascular disease in space: a systematic review"
+    }
+   ]
   },
   {
    "id": "region-arm",
@@ -100,7 +119,14 @@
    "when": "Shown as Unknown, never as Normal.",
    "when_src": "csync/capsule.py (missing data never shown as normal)",
    "not": "No estimate is made from other signals.",
-   "in_app": "Not in the demo."
+   "in_app": "Not in the demo.",
+   "pubmed": [
+    {
+     "pmid": "31319685",
+     "cite": "Fu Q et al., Circulation 2019;140(9):729-738",
+     "title": "Impact of prolonged spaceflight on orthostatic tolerance during ambulation and blood pressure profiles in astronauts"
+    }
+   ]
   },
   {
    "id": "region-body",
