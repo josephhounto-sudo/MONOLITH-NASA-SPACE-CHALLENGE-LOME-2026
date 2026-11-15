@@ -6,3 +6,4 @@ plotly>=5.20
 jsonschema>=4.21
 pytest>=8.0
 scipy>=1.11
+# hosted-sync 81cf6eacfc5cbfd12aac8f5307caf6e5e101b227
