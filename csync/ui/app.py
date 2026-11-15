@@ -72,15 +72,18 @@ def load_procedure(pid):
 
 # ------------------------------------------------------------------ pieces
 def card(dim, state, day, hist=""):
-    s = theme["state"].get(state, theme["state"]["UNKNOWN"])
+    shown = state if state in theme["state"] else "UNKNOWN"
+    s = theme["state"][shown]
     if dim in CONTEXT_DIMENSIONS:
         label = UI["context_only"]
-    elif state == "UNKNOWN" and day <= 5:
+    elif day <= 5:
+        shown = "UNKNOWN"
+        s = theme["state"]["UNKNOWN"]
         label = strings["baseline_building"].format(n=day)
     else:
         label = strings["states"][state]
     ctx = " ctx" if dim in CONTEXT_DIMENSIONS else ""
-    return (f"<div class='cs-card{ctx}' data-state='{state if state in theme['state'] else 'UNKNOWN'}' style='{style.card_vars(s['color'])}'>"
+    return (f"<div class='cs-card{ctx}' data-state='{shown}' style='{style.card_vars(s['color'])}'>"
             f"<div class='dim'>{dim}</div>"
             f"<div style='color:{s['color']};font-size:1.1em'>{s['icon']} {label}</div>{hist}</div>")
 
