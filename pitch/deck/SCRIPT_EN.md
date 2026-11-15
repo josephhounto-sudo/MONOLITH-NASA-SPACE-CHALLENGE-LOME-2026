@@ -36,13 +36,15 @@ Demo: interface already open at day 10. Press « Request resume », then « Comm
 ## Word counts (script-computed)
 | Slide | Time | Seconds | Words | Words/min |
 |---|---|---|---|---|
-| 1 | 0:00 → 0:25 | 25 | 51 | 122 |
-| 2 | 0:25 → 1:05 | 40 | 72 | 108 |
-| 3 | 1:05 → 1:55 | 50 | 116 | 139 |
-| 4 | 1:55 → 2:55 | 60 | 140 | 140 |
-| 5 | 2:55 → 3:45 | 50 | 67 | 80 |
+| 1 | 0:00 → 0:25 | 25 | 50 | 120 |
+| 2 | 0:25 → 1:05 | 40 | 71 | 106 |
+| 3 | 1:05 → 1:55 | 50 | 114 | 137 |
+| 4 | 1:55 → 2:55 | 60 | 151 | 151 |
+| 5 | 2:55 → 3:45 | 50 | 75 | 90 |
 | 6 | 3:45 → 4:25 | 40 | 76 | 114 |
-| 7 | 4:25 → 5:00 | 35 | 73 | 125 |
-| **Total** | **0:00 → 5:00** | **300** | **592** | **118** |
+| 7 | 4:25 → 5:00 | 35 | 75 | 129 |
+| **Total** | **0:00 → 5:00** | **300** | **612** | **122** |
 
 English is faster than French: about 150–160 words/min is a comfortable pace. Slide 5 is slow on purpose (two clicks and 2 s of silence). Time one full read-through aloud; if it exceeds 5:00, apply the two « cut » lines.
+
+_Recalculated 15/11 ~10:50 UTC after the slide 2 rework (problem + goal) and the slide 4 and 7 changes; slide 2 is slow (106 words/min), time it at rehearsal._
