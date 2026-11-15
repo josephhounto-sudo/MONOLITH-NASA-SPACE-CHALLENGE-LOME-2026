@@ -40,9 +40,28 @@ Statut : FAIT PAR L'IA — chaque chiffre ci-dessous a été recontrôlé dans l
 | Q2, Q7 | engagements d'équipe | M1 confirme avant le pitch (déjà noté dans la fiche) |
 | Sécurité des données | rien en place (seule une empreinte SHA-256 sert d'identifiant de message) | « Pas encore : chiffrement et accès sont une prochaine étape. Les données de la démo sont synthétiques. » |
 
-## D. Écarts entre le script du pitch et l'app (à décider par M1, rien modifié)
-- Diapo 4 dit « carte du corps … en maquette, non codée » : la silhouette est maintenant codée dans l'app. Soit garder la phrase (prudent), soit la corriger.
-- Aucun script ne mentionne l'onglet « Try it yourself » ni « Evidence at scale » : la démo en direct ne les utilise pas. Ne pas les ajouter dans les 5 minutes sans répétition chronométrée.
+## D. Synchronisation faite à 10:35 UTC
+- Diapo 4 : la mini-silhouette est maintenant celle de l'app (en volume, thorax sélectionné) ; légende « Clickable body map in the app · 8 zones ». Scripts FR et EN : « encore en maquette, non codée » remplacé par « la carte du corps de l'application : huit zones, chacune dit ce qui est mesuré ou inconnu ».
+- Diapo 7 : « Next: expert review, analog data, sensors » (≤ 25 mots, test du diaporama vert). Scripts FR/EN alignés. Les temps des tableaux de minutage ne sont pas recalculés (+3 mots diapo 4, +6 mots diapo 7) : à chronométrer à la répétition.
+- Onglets « Try it yourself » et « Evidence at scale » : toujours absents des 5 minutes (démo = diapo 5 inchangée). Ils servent de preuve si le jury ouvre l'app après le pitch. axe-core : 0 violation sur les 7 onglets ; mesure de contraste en pixels non relancée.
+- App : onglet Sources, nouveau bloc « After the pitch — planned, not done yet ».
+
+## D2. Coût et ambition (réponses 2 et 7)
+Coûts réels : **aucun chiffre dans le dépôt** (`TODO_M1`). Ce qui est établi : le logiciel tourne sur un ordinateur ou une tablette. Postes de coût à nommer sans montant : relecture par des experts, intégration, validation sur données d'analogue, capteurs (matériel de l'agence). Aucun montant à dire.
+Les fiches du dépôt ne donnent que les rôles (M1 chef/PO et communication, M2 capsule de décision, M3 interface, M4 procédures et scénarios), pas les parcours personnels.
+Ambition unique proposée (M1 confirme) : « Si nous gagnons, nous faisons relire les règles par des experts en médecine spatiale, puis nous les testons sur des données de missions d'isolement simulé. » Les capteurs réels et le reste viennent après.
+
+## D3. Après le pitch (même liste que dans l'app et la diapo 7)
+1. Relecture par des experts en médecine spatiale · 2. Essai sur données d'analogue · 3. Capteurs réels · 4. Référence avant mission · 5. Protection des données de santé · 6. Procédures imprimées · 7. Coût d'intégration à chiffrer.
+
+## D4. Les 13 questions : où en est chaque réponse
+| Questions | État |
+|---|---|
+| 3, 4, 6, 8, 9, 10, 12, 13 | Répondues, appuyées sur le dépôt |
+| 5, 11 | Répondues après correction (voir C) |
+| 1 | Réponse prudente : Bio-Monitor, Reaction Self Test et CMO-DA sont NON VÉRIFIÉS, M2 doit sourcer |
+| 2, 7 | Réponse prête, engagement à confirmer par M1 |
+| Sécurité des données | Réponse honnête : rien en place, prochaine étape |
 
 ## E. Réponses validées (prêtes à dire)
 1. Différence : « D'autres outils mesurent ou conseillent. Nous ajoutons la dérive par rapport à la référence personnelle, et le refus de reprise si la donnée est périmée. Nous complétons, nous ne remplaçons pas. »

@@ -275,7 +275,18 @@
     "sbar_a_t": "Body {b}, Attention {a}, Morale {m}. Flagged: {f}.",
     "sbar_a_none": "none",
     "sbar_r_open": "Open procedure {p}. A human decides.",
-    "sbar_r_cont": "No procedure proposed. A human decides."
+    "sbar_r_cont": "No procedure proposed. A human decides.",
+    "next_title": "After the pitch — planned, not done yet",
+    "next_intro": "These are next steps for the team. None of them is part of what the prototype does today.",
+    "next_items": [
+      "Review of the rules by space-medicine experts (the medical review is still pending).",
+      "Trial on simulated-isolation mission data, the nearest real data we know of.",
+      "Adapters for real sensors, so measured values replace the guided entry.",
+      "A pre-mission baseline, because a crew member who is tired during days 1–5 skews the reference.",
+      "Protection of health data: encryption and access control. Nothing is in place yet.",
+      "A printed-procedure backup for a power loss.",
+      "Cost of integration: not estimated yet, so no figure is given."
+    ]
   },
   "indicator_names": {
     "PH01": "heart-rate",

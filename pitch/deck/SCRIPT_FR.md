@@ -20,7 +20,7 @@ Rôles (décision D6, 14/11) : orateur A = M1 (diapos 1, 2, 3, 6, 7 = 190 s) ; o
 **Transition :** passage de main à l'orateur B.
 
 ## Diapo 4 · 1:55 → 2:55 (60 s) · orateur B
-« Deuxième acte, jour neuf : l'urgence de la vidéo du défi. L'astronaute signale une douleur vive à la poitrine. Une règle d'événement ouvre directement une procédure critique. L'écran guide les mesures, une par une : fréquence cardiaque, tension, température, glycémie. Pour chacune, il explique comment la prendre. La glycémie est marquée sans référence NASA en vol. C-Sync est conçu sans recommandation de médicament ni interprétation du symptôme : il enregistre les valeurs telles qu'elles sont mesurées, chacune avec son heure et son origine. Une phrase fixe rappelle de suivre la check-list médicale de bord et l'officier médical. Le compte rendu part dans une file d'envoi, et l'écran affiche l'état de la liaison. La liaison est coupée ; dès qu'elle revient, le rapport est envoyé une seule fois, sans doublon. Ici, une carte du corps à cliquer, encore en maquette, non codée. »
+« Deuxième acte, jour neuf : l'urgence de la vidéo du défi. L'astronaute signale une douleur vive à la poitrine. Une règle d'événement ouvre directement une procédure critique. L'écran guide les mesures, une par une : fréquence cardiaque, tension, température, glycémie. Pour chacune, il explique comment la prendre. La glycémie est marquée sans référence NASA en vol. C-Sync est conçu sans recommandation de médicament ni interprétation du symptôme : il enregistre les valeurs telles qu'elles sont mesurées, chacune avec son heure et son origine. Une phrase fixe rappelle de suivre la check-list médicale de bord et l'officier médical. Le compte rendu part dans une file d'envoi, et l'écran affiche l'état de la liaison. La liaison est coupée ; dès qu'elle revient, le rapport est envoyé une seule fois, sans doublon. Ici, la carte du corps de l'application : huit zones, chacune dit ce qui est mesuré ou inconnu. »
 **Transition :** « Le lendemain, l'équipage veut reprendre le travail. »
 **Si on est en retard : coupe** la phrase « La glycémie est marquée sans référence NASA en vol. » (−9 mots, environ 4 s).
 
@@ -35,7 +35,7 @@ Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et
 **Si on est en retard : coupe** la dernière phrase (CO2 constant, −22 mots, environ 10 s).
 
 ## Diapo 7 · 4:25 → 5:00 (35 s) · orateur A
-« Nos limites : l'équipage est simulé, rien n'est validé cliniquement. Les os, l'immunité et la dose de rayonnement reçue par l'équipage ne sont pas encore mesurés ; ils sont affichés comme inconnus. Nous avons choisi un moteur simple, testé et explicable, plutôt qu'une boîte noire. La suite : de vraies données si elles s'ouvrent, et des adaptateurs pour de vrais capteurs. L'interface n'affiche que des écarts statistiques, sans qualification médicale. C-Sync : hors ligne, explicable, et c'est l'humain qui décide. Merci. »
+« Nos limites : l'équipage est simulé, rien n'est validé cliniquement. Les os, l'immunité et la dose de rayonnement reçue par l'équipage ne sont pas encore mesurés ; ils sont affichés comme inconnus. Nous avons choisi un moteur simple, testé et explicable, plutôt qu'une boîte noire. La suite : relecture des règles par des experts, essai sur des données de missions d'isolement simulé, puis de vrais capteurs. L'interface n'affiche que des écarts statistiques, sans qualification médicale. C-Sync : hors ligne, explicable, et c'est l'humain qui décide. Merci. »
 
 ---
 ## Comptes et minutage (calculés par script)

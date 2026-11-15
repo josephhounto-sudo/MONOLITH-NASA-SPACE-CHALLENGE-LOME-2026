@@ -508,4 +508,8 @@ with _tabs[5]:
     habitat_panel()
 with _tabs[6]:
     provenance_table()
+    st.divider()
+    st.subheader(UI["next_title"])
+    st.caption(UI["next_intro"])
+    st.markdown("\n".join(f"- {t}" for t in UI["next_items"]))
 st.caption(version_stamp())
