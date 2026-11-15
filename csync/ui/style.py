@@ -434,6 +434,18 @@ a{color:var(--f-stone);text-underline-offset:3px}
  [data-testid="stApp"]::before{display:none}}
 @supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.cs-top,.cs-card,[data-testid="stSlider"]{background:#fff!important}}
 @media (max-width:760px){.cs-cage{opacity:.35}}
+
+/* glass v2 (15/11, done by the AI design session): light that behaves like glass, not a white box.
+   edge light (warm top-left, cool bottom-right) + soft specular sheen + fine grain. Meaning stays in the shapes; this is surface only. */
+.cs-card,.cs-top,[data-testid="stSlider"]{--g-noise:url("data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHdpZHRoPScxNjAnIGhlaWdodD0nMTYwJz48ZmlsdGVyIGlkPSduJz48ZmVUdXJidWxlbmNlIHR5cGU9J2ZyYWN0YWxOb2lzZScgYmFzZUZyZXF1ZW5jeT0nLjknIG51bU9jdGF2ZXM9JzInIHN0aXRjaFRpbGVzPSdzdGl0Y2gnLz48ZmVDb2xvck1hdHJpeCB2YWx1ZXM9JzAgMCAwIDAgLjIgIDAgMCAwIDAgLjIgIDAgMCAwIDAgLjI1ICAwIDAgMCAuNTUgMCcvPjwvZmlsdGVyPjxyZWN0IHdpZHRoPScxMDAlJyBoZWlnaHQ9JzEwMCUnIGZpbHRlcj0ndXJsKCNuKScvPjwvc3ZnPg==")}
+.cs-card:not(.ctx),.cs-top{background-image:linear-gradient(135deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 38%),var(--g-noise);background-blend-mode:normal,soft-light;
+ box-shadow:inset 1.5px 1.5px 0 rgba(255,255,255,.95),inset -1px -1px 0 rgba(100,218,244,.35),inset 0 0 24px rgba(255,255,255,.35),0 1px 2px rgba(20,22,24,.04),0 26px 60px rgba(120,60,80,.12);
+ -webkit-backdrop-filter:blur(28px) saturate(180%) brightness(1.04);backdrop-filter:blur(28px) saturate(180%) brightness(1.04)}
+.cs-card[data-state="DEGRADED"]{background-image:linear-gradient(135deg,rgba(255,255,255,.55) 0%,rgba(255,255,255,0) 38%),linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,232,226,.72)),var(--g-noise)}
+.cs-card:not(.ctx)::before{content:"";position:absolute;left:-30%;top:-60%;width:90%;height:120%;pointer-events:none;transform:rotate(18deg);
+ background:radial-gradient(closest-side,rgba(255,255,255,.55),rgba(255,255,255,0));opacity:.55}
+.cs-card:not(.ctx):hover{box-shadow:inset 1.5px 1.5px 0 #fff,inset -1px -1px 0 rgba(247,114,86,.4),inset 0 0 28px rgba(255,255,255,.45),0 30px 70px rgba(120,60,80,.16);transition:box-shadow .3s}
+@media (prefers-reduced-transparency:reduce){.cs-card:not(.ctx),.cs-top{background-image:none;background-color:#FFFFFF}.cs-card:not(.ctx)::before{display:none}}
 """)
 
 _FIELD = {"calm": ".06", "watch": ".22", "critical": ".62"}
