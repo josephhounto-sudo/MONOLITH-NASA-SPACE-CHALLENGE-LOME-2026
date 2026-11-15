@@ -35,3 +35,15 @@ def test_emergency_opens_immediately():
     df, _ = run("histoire")
     ev = event_rule(df)
     assert len(ev) == 1 and ev[0]["criticality"] == "CRITICAL"
+
+
+def test_missing_value_after_baseline_is_unknown_and_never_an_alert():
+    import pandas as pd
+    from csync.rules import evaluate
+    cols = ["PH01", "PH09", "CO01", "CO02", "PS01", "PS02", "PS03", "PS04"]
+    dv = pd.DataFrame({c: [50.0] * 8 for c in cols}, index=range(1, 9))
+    dv.loc[7, "PH01"] = float("nan")          # sensor outage on day 7
+    _, _, states, decisions, _ = evaluate(dv)
+    assert states.at[7, "Body"] == "UNKNOWN"          # missing data: never NORMAL
+    assert states.at[7, "Attention"] == "NORMAL"      # complete data, no drift
+    assert decisions.set_index("day").at[7, "action"] == "CONTINUE"   # UNKNOWN is not an alert
