@@ -157,6 +157,25 @@ _HYBRID = """
 .stButton>button:hover:not(:disabled){transform:none;box-shadow:none!important}
 """
 
+# Profile "calm": design pass with the csync-design skill (P2 one rich zone, P3 neutral banner, P4 equal cards, P5 sentence case, P7 no motion).
+# Same markup as the others, CSS only. Select with CSYNC_STYLE=calm. Proposed 15/11 05:15, awaiting M1 preview.
+_CALM = """
+.cs-bg{display:none!important}
+html,body,[data-testid="stApp"]{background:var(--cs-surface)!important}
+.cs-top,[data-testid="stAlert"],[data-testid="stSlider"],.stButton>button,.cs-kicker,.cs-card,.cs-decision,[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+.cs-top,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{background:var(--cs-panel)!important;border-radius:12px!important}
+[data-testid="stAlert"],[data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{background:var(--cs-panel)!important;border-radius:12px;border-color:var(--cs-line)!important}
+.cs-card{min-height:112px;border-radius:12px;background:linear-gradient(90deg,var(--rail-a),transparent 60%%),var(--cs-panel)}
+.cs-card.ctx{background:transparent}
+.cs-card .dim{font-size:.82rem;font-weight:600;letter-spacing:0;text-transform:none}
+.cs-card .st{font-size:1.15rem;font-weight:600}
+.cs-kicker{letter-spacing:0;text-transform:none;background:none!important;border:0;padding:0}
+.cs-action{margin:.5rem 0 .2rem;padding:.75rem 1rem;border-left:4px solid var(--cs-cyan);background:var(--cs-panel);border-radius:0 12px 12px 0;font-size:1.12rem;font-weight:600}
+.stButton>button{border-radius:10px;background:var(--cs-panel);font-weight:600}
+.stButton>button:hover:not(:disabled){transform:none}
+"""
+
 def _uri(svg):
     return "url(\"data:image/svg+xml;utf8," + quote(svg) + "\")"
 
@@ -203,7 +222,7 @@ def inject(name, tag):
     """Call once, right after set_page_config. st.html keeps the CSS out of the markdown stream."""
     tk = _tokens()
     style = os.environ.get("CSYNC_STYLE", "hybrid")
-    extra = {"quiet": _QUIET, "hybrid": _HYBRID}.get(style, "")
+    extra = {"quiet": _QUIET, "hybrid": _HYBRID, "calm": _CALM}.get(style, "")
     st.html("<style>" + _CSS % tk + _art(tk) + extra + "</style>" + _SHAPES)
     st.html(_TOP % {**tk, "name": name, "tag": tag})
 

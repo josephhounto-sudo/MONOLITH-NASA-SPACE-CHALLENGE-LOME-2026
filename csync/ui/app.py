@@ -7,6 +7,7 @@ Every colour comes from csync/config/theme.json and every text from csync/config
 Only exception allowed by card M3-3: the resume button calls csync.gate.resume_gate with the inputs stored in the capsule.
 """
 import importlib.util
+import html
 import json
 import os
 import sys
@@ -92,7 +93,8 @@ def nominal(cap, day):
         col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day), unsafe_allow_html=True)
     with st.container(border=True):
         st.markdown(f"**{UI['why_label']}** — {cap['explanation']}")
-        st.markdown(f"**{UI['action_label']}** — {cap['action'].get('text', '')}")
+        st.markdown(f"<div class='cs-action'><b>{UI['action_label']}</b> — {html.escape(str(cap['action'].get('text', '')))}</div>",
+                    unsafe_allow_html=True)
     with st.expander(UI["signals_label"]):
         st.dataframe([{k: s.get(k) for k in ("indicator_id", "name", "value", "unit", "baseline_mean", "d", "flagged")}
                       for s in cap["signals"]], hide_index=True)
