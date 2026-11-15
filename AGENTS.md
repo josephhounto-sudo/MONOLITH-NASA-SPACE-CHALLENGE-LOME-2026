@@ -1,4 +1,6 @@
 # AGENTS.md — lire en premier (Cursor et toute IA du dépôt)
+
+> **Reprise de session : lire d'abord `docs/HANDOFF_TOTAL.md` (état au 15/11/2026 06:15, remplace `docs/CURSOR_HANDOFF.md`).**
 Projet : C-Sync, NASA Space Apps 2026 Lomé, équipe MONOLITH. Réponds en français. Texte produit/affiché : anglais (jury), sauf docs d'équipe.
 
 **Lis d'abord** : `docs/CURSOR_HANDOFF.md` (état, tâches, décisions), puis `docs/CONTEXTE_IA.md` (contexte complet à jour).
