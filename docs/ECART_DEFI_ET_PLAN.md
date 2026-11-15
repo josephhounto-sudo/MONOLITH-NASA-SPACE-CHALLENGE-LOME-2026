@@ -15,7 +15,7 @@
 Verdict : C-Sync répond bien à « détecter tôt, hors ligne, avec décision humaine » ; il ne répond pas à « guider un traitement ». Le dire dans le pitch évite que le jury le découvre.
 
 ## 2. Pack Cursor (tâches à fichiers disjoints, à coller une par session)
-Je n'ai pas pu piloter Cursor depuis ici (pas d'accès à ton écran). Chaque tâche : branche `cursor-<n>` depuis `nasa-data`, ne toucher que les fichiers listés, lancer `python scripts/build_context.py`, `python scripts/check_consistency.py`, `pytest -q`, pousser sur la branche, jamais sur main.
+Je n'ai pas pu piloter Cursor depuis ici (pas d'accès à ton écran). Chaque tâche : branche `cursor-<n>` depuis `integration-nasa-design`, ne toucher que les fichiers listés, lancer `python scripts/build_context.py`, `python scripts/check_consistency.py`, `pytest -q`, pousser sur la branche, jamais sur main.
 1. **EWMA vs règle v3** : seulement `research/ewma_compare.py` + `tests/test_ewma_compare.py`. Comparer sur les mêmes scénarios synthétiques, rapporter faux déclenchements et délai ; ne pas changer le moteur.
 2. **Contrôle qualité** : seulement `csync/quality.py` + tests. Plateaux, valeurs manquantes, doublons ; cas limites.
 3. **Mémoire locale branchée** : seulement `csync/memory.py` + `tests/test_adapters_memory.py`. Redémarrage, fichier corrompu, concurrence.
