@@ -275,7 +275,48 @@
     "sbar_a_t": "Corps {b}, Attention {a}, Moral {m}. Marqués : {f}.",
     "sbar_a_none": "aucun",
     "sbar_r_open": "Ouvrir la procédure {p}. Un humain décide.",
-    "sbar_r_cont": "Aucune procédure proposée. Un humain décide."
+    "sbar_r_cont": "Aucune procédure proposée. Un humain décide.",
+    "next_title": "Après le pitch — prévu, pas encore fait",
+    "next_intro": "Ce sont les prochaines étapes de l'équipe. Aucune ne fait partie de ce que le prototype fait aujourd'hui.",
+    "next_items": [
+      "Relecture des règles par des experts en médecine spatiale (la relecture médicale est encore en attente).",
+      "Essai sur des données de missions d'isolement simulé, les données réelles les plus proches que nous connaissons.",
+      "Adaptateurs pour de vrais capteurs, afin que des valeurs mesurées remplacent la saisie guidée.",
+      "Une référence avant mission, car un équipier fatigué pendant les jours 1 à 5 fausse la référence.",
+      "Protection des données de santé : chiffrement et contrôle d'accès. Rien n'est en place pour l'instant.",
+      "Des procédures imprimées de secours en cas de coupure d'électricité.",
+      "Coût d'intégration : pas encore estimé, donc aucun chiffre n'est donné."
+    ],
+    "tab_cmd": "Tableau du commandant",
+    "cmd_title": "Tableau du commandant — six équipiers synthétiques",
+    "cmd_intro": "La même règle v3 s'applique à chaque équipier, par rapport à sa propre référence. Le tableau ne fait que trier, le plus urgent d'abord. Il ne décide rien : chaque procédure ouverte attend une décision humaine.",
+    "cmd_cols": {
+      "m": "Équipier",
+      "b": "Corps",
+      "a": "Attention",
+      "o": "Moral",
+      "s": "Statut",
+      "t": "Depuis",
+      "f": "Signalé",
+      "h": "Décision"
+    },
+    "cmd_status": {
+      "OPEN_PROCEDURE": "Procédure ouverte",
+      "DEGRADED": "Dégradé",
+      "WATCH": "Surveillance",
+      "UNKNOWN": "Inconnu",
+      "NORMAL": "Normal"
+    },
+    "cmd_since": "jour {d}",
+    "cmd_pending": "décision humaine en attente",
+    "cmd_summary": "Jour {day} : {n_open} procédure(s) ouverte(s), {n_deg} dégradé(s), {n_watch} en surveillance, {n_unk} inconnu(s).",
+    "cmd_note": "Un seul signalement (surveillance) n'est pas une alerte : un indicateur est sorti de sa référence. L'équipier F a une panne de capteur simulée dès le jour 6 : son état Corps reste Inconnu, jamais Normal. Les jours 1 à 5 forment la référence : tous les états sont Inconnus.",
+    "cmd_synth": "DONNÉES SYNTHÉTIQUES — six équipiers inventés (graines 61001–61006), pas de vrais astronautes.",
+    "ad_title": "Ou collez un flux d'appareil (lignes JSON)",
+    "ad_help": "Une ligne par mesure : {\"device\": \"wrist-01\", \"mission_day\": 7, \"metric\": \"resting_hr_bpm\", \"value\": 61}. Mesures : sleep_hours, resting_hr_bpm, pvt_mean_rt_ms, pvt_lapses, kss, stress, mood, load. Jours de mission 6 et 7. C'est un format de données, aucun appareil réel n'est encore branché.",
+    "ad_ph": "{\"device\": \"wrist-01\", \"mission_day\": 7, \"metric\": \"sleep_hours\", \"value\": 5.4}",
+    "ad_ok": "{n} ligne(s) acceptée(s). Le flux d'appareil remplace le tableau ci-dessus.",
+    "ad_bad": "Ligne {n} rejetée : {r}. Son indicateur reste Inconnu."
   },
   "indicator_names": {
     "PH01": "fréquence cardiaque",

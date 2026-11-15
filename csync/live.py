@@ -17,15 +17,25 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 INDICATORS = [i for lst in DRIFT_INDICATORS.values() for i in lst]
 
 
+def _story() -> pd.DataFrame:
+    """The synthetic story crew member. Read from data/out when run_story.py was run; otherwise generated in memory
+    (same generator, seed 42), so a fresh clone or the hosted app never fails on a missing file."""
+    path = os.path.join(ROOT, "data", "out", "measurements_histoire.csv")
+    if os.path.exists(path):
+        return pd.read_csv(path)
+    from synthetic.generator import generate
+    return generate("histoire", seed=42, drift_amp=2.5, fast=True)
+
+
 def baseline() -> pd.DataFrame:
-    df = pd.read_csv(os.path.join(ROOT, "data", "out", "measurements_histoire.csv"))
+    df = _story()
     dv = daily_values(df[df.variant == "histoire"])
     return dv.loc[[d for d in dv.index if d <= Params().baseline_days], INDICATORS]
 
 
 def story_day(day: int) -> dict:
     """Story values of one day, to prefill the inputs."""
-    df = pd.read_csv(os.path.join(ROOT, "data", "out", "measurements_histoire.csv"))
+    df = _story()
     dv = daily_values(df[df.variant == "histoire"])
     return {i: float(dv.at[day, i]) for i in INDICATORS if not math.isnan(dv.at[day, i])}
 
