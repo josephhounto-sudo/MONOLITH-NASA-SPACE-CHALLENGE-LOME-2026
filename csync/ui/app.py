@@ -304,6 +304,49 @@ def try_panel():
     st.info(UI["try_open"].format(p=out["procedure_id"]) if out["action"] == "OPEN_PROCEDURE" else UI["try_continue"])
 
 
+@st.cache_data(show_spinner=False)
+def _nasa_scale():
+    from csync import scale
+    return scale.reprocess_nasa()
+
+
+def scale_panel():
+    """Evidence at scale: real NASA telemetry re-processed now; synthetic crews run through the shipped rule on fresh seeds."""
+    from csync import scale
+    st.subheader(UI["scale_title"])
+    st.markdown(f"**{UI['scale_real_h']}**")
+    st.markdown(UI["scale_real_intro"])
+    r = _nasa_scale()
+    c1, c2, c3 = st.columns(3)
+    c1.metric(UI["scale_m_missions"], f"{r['missions']}")
+    c2.metric(UI["scale_m_points"], f"{r['points']:,}")
+    c3.metric(UI["scale_m_hours"], f"{r['hours']:,}")
+    cols = {"mission": UI["scale_c_mission"], "hours": UI["scale_c_hours"], "runs": UI["scale_c_runs"], "longest": UI["scale_c_longest"],
+            "above": UI["scale_c_above"], "cap": UI["scale_c_cap"]}
+    rows = [{"mission": x["mission"], "hours": x["hours"], "runs": x["artifact_runs_ge_1h"], "longest": x["longest_run_h"],
+             "above": x["pct_hours_above_3mmhg"], "cap": "yes" if x["sensor_zero_or_cap"] else "no"} for x in r["rows"]]
+    st.markdown(md_table(cols, rows))
+    st.caption(UI["scale_usable"].format(n=len(rows), s=r["seconds"]))
+    st.markdown(f"**{UI['scale_chart']}**")
+    st.bar_chart({x["mission"]: x["longest_run_h"] for x in r["rows"]}, color=style.chart_colors(theme)[0] if hasattr(style, "chart_colors") else None)
+    st.divider()
+    st.markdown(f"**{UI['scale_crews_h']}**")
+    st.markdown(UI["scale_crews_intro"].format(s0=50000))
+    size = st.radio(" ", [UI["scale_run_q"], UI["scale_run_l"]], horizontal=True, key="scale_size", label_visibility="collapsed")
+    if st.button(UI["scale_run_btn"], key="scale_go"):
+        n0, n1 = (100, 50) if size == UI["scale_run_q"] else (300, 150)
+        with st.spinner("…"):
+            out = scale.crews(n0, n1)
+        pub = json.load(open(os.path.join(ROOT, "research", "pilot", "holdout_results.json"), encoding="utf8"))
+        def line(label, k, key):
+            d = out[k]
+            return {"set": label, "hits": f"{d['hits']}/{d['n']}", "pct": f"{100 * d['hits'] / d['n']:.1f}",
+                    "ci": f"{d['ci'][0]:.1f}–{d['ci'][1]:.1f}", "pub": f"{pub[key]['pct']}"}
+        st.markdown(md_table({"set": UI["scale_c_set"], "hits": UI["scale_c_hits"], "pct": UI["scale_c_pct"], "ci": UI["scale_c_ci"], "pub": UI["scale_c_pub"]},
+                             [line(UI["scale_healthy"], "control", "control (false procedure)"), line(UI["scale_drift"], "gradual", "gradual 1.5 SD")]))
+        st.caption(UI["scale_took"].format(n=n0 + n1, s=out["seconds"]))
+
+
 def body_map(symptom_zone=None, day=None):
     """Body map section: 8 selectable zones (pills) next to a neutral figure; text comes from pitch/silhouette/fiches.json."""
     st.divider()
@@ -444,18 +487,20 @@ for _c in today:
         _zone = _m.group(1) if _m else None
 st.divider()
 st.subheader(UI["more_title"])
-_tabs = st.tabs([UI["tab_try"], UI["tab_trends"], UI["tab_body"], UI["tab_nasa"], UI["tab_env"], UI["tab_sources"]])
+_tabs = st.tabs([UI["tab_try"], UI["tab_scale"], UI["tab_trends"], UI["tab_body"], UI["tab_nasa"], UI["tab_env"], UI["tab_sources"]])
 with _tabs[0]:
     try_panel()
 with _tabs[1]:
-    trends_panel(day)
+    scale_panel()
 with _tabs[2]:
-    body_map(_zone, day)
+    trends_panel(day)
 with _tabs[3]:
+    body_map(_zone, day)
+with _tabs[4]:
     hazards_panel()
     countermeasures_panel()
-with _tabs[4]:
-    habitat_panel()
 with _tabs[5]:
+    habitat_panel()
+with _tabs[6]:
     provenance_table()
 st.caption(version_stamp())
