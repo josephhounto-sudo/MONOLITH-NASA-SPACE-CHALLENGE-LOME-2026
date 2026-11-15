@@ -1,4 +1,5 @@
 """2026-11-14 ~07:00 Lome (UTC) | reference commit dc61786 | FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
+2026-11-15 ~07:10 (UTC) design-v2: event first on the "stone" container, warm field per criticality — FAIT PAR L'IA — PAS ENCORE VÉRIFIÉ
 
 C-Sync interface (Streamlit). Reads capsules only. Owner: M3 (task cards M3-1..M3-3).
 Run: streamlit run csync/ui/app.py
@@ -7,6 +8,7 @@ Every colour comes from csync/config/theme.json and every text from csync/config
 Only exception allowed by card M3-3: the resume button calls csync.gate.resume_gate with the inputs stored in the capsule.
 """
 import importlib.util
+import html
 import json
 import os
 import sys
@@ -20,6 +22,8 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
+from csync import habitat  # noqa: E402
+from csync.ui import style  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
 theme = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
@@ -66,7 +70,7 @@ def load_procedure(pid):
 
 
 # ------------------------------------------------------------------ pieces
-def card(dim, state, day):
+def card(dim, state, day, hist=""):
     s = theme["state"].get(state, theme["state"]["UNKNOWN"])
     if dim in CONTEXT_DIMENSIONS:
         label = UI["context_only"]
@@ -74,9 +78,10 @@ def card(dim, state, day):
         label = strings["baseline_building"].format(n=day)
     else:
         label = strings["states"][state]
-    return (f"<div style='background:{theme['panel']};border-left:6px solid {s['color']};padding:10px;border-radius:4px'>"
-            f"<div style='color:{theme['text']};font-weight:600'>{dim}</div>"
-            f"<div style='color:{s['color']};font-size:1.1em'>{s['icon']} {label}</div></div>")
+    ctx = " ctx" if dim in CONTEXT_DIMENSIONS else ""
+    return (f"<div class='cs-card{ctx}' data-state='{state if state in theme['state'] else 'UNKNOWN'}' style='{style.card_vars(s['color'])}'>"
+            f"<div class='dim'>{dim}</div>"
+            f"<div style='color:{s['color']};font-size:1.1em'>{s['icon']} {label}</div>{hist}</div>")
 
 
 def fixed_sentence():
@@ -87,9 +92,11 @@ def nominal(cap, day):
     st.subheader(cap["situation"])
     cols = st.columns(len(DIMENSIONS))
     for col, dim in zip(cols, DIMENSIONS):
-        col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day), unsafe_allow_html=True)
-    st.markdown(f"**{UI['why_label']}** — {cap['explanation']}")
-    st.markdown(f"**{UI['action_label']}** — {cap['action'].get('text', '')}")
+        col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day, style.history(STATES_BY_DAY, dim, day)), unsafe_allow_html=True)
+    with st.container(border=True):
+        st.markdown(f"**{UI['why_label']}** — {cap['explanation']}")
+        st.markdown(f"<div class='cs-action'><b>{UI['action_label']}</b> — {html.escape(str(cap['action'].get('text', '')))}</div>",
+                    unsafe_allow_html=True)
     with st.expander(UI["signals_label"]):
         st.dataframe([{k: s.get(k) for k in ("indicator_id", "name", "value", "unit", "baseline_mean", "d", "flagged")}
                       for s in cap["signals"]], hide_index=True)
@@ -98,7 +105,7 @@ def nominal(cap, day):
 
 
 def action_screen(cap):
-    st.markdown(f"### {UI['emergency_title']}")
+    st.markdown(f"<div class='cs-kicker'>{UI['emergency_title']}</div>", unsafe_allow_html=True)
     st.subheader(cap["situation"])
     fixed_sentence()
     proc = load_procedure(cap["action"]["procedure_id"])
@@ -144,7 +151,7 @@ def action_screen(cap):
 
 
 def resume_screen(cap):
-    st.markdown(f"### {UI['resume_title']}")
+    st.markdown(f"<div class='cs-kicker'>{UI['resume_title']}</div>", unsafe_allow_html=True)
     st.subheader(cap["situation"])
     gi = cap["gate_inputs"]
     proc = load_procedure(gi["procedure_id"]) or {}
@@ -162,11 +169,12 @@ def resume_screen(cap):
     if "resume_result" in st.session_state:
         d, reasons = st.session_state["resume_result"]
         colour = theme["state"]["DEGRADED" if d == "REFUSE_RESUME" else "NORMAL"]["color"]
-        st.markdown(f"<div style='color:{colour};font-size:1.4em;font-weight:700'>{UI['decision']}: {d}</div>",
+        st.markdown(f"<div class='cs-decision' style='color:{colour};{style.card_vars(colour)}'>{UI['decision']}: {d}</div>",
                     unsafe_allow_html=True)
-        st.markdown(f"**{UI['reasons']}**")
-        for r in reasons:
-            st.markdown(f"- {human_reason(r)}")
+        with st.container(border=True):
+            st.markdown(f"**{UI['reasons']}**")
+            for r in reasons:
+                st.markdown(f"- {human_reason(r)}")
         with st.expander(UI["technical_log"]):
             for r in reasons:
                 st.text(r)
@@ -180,25 +188,70 @@ def resume_screen(cap):
     st.caption(strings["human_decision_pending"])
 
 
+def habitat_panel():
+    """Real NASA ISS cabin data, context only. Reads data/real/habitat_*.csv (built by scripts/build_habitat.py)."""
+    with st.container(key="cs-habitat"):
+        _habitat_body()
+
+
+def _habitat_body():
+    st.subheader(UI["habitat_title"])
+    st.markdown(UI["habitat_intro"])
+    df = habitat.rr1_hourly()
+    flat = df[df["artifact"]]
+    chart = df.set_index("hour_utc")[["co2_mmhg"]].rename(columns={"co2_mmhg": UI["habitat_series_co2"]})
+    chart[UI["habitat_series_limit"]] = habitat.LIMIT_MMHG
+    chart[UI["habitat_series_flat"]] = df.set_index("hour_utc")["co2_mmhg"].where(df.set_index("hour_utc")["artifact"])
+    st.line_chart(chart, color=style.chart_colors(theme))
+    if len(flat):
+        run = habitat.missions().set_index("mission").loc["RR-1"]
+        ppm = float(run["longest_run_ppm"])
+        st.markdown(UI["habitat_flag"].format(ppm=ppm, mm=habitat.ppm_to_mmhg(ppm), hours=float(run["longest_run_h"])))
+    m = habitat.missions()
+    st.markdown(f"**{UI['habitat_table_title']}**")
+    st.dataframe(m[list(UI["habitat_columns"])].rename(columns=UI["habitat_columns"]), hide_index=True)
+    st.caption(UI["habitat_table_note"].format(n=len(m), k=int((m["artifact_runs_ge_1h"] > 0).sum())))
+    st.caption(UI["habitat_credit"])
+
+
 # ------------------------------------------------------------------ page
 st.set_page_config(page_title=strings["app_title"], layout="wide")
+style.inject(UI["brand_name"], UI["brand_tag"])
 st.warning(strings["synthetic_banner"])
 caps, fallback = load_capsules()
 if fallback:
     st.caption(UI["fallback_notice"])
 day = st.slider(UI["day_slider"], 1, 10, 7)
 today = [c for c in caps if c.get("day") == day]
+STATES_BY_DAY = {c["day"]: c["states"] for c in caps if c.get("capsule_type", "daily") == "daily" and is_valid(c)}
+_events, _link, _delay = {}, None, json.load(open(os.path.join(ROOT, "contracts", "decision.schema.json")))["properties"]["ground_delay_min"]["const"]
+for c in caps:
+    if c.get("capsule_type") == "emergency" and is_valid(c):
+        _events[c["day"]] = UI["event_emergency"]
+        q = c.get("send_queue", {})
+        _delay = q.get("ground_delay_min", _delay)
+        if c["day"] == day and q:
+            _link = (q["link_down_utc"][11:16], q["link_up_utc"][11:16])
+    elif c.get("capsule_type") == "resume" and is_valid(c) and c["action"].get("type") == "REFUSE_RESUME":
+        _events[c["day"]] = UI["event_resume"]
+style.mission_strip(UI, STATES_BY_DAY, _events, day, _link, _delay)
 daily = next((c for c in today if c.get("capsule_type", "daily") == "daily"), None)
+# warm light field = highest criticality of the day (appearance only, fusion profile)
+crits = {c.get("action", {}).get("criticality") for c in today if is_valid(c)}
+acting = any(c.get("action", {}).get("type") not in (None, "CONTINUE") for c in today if is_valid(c))
+style.field("critical" if "CRITICAL" in crits else "watch" if acting else "calm")
+# what demands action now comes first: the CRITICAL event on the dark stone surface, then the crew state
+for c in today:
+    if c.get("capsule_type") == "emergency" and is_valid(c) and c["ui_hint"] == "ACTION":
+        with st.container(key="cs-stone"):
+            action_screen(c)
+    elif c.get("capsule_type") == "resume" and is_valid(c):
+        with st.container(key="cs-stone"):
+            resume_screen(c)
 if daily is None:
     st.error(UI["no_capsule"])
 elif not is_valid(daily):
     st.error(UI["invalid_capsule"])
 else:
     nominal(daily, day)
-for c in today:
-    if c.get("capsule_type") == "emergency" and is_valid(c) and c["ui_hint"] == "ACTION":
-        st.divider()
-        action_screen(c)
-    elif c.get("capsule_type") == "resume" and is_valid(c):
-        st.divider()
-        resume_screen(c)
+habitat_panel()

@@ -1,0 +1,12 @@
+{
+  "seed": 20261115,
+  "key": {
+    "jour7_X": "signal",
+    "jour7_Y": "fusion",
+    "jour9_X": "fusion",
+    "jour9_Y": "signal",
+    "jour10_X": "signal",
+    "jour10_Y": "fusion"
+  },
+  "note": "Do not open before all testers are done."
+}

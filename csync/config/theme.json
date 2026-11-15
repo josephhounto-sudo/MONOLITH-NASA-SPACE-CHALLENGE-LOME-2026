@@ -21,5 +21,42 @@
       "color": "#8A999F",
       "icon": "?"
     }
+  },
+  "design": {
+    "name": "Monolith Glass",
+    "trust": "#2F7FD8",
+    "trust_soft": "#6FB1F0",
+    "deep": "#081423",
+    "aurora_warm": "#FF8A4C",
+    "note": "Trust blue tints the background and chrome only. Red, amber and green are reserved for states; cyan is reserved for interaction."
+  },
+  "fusion": {
+    "name": "Pleats + Monolith (fusion of directions 1 and 3, 15/11)",
+    "note": "Light glass for context; the dark stone surface only for what demands action now (CRITICAL). Warm field = criticality of the day, cool field = link to ground. State colours below are the light-background variants (contrast >= 4.5:1 on the glass).",
+    "paper": "#F6F2F5",
+    "glass": "#FFFFFF",
+    "ink": "#141618",
+    "ink2": "#4A5357",
+    "stone": "#1F2A3D",
+    "stone2": "#2A374D",
+    "cream": "#F4F0E4",
+    "cream2": "#D9D5C6",
+    "warm": "#F77256",
+    "warm2": "#FEAA60",
+    "cool": "#64DAF4",
+    "lilac": "#BFB9F5",
+    "state_on_light": {
+      "NORMAL": "#0F7A55",
+      "WATCH": "#8F4D00",
+      "DEGRADED": "#A62A22",
+      "UNKNOWN": "#56636A"
+    },
+    "chart": {
+      "series": "#1F2A3D",
+      "limit": "#0B6E85",
+      "flagged": "#56636A",
+      "note": "Light-background chart colours: series 14.4:1, requirement line 5.9:1, flagged 6.2:1 on white (graphics need 3:1). The dark-theme cyan #00E0F5 is 1.6:1 on white."
+    },
+    "teal": "#0B6E85"
   }
 }

@@ -1,0 +1,86 @@
+[
+ {
+  "profile": "A_glass",
+  "day": 7,
+  "motion": "no-preference",
+  "violations": [],
+  "running_bg_animations": 7
+ },
+ {
+  "profile": "A_glass",
+  "day": 7,
+  "motion": "reduce",
+  "violations": [],
+  "running_bg_animations": 0
+ },
+ {
+  "profile": "A_glass",
+  "day": 9,
+  "motion": "no-preference",
+  "violations": [],
+  "running_bg_animations": 7
+ },
+ {
+  "profile": "A_glass",
+  "day": 9,
+  "motion": "reduce",
+  "violations": [],
+  "running_bg_animations": 0
+ },
+ {
+  "profile": "A_glass",
+  "day": 10,
+  "motion": "no-preference",
+  "violations": [],
+  "running_bg_animations": 7
+ },
+ {
+  "profile": "A_glass",
+  "day": 10,
+  "motion": "reduce",
+  "violations": [],
+  "running_bg_animations": 0
+ },
+ {
+  "profile": "B_quiet",
+  "day": 7,
+  "motion": "no-preference",
+  "violations": [],
+  "running_bg_animations": 0
+ },
+ {
+  "profile": "B_quiet",
+  "day": 7,
+  "motion": "reduce",
+  "violations": [],
+  "running_bg_animations": 0
+ },
+ {
+  "profile": "B_quiet",
+  "day": 9,
+  "motion": "no-preference",
+  "violations": [],
+  "running_bg_animations": 0
+ },
+ {
+  "profile": "B_quiet",
+  "day": 9,
+  "motion": "reduce",
+  "violations": [],
+  "running_bg_animations": 0
+ },
+ {
+  "profile": "B_quiet",
+  "day": 10,
+  "motion": "no-preference",
+  "violations": [],
+  "running_bg_animations": 0
+ },
+ {
+  "profile": "B_quiet",
+  "day": 10,
+  "motion": "reduce",
+  "violations": [],
+  "running_bg_animations": 0
+ }
+]

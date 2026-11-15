@@ -1,0 +1,13 @@
+# Light base for the "fusion" look (CSYNC_STYLE default): native widgets match the light glass.
+# Values mirror csync/config/theme.json -> fusion (paper, glass, ink, stone). The dark profiles (glass, quiet, hybrid,
+# calm, signal) still work but their native widgets will be light: set base = "dark" again to use them.
+[theme]
+base = "light"
+primaryColor = "#1F2A3D"
+backgroundColor = "#F6F2F5"
+secondaryBackgroundColor = "#FFFFFF"
+textColor = "#141618"
+font = "sans serif"
+
+[browser]
+gatherUsageStats = false
