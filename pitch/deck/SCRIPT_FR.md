@@ -8,11 +8,11 @@ Rôles (décision D6, 14/11) : orateur A = M1 (diapos 1, 2, 3, 6, 7 = 190 s) ; o
 
 ---
 ## Diapo 1 · 0:00 → 0:25 (25 s) · orateur A
-« À mi-chemin de Mars, un astronaute signale une douleur vive à la poitrine. Un message met jusqu'à vingt minutes pour atteindre la Terre, et il n'y a pas de médecin à bord. Pendant ce délai, qui aide l'équipage à mesurer, à comprendre ce qui change, et à décider ? Nous sommes l'équipe MONOLITH, et notre réponse s'appelle C-Sync. »
-**Transition :** clic sur « vingt minutes ».
+« À mi-chemin de Mars, un astronaute signale une douleur vive à la poitrine. Un message met jusqu'à vingt-deux minutes pour atteindre la Terre, et il n'y a pas de médecin à bord. Pendant ce délai, qui aide l'équipage à mesurer, à comprendre ce qui change, et à décider ? Nous sommes l'équipe MONOLITH, et notre réponse s'appelle C-Sync. »
+**Transition :** clic sur « vingt-deux minutes ».
 
 ## Diapo 2 · 0:25 → 1:05 (40 s) · orateur A
-« Selon le programme de recherche humaine de la NASA, un message entre Mars et la Terre met jusqu'à vingt minutes dans un sens. Et la NASA prévoit des coupures de communication qui peuvent durer des semaines. Pour toute mission habitée vers Mars, ces retards sont inévitables. L'équipage est donc seul pour mesurer et agir. Or les astronautes ne sont pas médecins. Il leur faut un outil qui fonctionne hors ligne, qui guide chaque mesure, et qui signale toute donnée absente au lieu de la faire passer pour normale. »
+« Selon une analyse de la NASA présentée à ASCEND 2022, un message entre Mars et la Terre met jusqu'à vingt-deux minutes dans un sens, et les coupures de communication peuvent durer de plusieurs jours à plusieurs mois. Pour toute mission habitée vers Mars, ces retards sont inévitables. L'équipage est donc seul pour mesurer et agir. Or les astronautes ne sont pas médecins. Il leur faut un outil qui fonctionne hors ligne, qui guide chaque mesure, et qui signale toute donnée absente au lieu de la faire passer pour normale. »
 **Transition :** « Voici comment, en trois actes. »
 
 ## Diapo 3 · 1:05 → 1:55 (50 s) · orateur A
