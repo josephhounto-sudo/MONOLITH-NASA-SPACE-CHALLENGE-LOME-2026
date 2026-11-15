@@ -497,7 +497,8 @@ def field(level):
 
 
 def _profile():
-    return os.environ.get("CSYNC_STYLE", "fusion")
+    # The old hosted secret CSYNC_STYLE (="signal") is deliberately ignored: the live app must follow the code without manual settings.
+    return os.environ.get("CSYNC_STYLE_PROFILE", "fusion")
 
 
 def inject(name, tag):

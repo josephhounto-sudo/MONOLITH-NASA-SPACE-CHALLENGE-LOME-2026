@@ -1,0 +1,16 @@
+# Every push to main fast-forwards m3-design, the branch the hosted Streamlit app follows,
+# so the live app updates by itself (Streamlit Community Cloud redeploys on each push to that branch).
+name: sync-hosted-app
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - run: git push origin HEAD:refs/heads/m3-design --force-with-lease
