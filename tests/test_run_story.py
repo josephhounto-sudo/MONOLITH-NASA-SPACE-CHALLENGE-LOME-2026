@@ -74,3 +74,20 @@ def test_day10_daily_does_not_say_continue_while_emergency_open(out):
     day10 = next(c for c in load(out, "histoire") if c["capsule_type"] == "daily" and c["day"] == 10)
     assert "Continue" not in day10["action"]["text"]
     assert day10["open_episode"]["procedure_id"] == "PROC-EMERGENCY-01"
+
+
+def _load_run_story():
+    import importlib.util
+    spec = importlib.util.spec_from_file_location("run_story", os.path.join(ROOT, "scripts", "run_story.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def test_load_procedure_accepts_known_ids_and_refuses_others():
+    rs = _load_run_story()
+    assert isinstance(rs.load_procedure("PROC-EMERGENCY-01"), dict)
+    assert isinstance(rs.load_procedure("PROC-FATIGUE-01"), dict)
+    for bad in ("../README", "PROC-UNKNOWN-99", ""):
+        with pytest.raises(ValueError):
+            rs.load_procedure(bad)

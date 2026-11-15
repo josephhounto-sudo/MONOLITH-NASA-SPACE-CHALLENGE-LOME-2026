@@ -36,7 +36,12 @@ HEARTBEAT_MIN = 30                                  # demo parameter (same caden
 RESUME_REQUEST = ts(10, 9, 0)                       # story: resume requested day 10, 09:00
 
 
+ALLOWED_PROCEDURES = {"PROC-FATIGUE-01", "PROC-EMERGENCY-01"}   # add an id only together with its data/procedures file
+
+
 def load_procedure(pid):
+    if pid not in ALLOWED_PROCEDURES:
+        raise ValueError(f"unknown procedure_id: {pid!r}")
     with open(os.path.join(ROOT, "data", "procedures", f"{pid}.json"), encoding="utf8") as f:
         return json.load(f)
 

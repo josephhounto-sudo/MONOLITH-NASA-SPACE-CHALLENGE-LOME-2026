@@ -8,10 +8,10 @@ Règle : le contenu doit rester identique à SCRIPT_FR.md ; si l'un change, chan
 ---
 
 ## Slide 1 · 0:00 → 0:25 (25 s) · speaker A
-« Halfway to Mars, an astronaut reports sharp chest pain. A message takes up to twenty minutes to reach Earth, and there is no doctor on board. During that delay, who helps the crew measure, understand what is changing, and decide? We are team MONOLITH, and our answer is called C-Sync. »
+« Halfway to Mars, an astronaut reports sharp chest pain. A message takes up to twenty-two minutes to reach Earth, and there is no doctor on board. During that delay, who helps the crew measure, understand what is changing, and decide? We are team MONOLITH, and our answer is called C-Sync. »
 
 ## Slide 2 · 0:25 → 1:05 (40 s) · speaker A
-« According to NASA's Human Research Program, a one-way message between Mars and Earth can take up to twenty minutes. NASA also expects communication blackouts that can last weeks. For any crewed Mars mission, these delays are unavoidable, so the crew must measure and act alone. But astronauts are not doctors. They need a tool that works offline, guides every measurement, and flags missing data instead of letting it pass as normal. »
+« According to a NASA analysis presented at ASCEND 2022, a one-way message between Mars and Earth can take up to twenty-two minutes, and communication disruptions can last from several days to several months. For any crewed Mars mission, these delays are unavoidable, so the crew must measure and act alone. But astronauts are not doctors. They need a tool that works offline, guides every measurement, and flags missing data instead of letting it pass as normal. »
 
 ## Slide 3 · 1:05 → 1:55 (50 s) · speaker A
 « Act one: a slow drift. C-Sync compares each astronaut with themselves, using their first five days, not a universal norm. During those five days, no drift alert is evaluated: the baseline is being built, and the screen says so. On day seven of our simulated story, reaction time and attention errors move away from their baseline two days in a row. The Attention card turns Degraded, and the Body card goes to Watch: two dimensions leave the normal range. C-Sync shows what changed, since when, and how certain it is. It opens a fatigue procedure and suggests reviewing the signals with the onboard medical officer. The decision stays human: it is shown as pending. »

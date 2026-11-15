@@ -1,4 +1,4 @@
-# C-Sync — contexte pour IA (généré le 15/11/2026 07:05 UTC, base commit 4a807e8)
+# C-Sync — contexte pour IA (généré le 15/11/2026 07:21 UTC, base commit 26cad4f)
 Source unique : ce dépôt public. Si ce fichier date de plus de 6 h, demande à M1 de le régénérer (P5/P8).
 Règles pour l'IA qui lit ceci : ne lis que ce qui est ici ; si une page est inaccessible, dis-le ; n'invente rien ; réponds en français ; écris « NON VÉRIFIÉ » pour toute affirmation sans source ici.
 Rôles : M1 chef/PO, M5 communication/soumission ; M2 capsule de décision ; M3 interface ; M4 procédures/scénarios. Pitch dim. 12:00-14:00 (5 min, sans questions) ; soumission dim. 23:59. Démo sur données SYNTHÉTIQUES, non validée sur de vrais équipages.
@@ -8,6 +8,8 @@ Rôles : M1 chef/PO, M5 communication/soumission ; M2 capsule de décision ; M3 
 # RÈGLES POUR L'IA (AGENTS)
 
 # AGENTS.md — lire en premier (Cursor et toute IA du dépôt)
+
+> **Reprise de session : lire d'abord `docs/HANDOFF_TOTAL.md` (état au 15/11/2026 06:15, remplace `docs/CURSOR_HANDOFF.md`).**
 Projet : C-Sync, NASA Space Apps 2026 Lomé, équipe MONOLITH. Réponds en français. Texte produit/affiché : anglais (jury), sauf docs d'équipe.
 
 **Lis d'abord** : `docs/CURSOR_HANDOFF.md` (état, tâches, décisions), puis `docs/CONTEXTE_IA.md` (contexte complet à jour).
@@ -28,6 +30,8 @@ Projet : C-Sync, NASA Space Apps 2026 Lomé, équipe MONOLITH. Réponds en fran�
 # PASSATION : ÉTAT ET TÂCHES
 
 # Passation à Cursor — état au samedi 14/11/2026 14:40 (Lomé = UTC)
+
+> PÉRIMÉ (14/11 14:40). État actuel : `docs/HANDOFF_TOTAL.md`.
 Équipe : M1/M5 Joseph, M2 Yves, M3 Youssouf, M4 Jean. Pitch dim. 12:00 (5 min, sans questions). Soumission dim. 23:59, cible 15:00.
 
 ## 1. Ce qui existe et marche (128 tests verts)
@@ -238,6 +242,11 @@ V1 Produit à partir du 14/11 (début confirmé par les organisateurs) · V2 Auc
 - 14/11 14:50 MAJ 10 : passation Cursor (AGENTS.md, docs/CURSOR_HANDOFF.md) ; pré-mortem de l'artefact Parcours (PREMORTEM_ARTEFACT_14-11.md) ; artefact simplifié 8→4 onglets.
 - 14/11 15:05 MAJ 11 : D6, D9, D10, D11 tranchées par M1 ; logo intégré ; SCRIPT_FR v3 (formulations absolues adoucies), SCRIPT_EN v1 ; diapo 5 « Stale data is flagged as expired » ; bloc lourd Cursor.
 - 14/11 17:35 MAJ 12 : travail M4 (Jean) intégré : branches m4-procedures (5 tests, en-têtes « validation humaine M4 : à faire ») et m4-expected (tests de scénarios, `scripts/recette_m4.py`, `docs/RECETTE_M4.md`, DEV-03). DEV-03 corrigé dans `sendqueue.ground_view` et clos ; README/STORY : Habitat = contexte, non évalué. 153 tests. Non repris : modification non commitée de HELP_CARD_SOURCES.md (en-tête « VÉRIFIÉ PAR M4 » sans preuve, tableau reformaté).
+- 14/11 21:00 MAJ 13 : registre des décisions ouvertes créé (docs/A_TRANCHER.md) ; état vérifié : main 8e03e59, 153 tests, check_consistency 0 erreur ; aucun commit M2/M3 visible sur origin. Rien appliqué sans réponse de M1.
+- 14/11 21:45 MAJ 14 : décisions M1 reçues (A1 hybride construit sur m3-design 4035e4d ; A3 EWMA non appliqué, motif écrit) ; M3 : changement local non commité, 3 tests rouges, non intégré ; M2 : rien visible sur origin ; « blackouts of weeks » non vérifié.
+- 15/11 04:55 MAJ 15 : diapo 2 et scripts EN/FR alignés sur l'abstract NTRS 20220013418 lu dans le navigateur (délai 0–22 min ; coupures de plusieurs jours à plusieurs mois) ; remplace « up to ~20 min (HRP) » et « weeks ». PDF et pptx de secours régénérés ; 153 tests, test_deck OK.
+- 15/11 05:50 MAJ 16 : critères T1–T8 (docs/SOUMISSION_CRITERES.md) ; trouvé : logo IA sans filigrane + AI_USAGE contradictoire, diapos sans noms ni titre du défi ; branche checkpoint-before-design (tag refusé 403).
+- 15/11 06:05 MAJ 17 : AI_USAGE.md (logo IA déclaré sans filigrane, décision M1 ; idée = équipe) ; diapo 1 : titre du défi en pied de page ; PDF/pptx régénérés. Relecture totale reportée après le design (décision M1).
 
 
 ---

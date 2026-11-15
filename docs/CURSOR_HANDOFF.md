@@ -1,4 +1,6 @@
 # Passation à Cursor — état au samedi 14/11/2026 14:40 (Lomé = UTC)
+
+> PÉRIMÉ (14/11 14:40). État actuel : `docs/HANDOFF_TOTAL.md`.
 Équipe : M1/M5 Joseph, M2 Yves, M3 Youssouf, M4 Jean. Pitch dim. 12:00 (5 min, sans questions). Soumission dim. 23:59, cible 15:00.
 
 ## 1. Ce qui existe et marche (128 tests verts)
