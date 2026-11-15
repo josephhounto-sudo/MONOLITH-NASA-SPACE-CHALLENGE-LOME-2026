@@ -13,6 +13,8 @@ async def main():
         b = await p.chromium.launch(); pg = await b.new_page(viewport={"width": 1920, "height": 1080})
         for i in range(1, 8):
             await pg.goto(f"{URL}#{i}"); await pg.reload(); await pg.wait_for_timeout(250)
+            # slide 1 motion: freeze on its last frame (= the poster) so the backup image shows the final title
+            await pg.evaluate("()=>{const v=document.querySelector('video');if(v){v.pause();v.currentTime=Math.max(0,(v.duration||5.5)-0.05)}}"); await pg.wait_for_timeout(400)
             f = os.path.join(tmp, f"s{i}.png"); await pg.screenshot(path=f); imgs.append(f)
         await pg.goto(URL); await pg.emulate_media(media="print")
         await pg.pdf(path=os.path.join(HERE, "C-Sync_pitch_7_slides.pdf"), width="16in", height="9in", print_background=True, prefer_css_page_size=True)
