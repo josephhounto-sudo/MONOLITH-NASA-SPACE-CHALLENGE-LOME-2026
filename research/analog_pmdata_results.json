@@ -1,0 +1,341 @@
+{
+  "people": 16,
+  "rows": [
+    {
+      "participant": "p01",
+      "measurements": 566,
+      "calendar_days": 152,
+      "days_with_any_value": 152,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "WATCH": 43,
+          "NORMAL": 90,
+          "UNKNOWN": 14
+        },
+        "Attention": {
+          "UNKNOWN": 147
+        },
+        "Morale": {
+          "UNKNOWN": 147
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p02",
+      "measurements": 388,
+      "calendar_days": 150,
+      "days_with_any_value": 131,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 88,
+          "NORMAL": 57
+        },
+        "Attention": {
+          "UNKNOWN": 145
+        },
+        "Morale": {
+          "UNKNOWN": 145
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p03",
+      "measurements": 398,
+      "calendar_days": 152,
+      "days_with_any_value": 120,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "NORMAL": 57,
+          "UNKNOWN": 90
+        },
+        "Attention": {
+          "UNKNOWN": 147
+        },
+        "Morale": {
+          "UNKNOWN": 147
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p04",
+      "measurements": 470,
+      "calendar_days": 152,
+      "days_with_any_value": 146,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 114,
+          "NORMAL": 33
+        },
+        "Attention": {
+          "UNKNOWN": 147
+        },
+        "Morale": {
+          "UNKNOWN": 147
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p05",
+      "measurements": 506,
+      "calendar_days": 152,
+      "days_with_any_value": 145,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 72,
+          "NORMAL": 75
+        },
+        "Attention": {
+          "UNKNOWN": 147
+        },
+        "Morale": {
+          "UNKNOWN": 147
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p06",
+      "measurements": 593,
+      "calendar_days": 152,
+      "days_with_any_value": 151,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "NORMAL": 135,
+          "WATCH": 7,
+          "UNKNOWN": 5
+        },
+        "Attention": {
+          "UNKNOWN": 147
+        },
+        "Morale": {
+          "UNKNOWN": 147
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p07",
+      "measurements": 547,
+      "calendar_days": 148,
+      "days_with_any_value": 147,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "NORMAL": 98,
+          "UNKNOWN": 17,
+          "WATCH": 28
+        },
+        "Attention": {
+          "UNKNOWN": 143
+        },
+        "Morale": {
+          "UNKNOWN": 143
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p08",
+      "measurements": 455,
+      "calendar_days": 143,
+      "days_with_any_value": 142,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "NORMAL": 59,
+          "WATCH": 30,
+          "UNKNOWN": 42,
+          "DEGRADED": 7
+        },
+        "Attention": {
+          "UNKNOWN": 138
+        },
+        "Morale": {
+          "UNKNOWN": 138
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p09",
+      "measurements": 458,
+      "calendar_days": 152,
+      "days_with_any_value": 148,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 46,
+          "NORMAL": 96,
+          "WATCH": 5
+        },
+        "Attention": {
+          "UNKNOWN": 147
+        },
+        "Morale": {
+          "UNKNOWN": 147
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p10",
+      "measurements": 436,
+      "calendar_days": 148,
+      "days_with_any_value": 113,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 51,
+          "NORMAL": 92
+        },
+        "Attention": {
+          "UNKNOWN": 143
+        },
+        "Morale": {
+          "UNKNOWN": 143
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p11",
+      "measurements": 419,
+      "calendar_days": 137,
+      "days_with_any_value": 118,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 63,
+          "NORMAL": 69
+        },
+        "Attention": {
+          "UNKNOWN": 132
+        },
+        "Morale": {
+          "UNKNOWN": 132
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p12",
+      "measurements": 249,
+      "calendar_days": 133,
+      "days_with_any_value": 83,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 128
+        },
+        "Attention": {
+          "UNKNOWN": 128
+        },
+        "Morale": {
+          "UNKNOWN": 128
+        }
+      },
+      "has_resting_heart_rate_file": false
+    },
+    {
+      "participant": "p13",
+      "measurements": 216,
+      "calendar_days": 135,
+      "days_with_any_value": 68,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 130
+        },
+        "Attention": {
+          "UNKNOWN": 130
+        },
+        "Morale": {
+          "UNKNOWN": 130
+        }
+      },
+      "has_resting_heart_rate_file": false
+    },
+    {
+      "participant": "p14",
+      "measurements": 515,
+      "calendar_days": 140,
+      "days_with_any_value": 138,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "NORMAL": 19,
+          "WATCH": 94,
+          "UNKNOWN": 21,
+          "DEGRADED": 1
+        },
+        "Attention": {
+          "UNKNOWN": 135
+        },
+        "Morale": {
+          "UNKNOWN": 135
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p15",
+      "measurements": 430,
+      "calendar_days": 145,
+      "days_with_any_value": 144,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 47,
+          "NORMAL": 93
+        },
+        "Attention": {
+          "UNKNOWN": 140
+        },
+        "Morale": {
+          "UNKNOWN": 140
+        }
+      },
+      "has_resting_heart_rate_file": true
+    },
+    {
+      "participant": "p16",
+      "measurements": 398,
+      "calendar_days": 152,
+      "days_with_any_value": 152,
+      "procedures": 0,
+      "states_after_baseline": {
+        "Body": {
+          "UNKNOWN": 65,
+          "NORMAL": 82
+        },
+        "Attention": {
+          "UNKNOWN": 147
+        },
+        "Morale": {
+          "UNKNOWN": 147
+        }
+      },
+      "has_resting_heart_rate_file": true
+    }
+  ],
+  "not_measured": [
+    "CO01",
+    "CO02",
+    "PS01",
+    "PS04",
+    "PH10",
+    "PH11",
+    "PH12",
+    "SY01"
+  ]
+}

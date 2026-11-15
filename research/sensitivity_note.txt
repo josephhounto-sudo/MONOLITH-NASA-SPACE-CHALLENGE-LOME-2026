@@ -1,0 +1,10 @@
+Compromis lu sur cette grille (graines neuves, équipages synthétiques). Aucune case n'est un optimum.
+Réglage livré (1,5 ; 2 jours ; référence 5) : faux déclenchements 2.0% (4/200, Wilson 0.8–5.0) ; dérive 1,5 ET de l'histoire 92.7% (139/150, Wilson 87.3–95.9) ; saut 2 ET 56.7% (85/150, Wilson 48.7–64.3).
+Même référence et 2 jours, seuil 1,0 : faux 14.5% (29/200, Wilson 10.3–20.0), dérive 98.7% (148/150, Wilson 95.3–99.6), saut 86.7% (130/150, Wilson 80.3–91.2).
+Même référence et 2 jours, seuil 2,5 : faux 0.0% (0/200, Wilson 0.0–1.9), dérive 58.0% (87/150, Wilson 50.0–65.6), saut 6.7% (10/150, Wilson 3.7–11.8).
+Seuil 1,5 et référence 5, sur 1 jour : faux 27.5% (55/200, Wilson 21.8–34.1), dérive 100.0% (150/150, Wilson 97.5–100.0), saut 94.7% (142/150, Wilson 89.8–97.3).
+Seuil 1,5 et référence 5, sur 3 jours : faux 0.0% (0/200, Wilson 0.0–1.9), dérive 70.7% (106/150, Wilson 62.9–77.4), saut 28.0% (42/150, Wilson 21.4–35.7).
+Seuil 1,5 et 2 jours, référence de 3 jours : faux 1.5% (3/200, Wilson 0.5–4.3), dérive 91.3% (137/150, Wilson 85.7–94.9), saut 57.3% (86/150, Wilson 49.3–65.0).
+Seuil 1,5 et 2 jours, référence de 7 jours : faux 0.0% (0/200, Wilson 0.0–1.9), dérive 56.0% (84/150, Wilson 48.0–63.7), saut 61.3% (92/150, Wilson 53.3–68.8).
+Lire ainsi : abaisser le seuil ou exiger un seul jour augmente à la fois les procédures sur équipage témoin et les procédures sur dérive ou saut. Monter le seuil ou exiger 3 jours fait l'inverse. Une référence de 7 jours inclut, dans le scénario de dérive, des jours déjà décalés (la rampe de l'histoire commence au jour 6) : la comparaison n'est plus celle d'une référence propre.
+Limite : un seul générateur, 10 jours, graines 60000-60199 / 62000-62149 / 63000-63149. Ces taux ne se comparent pas aux 0,7 % / 95,3 % / 59,3 % du pilote 3, qui utilisent d'autres graines et, pour le saut, un écart-type de population.

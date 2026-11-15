@@ -114,7 +114,44 @@ def test_resume_gate_is_10_min():
     assert decision == "RESUME_AUTHORIZED"
 
 
-def test_ground_delay_is_20_min():
+def _deck_visible_text() -> str:
+    """Text a reader sees. Data URIs are removed before the search, so a digit inside a font does not count."""
+    import re
+    html = open(os.path.join(ROOT, "pitch", "deck", "deck.html"), encoding="utf8").read()
+    html = re.sub(r"data:[^\"']+", " ", html)
+    html = re.sub(r"<style[\s\S]*?</style>", " ", html)
+    html = re.sub(r"<[^>]+>", " ", html)
+    return re.sub(r"\s+", " ", html)
+
+
+def _heldout_and_points():
+    """Recompute the held-out shares from the stored counts, and the point total from the raw file."""
+    held = json.load(open(os.path.join(ROOT, "research", "pilot", "holdout_results.json"), encoding="utf8"))
+    control = held["control (false procedure)"]
+    gradual = held["gradual 1.5 SD"]
+    abrupt = held["abrupt 2 SD"]
+    from csync.scale import raw_inventory
+    points = raw_inventory()["points"]
+    return control, gradual, abrupt, points
+
+
+def test_deck_figures_match_recalculated_sources():
+    """0/300, 93 %, 57 %, 759 525 points, 6 crew: the slideshow must match the source files.
+
+    If this fails, report the gap. Do not edit the expected figures to match the slideshow.
+    """
+    import re
+    control, gradual, abrupt, points = _heldout_and_points()
+    text = _deck_visible_text()
+    assert f"{control['hits']}/{control['n']}" == "0/300"
+    assert round(100.0 * gradual["hits"] / gradual["n"]) == 93
+    assert round(100.0 * abrupt["hits"] / abrupt["n"]) == 57
+    assert points == 759525
+    assert "0/300" in text
+    assert re.search(r"93\s*%", text)
+    assert re.search(r"57\s*%", text)
+    assert re.search(r"759[\s\u00a0\u202f]?525", text)
+    assert re.search(r"\b6\b\s+(crew|crews|crew members)", text, re.I)
     assert Params().ground_delay_min == 20
     link_down = datetime(2031, 3, 9, 13, 0)
     link_up = datetime(2031, 3, 9, 19, 0)
