@@ -81,3 +81,12 @@ Ambition unique proposée (M1 confirme) : « Si nous gagnons, nous faisons relir
 13. Responsabilité : l'humain. Compte rendu « en attente » ; override consigné, jamais suffisant seul.
 Phrase de repli : « Nous ne l'avons pas encore vérifié, c'est notre prochaine étape. »
 Ne jamais dire : « la NASA n'a rien » ; aucun coût, test réel ou résultat clinique.
+
+
+## F. Mise à jour 15/11 ~11:05 UTC — design et contexte pour les orateurs
+- **Look du diaporama** : toutes les diapos sont sur fond sombre (famille « stone » de l'app), accent cyan, **pas de rose** ; le ton chaud n'apparaît que comme couleur d'état critique. Formes : orbites, anneaux, grille de 300 points (0/300 sains déclenchent une procédure), deux anneaux 93 % (dérives progressives, 139/150) et 57 % (brusques, 86/150). Chiffres vérifiés par `tests/test_deck_shapes.py` contre `research/pilot/holdout_results.json`.
+- **Diapo 2** : objectif en quatre volets avec statut honnête : Guider l'urgence = fait ; Aider le commandant = prototype (six équipiers simulés, ne décide rien) ; Données ouvertes NASA = fait, habitat seulement ; Capteurs réels = prévu (format lu, aucun appareil branché).
+- **Diapo 4** : grande silhouette annotée (thorax sélectionné, trois messages : douleur thoracique → procédure critique ; mesures guidées une à une ; rapport en file, livré une seule fois). Le script FR/EN dit désormais « la silhouette » et non plus « huit zones ».
+- **À ne pas dire** : connexion NASA en direct, capteur réel branché, validation clinique. Le Commander board et l'adaptateur de flux d'appareil sont des prototypes sur données simulées.
+- **App** : anneaux d'état (forme + couleur) dans le Commander board, grilles de points dans Evidence at scale ; une exécution fraîche donne ses propres chiffres (ex. 2/100 sains), l'intervalle est la plage honnête, les chiffres publiés restent ceux du jeu tenu à l'écart.
+- **Ambition si on gagne (D2)** : proposition non validée par l'équipe ; à trancher avant midi.
