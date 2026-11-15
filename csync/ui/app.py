@@ -20,6 +20,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
+from csync import habitat  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
 theme = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
@@ -180,6 +181,28 @@ def resume_screen(cap):
     st.caption(strings["human_decision_pending"])
 
 
+def habitat_panel():
+    """Real NASA ISS cabin data, context only. Reads data/real/habitat_*.csv (built by scripts/build_habitat.py)."""
+    st.divider()
+    st.subheader(UI["habitat_title"])
+    st.markdown(UI["habitat_intro"])
+    df = habitat.rr1_hourly()
+    flat = df[df["artifact"]]
+    chart = df.set_index("hour_utc")[["co2_mmhg"]].rename(columns={"co2_mmhg": UI["habitat_series_co2"]})
+    chart[UI["habitat_series_limit"]] = habitat.LIMIT_MMHG
+    chart[UI["habitat_series_flat"]] = df.set_index("hour_utc")["co2_mmhg"].where(df.set_index("hour_utc")["artifact"])
+    st.line_chart(chart, color=[theme["interactive"], theme["text_secondary"], theme["state"]["UNKNOWN"]["color"]])
+    if len(flat):
+        run = habitat.missions().set_index("mission").loc["RR-1"]
+        ppm = float(run["longest_run_ppm"])
+        st.markdown(UI["habitat_flag"].format(ppm=ppm, mm=habitat.ppm_to_mmhg(ppm), hours=float(run["longest_run_h"])))
+    m = habitat.missions()
+    st.markdown(f"**{UI['habitat_table_title']}**")
+    st.dataframe(m[list(UI["habitat_columns"])].rename(columns=UI["habitat_columns"]), hide_index=True)
+    st.caption(UI["habitat_table_note"].format(n=len(m), k=int((m["artifact_runs_ge_1h"] > 0).sum())))
+    st.caption(UI["habitat_credit"])
+
+
 # ------------------------------------------------------------------ page
 st.set_page_config(page_title=strings["app_title"], layout="wide")
 st.warning(strings["synthetic_banner"])
@@ -202,3 +225,4 @@ for c in today:
     elif c.get("capsule_type") == "resume" and is_valid(c):
         st.divider()
         resume_screen(c)
+habitat_panel()
