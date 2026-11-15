@@ -1,4 +1,4 @@
-# C-Sync — contexte pour IA (généré le 15/11/2026 08:18 UTC, base commit bf6389a)
+# C-Sync — contexte pour IA (généré le 15/11/2026 08:35 UTC, base commit 9de63df)
 Source unique : ce dépôt public. Si ce fichier date de plus de 6 h, demande à M1 de le régénérer (P5/P8).
 Règles pour l'IA qui lit ceci : ne lis que ce qui est ici ; si une page est inaccessible, dis-le ; n'invente rien ; réponds en français ; écris « NON VÉRIFIÉ » pour toute affirmation sans source ici.
 Rôles : M1 chef/PO, M5 communication/soumission ; M2 capsule de décision ; M3 interface ; M4 procédures/scénarios. Pitch dim. 12:00-14:00 (5 min, sans questions) ; soumission dim. 23:59. Démo sur données SYNTHÉTIQUES, non validée sur de vrais équipages.
@@ -138,7 +138,7 @@ Five dimensions: **Body, Attention, Morale, Mission, Habitat**. Four states: **N
 Details and limits: [`data/real/`](data/real), [`SOURCES.md`](SOURCES.md), [`HYPOTHESES.md`](HYPOTHESES.md).
 
 ## Analysis pilot
-Detection methods are compared at equal false-alarm rates in pilot 3 (300 healthy crews, 150 gradual-drift and 150 abrupt-change crews, synthetic; [`docs/METHODES_NASA_DOSSIER.md`](docs/METHODES_NASA_DOSSIER.md) section 7). The engine is the rule v3 (threshold 1.5, two consecutive days): 0.7 % of healthy simulated crews trigger, 95.3 % of gradual drifts and 59.3 % of abrupt changes are detected; the threshold was tuned on the same scenario families, so these figures are not validation. [`research/pilot/`](research/pilot) keeps the earlier pilots, reproducibly. Inspired by NASA HRP's Artemis II Data Methodology Challenge, which favoured individual-level, small-sample methods; C-Sync keeps a simplified, deterministic version that can run offline.
+Detection methods are compared at equal false-alarm rates in pilot 3 (300 healthy crews, 150 gradual-drift and 150 abrupt-change crews, synthetic; [`docs/METHODES_NASA_DOSSIER.md`](docs/METHODES_NASA_DOSSIER.md) section 7). The engine is the rule v3 (threshold 1.5, two consecutive days): 0.7 % of healthy simulated crews trigger, 95.3 % of gradual drifts and 59.3 % of abrupt changes are detected; the threshold was tuned on the same scenario families, so these figures are not validation. A held-out run on seeds never used for tuning gives 0.0 % false procedures, 92.7 % gradual and 57.3 % abrupt detection, still synthetic ([`docs/VALIDATION_HOLDOUT.md`](docs/VALIDATION_HOLDOUT.md)). [`research/pilot/`](research/pilot) keeps the earlier pilots, reproducibly. Inspired by NASA HRP's Artemis II Data Methodology Challenge, which favoured individual-level, small-sample methods; C-Sync keeps a simplified, deterministic version that can run offline.
 
 ## Quick start
 ```bash

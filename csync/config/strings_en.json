@@ -204,7 +204,14 @@
         "source": "NASA Human Research Roadmap, risk 100; gap Sleep-102; task 1453"
       }
     ],
-    "cm_source": "Links: https://ntrs.nasa.gov/citations/20240016101 ; https://humanresearchroadmap.nasa.gov/Risks/risk.aspx?i=100 ; https://humanresearchroadmap.nasa.gov/gaps/gap.aspx?i=737 ; https://humanresearchroadmap.nasa.gov/tasks/task.aspx?i=1453"
+    "cm_source": "Links: https://ntrs.nasa.gov/citations/20240016101 ; https://humanresearchroadmap.nasa.gov/Risks/risk.aspx?i=100 ; https://humanresearchroadmap.nasa.gov/gaps/gap.aspx?i=737 ; https://humanresearchroadmap.nasa.gov/tasks/task.aspx?i=1453",
+    "tab_trends": "Trends",
+    "tab_body": "Body map",
+    "tab_nasa": "NASA hazards and countermeasures",
+    "tab_env": "Habitat (real NASA data)",
+    "tab_sources": "Sources",
+    "more_title": "More detail",
+    "version_label": "Version {v} · capsules generated {t} UTC"
   },
   "indicator_names": {
     "PH01": "heart-rate",

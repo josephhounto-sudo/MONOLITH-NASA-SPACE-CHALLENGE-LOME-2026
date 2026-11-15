@@ -250,12 +250,19 @@ def trends_panel(day):
         st.caption(UI["trend_building"])
 
 
+def md_table(cols, rows):
+    """Markdown table: long cells wrap (st.dataframe truncates them) and screen readers get a real table."""
+    esc = lambda t: str(t).replace("|", "/").replace("\n", " ")
+    head = "| " + " | ".join(esc(c) for c in cols.values()) + " |\n|" + "---|" * len(cols) + "\n"
+    return head + "\n".join("| " + " | ".join(esc(r[k]) for k in cols) + " |" for r in rows)
+
+
 def hazards_panel():
     st.divider()
     st.subheader(UI["hazard_title"])
     st.markdown(UI["hazard_intro"])
     cols = UI["hazard_cols"]
-    st.dataframe([{cols[k]: r[k] for k in cols} for r in UI["hazard_rows"]], hide_index=True)
+    st.markdown(md_table(cols, UI["hazard_rows"]))
     st.caption(UI["hazard_source"])
 
 
@@ -264,7 +271,7 @@ def countermeasures_panel():
     st.subheader(UI["cm_title"])
     st.markdown(UI["cm_intro"])
     cols = UI["cm_cols"]
-    st.dataframe([{cols[k]: r[k] for k in cols} for r in UI["cm_rows"]], hide_index=True)
+    st.markdown(md_table(cols, UI["cm_rows"]))
     st.caption(UI["cm_source"])
 
 
@@ -338,6 +345,20 @@ def _habitat_body():
     st.caption(UI["habitat_credit"])
 
 
+def version_stamp():
+    """Which code and data this page shows (a stale browser tab or an old clone is visible at a glance)."""
+    import subprocess, datetime
+    try:
+        v = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True, timeout=3).stdout.strip() or "unknown"
+    except Exception:
+        v = "unknown"
+    try:
+        t = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(ROOT, "data", "out", "capsules_histoire.json")), datetime.timezone.utc).strftime("%d/%m %H:%M")
+    except OSError:
+        t = "unknown"
+    return UI["version_label"].format(v=v, t=t)
+
+
 def provenance_table():
     st.divider()
     st.subheader(UI["prov_title"])
@@ -390,9 +411,18 @@ for _c in today:
     if _c.get("capsule_type") == "emergency":
         _m = re.search(r"zone: ([a-z]+)", _c.get("situation", ""))
         _zone = _m.group(1) if _m else None
-trends_panel(day)
-body_map(_zone, day)
-hazards_panel()
-countermeasures_panel()
-habitat_panel()
-provenance_table()
+st.divider()
+st.subheader(UI["more_title"])
+_tabs = st.tabs([UI["tab_trends"], UI["tab_body"], UI["tab_nasa"], UI["tab_env"], UI["tab_sources"]])
+with _tabs[0]:
+    trends_panel(day)
+with _tabs[1]:
+    body_map(_zone, day)
+with _tabs[2]:
+    hazards_panel()
+    countermeasures_panel()
+with _tabs[3]:
+    habitat_panel()
+with _tabs[4]:
+    provenance_table()
+st.caption(version_stamp())
