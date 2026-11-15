@@ -40,11 +40,13 @@ Statut : FAIT PAR L'IA — chaque chiffre ci-dessous a été recontrôlé dans l
 | Q2, Q7 | engagements d'équipe | M1 confirme avant le pitch (déjà noté dans la fiche) |
 | Sécurité des données | rien en place (seule une empreinte SHA-256 sert d'identifiant de message) | « Pas encore : chiffrement et accès sont une prochaine étape. Les données de la démo sont synthétiques. » |
 
-## D. Synchronisation faite à 10:35 UTC
-- Diapo 4 : la mini-silhouette est maintenant celle de l'app (en volume, thorax sélectionné) ; légende « Clickable body map in the app · 8 zones ». Scripts FR et EN : « encore en maquette, non codée » remplacé par « la carte du corps de l'application : huit zones, chacune dit ce qui est mesuré ou inconnu ».
-- Diapo 7 : « Next: expert review, analog data, sensors » (≤ 25 mots, test du diaporama vert). Scripts FR/EN alignés. Les temps des tableaux de minutage ne sont pas recalculés (+3 mots diapo 4, +6 mots diapo 7) : à chronométrer à la répétition.
-- Onglets « Try it yourself » et « Evidence at scale » : toujours absents des 5 minutes (démo = diapo 5 inchangée). Ils servent de preuve si le jury ouvre l'app après le pitch. axe-core : 0 violation sur les 7 onglets ; mesure de contraste en pixels non relancée.
-- App : onglet Sources, nouveau bloc « After the pitch — planned, not done yet ».
+## D. Synchronisation faite à 10:55 UTC (remplace la version de 10:35)
+- **Diapo 2 = problème + objectif** (l'ancienne diapo « Far from help » est fusionnée). Quatre lignes avec étiquette : Guider l'urgence = Fait ; Aider le commandant = Prototype ; Lire les données NASA = Habitat seulement ; Brancher de vrais capteurs = Prévu. Source ASCEND conservée en pied.
+- **Diapo 4** : vraie carte du corps de l'app. **Diapo 7** : « Next: expert review, analog data, sensors ».
+- **Deck FR** généré depuis le deck EN (`pitch/deck/make_fr.py`, tout texte manquant arrête le script) : `deck_fr_final.html`, `C-Sync_pitch_7_slides_FR.pdf`, PowerPoint de secours FR. Plafond de mots : 25 en anglais, 32 en français (le français est plus long ; tests verts). Les captures restent en anglais (l'app n'a pas de chaînes françaises).
+- **L'app a maintenant de quoi prouver la diapo 2** : onglet « Commander board » (6 équipiers simulés, même règle, triés par urgence, « human decision pending », aucune décision automatique) ; onglet « Try it yourself » accepte un flux de capteur au format JSON lines (lignes invalides rejetées avec la raison, valeur manquante = UNKNOWN). Aucun appareil réel n'est branché : c'est un format, pas une intégration.
+- Scripts FR et EN : diapo 2 réécrite, tableaux de minutage recalculés (diapo 2 lente : 111 mots/min FR, 106 EN, à chronométrer).
+- axe-core : 0 violation sur les 8 onglets. 202 tests verts. Contraste en pixels non relancé.
 
 ## D2. Coût et ambition (réponses 2 et 7)
 Coûts réels : **aucun chiffre dans le dépôt** (`TODO_M1`). Ce qui est établi : le logiciel tourne sur un ordinateur ou une tablette. Postes de coût à nommer sans montant : relecture par des experts, intégration, validation sur données d'analogue, capteurs (matériel de l'agence). Aucun montant à dire.
