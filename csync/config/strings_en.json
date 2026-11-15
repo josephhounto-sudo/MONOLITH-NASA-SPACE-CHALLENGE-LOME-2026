@@ -286,7 +286,37 @@
       "Protection of health data: encryption and access control. Nothing is in place yet.",
       "A printed-procedure backup for a power loss.",
       "Cost of integration: not estimated yet, so no figure is given."
-    ]
+    ],
+    "tab_cmd": "Commander board",
+    "cmd_title": "Commander board — six synthetic crew members",
+    "cmd_intro": "The same rule v3 runs on each member against their own baseline. The board only sorts, most urgent first. It decides nothing: every open procedure waits for a human decision.",
+    "cmd_cols": {
+      "m": "Member",
+      "b": "Body",
+      "a": "Attention",
+      "o": "Morale",
+      "s": "Status",
+      "t": "Since",
+      "f": "Flagged",
+      "h": "Decision"
+    },
+    "cmd_status": {
+      "OPEN_PROCEDURE": "Procedure open",
+      "DEGRADED": "Degraded",
+      "WATCH": "Watch",
+      "UNKNOWN": "Unknown",
+      "NORMAL": "Normal"
+    },
+    "cmd_since": "day {d}",
+    "cmd_pending": "human decision pending",
+    "cmd_summary": "Day {day}: {n_open} procedure(s) open, {n_deg} degraded, {n_watch} watch, {n_unk} unknown.",
+    "cmd_note": "A single flag (Watch) is not an alert: one indicator left its baseline. Crew F has a simulated sensor gap from day 6, so its Body state reads Unknown, never Normal. Days 1–5 are the baseline: every state is Unknown.",
+    "cmd_synth": "SYNTHETIC DATA — six invented crew members (seeds 61001–61006), not real astronauts.",
+    "ad_title": "Or paste a device feed (JSON lines)",
+    "ad_help": "One line per reading: {\"device\": \"wrist-01\", \"mission_day\": 7, \"metric\": \"resting_hr_bpm\", \"value\": 61}. Metrics: sleep_hours, resting_hr_bpm, pvt_mean_rt_ms, pvt_lapses, kss, stress, mood, load. Mission days 6 and 7. This is a data format, no real device is connected yet.",
+    "ad_ph": "{\"device\": \"wrist-01\", \"mission_day\": 7, \"metric\": \"sleep_hours\", \"value\": 5.4}",
+    "ad_ok": "{n} line(s) accepted. The device feed replaces the table above.",
+    "ad_bad": "Line {n} rejected: {r}. Its indicator stays Unknown."
   },
   "indicator_names": {
     "PH01": "heart-rate",

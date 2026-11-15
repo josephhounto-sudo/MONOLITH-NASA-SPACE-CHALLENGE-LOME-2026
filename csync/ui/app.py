@@ -23,7 +23,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
-from csync import habitat, silhouette  # noqa: E402
+from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
 from csync.ui import style  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
@@ -257,6 +257,27 @@ def md_table(cols, rows):
     return head + "\n".join("| " + " | ".join(esc(r[k]) for k in cols) + " |" for r in rows)
 
 
+@st.cache_data
+def _crew_board(day: int):
+    return crew.board(day)
+
+
+def commander_panel(day):
+    """Crew-level view for the commander: the same rule on six synthetic members, sorted by urgency. Decides nothing."""
+    st.subheader(UI["cmd_title"])
+    st.markdown(UI["cmd_intro"])
+    b = _crew_board(day)
+    n = lambda k: int((b.action == k).sum())
+    st.markdown(f"**{UI['cmd_summary'].format(day=day, n_open=n('OPEN_PROCEDURE'), n_deg=n('DEGRADED'), n_watch=n('WATCH'), n_unk=n('UNKNOWN'))}**")
+    w, names = UI["cmd_status"], UI["try_names"]
+    rows = [{"m": r.member, "b": w[r.Body.upper()] if r.Body.upper() in w else r.Body, "a": w[r.Attention.upper()], "o": w[r.Morale.upper()],
+             "s": w[r.action], "t": UI["cmd_since"].format(d=int(r.since)) if r.since == r.since and r.since else "—",
+             "f": ", ".join(names[i] for i in r.flagged) or "—", "h": UI["cmd_pending"] if r.human else "—"} for r in b.itertuples()]
+    st.markdown(md_table(UI["cmd_cols"], rows))
+    st.caption(UI["cmd_note"])
+    st.caption(UI["cmd_synth"])
+
+
 def hazards_panel():
     st.divider()
     st.subheader(UI["hazard_title"])
@@ -292,7 +313,18 @@ def try_panel():
                             key="try_editor_" + ("b" if choice == UI["try_preset_base"] else "s"))
     def col(c):
         return {i: (None if pd.isna(v) else float(v)) for i, v in zip(live.INDICATORS, edited[c])}
-    out = live.try_it(col(UI["try_col_a"]), col(UI["try_col_b"]))
+    day6, day7 = col(UI["try_col_a"]), col(UI["try_col_b"])
+    with st.expander(UI["ad_title"]):
+        st.caption(UI["ad_help"])
+        feed = st.text_area(UI["ad_title"], placeholder=UI["ad_ph"], height=120, key="device_feed", label_visibility="collapsed")
+    if feed.strip():
+        parsed = adapters.parse(feed)
+        day6, day7 = parsed["days"][6], parsed["days"][7]
+        if parsed["accepted"]:
+            st.success(UI["ad_ok"].format(n=parsed["accepted"]))
+        for n_, r_ in parsed["rejected"]:
+            st.warning(UI["ad_bad"].format(n=n_, r=r_))
+    out = live.try_it(day6, day7)
     st.markdown(f"**{UI['try_result']}**")
     cols = st.columns(3)
     for c, dim in zip(cols, ("Body", "Attention", "Morale")):
@@ -492,21 +524,23 @@ for _c in today:
         _zone = _m.group(1) if _m else None
 st.divider()
 st.subheader(UI["more_title"])
-_tabs = st.tabs([UI["tab_try"], UI["tab_scale"], UI["tab_trends"], UI["tab_body"], UI["tab_nasa"], UI["tab_env"], UI["tab_sources"]])
+_tabs = st.tabs([UI["tab_try"], UI["tab_cmd"], UI["tab_scale"], UI["tab_trends"], UI["tab_body"], UI["tab_nasa"], UI["tab_env"], UI["tab_sources"]])
 with _tabs[0]:
     try_panel()
 with _tabs[1]:
-    scale_panel()
+    commander_panel(day)
 with _tabs[2]:
-    trends_panel(day)
+    scale_panel()
 with _tabs[3]:
-    body_map(_zone, day)
+    trends_panel(day)
 with _tabs[4]:
+    body_map(_zone, day)
+with _tabs[5]:
     hazards_panel()
     countermeasures_panel()
-with _tabs[5]:
-    habitat_panel()
 with _tabs[6]:
+    habitat_panel()
+with _tabs[7]:
     provenance_table()
     st.divider()
     st.subheader(UI["next_title"])
