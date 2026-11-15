@@ -22,3 +22,5 @@
 - 15/11 04:55 MAJ 15 : diapo 2 et scripts EN/FR alignés sur l'abstract NTRS 20220013418 lu dans le navigateur (délai 0–22 min ; coupures de plusieurs jours à plusieurs mois) ; remplace « up to ~20 min (HRP) » et « weeks ». PDF et pptx de secours régénérés ; 153 tests, test_deck OK.
 - 15/11 05:50 MAJ 16 : critères T1–T8 (docs/SOUMISSION_CRITERES.md) ; trouvé : logo IA sans filigrane + AI_USAGE contradictoire, diapos sans noms ni titre du défi ; branche checkpoint-before-design (tag refusé 403).
 - 15/11 06:05 MAJ 17 : AI_USAGE.md (logo IA déclaré sans filigrane, décision M1 ; idée = équipe) ; diapo 1 : titre du défi en pied de page ; PDF/pptx régénérés. Relecture totale reportée après le design (décision M1).
+
+- 2026-11-15 17:42 (UTC=Lomé): projet SOUMIS sur spaceappschallenge.org (banner "Project Submitted for Judging"). Démo: pitch/demo/README.md (7 diapos en images). Projet: dépôt GitHub. Cases conditions + originalité cochées. À vérifier: 5 membres sur la plateforme (dont LAMADOKU Juste), 4 noms sur la diapo 1.

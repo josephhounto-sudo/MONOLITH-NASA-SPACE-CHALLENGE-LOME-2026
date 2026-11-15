@@ -1,5 +1,5 @@
 # Dossier de soumission finale — C-Sync, équipe MONOLITH · 15/11/2026
-FAIT PAR L'IA — À VALIDER PAR M1. Rien n'a été soumis. Règles : `docs/PROGRAMME_OFFICIEL.md` (clôture dimanche 23:59, seule la dernière soumission est jugée) et le guide officiel lu le 14/11.
+FAIT PAR L'IA — À VALIDER PAR M1. SOUMIS le 15/11 à 17:42 (voir docs/MAJ_LOG.md). Règles : `docs/PROGRAMME_OFFICIEL.md` (clôture dimanche 23:59, seule la dernière soumission est jugée) et le guide officiel lu le 14/11.
 
 ## Contenu du dossier
 | Pièce | Fichier | Exigence officielle | État |
