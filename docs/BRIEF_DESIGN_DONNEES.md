@@ -21,11 +21,18 @@ FAIT PAR L'IA. Branche `nasa-data` (partie de `main`), **pas de CSS touché** : 
 - Tout chiffre non issu des fichiers du dépôt. Le panneau lit `data/real/habitat_*.csv`, reconstruits depuis le brut par `python scripts/build_habitat.py` et re-testés (`tests/test_habitat.py`).
 
 ## 4. Contraintes techniques à ne pas casser
-- 162 tests verts (`python -m pytest -q`). `tests/test_ui.py` vérifie le balisage exact des cartes et que toute couleur vient de `csync/config/theme.json`.
+- 170 tests verts (`python -m pytest -q`). `tests/test_ui.py` vérifie le balisage exact des cartes et que toute couleur vient de `csync/config/theme.json`.
 - Aucune couleur en dur dans `app.py` ; textes dans `csync/config/strings_en.json` (clés `habitat_*`).
 - axe-core : 0 violation (jours 7, 9, 10 ; mouvement normal et réduit) — vérifié sur cette branche.
 - `st.html` retire le SVG en ligne ; `st.line_chart` accepte les couleurs du thème.
 - Une zone riche à la fois : le panneau Habitat est une **section**, pas un fond animé.
+
+## 4 bis. Ajouts du 15/11 07:25 (même branche `nasa-data`)
+- **Silhouette dans l'application** : section « Body map » (`body_map()` dans `app.py`, `csync/silhouette.py`, textes dans `pitch/silhouette/fiches.json`). 8 zones sélectionnables par boutons clavier (`st.pills`), figure neutre sans visage, zones non mesurées en pointillés, jamais « normal ». Le jour d'un symptôme (jour 9), la zone du symptôme (poitrine) est présélectionnée. Elle est rendue en image Markdown (Streamlit retire le SVG en ligne et n'ajoute pas de texte alternatif à `st.image`). **À améliorer par le design** : étiquettes sur la figure, cliquable directement, mise en page.
+- **Adaptation à l'écran** : mesurée à 1280, 768 et 390 px : aucun débordement horizontal, axe 0 violation à 1280 et 390 px (jours 7, 9, 10).
+- **Adaptation à l'état de l'équipage** (« interface adaptative » au sens du défi, si c'est ce que M1 entend) : **non faite**. Proposition à valider : le jour d'une procédure ouverte, la zone d'action passe avant les cartes ; sinon l'ordre actuel. À décider avec M1.
+- Reprise de M3 : voir `docs/M3_REVUE.md` (typo agrandie à reprendre ici, avec mise à jour des 3 tests qui exigent `font-size:1.1em`).
+- Après la fusion : la diapo 4 affiche encore « Static mock-up · not in the app yet » : à corriger et à recapturer.
 
 ## 5. Autres demandes de M1 pour le design
 - Brief écrit prioritaire : futuriste, verre léger, formes, mot d'état en grand. Références : dossier Téléchargements de M1.

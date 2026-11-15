@@ -11,6 +11,7 @@ import importlib.util
 import html
 import json
 import os
+import re
 import sys
 import tempfile
 from datetime import datetime
@@ -22,7 +23,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
-from csync import habitat  # noqa: E402
+from csync import habitat, silhouette  # noqa: E402
 from csync.ui import style  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
@@ -178,14 +179,117 @@ def resume_screen(cap):
         with st.expander(UI["technical_log"]):
             for r in reasons:
                 st.text(r)
-            for line in st.session_state["resume_log"]:
-                st.text(line)
     if st.session_state["resume_log"]:
         st.markdown(f"**{UI['log_title']}**")
         for line in st.session_state["resume_log"]:
             st.text(line)
     fixed_sentence()
     st.caption(strings["human_decision_pending"])
+
+
+def trend_svg(rows, base, thr, label, direction):
+    """Line chart as an SVG Markdown image with alt text (Vega marks carry no alt, axe svg-img-alt)."""
+    import base64
+    W, H, L, R, T, B = 640, 220, 52, 16, 16, 34
+    vals = [r["value"] for r in rows if r["value"] is not None]
+    lo, hi = min(vals + [base, thr]), max(vals + [base, thr])
+    pad = (hi - lo) * 0.1 or 1
+    lo, hi = lo - pad, hi + pad
+    n = max(len(rows) - 1, 1)
+    X = lambda i: L + (W - L - R) * i / n
+    Y = lambda v: T + (H - T - B) * (1 - (v - lo) / (hi - lo))
+    ch = theme["chart"]
+    c_val, c_base, c_thr, txt = ch["value"], ch["baseline"], ch["threshold"], ch["ink"]
+    g = []
+    for v in (lo + pad, (lo + hi) / 2, hi - pad):
+        g.append(f'<text x="{L-6}" y="{Y(v)+4:.0f}" font-size="11" text-anchor="end" fill="{txt}" font-family="sans-serif">{v:.3g}</text>')
+    for i, r in enumerate(rows):
+        g.append(f'<text x="{X(i):.0f}" y="{H-14}" font-size="11" text-anchor="middle" fill="{txt}" font-family="sans-serif">{r["day"]}</text>')
+    g.append(f'<text x="{(L+W-R)/2:.0f}" y="{H-1}" font-size="11" text-anchor="middle" fill="{txt}" font-family="sans-serif">Mission day</text>')
+    g.append(f'<line x1="{L}" x2="{W-R}" y1="{Y(base):.1f}" y2="{Y(base):.1f}" stroke="{c_base}" stroke-width="1.5" stroke-dasharray="2 4"/>')
+    g.append(f'<line x1="{L}" x2="{W-R}" y1="{Y(thr):.1f}" y2="{Y(thr):.1f}" stroke="{c_thr}" stroke-width="1.5" stroke-dasharray="6 4"/>')
+    pts = " ".join(f"{X(i):.1f},{Y(r['value']):.1f}" for i, r in enumerate(rows) if r["value"] is not None)
+    g.append(f'<polyline points="{pts}" fill="none" stroke="{c_val}" stroke-width="2"/>')
+    for i, r in enumerate(rows):
+        if r["value"] is None:
+            continue
+        fill = c_thr if r["flagged"] else c_val
+        g.append(f'<circle cx="{X(i):.1f}" cy="{Y(r["value"]):.1f}" r="{5 if r["flagged"] else 3}" fill="{fill}" stroke="{ch["ring"]}" stroke-width="2"/>')
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">' + "".join(g) + "</svg>"
+    flagged = [str(r["day"]) for r in rows if r["flagged"]]
+    alt = (f"{label}, days {rows[0]['day']} to {rows[-1]['day']}: values {min(vals):.3g} to {max(vals):.3g}; personal baseline {base:.3g}, "
+           f"threshold {thr:.3g}" + (f"; flagged days {', '.join(flagged)}." if flagged else "; no flagged day."))
+    uri = "data:image/svg+xml;base64," + base64.b64encode(svg.encode()).decode()
+    return f"![{alt}]({uri})"
+
+
+def trends_panel(day):
+    """Dynamic chart per indicator up to the chosen day, against the personal baseline (reads data/out/trends_histoire.json)."""
+    path = os.path.join(ROOT, "data", "out", "trends_histoire.json")
+    if not os.path.exists(path):
+        return
+    data = json.load(open(path, encoding="utf8"))["indicators"]
+    st.divider()
+    st.subheader(UI["trend_title"])
+    st.markdown(UI["trend_intro"])
+    names = UI["trend_names"]
+    ind = st.pills(UI["trend_select"], list(names), format_func=names.get, selection_mode="single",
+                   default="PH09", key="trend_indicator")
+    if not ind:
+        return
+    t = data[ind]
+    rows = [r for r in t["days"] if r["day"] <= day]
+    frame = {UI["trend_value"]: [r["value"] for r in rows], UI["trend_base"]: [t["baseline_mean"]] * len(rows),
+             UI["trend_thr"]: [t["threshold"]] * len(rows)}
+    vals = [r["value"] for r in rows]
+    st.markdown(trend_svg(rows, t["baseline_mean"], t["threshold"], f"{names[ind]} ({t['unit']})", t["direction"]),
+                unsafe_allow_html=False)
+    flagged = [str(r["day"]) for r in rows if r["flagged"]]
+    st.markdown(UI["trend_flagged"].format(day=day, days=", ".join(flagged)) if flagged else UI["trend_none"].format(day=day))
+    if day <= 5:
+        st.caption(UI["trend_building"])
+
+
+def hazards_panel():
+    st.divider()
+    st.subheader(UI["hazard_title"])
+    st.markdown(UI["hazard_intro"])
+    cols = UI["hazard_cols"]
+    st.dataframe([{cols[k]: r[k] for k in cols} for r in UI["hazard_rows"]], hide_index=True)
+    st.caption(UI["hazard_source"])
+
+
+def body_map(symptom_zone=None, day=None):
+    """Body map section: 8 selectable zones (pills) next to a neutral figure; text comes from pitch/silhouette/fiches.json."""
+    st.divider()
+    st.subheader(UI["body_map_title"])
+    st.markdown(UI["body_map_intro"])
+    sheets = silhouette.fiches()
+    labels = {rid: silhouette.label(rid) for rid in sheets}
+    preset = silhouette.region_for_zone(symptom_zone)
+    if preset:
+        st.markdown(UI["body_map_symptom"].format(day=day, zone=symptom_zone))
+    choice = st.pills(UI["body_map_select"], list(labels), format_func=labels.get, selection_mode="single",
+                      default=preset, key=f"body_zone_{day}")
+    left, right = st.columns([2, 3])
+    left.markdown(silhouette.markdown_image(choice, UI["body_map_alt"].format(zone=labels[choice] if choice else "none")))
+    if not choice:
+        return
+    r = sheets[choice]
+    state = silhouette.STATUS_STATE[r["status"]]
+    with right:
+        st.markdown(f"#### {r['title']}")
+        st.markdown(f"**{theme['state'][state]['icon']} {silhouette.STATUS_WORD[r['status']]}**")
+        st.markdown(f"**{UI['body_map_indicators']}:** " + "; ".join(r["indicators"]))
+        for key, lab in (("how", "body_map_how"), ("why", "body_map_why"), ("when", "body_map_when"), ("not", "body_map_not")):
+            text = r.get(key)
+            if key == "why" and not text:
+                text = UI["body_map_no_ref"] if r["status"] == "measured" else None
+            if text:
+                st.markdown(f"**{UI[lab]}:** {text}")
+        srcs = [s for s in (r.get("how_src"), r.get("when_src")) if s]
+        if srcs:
+            st.caption(f"{UI['body_map_source']}: " + " · ".join(srcs))
 
 
 def habitat_panel():
@@ -208,10 +312,28 @@ def _habitat_body():
         ppm = float(run["longest_run_ppm"])
         st.markdown(UI["habitat_flag"].format(ppm=ppm, mm=habitat.ppm_to_mmhg(ppm), hours=float(run["longest_run_h"])))
     m = habitat.missions()
+    ms = habitat.rr1_measurements()
+    count = lambda q: sum(1 for x in ms if x["quality"] == q)  # noqa: E731
+    st.caption(UI["habitat_measurements"].format(n=len(ms), ok=count("OK"), art=count("ARTIFACT"), miss=count("MISSING")))
+    with st.expander(UI["habitat_more_title"]):
+        hourly = df.set_index("hour_utc")
+        st.line_chart(hourly[["temp_c"]].rename(columns={"temp_c": UI["habitat_temp"]}), color=[theme["interactive"]])
+        st.line_chart(hourly[["rh_pct"]].rename(columns={"rh_pct": UI["habitat_rh"]}), color=[theme["interactive"]])
+        rad = habitat.rr1_radiation()
+        st.bar_chart(rad.set_index("date")[["total_mgy_day"]].rename(columns={"total_mgy_day": UI["habitat_rad"]}),
+                     color=[theme["interactive"]])
+        st.caption(UI["habitat_rad_note"].format(acc=float(rad["accumulated_mgy"].iloc[-1])))
     st.markdown(f"**{UI['habitat_table_title']}**")
     st.dataframe(m[list(UI["habitat_columns"])].rename(columns=UI["habitat_columns"]), hide_index=True)
     st.caption(UI["habitat_table_note"].format(n=len(m), k=int((m["artifact_runs_ge_1h"] > 0).sum())))
     st.caption(UI["habitat_credit"])
+
+
+def provenance_table():
+    st.divider()
+    st.subheader(UI["prov_title"])
+    cols = UI["prov_cols"]
+    st.dataframe([{cols[k]: row[k] for k in cols} for row in UI["prov_rows"]], hide_index=True)
 
 
 # ------------------------------------------------------------------ page
@@ -254,4 +376,13 @@ elif not is_valid(daily):
     st.error(UI["invalid_capsule"])
 else:
     nominal(daily, day)
+_zone = None
+for _c in today:
+    if _c.get("capsule_type") == "emergency":
+        _m = re.search(r"zone: ([a-z]+)", _c.get("situation", ""))
+        _zone = _m.group(1) if _m else None
+trends_panel(day)
+body_map(_zone, day)
+hazards_panel()
 habitat_panel()
+provenance_table()

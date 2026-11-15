@@ -45,6 +45,9 @@ def main(out=os.path.join(ROOT, "data", "real")):
                 a, b = s.index[r["start"]], s.index[r["end"]]
                 art[(art.index >= a.floor("1h")) & (art.index <= b)] = True
             rr1 = pd.DataFrame({"hour_utc": hourly.index, "co2_ppm": hourly.round(1).values, "artifact": art.values})
+            for col, key in (("temp_c", "temperature_iss"), ("rh_pct", "rh_iss")):
+                x = pd.Series(pd.to_numeric(pd.Series(t[key]), errors="coerce").values, index=pd.to_datetime(t["time"]))
+                rr1[col] = x.resample("1h").mean().reindex(hourly.index).round(2).values
     pd.DataFrame(rows).to_csv(os.path.join(out, "habitat_missions.csv"), index=False)
     rr1.to_csv(os.path.join(out, "habitat_rr1_hourly.csv"), index=False)
     return rows
