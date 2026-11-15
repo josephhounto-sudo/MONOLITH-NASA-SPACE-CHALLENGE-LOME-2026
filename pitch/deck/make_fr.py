@@ -42,6 +42,7 @@ MAP = [
  ("Not yet measured: bones, immunity, radiation dose", "Pas encore mesurés : os, immunité, dose de rayonnement"),
  ("Next: expert review, analog data, sensors", "Après : relecture d'experts, données d'analogue, capteurs"),
  ("Offline. Explainable. The human decides.", "Hors ligne. Explicable. L'humain décide."),
+ ("AI-generated images: team logo, C-Sync mark", "Images générées par IA : logo d'équipe, marque C-Sync"),
  (">Body<", ">Corps<"), (">Watch<", ">Surveillance<"), (">Degraded<", ">Dégradé<"), (">Morale<", ">Moral<"),
  ("Habitat · context only", "Habitat · contexte seulement"), (">gradual<", ">progressive<"), (">abrupt<", ">brusque<"),
  ('<html lang="en">', '<html lang="fr">'),

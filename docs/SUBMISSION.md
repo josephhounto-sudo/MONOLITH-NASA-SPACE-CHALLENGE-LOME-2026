@@ -1,3 +1,5 @@
+# ⚠ Remplacé le 15/11 par `submission/FORM_FIELDS_EN.md` (textes finaux) et `submission/README_SOUMISSION.md` (dossier et checklist). Les chiffres ci-dessous (0,7 %, 95,3 %, 59,3 %, 174 tests, « filigrane partout », « toute modification relue ») sont périmés ou inexacts : ne pas les coller.
+
 # Page de soumission — textes à copier (anglais) · M5
 **Project name:** C-Sync
 **High-Level Summary (draft):** C-Sync is an offline-first assistant that helps a deep-space crew notice unusual changes in their health and performance, guides them step by step through a medical emergency, and, under the demo's rules, refuses to resume work when the supporting data are stale, with a ground delay of up to about 20 minutes or no link at all. It compares each astronaut to their own baseline, shows its confidence, flags missing data as unknown instead of normal, and leaves the final decision to a human operator. It uses real NASA ISS cabin telemetry (OSDR Environmental Data App) and labelled synthetic crew data.

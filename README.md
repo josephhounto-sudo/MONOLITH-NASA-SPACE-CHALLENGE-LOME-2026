@@ -38,7 +38,12 @@ Five dimensions: **Body, Attention, Morale, Mission, Habitat**. Four states: **N
 Details and limits: [`data/real/`](data/real), [`SOURCES.md`](SOURCES.md), [`HYPOTHESES.md`](HYPOTHESES.md).
 
 ## Analysis pilot
-Detection methods are compared at equal false-alarm rates in pilot 3 (300 healthy crews, 150 gradual-drift and 150 abrupt-change crews, synthetic; [`docs/METHODES_NASA_DOSSIER.md`](docs/METHODES_NASA_DOSSIER.md) section 7). The engine is the rule v3 (threshold 1.5, two consecutive days): 0.7 % of healthy simulated crews trigger, 95.3 % of gradual drifts and 59.3 % of abrupt changes are detected; the threshold was tuned on the same scenario families, so these figures are not validation. A held-out run on seeds never used for tuning gives 0.0 % false procedures, 92.7 % gradual and 57.3 % abrupt detection, still synthetic ([`docs/VALIDATION_HOLDOUT.md`](docs/VALIDATION_HOLDOUT.md)). [`research/pilot/`](research/pilot) keeps the earlier pilots, reproducibly. Inspired by NASA HRP's Artemis II Data Methodology Challenge, which favoured individual-level, small-sample methods; C-Sync keeps a simplified, deterministic version that can run offline.
+Detection methods are compared at equal false-alarm rates in pilot 3 (300 healthy crews, 150 gradual-drift and 150 abrupt-change crews, synthetic; [`docs/METHODES_NASA_DOSSIER.md`](docs/METHODES_NASA_DOSSIER.md) section 7). The engine is the rule v3 (threshold 1.5, two consecutive days): 0.7 % of healthy simulated crews trigger, 95.3 % of gradual drifts and 59.3 % of abrupt changes are detected; the threshold was tuned on the same scenario families, so these figures are not validation. A held-out run on seeds never used for tuning gives 0.0 % false procedures, 92.7 % gradual and 57.3 % abrupt detection, still synthetic ([`docs/VALIDATION_HOLDOUT.md`](docs/VALIDATION_HOLDOUT.md)). [`research/pilot/`](research/pilot) keeps the earlier pilots, reproducibly. Inspired by NASA HRP's Artemis II Data Methodology Challenge, which favoured individual-level, small-sample methods; C-Sync keeps a simplified, deterministic version that can run offline. **Held-out check (15/11/2026, seeds never used for tuning, no retuning):** 0/300 healthy crews triggered a procedure, 139/150 (92.7 %) gradual drifts and 86/150 (57.3 %) abrupt shifts were detected ([`docs/VALIDATION_HOLDOUT.md`](docs/VALIDATION_HOLDOUT.md)). Synthetic crews only; nothing is clinically validated.
+
+## Prototypes added on 15/11/2026
+- **Commander board** (app tab): the same rule on six synthetic crew members, sorted by urgency; it decides nothing, every open procedure waits for a human.
+- **Device-feed reader** (`csync/devicefeed.py`): reads a text format of daily measurements (format check only); no real device is connected.
+- **Real NASA data** stays limited to ISS cabin telemetry (habitat context); no real crew physiology.
 
 ## Quick start
 ```bash
@@ -65,7 +70,7 @@ streamlit run csync/ui/app.py       # the interface
 | Part | Status |
 |---|---|
 | Contracts v0 | drafted, to be validated |
-| Rules engine, resume gate, send queue | implemented; 174 automated tests (software stability, not clinical validation) |
+| Rules engine, resume gate, send queue | implemented; 205 automated tests (software stability, not clinical validation) |
 | Generator + story data | implemented |
 | Decision capsule, UI screens, procedure files | implemented; the three screens (days 7, 9, 10) are covered by automated screen tests (the body map has eight selectable zones in the app; the Habitat panel shows real NASA ISS data with quality control) |
 
