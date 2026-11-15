@@ -282,6 +282,14 @@ def _shape(body, filled=True):
     return _uri(f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><g{paint}>{body}</g></svg>")
 
 
+def _orbit(core, dot=None, ring_extra="", dashed=False):
+    """C-Sync state glyph: the core keeps a distinct silhouette per state (circle / diamond / triangle / dashed square),
+    the orbit says how far the crew member is from their own baseline ("in sync" -> drifting -> off the orbit). 15/11 · FAIT PAR L'IA."""
+    ring = "<ellipse cx='16' cy='17' rx='14' ry='5.5' transform='rotate(-24 16 17)' fill='none' stroke='black' stroke-width='1.9'%s/>" % ring_extra
+    body = ring + core + (f"<circle cx='{dot[0]}' cy='{dot[1]}' r='2.6'/>" if dot else "")
+    return _uri(f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='-1 0 35 33'>{body}</svg>")
+
+
 _FUSION = Template(r"""
 @font-face{font-family:"Clash Display";src:url(data:font/woff2;base64,$clash) format("woff2");font-weight:200 700;font-display:swap}
 @font-face{font-family:Satoshi;src:url(data:font/woff2;base64,$satoshi) format("woff2");font-weight:300 900;font-display:swap}
@@ -343,11 +351,11 @@ a{color:var(--f-stone);text-underline-offset:3px}
 .cs-card{position:relative;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;gap:10px;min-height:178px;
  padding:16px 18px;border-radius:26px;background:var(--f-glass);border:1px solid var(--f-line);
  box-shadow:inset 0 1px 0 #fff,0 1px 2px rgba(20,22,24,.04),0 22px 56px rgba(120,60,80,.10);-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%)}
-.cs-card[data-state="NORMAL"]{--c:var(--f-normal);--s:$s_normal}
-.cs-card[data-state="WATCH"]{--c:var(--f-watch);--s:$s_watch}
-.cs-card[data-state="DEGRADED"]{--c:var(--f-degraded);--s:$s_degraded;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,232,226,.72))}
-.cs-card[data-state="UNKNOWN"]{--c:var(--f-unknown);--s:$s_unknown}
-.cs-card::after{content:"";position:absolute;right:16px;top:16px;width:34px;height:34px;background:var(--c);
+.cs-card[data-state="NORMAL"]{--c:var(--f-normal);--s:$o_normal}
+.cs-card[data-state="WATCH"]{--c:var(--f-watch);--s:$o_watch}
+.cs-card[data-state="DEGRADED"]{--c:var(--f-degraded);--s:$o_degraded;background:linear-gradient(160deg,rgba(255,255,255,.7),rgba(255,232,226,.72))}
+.cs-card[data-state="UNKNOWN"]{--c:var(--f-unknown);--s:$o_unknown}
+.cs-card::after{content:"";position:absolute;right:12px;top:10px;width:52px;height:52px;background:var(--c);
  -webkit-mask:var(--s) center/contain no-repeat;mask:var(--s) center/contain no-repeat}
 .cs-card .dim{color:var(--f-ink2);font-size:.9rem;font-weight:600}
 .cs-card>div:nth-child(2){color:var(--c)!important;font-family:var(--f-display);font-weight:600;font-size:clamp(1.5rem,2.3vw,2.15rem)!important;line-height:1.05;letter-spacing:-.015em}
@@ -472,7 +480,11 @@ def _fusion_css():
         cage=_uri(cage), mark=_uri(mark),
         s_normal=_shape("<circle cx='12' cy='12' r='10'/>"), s_watch=_shape("<path d='M12 1.5 22.5 12 12 22.5 1.5 12Z'/>"),
         s_degraded=_shape("<path d='M12 2 22.6 21H1.4Z'/>"),
-        s_unknown=_shape("<rect x='2' y='2' width='20' height='20' rx='2'/>", filled=False))
+        s_unknown=_shape("<rect x='2' y='2' width='20' height='20' rx='2'/>", filled=False),
+        o_normal=_orbit("<circle cx='16' cy='16' r='6'/>", dot=(27.2, 9.9)),
+        o_watch=_orbit("<path d='M16 9.6 22.4 16 16 22.4 9.6 16Z'/>", dot=(28.4, 9.2), ring_extra=" pathLength='100' stroke-dasharray='86 6 8 0'"),
+        o_degraded=_orbit("<path d='M16 9.2 22.2 20.2H9.8Z'/>", dot=(29.5, 8.5), ring_extra=" pathLength='100' stroke-dasharray='58 16 26 0'"),
+        o_unknown=_orbit("<rect x='10.5' y='10.5' width='11' height='11' rx='1.5' fill='none' stroke='black' stroke-width='1.8' stroke-dasharray='3 2.4'/>", ring_extra=" stroke-dasharray='3 3' opacity='.7'"))
 
 
 def field(level):
