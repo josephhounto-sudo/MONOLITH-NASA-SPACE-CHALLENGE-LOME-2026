@@ -264,7 +264,18 @@
     "scale_c_pub": "Published held-out (%)",
     "scale_healthy": "Healthy crew (a procedure here is a false one)",
     "scale_drift": "Gradual drift of 1.5 SD (detected)",
-    "scale_took": "{n} synthetic crews in {s} s."
+    "scale_took": "{n} synthetic crews in {s} s.",
+    "sbar_title": "Handoff note (SBAR format)",
+    "sbar_s": "Situation",
+    "sbar_b": "Background",
+    "sbar_a": "Assessment",
+    "sbar_r": "Recommendation",
+    "sbar_s_t": "Day 7 check-in compared with the personal baseline of days 1–5 (synthetic crew member).",
+    "sbar_b_t": "Baseline built from days 1–5. Rule v3: flagged at d ≥ 1.5 on 2 consecutive days. A missing value reads UNKNOWN.",
+    "sbar_a_t": "Body {b}, Attention {a}, Morale {m}. Flagged: {f}.",
+    "sbar_a_none": "none",
+    "sbar_r_open": "Open procedure {p}. A human decides.",
+    "sbar_r_cont": "No procedure proposed. A human decides."
   },
   "indicator_names": {
     "PH01": "heart-rate",

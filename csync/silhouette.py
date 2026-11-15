@@ -47,20 +47,39 @@ def region_for_zone(zone: str | None) -> str | None:
 
 
 def svg(selected: str | None = None) -> str:
-    """SVG string of the figure; the selected zone is outlined and the others keep their status colour."""
+    """SVG string of the figure, with volume: each zone is shaded like a cylinder (light from upper left), the head like a
+    sphere, a soft ground shadow and a thickness edge give depth. Shading is pure surface: the zone colour, dash and outline
+    still carry the status. Selected zone is outlined. 15/11 · FAIT PAR L'IA (pseudo-3D, no external resource)."""
     t, st_ = THEME, fiches()
     out = ['<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 640" role="img" '
            f'aria-label="Neutral front-view body map, 8 zones, selected: {label(selected) if selected else "none"}">',
+           '<defs>'
+           '<linearGradient id="vol" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#000" stop-opacity=".16"/>'
+           '<stop offset=".28" stop-color="#fff" stop-opacity=".55"/><stop offset=".62" stop-color="#fff" stop-opacity="0"/>'
+           '<stop offset="1" stop-color="#000" stop-opacity=".28"/></linearGradient>'
+           '<radialGradient id="sph" cx=".34" cy=".3" r=".78"><stop offset="0" stop-color="#fff" stop-opacity=".75"/>'
+           '<stop offset=".55" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".32"/></radialGradient>'
+           '<radialGradient id="gnd" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".28"/>'
+           '<stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>'
+           '<filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs>',
            f'<rect width="400" height="640" fill="{t["surface"]}"/>',
-           f'<rect x="186" y="104" width="28" height="20" rx="6" fill="{t["panel"]}" stroke="{t["text_secondary"]}" stroke-width="2"/>']
+           '<ellipse cx="200" cy="552" rx="128" ry="16" fill="url(#gnd)"/>',
+           f'<rect x="186" y="104" width="28" height="20" rx="6" fill="{t["panel"]}" stroke="{t["text_secondary"]}" stroke-width="2"/>',
+           '<rect x="186" y="104" width="28" height="20" rx="6" fill="url(#vol)"/>']
     for rid, (_, shapes) in SHAPES.items():
         state = STATUS_STATE[st_[rid]["status"]]
         colour = t["state"][state]["color"]
         dash = ' stroke-dasharray="6 5"' if st_[rid]["status"] != "measured" else ""
         sel = rid == selected
         width, stroke = (5, t["interactive"]) if sel else (3, colour)
+        grad = "sph" if rid == "region-head" else "vol"
+        habitat = rid in ("region-habitat", "region-body")
         for tag, attrs in shapes:
+            if not habitat:       # thickness edge: the same shape pushed down-right, blurred and dark
+                out.append(f'<{tag} {attrs} fill="#000" opacity=".16" transform="translate(5 6)" filter="url(#soft)"/>')
             out.append(f'<{tag} {attrs} fill="{t["panel"]}" stroke="{stroke}" stroke-width="{width}"{dash}/>')
+            if not habitat:
+                out.append(f'<{tag} {attrs} fill="url(#{grad})" stroke="none"/>')
     out.append("</svg>")
     return "".join(out)
 

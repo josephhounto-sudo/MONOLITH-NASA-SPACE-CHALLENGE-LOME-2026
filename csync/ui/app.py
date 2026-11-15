@@ -302,6 +302,11 @@ def try_panel():
     st.markdown(f"**{UI['try_d_title']}**")
     st.markdown(md_table({"n": UI["try_col_ind"], "d": "d", "f": UI["try_flagged"]}, rows))
     st.info(UI["try_open"].format(p=out["procedure_id"]) if out["action"] == "OPEN_PROCEDURE" else UI["try_continue"])
+    flagged = ", ".join(names[i] for i in live.INDICATORS if out["flagged"][i]) or UI["sbar_a_none"]
+    st.markdown(f"**{UI['sbar_title']}**")
+    st.markdown(f"**{UI['sbar_s']}** — {UI['sbar_s_t']}  \n**{UI['sbar_b']}** — {UI['sbar_b_t']}  \n"
+                f"**{UI['sbar_a']}** — " + UI["sbar_a_t"].format(b=out["states"]["Body"], a=out["states"]["Attention"], m=out["states"]["Morale"], f=flagged)
+                + f"  \n**{UI['sbar_r']}** — " + (UI["sbar_r_open"].format(p=out["procedure_id"]) if out["action"] == "OPEN_PROCEDURE" else UI["sbar_r_cont"]))
 
 
 @st.cache_data(show_spinner=False)
