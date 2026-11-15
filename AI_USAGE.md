@@ -2,9 +2,9 @@
 
 | Tool | Used for | Human review |
 |---|---|---|
-| Claude (Anthropic) | Planning documents before the event (no code); from 14/11/2026 04:15 (after the organizers confirmed work could start; the confirmation was given orally and heard by all participants, no written trace): data analysis, synthetic generator, rules engine, tests, documentation drafts | Every change is reviewed by a team member before merge (checklist V10) |
+| Claude (Anthropic) | Planning documents before the event (no code); from 14/11/2026 04:15 (after the organizers confirmed work could start; the confirmation was given orally and heard by all participants, no written trace): data analysis, synthetic generator, rules engine, tests, documentation drafts | Review status: partial. Code is covered by automated tests; the team lead reads the final state before submission (checklist V10, tracked in docs/SOUMISSION_CRITERES.md) |
 | ChatGPT (OpenAI), Gemini (Google) | Research notes and review of drafts. The project idea and the solution concept came from the team. | Facts re-checked against the cited sources |
-| Cursor (models selected by hand: Claude, GPT or Gemini; one agent session on 14/11/2026 ran on Grok 4.7 (xAI) and is declared here) | Code assistance during the event: tests, UI checks, consistency checks | Pull-request review; nothing is merged without it |
+| Cursor (models selected by hand: Claude, GPT or Gemini; one agent session on 14/11/2026 ran on Grok 4.7 (xAI) and is declared here) | Code assistance during the event: tests, UI checks, consistency checks | Automated tests before every merge; human read-through of the final state before submission |
 | Grok 4.7 (xAI) via Cursor, read-only mode | Review of the engine code (audit) on branch m2-audit; only Grok was usable on the free Cursor plan | Output cross-checked line by line against the code and tests; the tool modified no file |
 
 Rules we followed: no personal data, names or phone numbers in any prompt; no model of Chinese origin (local organizer rule); no AI-generated code or data was reused from before the event.

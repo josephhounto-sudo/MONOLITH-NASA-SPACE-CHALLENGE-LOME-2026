@@ -31,7 +31,7 @@ Five dimensions: **Body, Attention, Morale, Mission, Habitat**. Four states: **N
 ## Data
 | Data | Origin | Use |
 |---|---|---|
-| ISS cabin CO2, temperature, humidity, radiation — NASA OSDR **Environmental Data App**, mission RR-1 (2014) | **Real, NASA** | Habitat **context** and data-quality checks only: the screen shows Habitat as "Context only", it is not scored (a real run of constant CO2 values, 2,646 ppm for 153 h in the raw 5-minute series, is flagged ARTIFACT; origin unknown: sensor or data fill) |
+| ISS cabin CO2, temperature, humidity, radiation — NASA OSDR **Environmental Data App**, mission RR-1 (2014) | **Real, NASA** | Habitat **context** and data-quality checks only: the Habitat panel plots the real CO2 series against the NASA-STD-3001 requirement (3 mmHg, converted from ppm at 760 mmHg, approximate) with quality flags, and compares 14 missions; Habitat is "Context only" and is not scored (a real run of constant CO2 values, 2,646 ppm for 153 h in the raw 5-minute series, is flagged ARTIFACT; origin unknown: sensor or data fill) |
 | PhysioNet Wearable Device Dataset v1.0.1 (Empatica E4, 33 valid sessions) | Real, open (ODC-By) | Wrist-sensor noise model (5.1 bpm) and beat coverage (~55 %) |
 | Crew physiology, sleep, PVT-B, check-ins | **Synthetic**, labelled, generator `csync-synth-0.1`, seed 42 | The story; the demo uses only synthetic crew data |
 
@@ -65,9 +65,9 @@ streamlit run csync/ui/app.py       # the interface
 | Part | Status |
 |---|---|
 | Contracts v0 | drafted, to be validated |
-| Rules engine, resume gate, send queue | implemented; 153 automated tests (software stability, not clinical validation) |
+| Rules engine, resume gate, send queue | implemented; 174 automated tests (software stability, not clinical validation) |
 | Generator + story data | implemented |
-| Decision capsule, UI screens, procedure files | implemented; the three screens (days 7, 9, 10) are covered by automated screen tests (body map: static mock-up, not in the app) |
+| Decision capsule, UI screens, procedure files | implemented; the three screens (days 7, 9, 10) are covered by automated screen tests (the body map has eight selectable zones in the app; the Habitat panel shows real NASA ISS data with quality control) |
 
 ## Team & AI use
 Team MONOLITH, five members (M1-M5). AI tools were used and are declared in [`AI_USAGE.md`](AI_USAGE.md). License: [MIT](LICENSE).

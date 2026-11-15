@@ -229,10 +229,28 @@ def habitat_panel():
         ppm = float(run["longest_run_ppm"])
         st.markdown(UI["habitat_flag"].format(ppm=ppm, mm=habitat.ppm_to_mmhg(ppm), hours=float(run["longest_run_h"])))
     m = habitat.missions()
+    ms = habitat.rr1_measurements()
+    count = lambda q: sum(1 for x in ms if x["quality"] == q)  # noqa: E731
+    st.caption(UI["habitat_measurements"].format(n=len(ms), ok=count("OK"), art=count("ARTIFACT"), miss=count("MISSING")))
+    with st.expander(UI["habitat_more_title"]):
+        hourly = df.set_index("hour_utc")
+        st.line_chart(hourly[["temp_c"]].rename(columns={"temp_c": UI["habitat_temp"]}), color=[theme["interactive"]])
+        st.line_chart(hourly[["rh_pct"]].rename(columns={"rh_pct": UI["habitat_rh"]}), color=[theme["interactive"]])
+        rad = habitat.rr1_radiation()
+        st.bar_chart(rad.set_index("date")[["total_mgy_day"]].rename(columns={"total_mgy_day": UI["habitat_rad"]}),
+                     color=[theme["interactive"]])
+        st.caption(UI["habitat_rad_note"].format(acc=float(rad["accumulated_mgy"].iloc[-1])))
     st.markdown(f"**{UI['habitat_table_title']}**")
     st.dataframe(m[list(UI["habitat_columns"])].rename(columns=UI["habitat_columns"]), hide_index=True)
     st.caption(UI["habitat_table_note"].format(n=len(m), k=int((m["artifact_runs_ge_1h"] > 0).sum())))
     st.caption(UI["habitat_credit"])
+
+
+def provenance_table():
+    st.divider()
+    st.subheader(UI["prov_title"])
+    cols = UI["prov_cols"]
+    st.dataframe([{cols[k]: row[k] for k in cols} for row in UI["prov_rows"]], hide_index=True)
 
 
 # ------------------------------------------------------------------ page
@@ -244,19 +262,28 @@ if fallback:
 day = st.slider(UI["day_slider"], 1, 10, 7)
 today = [c for c in caps if c.get("day") == day]
 daily = next((c for c in today if c.get("capsule_type", "daily") == "daily"), None)
+priority = [c for c in today if c.get("capsule_type") in ("emergency", "resume") and is_valid(c)
+            and (c.get("ui_hint") == "ACTION" or c.get("capsule_type") == "resume")]
+
+
+def action_blocks():
+    for c in priority:
+        if c.get("capsule_type") == "emergency":
+            action_screen(c)
+        else:
+            resume_screen(c)
+        st.divider()
+
+
+if priority:
+    st.info(UI["priority_notice"])
+    action_blocks()   # adaptive order: an open procedure comes before the daily cards
 if daily is None:
     st.error(UI["no_capsule"])
 elif not is_valid(daily):
     st.error(UI["invalid_capsule"])
 else:
     nominal(daily, day)
-for c in today:
-    if c.get("capsule_type") == "emergency" and is_valid(c) and c["ui_hint"] == "ACTION":
-        st.divider()
-        action_screen(c)
-    elif c.get("capsule_type") == "resume" and is_valid(c):
-        st.divider()
-        resume_screen(c)
 _zone = None
 for _c in today:
     if _c.get("capsule_type") == "emergency":
@@ -264,3 +291,4 @@ for _c in today:
         _zone = _m.group(1) if _m else None
 body_map(_zone, day)
 habitat_panel()
+provenance_table()

@@ -74,7 +74,47 @@
     "body_map_indicators": "Indicators",
     "body_map_no_ref": "No NASA in-flight reference",
     "body_map_symptom": "Zone of the reported symptom (day {day}): {zone}.",
-    "body_map_alt": "Neutral body map with 8 zones. Selected zone: {zone}. Dashed outlines are zones not measured or context only."
+    "body_map_alt": "Neutral body map with 8 zones. Selected zone: {zone}. Dashed outlines are zones not measured or context only.",
+    "habitat_measurements": "Quality control before any rule: {n} measurements built from the NASA series — {ok} OK, {art} ARTIFACT, {miss} MISSING — each checked against the Measurement contract.",
+    "habitat_more_title": "Other RR-1 cabin telemetry: temperature, humidity, radiation dose",
+    "habitat_temp": "Cabin temperature, hourly mean (°C)",
+    "habitat_rh": "Relative humidity, hourly mean (%)",
+    "habitat_rad": "Radiation dose per day (mGy)",
+    "habitat_rad_note": "Daily dose, mission RR-1 (39 days); cumulative {acc:.2f} mGy. Cabin dosimetry for context: it is not a personal dose, and C-Sync does not measure a personal radiation dose.",
+    "prov_title": "Where every number comes from",
+    "prov_cols": {
+      "data": "Data",
+      "kind": "Real or synthetic",
+      "use": "Used for",
+      "limit": "Limit"
+    },
+    "priority_notice": "Open procedure today: the guided action is shown first.",
+    "prov_rows": [
+      {
+        "data": "NASA OSDR Environmental Data App, ISS cabin, 14 missions (RR-1 … RR-28)",
+        "kind": "Real, NASA",
+        "use": "Habitat context, data-quality checks, CO2 against the NASA-STD-3001 requirement",
+        "limit": "Rodent-research facility sensors; not a crew; origin of constant values unknown"
+      },
+      {
+        "data": "PhysioNet wearable dataset v1.0.1 (Empatica E4, ODC-By)",
+        "kind": "Real, open",
+        "use": "Wrist-sensor noise (5.1 bpm) and beat coverage (about 55 %) in the simulator",
+        "limit": "Statistics from the first 500 lines of each file only"
+      },
+      {
+        "data": "NASA Human Research Program risk pages",
+        "kind": "Real, NASA text",
+        "use": "Why each measure matters (sources shown on every zone)",
+        "limit": "Text sources, not data"
+      },
+      {
+        "data": "Crew physiology, sleep, reaction time, check-ins",
+        "kind": "Synthetic (csync-synth-0.1, seed 42)",
+        "use": "The demo story and every detection result",
+        "limit": "No real crew; nothing is clinically validated"
+      }
+    ]
   },
   "indicator_names": {
     "PH01": "heart-rate",

@@ -8,6 +8,7 @@ are not documented in the dataset).
 """
 from __future__ import annotations
 
+import functools
 import os
 
 import pandas as pd
@@ -31,6 +32,22 @@ def rr1_hourly() -> pd.DataFrame:
     df = pd.read_csv(os.path.join(REAL, "habitat_rr1_hourly.csv"), parse_dates=["hour_utc"])
     df["co2_mmhg"] = df["co2_ppm"].map(ppm_to_mmhg)
     return df
+
+
+@functools.lru_cache(maxsize=1)
+def _rr1_measurements() -> tuple:
+    from csync.adapters import eda_measurements
+    df = pd.read_csv(os.path.join(REAL, "habitat_rr1_hourly.csv"))
+    return tuple(eda_measurements(df["hour_utc"], df["co2_ppm"], "co2_ppm", "RR-1"))
+
+
+def rr1_measurements() -> list[dict]:
+    """RR-1 CO2 as validated Measurement records, quality control applied (csync.adapters)."""
+    return [dict(m) for m in _rr1_measurements()]
+
+
+def rr1_radiation() -> pd.DataFrame:
+    return pd.read_csv(os.path.join(REAL, "eda_rr1_radiation_daily.csv"), parse_dates=["date"])
 
 
 def missions() -> pd.DataFrame:
