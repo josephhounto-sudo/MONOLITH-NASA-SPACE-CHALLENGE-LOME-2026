@@ -18,7 +18,7 @@ Dimanche 15/11/2026 · 5 minutes, sans questions du jury · diapos en anglais, p
 | Dérives progressives repérées | 139 sur 150 (93 %) | idem |
 | Changements brusques repérés | 86 sur 150 (57 %) : la limite connue | idem |
 | Données NASA réelles | 759 525 points, 20 missions (cabine ISS) | onglet Evidence at scale |
-| Tests automatiques | 205 | `python -m pytest -q` |
+| Tests automatiques | 211 | `python -m pytest -q` |
 
 **Nouveautés du 15/11 à connaître (tout est dans l'app et les diapos) :**
 
@@ -87,7 +87,11 @@ Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et
 
 
 
-# 4. Démo en direct (diapo 5)
+# 4. Démo en direct (diapo 5) — ou sans démo
+
+**Sans démo en direct :** ne touchez pas à l'ordinateur. Montrez la diapo (capture de l'app) et dites le même texte, en remplaçant « Je demande la reprise » par « Quand je demande la reprise, voici ce que l'écran affiche ». Le tag de la diapo dit « Depuis l'app » : il reste vrai. Durée identique.
+
+**Avec démo :**
 
 1. L'interface est déjà ouverte au jour 10. 2. Clic sur **Request resume** : la décision est REFUSE_RESUME. 3. Silence de 2 secondes. 4. Clic sur **Commander override** : la ligne du journal dit que le forçage est enregistré et que la décision ne change pas. 5. **Si rien ne s'affiche en 10 secondes** : passer à la capture de la diapo et dire le même texte.
 
@@ -98,7 +102,7 @@ Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et
 ###  Réponses validées (prêtes à dire)
 1. Différence : « D'autres outils mesurent ou conseillent. Nous ajoutons la dérive par rapport à la référence personnelle, et le refus de reprise si la donnée est périmée. Nous complétons, nous ne remplaçons pas. »
 2. Coût : « Logiciel sur ordinateur ou tablette. Nous n'avons pas chiffré, c'est la prochaine étape. » (aucun chiffre en euros)
-3. Utilisateurs réels : « Pas encore. 205 tests automatiques et une histoire simulée de 10 jours. Aucune validation clinique. »
+3. Utilisateurs réels : « Pas encore. 211 tests automatiques et une histoire simulée de 10 jours. Aucune validation clinique. »
 4. Données : « Équipage simulé, étiqueté synthétique partout, et télémétrie de cabine NASA pour le contrôle qualité. Aucune donnée de santé réelle. »
 5. Impact : « Aujourd'hui : 0 faux déclenchement sur 300 équipages simulés tenus à l'écart, 93 % des dérives lentes repérées, 57 % des sauts brusques. Réglé sur des scénarios simulés : pas un résultat clinique. »
 6. Hors ligne : « Le calcul est local, les comptes rendus attendent en file. Sans électricité, rien ne fonctionne ; procédures imprimées en suite. »
@@ -136,7 +140,7 @@ Ambition unique proposée (M1 confirme) : « Si nous gagnons, nous faisons relir
 | Données NASA réelles retraitées à l'ouverture : 759 525 points, 20 missions (télémétrie de cabine, pas de physiologie) | onglet « Evidence at scale », `csync/scale.py` |
 | Valeur de CO2 constante ≈ 153 h (RR-1) signalée ARTIFACT | `docs/PREMORTEM_14-11.md` |
 | App manipulable (saisie des jours 6–7, même règle, note SBAR) | onglet « Try it yourself », `csync/live.py` |
-| 205 tests automatiques verts | `python -m pytest -q` |
+| 211 tests automatiques verts | `python -m pytest -q` |
 | Silhouette cliquable en volume (SVG), verre v2, glyphes d'état | `csync/silhouette.py`, `csync/ui/style.py` |
 
 
@@ -147,3 +151,15 @@ Ambition unique proposée (M1 confirme) : « Si nous gagnons, nous faisons relir
 1. Relecture par des experts en médecine spatiale · 2. Essai sur données d'analogue · 3. Capteurs réels · 4. Référence avant mission · 5. Protection des données de santé · 6. Procédures imprimées · 7. Coût d'intégration à chiffrer.
 
 
+
+
+# 7. Nouveaux résultats de la tâche lourde de M2 (15/11, à connaître)
+
+| Sujet | Résultat | Ce qu'on peut dire |
+|---|---|---|
+| Sensibilité de la règle (graines neuves) | Réglage livré : faux déclenchements **2,0 % (4/200)**, dérives 92,7 %, sauts 56,7 %. Seuil 1,0 : faux 14,5 %. Seuil 2,5 : dérives 58 %. Un seul jour : faux 27,5 %. | « Le seuil est un compromis : plus bas il déclenche trop, plus haut il rate les dérives. » |
+| **Attention aux deux chiffres de faux déclenchements** | **0/300** sur le jeu tenu à l'écart (diapo 6) ; **4/200 (2,0 %)** sur le jeu de sensibilité. Intervalles 0–1,3 % et 0,8–5,0 % : compatibles. | Dire « de 0 à 2 % selon les équipages simulés », jamais « zéro faux déclenchement » sans le jeu. |
+| Référence fatiguée | Si l'astronaute est déjà fatigué pendant les jours 1–5, une part des détections disparaît : 15,8 % (0,5 ET), 37,0 % (1,0 ET), 63,7 % (1,5 ET). Piste « référence avant mission » : non adoptée. | Limite réelle, déjà dite en réponse 12. |
+| Essai sur données ouvertes (PMData) | 16 personnes, 2 343 jours : l'adaptateur lit le format, la règle tourne ; Attention et Moral restent Inconnus faute de mesure. Aucune procédure déclenchée. | « Nous avons essayé sur un jeu ouvert réel : la chaîne fonctionne, ce n'est pas une validation. » Licence : usage recherche et enseignement. |
+| Dossier de relecture | `docs/REVIEW_PACKET.md` : 3 règles, 15 questions pour M4 ou un spécialiste. Signature **M4 : en attente**. | « Relecture médicale préparée, pas encore faite. » |
+| Français | `csync/config/strings_fr.json` complet, même clés que l'anglais. | L'app FR n'est pas encore branchée dans l'interface. |

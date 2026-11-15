@@ -11,6 +11,8 @@
 ## Other data
 - Hongn A., Bosch F., Prado L., Bonomini P. (2025). *Wearable Device Dataset from Induced Stress and Structured Exercise Sessions* (v1.0.1). PhysioNet. https://doi.org/10.13026/he0v-tf17 — ODC-By 1.0. Also: Hongn et al. (2025), *Scientific Data* 12(1). And Pollard T. et al. (2026), PhysioNet, *Nature Health*.
 
+- Thambawita V. et al. (2020). *PMData: a sports logging dataset* (OSF, https://osf.io/vx4bk/), 16 people, read 15/11/2026. Licence: the paper states CC BY-NC 4.0 (research and teaching), the OSF API shows CC BY 4.0; both are recorded. Used only for the analog-data format trial (`docs/ANALOG_TRIAL.md`), file fingerprints in `data/real/raw/SHA256SUMS.txt`; not used in the demo.
+
 ## Methods
 - Basner M., Mollicone D., Dinges D. F. (2011). Validity and sensitivity of a brief psychomotor vigilance test (PVT-B). *Acta Astronautica* 69, 949-959 — 3-minute PVT, lapse ≥ 355 ms.
 

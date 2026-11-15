@@ -24,10 +24,10 @@ Rôles (décision D6, 14/11) : orateur A = M1 (diapos 1, 2, 3, 6, 7 = 190 s) ; o
 **Transition :** « Le lendemain, l'équipage veut reprendre le travail. »
 **Si on est en retard : coupe** la phrase « La glycémie est marquée sans référence NASA en vol. » (−9 mots, environ 4 s).
 
-## Diapo 5 · 2:55 → 3:45 (50 s) · orateur B · DÉMO EN DIRECT
+## Diapo 5 · 2:55 → 3:45 (50 s) · orateur B · DÉMO EN DIRECT (ou capture, voir plus bas)
 Manipulation : interface déjà ouverte au jour 10. Appui sur « Request resume », puis sur « Commander override ».
 « Troisième acte, jour dix, en direct. Je demande la reprise. Refusée. [2 s de silence] Le commandant force la reprise. Le forçage est consigné dans le journal, mais la décision ne change pas : la dernière fréquence cardiaque date de quatorze minutes, la limite est de dix. Le système donne la raison en clair, sur l'écran. Une donnée périmée est signalée comme expirée, pas comme normale. Dans nos règles, un forçage seul ne suffit pas à reprendre. »
-Démo en panne : si rien ne s'affiche en 10 secondes, passer à la capture C5 et dire le même texte.
+Démo en panne **ou pas de démo du tout** : ne pas toucher à l'ordinateur, montrer la capture de la diapo et dire le même texte, en remplaçant « Je demande la reprise » par « Quand je demande la reprise, voici ce que l'écran affiche ». Le tag de la diapo dit « Depuis l'app », il reste vrai dans les deux cas. Durée identique.
 **Transition :** retour au clavier de l'orateur A.
 
 ## Diapo 6 · 3:45 → 4:25 (40 s) · orateur A

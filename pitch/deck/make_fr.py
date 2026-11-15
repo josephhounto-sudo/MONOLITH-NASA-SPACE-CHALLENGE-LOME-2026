@@ -28,7 +28,7 @@ MAP = [
  ("Guided measurements, one at a time: how to take each", "Mesures guidées, une à la fois : comment les prendre"),
  ("Report queued, delivered once", "Rapport en file, livré une seule fois"),
  ("Guided emergency, day 9", "Urgence guidée, jour 9"), ("Report queue, link down then restored", "File d'envoi : liaison coupée puis rétablie"),
- ("LIVE DEMO", "DÉMO EN DIRECT"), ("Act 3 ·", "Acte 3 ·"), ("Return (day 10)", "Reprise (jour 10)"),
+ ("FROM THE APP", "DEPUIS L'APP"), ("Act 3 ·", "Acte 3 ·"), ("Return (day 10)", "Reprise (jour 10)"),
  ("Heart rate 14 minutes old; limit 10 minutes", "Fréquence cardiaque vieille de 14 min ; limite 10 min"),
  ("Commander override: logged. Resume: refused.", "Forçage du commandant : consigné. Reprise : refusée."),
  ("Stale data is flagged as expired", "Donnée périmée : signalée expirée"), ("Fallback if the live demo fails", "Repli si la démo en direct échoue"),

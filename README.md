@@ -70,7 +70,7 @@ streamlit run csync/ui/app.py       # the interface
 | Part | Status |
 |---|---|
 | Contracts v0 | drafted, to be validated |
-| Rules engine, resume gate, send queue | implemented; 205 automated tests (software stability, not clinical validation) |
+| Rules engine, resume gate, send queue | implemented; 211 automated tests (software stability, not clinical validation) |
 | Generator + story data | implemented |
 | Decision capsule, UI screens, procedure files | implemented; the three screens (days 7, 9, 10) are covered by automated screen tests (the body map has eight selectable zones in the app; the Habitat panel shows real NASA ISS data with quality control) |
 

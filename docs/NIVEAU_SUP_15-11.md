@@ -15,6 +15,7 @@ FAIT PAR L'IA — À VALIDER PAR M1. Critères annoncés : Impact, Créativité,
 |---|---|
 | « Données synthétiques : donc rien de prouvé » | Oui, et c'est écrit sur chaque capture. Le chiffre mesure le comportement de la règle, pas une validité clinique. Suite : revue d'experts, puis essai sur données d'isolement simulé. |
 | « 1,5 écart-type, pourquoi ? » | Seuil réglé sur graines 1000–7149, puis vérifié sans réglage sur 30000–37149 : 0/300 faux, 92,7 % et 57,3 %. Choix arbitraire assumé, borne d'incertitude publiée (`docs/VALIDATION_HOLDOUT.md`). |
+| « Zéro faux déclenchement ? » | 0/300 sur un jeu, 4/200 (2,0 %) sur un autre : « de 0 à 2 % selon les équipages simulés ». |
 | « Votre point faible ? » | Les changements brusques : 57,3 %, parce que la règle attend deux jours. C'est dit sur la diapo 6 et dans le dépôt. |
 | « Que fait-il pour une douleur thoracique ? » | Il ouvre une procédure fixe, guide les mesures une à une avec leur source, met le rapport en file. Il ne propose ni traitement ni dose ; il renvoie à la liste de contrôle médicale de bord et à l'officier médical. |
 | « Les fiches sont validées ? » | Non : non validées par un médecin (relecture M4 en attente). Ne jamais dire « validé cliniquement ». |
@@ -30,4 +31,4 @@ FAIT PAR L'IA — À VALIDER PAR M1. Critères annoncés : Impact, Créativité,
 (à remplir par M1 : date, personne, réponses.)
 
 ## 5. Contrôles faits par l'IA
-Deck EN/FR : tests verts ; captures régénérées depuis l'app courante (C1–C6) ; glyphes identiques app/deck ; 205 tests ; axe 0 violation (à relancer après ce commit : `/tmp/axe_tabs.py` n'est pas dans le dépôt).
+Deck EN/FR : tests verts ; captures régénérées depuis l'app courante (C1–C6) ; glyphes identiques app/deck ; 211 tests ; axe 0 violation (à relancer après ce commit : `/tmp/axe_tabs.py` n'est pas dans le dépôt).

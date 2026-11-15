@@ -4,7 +4,7 @@ FAIT PAR L'IA — À VALIDER PAR M1. Rien n'a été soumis. Règles : `docs/PROG
 ## Contenu du dossier
 | Pièce | Fichier | Exigence officielle | État |
 |---|---|---|---|
-| 8 champs du formulaire, textes finaux en anglais | `submission/FORM_FIELDS_EN.md` | nom, résumé, lien démo, lien projet, détails, usage de l'IA, données NASA, références | prêt, chiffres alignés sur le jeu tenu à l'écart (0/300, 92,7 %, 57,3 %) et 205 tests |
+| 8 champs du formulaire, textes finaux en anglais | `submission/FORM_FIELDS_EN.md` | nom, résumé, lien démo, lien projet, détails, usage de l'IA, données NASA, références | prêt, chiffres alignés sur le jeu tenu à l'écart (0/300, 92,7 %, 57,3 %) et 211 tests |
 | Démo : 7 diapos en anglais (ou vidéo ≤ 30 s) | `submission/C-Sync_pitch_7_slides.pdf` (copie de `pitch/deck/`) | 7 diapos au plus, titre compris, anglais, lien ouvert sans compte | prêt, 7 diapos, test du deck vert |
 | Secours PowerPoint | `submission/C-Sync_pitch_SECOURS_images.pptx` | — | images seulement |
 | Dépôt public | https://github.com/josephhounto-sudo/MONOLITH-NASA-SPACE-CHALLENGE-LOME-2026 | public, sans mot de passe | public, `main` à jour |
@@ -29,7 +29,7 @@ FAIT PAR L'IA — À VALIDER PAR M1. Rien n'a été soumis. Règles : `docs/PROG
 - **Images de personnes de moins de 18 ans** : aucune dans le deck ni le dépôt.
 
 ## Contrôles faits le 15/11 (reproductibles)
-`python -m pytest -q` : 205 passés · `python scripts/check_consistency.py` : 0 erreur · deck : `NODE_PATH=/tmp/node_modules node pitch/tests/test_deck.js pitch/deck/deck_final.html /tmp/d.txt` : tous passent · axe : 0 violation sur les 8 onglets de l'app · liens démo et dépôt : HTTP 200 sans connexion (vérifier de nouveau après le dernier push).
+`python -m pytest -q` : 211 passés · `python scripts/check_consistency.py` : 0 erreur · deck : `NODE_PATH=/tmp/node_modules node pitch/tests/test_deck.js pitch/deck/deck_final.html /tmp/d.txt` : tous passent · axe : 0 violation sur les 8 onglets de l'app · liens démo et dépôt : HTTP 200 sans connexion (vérifier de nouveau après le dernier push).
 
 ## Après le clic
 Marquer `submitted` avec l'heure dans `docs/MAJ_LOG.md`. Plusieurs soumissions sont possibles jusqu'à 23:59 : si on corrige quelque chose, soumettre de nouveau, seule la dernière compte.
