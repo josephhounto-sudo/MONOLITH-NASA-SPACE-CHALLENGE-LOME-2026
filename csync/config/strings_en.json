@@ -181,7 +181,30 @@
         "status": "Context only — not scored"
       }
     ],
-    "hazard_source": "Source: NASA Human Research Program, 5 Hazards of Human Spaceflight, https://www.nasa.gov/hrp/hazards/ ; delay: NASA ASCEND 2022, NTRS 20220013418."
+    "hazard_source": "Source: NASA Human Research Program, 5 Hazards of Human Spaceflight, https://www.nasa.gov/hrp/hazards/ ; delay: NASA ASCEND 2022, NTRS 20220013418.",
+    "cm_title": "What NASA already documents as countermeasures — reference, not a prescription",
+    "cm_intro": "C-Sync does not choose, dose or schedule any countermeasure. It points to the onboard procedure and leaves the decision to the crew medical officer and the flight surgeon. The rows below are what NASA publishes, with the source.",
+    "cm_cols": {
+      "area": "Area",
+      "nasa": "What NASA documents",
+      "csync": "What C-Sync does",
+      "source": "Source"
+    },
+    "cm_rows": [
+      {
+        "area": "Exercise (aerobic and resistive)",
+        "nasa": "On the International Space Station, exercise with a treadmill, a cycle ergometer and a resistive device is used to protect muscle strength, aerobic fitness, bone density and sensorimotor performance. NASA is now testing whether a treadmill is still needed (study in progress, no results yet).",
+        "csync": "Does not measure exercise. No recommendation.",
+        "source": "Varanoske et al., NASA, NTRS 20240016101 (2025)"
+      },
+      {
+        "area": "Sleep and circadian rhythm",
+        "nasa": "NASA lists sleep loss, circadian desynchronization and work overload as a risk. An in-flight lighting schedule exists on the Station for circadian adaptation. NASA states that validated, individualised countermeasures are still a research gap.",
+        "csync": "Reported sleep (PH09) below the personal baseline for 2 days opens procedure PROC-FATIGUE-01 and refers to the crew medical officer.",
+        "source": "NASA Human Research Roadmap, risk 100; gap Sleep-102; task 1453"
+      }
+    ],
+    "cm_source": "Links: https://ntrs.nasa.gov/citations/20240016101 ; https://humanresearchroadmap.nasa.gov/Risks/risk.aspx?i=100 ; https://humanresearchroadmap.nasa.gov/gaps/gap.aspx?i=737 ; https://humanresearchroadmap.nasa.gov/tasks/task.aspx?i=1453"
   },
   "indicator_names": {
     "PH01": "heart-rate",

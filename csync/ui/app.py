@@ -259,6 +259,15 @@ def hazards_panel():
     st.caption(UI["hazard_source"])
 
 
+def countermeasures_panel():
+    st.divider()
+    st.subheader(UI["cm_title"])
+    st.markdown(UI["cm_intro"])
+    cols = UI["cm_cols"]
+    st.dataframe([{cols[k]: r[k] for k in cols} for r in UI["cm_rows"]], hide_index=True)
+    st.caption(UI["cm_source"])
+
+
 def body_map(symptom_zone=None, day=None):
     """Body map section: 8 selectable zones (pills) next to a neutral figure; text comes from pitch/silhouette/fiches.json."""
     st.divider()
@@ -384,5 +393,6 @@ for _c in today:
 trends_panel(day)
 body_map(_zone, day)
 hazards_panel()
+countermeasures_panel()
 habitat_panel()
 provenance_table()

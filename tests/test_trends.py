@@ -56,3 +56,14 @@ def test_app_shows_chart_up_to_the_chosen_day_only():
     assert "Flagged days up to day 7: 7." in md
     at.slider[0].set_value(4).run()
     assert "No flagged day up to day 4." in " ".join(m.value for m in at.markdown)
+
+
+def test_countermeasures_panel_cites_sources_and_gives_no_advice():
+    at = AppTest.from_file(ROOT + "/csync/ui/app.py", default_timeout=30).run()
+    assert not at.exception
+    assert any("countermeasures" in s.value for s in at.subheader)
+    rows = json.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]["cm_rows"]
+    assert all(r["source"] and "NASA" in r["source"] or "NTRS" in r["source"] for r in rows)
+    text = " ".join(" ".join(r.values()) for r in rows)
+    assert "does not" in rows[0]["csync"].lower() or "no recommendation" in rows[0]["csync"].lower()
+    assert banned_hits(text) == []

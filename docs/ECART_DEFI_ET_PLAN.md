@@ -9,10 +9,10 @@
 | Graphiques dynamiques | Courbes par indicateur jusqu'au jour choisi, base, seuil, jours signalés | Données synthétiques ; 8 indicateurs seulement |
 | Les 5 dangers NASA | Tableau des 5 dangers avec statut | Seuls CO2/température/humidité/radiation (habitat) sont mesurés ; les autres affichés « non mesuré » |
 | Données NASA réelles | 14 missions habitat, CO2 en mmHg vs exigence 3 mmHg, qualité, provenance | Contexte habitat uniquement, pas de physiologie équipage |
-| **Conseils de traitement / amélioration de la santé** | **Aucun à ce jour. Position NON tranchée par M1** (je l’avais écrite comme acquise, à tort) : le moteur renvoie vers les procédures NASA existantes + décision humaine | **Trou principal.** À assumer ou à combler par des procédures citées HRP/NASA, jamais inventées |
+| **Conseils de traitement / amélioration de la santé** | **Décision M1 (15/11 08:15) : option (b).** Panneau « contre-mesures NASA documentées » (exercice, sommeil/rythme circadien) avec sources NTRS 20240016101 et Human Research Roadmap ; aucune dose ni prescription ; C-Sync renvoie vers la procédure existante et le médecin de bord | Reste limité : seulement 2 domaines sourcés ; NASA dit elle-même que les contre-mesures sommeil validées et individualisées sont une lacune de recherche. À dire tel quel au pitch |
 | Gamification, variantes d'environnement | Non faits | Hors périmètre avant 15:00 ; à dire en « suite » |
 
-Verdict : C-Sync répond bien à « détecter tôt, hors ligne, avec décision humaine » ; il ne répond pas à « guider un traitement ». Le dire dans le pitch évite que le jury le découvre.
+Verdict : C-Sync répond bien à « détecter tôt, hors ligne, avec décision humaine » ; pour « guider un traitement » il montre ce que la NASA documente, sans rien prescrire. Le dire dans le pitch évite que le jury le découvre.
 
 ## 2. Pack Cursor (tâches à fichiers disjoints, à coller une par session)
 Je n'ai pas pu piloter Cursor depuis ici (pas d'accès à ton écran). Chaque tâche : branche `cursor-<n>` depuis `integration-nasa-design`, ne toucher que les fichiers listés, lancer `python scripts/build_context.py`, `python scripts/check_consistency.py`, `pytest -q`, pousser sur la branche, jamais sur main.
