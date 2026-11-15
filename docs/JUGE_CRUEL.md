@@ -32,3 +32,15 @@ Moteur honnête et bien testé, **interface nue et données NASA presque invisib
 - Un médecin de vol ou un chercheur du domaine qui lit l'écran et la règle (aucun contact).
 - Un jeu de données humain avec étiquettes (inexistant en accès ouvert d'après la recherche NLSP).
 - Le test des 5 secondes avec 3 à 5 personnes.
+
+## Seconde passe, même grille (15/11/2026 08:05 UTC, branche `nasa-data`)
+| Critère | Avant | Après | Ce qui a changé | Ce qui plafonne la note |
+|---|---|---|---|---|
+| Validité | 2,5 | **3,0** | données NASA réelles à l'écran avec repère officiel, contrôle qualité branché, 14 missions recalculées depuis le brut, tableau de provenance, README et AI_USAGE exacts | résultats toujours sur équipage simulé, seuil réglé sur les mêmes scénarios |
+| Pertinence | 3,0 | **3,5** | carte du corps dans l'application, action d'abord quand une procédure est ouverte | 3 dimensions sur 5 évaluées ; pas d'avis de professionnel |
+| Impact | 2,5 | **2,5** | rien | aucune preuve d'usage réel |
+| Créativité | 3,0 | **3,0** | rien | l'écran ne met pas les idées en valeur |
+| Présentation | 2,0 | **2,5** | thème sombre, 0 violation d'accessibilité | pas de design abouti, pas de noms, diapos à recapturer |
+| **Moyenne** | **2,6** | **2,9** | | |
+
+Le jury ne « choisit » pas une équipe à 2,9 sur 5 : il le fait pour l'équipe dont l'écran se comprend en 5 secondes et dont une preuve extérieure existe. Les deux leviers restants ne sont pas du code : le **design** (en cours ailleurs) et **une voix extérieure** (médecin de vol, chercheur, ou 3 à 5 personnes au test des 5 secondes). Je ne peux pas simuler l'une ni l'autre honnêtement.
