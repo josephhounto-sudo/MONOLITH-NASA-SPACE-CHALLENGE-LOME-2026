@@ -1,0 +1,115 @@
+{
+  "seeds": "65000-65149",
+  "n": 150,
+  "data": "SYNTHETIC",
+  "clean": {
+    "k": 146,
+    "n": 150,
+    "pct": 97.3,
+    "ci_lo": 93.3,
+    "ci_hi": 99.0
+  },
+  "bias": {
+    "0.5": {
+      "detected": {
+        "k": 123,
+        "n": 150,
+        "pct": 82.0,
+        "ci_lo": 75.1,
+        "ci_hi": 87.3
+      },
+      "missed_among_clean_detections": {
+        "k": 23,
+        "n": 146,
+        "pct": 15.8,
+        "ci_lo": 10.7,
+        "ci_hi": 22.5
+      }
+    },
+    "1.0": {
+      "detected": {
+        "k": 92,
+        "n": 150,
+        "pct": 61.3,
+        "ci_lo": 53.3,
+        "ci_hi": 68.8
+      },
+      "missed_among_clean_detections": {
+        "k": 54,
+        "n": 146,
+        "pct": 37.0,
+        "ci_lo": 29.6,
+        "ci_hi": 45.1
+      }
+    },
+    "1.5": {
+      "detected": {
+        "k": 53,
+        "n": 150,
+        "pct": 35.3,
+        "ci_lo": 28.1,
+        "ci_hi": 43.3
+      },
+      "missed_among_clean_detections": {
+        "k": 93,
+        "n": 146,
+        "pct": 63.7,
+        "ci_lo": 55.6,
+        "ci_hi": 71.1
+      }
+    }
+  },
+  "pre_mission_not_adopted": {
+    "0.5": {
+      "procedure_during_tired_window_days_6_to_10": {
+        "k": 1,
+        "n": 150,
+        "pct": 0.7,
+        "ci_lo": 0.1,
+        "ci_hi": 3.7
+      },
+      "procedure_during_injected_drift_days_11_to_15": {
+        "k": 146,
+        "n": 150,
+        "pct": 97.3,
+        "ci_lo": 93.3,
+        "ci_hi": 99.0
+      },
+      "adopted": false
+    },
+    "1.0": {
+      "procedure_during_tired_window_days_6_to_10": {
+        "k": 10,
+        "n": 150,
+        "pct": 6.7,
+        "ci_lo": 3.7,
+        "ci_hi": 11.8
+      },
+      "procedure_during_injected_drift_days_11_to_15": {
+        "k": 146,
+        "n": 150,
+        "pct": 97.3,
+        "ci_lo": 93.3,
+        "ci_hi": 99.0
+      },
+      "adopted": false
+    },
+    "1.5": {
+      "procedure_during_tired_window_days_6_to_10": {
+        "k": 76,
+        "n": 150,
+        "pct": 50.7,
+        "ci_lo": 42.7,
+        "ci_hi": 58.6
+      },
+      "procedure_during_injected_drift_days_11_to_15": {
+        "k": 146,
+        "n": 150,
+        "pct": 97.3,
+        "ci_lo": 93.3,
+        "ci_hi": 99.0
+      },
+      "adopted": false
+    }
+  }
+}
