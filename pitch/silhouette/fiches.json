@@ -38,7 +38,7 @@
    "when": "Resting heart rate follows the drift rule (own baseline). A reported chest symptom opens PROC-EMERGENCY-01 at once (CRITICAL): guided measurements, report queued for the ground (flight surgeon), delivered once. To resume work, heart rate must be less than 10 minutes old.",
    "when_src": "data/scenarios/histoire.json; contracts/decision.schema.json (CRITICAL = flight surgeon); csync/gate.py",
    "not": "C-Sync does not interpret the symptom. No clinical threshold. No treatment or medication advice. Follow the onboard medical checklist and the crew medical officer.",
-   "in_app": "Coded: drift rule (PH01) and guided emergency (SY01). Zone selection in the app: not coded.",
+   "in_app": "Coded: drift rule (PH01) and guided emergency (SY01). Zone selection in the app: coded (body map section; the zone of a reported symptom is preselected).",
    "why_src": "https://www.nasa.gov/reference/risk-of-cardiovascular-adaptations/"
   },
   {

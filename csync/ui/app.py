@@ -9,6 +9,7 @@ Only exception allowed by card M3-3: the resume button calls csync.gate.resume_g
 import importlib.util
 import json
 import os
+import re
 import sys
 import tempfile
 from datetime import datetime
@@ -20,7 +21,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
-from csync import habitat  # noqa: E402
+from csync import habitat, silhouette  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
 theme = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
@@ -171,14 +172,45 @@ def resume_screen(cap):
         with st.expander(UI["technical_log"]):
             for r in reasons:
                 st.text(r)
-            for line in st.session_state["resume_log"]:
-                st.text(line)
     if st.session_state["resume_log"]:
         st.markdown(f"**{UI['log_title']}**")
         for line in st.session_state["resume_log"]:
             st.text(line)
     fixed_sentence()
     st.caption(strings["human_decision_pending"])
+
+
+def body_map(symptom_zone=None, day=None):
+    """Body map section: 8 selectable zones (pills) next to a neutral figure; text comes from pitch/silhouette/fiches.json."""
+    st.divider()
+    st.subheader(UI["body_map_title"])
+    st.markdown(UI["body_map_intro"])
+    sheets = silhouette.fiches()
+    labels = {rid: silhouette.label(rid) for rid in sheets}
+    preset = silhouette.region_for_zone(symptom_zone)
+    if preset:
+        st.markdown(UI["body_map_symptom"].format(day=day, zone=symptom_zone))
+    choice = st.pills(UI["body_map_select"], list(labels), format_func=labels.get, selection_mode="single",
+                      default=preset, key=f"body_zone_{day}")
+    left, right = st.columns([2, 3])
+    left.markdown(silhouette.markdown_image(choice, UI["body_map_alt"].format(zone=labels[choice] if choice else "none")))
+    if not choice:
+        return
+    r = sheets[choice]
+    state = silhouette.STATUS_STATE[r["status"]]
+    with right:
+        st.markdown(f"#### {r['title']}")
+        st.markdown(f"**{theme['state'][state]['icon']} {silhouette.STATUS_WORD[r['status']]}**")
+        st.markdown(f"**{UI['body_map_indicators']}:** " + "; ".join(r["indicators"]))
+        for key, lab in (("how", "body_map_how"), ("why", "body_map_why"), ("when", "body_map_when"), ("not", "body_map_not")):
+            text = r.get(key)
+            if key == "why" and not text:
+                text = UI["body_map_no_ref"] if r["status"] == "measured" else None
+            if text:
+                st.markdown(f"**{UI[lab]}:** {text}")
+        srcs = [s for s in (r.get("how_src"), r.get("when_src")) if s]
+        if srcs:
+            st.caption(f"{UI['body_map_source']}: " + " · ".join(srcs))
 
 
 def habitat_panel():
@@ -225,4 +257,10 @@ for c in today:
     elif c.get("capsule_type") == "resume" and is_valid(c):
         st.divider()
         resume_screen(c)
+_zone = None
+for _c in today:
+    if _c.get("capsule_type") == "emergency":
+        _m = re.search(r"zone: ([a-z]+)", _c.get("situation", ""))
+        _zone = _m.group(1) if _m else None
+body_map(_zone, day)
 habitat_panel()

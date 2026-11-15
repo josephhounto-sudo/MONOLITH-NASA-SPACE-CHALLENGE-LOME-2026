@@ -62,7 +62,19 @@
       "max_1h_mmhg": "Max hourly mean (mmHg)",
       "pct_hours_above_3mmhg": "Hours above 3 mmHg (%)",
       "sensor_zero_or_cap": "Zero or capped values"
-    }
+    },
+    "body_map_title": "Body map — what C-Sync measures, zone by zone",
+    "body_map_intro": "Select a zone to see how it is measured, why it matters (NASA Human Research Program source), and when C-Sync alerts. Zones that are not measured are shown as Unknown, never as Normal. The map is a neutral shape, not a person.",
+    "body_map_select": "Body zone",
+    "body_map_how": "How it is measured",
+    "body_map_why": "Why it matters",
+    "body_map_when": "When C-Sync alerts",
+    "body_map_not": "What C-Sync does not do",
+    "body_map_source": "Source",
+    "body_map_indicators": "Indicators",
+    "body_map_no_ref": "No NASA in-flight reference",
+    "body_map_symptom": "Zone of the reported symptom (day {day}): {zone}.",
+    "body_map_alt": "Neutral body map with 8 zones. Selected zone: {zone}. Dashed outlines are zones not measured or context only."
   },
   "indicator_names": {
     "PH01": "heart-rate",
