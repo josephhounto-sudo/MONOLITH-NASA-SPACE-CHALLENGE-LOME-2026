@@ -262,6 +262,27 @@ def _crew_board(day: int):
     return crew.board(day)
 
 
+def state_glyphs(b, labels):
+    """One ring per crew member, ordered by urgency; the state is the ring's shape (solid, double, dotted, dashed), colour only reinforces it."""
+    import base64
+    f = theme["fusion"]
+    sc = f["state_on_light"]
+    style = {"OPEN_PROCEDURE": (sc["DEGRADED"], "", 3, True), "DEGRADED": (sc["DEGRADED"], "", 3, False),
+             "WATCH": (sc["WATCH"], "6 4", 3, False), "UNKNOWN": (sc["UNKNOWN"], "2 5", 3, False), "NORMAL": (sc["NORMAL"], "", 3, False)}
+    g, alt = [], []
+    for i, r in enumerate(b.itertuples()):
+        col, dash, sw, double = style[r.action]
+        cx = 34 + i * 76
+        d = f' stroke-dasharray="{dash}"' if dash else ""
+        g.append(f'<circle cx="{cx}" cy="34" r="22" fill="none" stroke="{col}" stroke-width="{sw}"{d}/>')
+        if double:
+            g.append(f'<circle cx="{cx}" cy="34" r="14" fill="none" stroke="{col}" stroke-width="{sw}"/>')
+        g.append(f'<text x="{cx}" y="39" text-anchor="middle" font-size="14" font-family="sans-serif" fill="{f["ink"]}">{str(r.member)[-1]}</text>')
+        alt.append(f"{r.member}: {labels[r.action]}")
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {34 + len(b) * 76} 70" width="{34 + len(b) * 76}" height="70">' + "".join(g) + "</svg>"
+    return f"![{'; '.join(alt)}](data:image/svg+xml;base64,{base64.b64encode(svg.encode()).decode()})"
+
+
 def commander_panel(day):
     """Crew-level view for the commander: the same rule on six synthetic members, sorted by urgency. Decides nothing."""
     st.subheader(UI["cmd_title"])
@@ -273,6 +294,7 @@ def commander_panel(day):
     rows = [{"m": r.member, "b": w[r.Body.upper()] if r.Body.upper() in w else r.Body, "a": w[r.Attention.upper()], "o": w[r.Morale.upper()],
              "s": w[r.action], "t": UI["cmd_since"].format(d=int(r.since)) if r.since == r.since and r.since else "—",
              "f": ", ".join(names[i] for i in r.flagged) or "—", "h": UI["cmd_pending"] if r.human else "—"} for r in b.itertuples()]
+    st.markdown(state_glyphs(b, w))
     st.markdown(md_table(UI["cmd_cols"], rows))
     st.caption(UI["cmd_note"])
     st.caption(UI["cmd_synth"])
@@ -347,6 +369,23 @@ def _nasa_scale():
     return scale.reprocess_nasa()
 
 
+def dot_grid(n, hits, alt, cols=25, hit_color=None, miss_color=None):
+    """One dot per simulated crew: filled = counted in the result above, ring = not. Shape plus fill, so colour is never the only cue."""
+    import base64
+    sc = theme["fusion"]["state_on_light"]
+    hit_color, miss_color = hit_color or sc["NORMAL"], miss_color or sc["UNKNOWN"]
+    r, gap = 5, 15
+    rows_n = -(-n // cols)
+    W, H = cols * gap + 4, rows_n * gap + 4
+    g = []
+    for i in range(n):
+        cx, cy = 2 + (i % cols) * gap + gap // 2, 2 + (i // cols) * gap + gap // 2
+        g.append(f'<circle cx="{cx}" cy="{cy}" r="{r}" fill="{hit_color}"/>' if i < hits else
+                 f'<circle cx="{cx}" cy="{cy}" r="{r - 1}" fill="none" stroke="{miss_color}" stroke-width="1.6"/>')
+    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">' + "".join(g) + "</svg>"
+    return f"![{alt}](data:image/svg+xml;base64,{base64.b64encode(svg.encode()).decode()})"
+
+
 def scale_panel():
     """Evidence at scale: real NASA telemetry re-processed now; synthetic crews run through the shipped rule on fresh seeds."""
     from csync import scale
@@ -381,6 +420,9 @@ def scale_panel():
                     "ci": f"{d['ci'][0]:.1f}–{d['ci'][1]:.1f}", "pub": f"{pub[key]['pct']}"}
         st.markdown(md_table({"set": UI["scale_c_set"], "hits": UI["scale_c_hits"], "pct": UI["scale_c_pct"], "ci": UI["scale_c_ci"], "pub": UI["scale_c_pub"]},
                              [line(UI["scale_healthy"], "control", "control (false procedure)"), line(UI["scale_drift"], "gradual", "gradual 1.5 SD")]))
+        c, gr = out["control"], out["gradual"]
+        st.markdown(dot_grid(c["n"], c["hits"], f"{c['hits']} of {c['n']} healthy crews triggered a procedure.", hit_color=theme["fusion"]["state_on_light"]["DEGRADED"]))
+        st.markdown(dot_grid(gr["n"], gr["hits"], f"{gr['hits']} of {gr['n']} drifting crews flagged.", cols=25))
         st.caption(UI["scale_took"].format(n=n0 + n1, s=out["seconds"]))
 
 
