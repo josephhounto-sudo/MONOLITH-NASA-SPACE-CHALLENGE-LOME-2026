@@ -263,6 +263,15 @@ def _tokens():
 FONTS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fonts")
 
 
+ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
+
+
+def _asset(name):
+    """C-Sync mark (brand/make_mark.py -> csync/ui/assets) as a data URI: st.html strips inline <svg>, not <img>."""
+    with open(os.path.join(ASSETS, name), "rb") as f:
+        return "data:image/svg+xml;base64," + base64.b64encode(f.read()).decode()
+
+
 def _font(name):
     with open(os.path.join(FONTS, name), "rb") as f:
         return base64.b64encode(f.read()).decode()
@@ -312,6 +321,7 @@ a{color:var(--f-stone);text-underline-offset:3px}
 .cs-top{display:flex;align-items:center;gap:14px;padding:12px 18px;margin:0 0 12px;border-radius:22px;background:var(--f-glass);
  border:1px solid var(--f-line);box-shadow:inset 0 1px 0 #fff,0 18px 50px rgba(120,60,80,.10);-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%)}
 .cs-top .mark{width:30px;height:34px;flex:none;background:var(--f-ink);-webkit-mask:$mark center/contain no-repeat;mask:$mark center/contain no-repeat}
+.cs-top .mk{width:44px;height:44px;flex:none;margin:-4px 0}.cs-top .mk-static{display:none}
 .cs-top .nm{font-family:var(--f-display);font-weight:600;font-size:1.3rem}
 .cs-top .tg{color:var(--f-ink2);font-size:.88rem}
 
@@ -353,7 +363,14 @@ a{color:var(--f-stone);text-underline-offset:3px}
 .cs-kicker::before{content:"";width:13px;height:12px;background:currentColor;-webkit-mask:$s_degraded center/contain no-repeat;mask:$s_degraded center/contain no-repeat}
 
 /* the stone: CRITICAL only (emergency, resume request). Dark surface, cream text, state colours of the dark theme. */
-.st-key-cs-stone{background:var(--f-stone)!important;border-radius:30px;padding:26px 28px 22px!important;color:var(--f-cream);
+.st-key-cs-stone{background:
+  radial-gradient(1px 1px at 12% 18%,rgba(244,240,228,.55),transparent 60%),radial-gradient(1px 1px at 37% 9%,rgba(244,240,228,.4),transparent 60%),
+  radial-gradient(1.5px 1.5px at 63% 22%,rgba(244,240,228,.5),transparent 60%),radial-gradient(1px 1px at 88% 14%,rgba(244,240,228,.45),transparent 60%),
+  radial-gradient(1px 1px at 79% 41%,rgba(244,240,228,.3),transparent 60%),radial-gradient(1.5px 1.5px at 94% 63%,rgba(244,240,228,.4),transparent 60%),
+  radial-gradient(1px 1px at 6% 72%,rgba(244,240,228,.35),transparent 60%),radial-gradient(1px 1px at 52% 88%,rgba(244,240,228,.3),transparent 60%),
+  radial-gradient(260px 160px at 100% 0%,rgba(11,110,133,.28),transparent 70%),
+  radial-gradient(1px 1px,rgba(244,240,228,.16) 50%,transparent 51%) 0 0/37px 41px,
+  radial-gradient(1px 1px,rgba(244,240,228,.10) 50%,transparent 51%) 17px 23px/53px 47px,var(--f-stone)!important;border-radius:30px;padding:26px 28px 22px!important;color:var(--f-cream);
  box-shadow:0 0 0 1px color-mix(in srgb,var(--f-d-degraded) 45%,transparent),0 30px 80px rgba(20,24,40,.28)}
 .st-key-cs-stone *{color:var(--f-cream)}
 .st-key-cs-stone h3{color:var(--f-cream)!important}
@@ -411,7 +428,7 @@ a{color:var(--f-stone);text-underline-offset:3px}
 [data-testid="stDataFrame"]{border-radius:14px;overflow:hidden}
 @media (max-width:900px){.cs-orbit .tag{display:none}}
 /* motion and transparency fallbacks */
-@media (prefers-reduced-motion:reduce){.stButton>button{transition:none}}
+@media (prefers-reduced-motion:reduce){.stButton>button{transition:none}.cs-top .mk-anim{display:none}.cs-top .mk-static{display:block}}
 @media (prefers-reduced-transparency:reduce){
  .cs-top,.cs-card,.cs-strip,.st-key-cs-habitat,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{-webkit-backdrop-filter:none!important;backdrop-filter:none!important;background:#fff!important}
  [data-testid="stApp"]::before{display:none}}
@@ -462,7 +479,10 @@ def inject(name, tag):
     style = _profile()
     if style == "fusion":
         st.html("<style>" + _fusion_css() + "</style>")
-        st.html((_TOP % {**tk, "name": name, "tag": tag}).replace("</header>", "<div class='cs-cage' aria-hidden='true'></div></header>"))
+        st.html("<header class='cs-top'>"
+                f"<img class='mk mk-anim' alt='' aria-hidden='true' src='{_asset('csync_mark_animated.svg')}'>"
+                f"<img class='mk mk-static' alt='' aria-hidden='true' src='{_asset('csync_mark_static.svg')}'>"
+                f"<div><div class='nm'>{name}</div><div class='tg'>{tag}</div></div></header>")
         return
     extra = {"quiet": _QUIET, "hybrid": _HYBRID, "calm": _CALM, "signal": _SIGNAL}.get(style, "")
     st.html("<style>" + _CSS % tk + _art(tk) + extra + "</style>" + _SHAPES)
