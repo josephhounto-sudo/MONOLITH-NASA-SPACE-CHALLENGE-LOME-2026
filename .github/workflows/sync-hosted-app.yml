@@ -1,5 +1,6 @@
-# Every push to main fast-forwards m3-design, the branch the hosted Streamlit app follows,
-# so the live app updates by itself (Streamlit Community Cloud redeploys on each push to that branch).
+# Every push to main rebuilds m3-design (the branch the hosted Streamlit app follows) as main + one marker commit.
+# The marker line in requirements.txt makes Streamlit Community Cloud reinstall and RESTART the app, so
+# already-imported modules (style, rules, glyphs) are reloaded instead of staying stale.
 name: sync-hosted-app
 on:
   push:
@@ -13,4 +14,10 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - run: git push origin HEAD:refs/heads/m3-design --force-with-lease
+      - run: |
+          git config user.name "sync-bot"
+          git config user.email "sync-bot@users.noreply.github.com"
+          git checkout -B m3-design
+          echo "# hosted-sync ${GITHUB_SHA}" >> requirements.txt
+          git commit -am "hosted app: restart marker for ${GITHUB_SHA::7}"
+          git push origin m3-design --force
