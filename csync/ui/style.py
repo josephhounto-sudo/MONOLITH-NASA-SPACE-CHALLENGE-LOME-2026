@@ -325,6 +325,9 @@ a{color:var(--f-stone);text-underline-offset:3px}
 .cs-cage{position:absolute;right:-6px;top:50%;width:150px;height:150px;transform:translateY(-50%);pointer-events:none;opacity:.9;
  background:$cage center/contain no-repeat}
 
+/* body map: dark stone card with the same corner radius as the glass cards */
+[data-testid="stMarkdownContainer"] img[alt^="Neutral body map"]{border-radius:22px;max-width:100%;height:auto}
+
 /* top bar: light glass */
 .cs-top{display:flex;align-items:center;gap:14px;padding:12px 18px;margin:0 0 12px;border-radius:22px;background:var(--f-glass);
  border:1px solid var(--f-line);box-shadow:inset 0 1px 0 #fff,0 18px 50px rgba(120,60,80,.10);-webkit-backdrop-filter:blur(26px) saturate(170%);backdrop-filter:blur(26px) saturate(170%)}

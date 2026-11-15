@@ -263,23 +263,21 @@ def _crew_board(day: int):
 
 
 def state_glyphs(b, labels):
-    """One ring per crew member, ordered by urgency; the state is the ring's shape (solid, double, dotted, dashed), colour only reinforces it."""
+    """One orbit glyph per crew member, ordered by urgency; same shape code as the state cards and the deck (csync/glyphs.py):
+    circle normal, diamond watch, triangle degraded or procedure open, dashed square unknown. Colour only reinforces the shape."""
     import base64
-    f = theme["fusion"]
-    sc = f["state_on_light"]
-    style = {"OPEN_PROCEDURE": (sc["DEGRADED"], "", 3, True), "DEGRADED": (sc["DEGRADED"], "", 3, False),
-             "WATCH": (sc["WATCH"], "6 4", 3, False), "UNKNOWN": (sc["UNKNOWN"], "2 5", 3, False), "NORMAL": (sc["NORMAL"], "", 3, False)}
-    g, alt = [], []
+    from csync import glyphs
+    sc = theme["fusion"]["state_on_light"]
+    ink = theme["fusion"]["ink"]
+    step, g, alt = 92, [], []
     for i, r in enumerate(b.itertuples()):
-        col, dash, sw, double = style[r.action]
-        cx = 34 + i * 76
-        d = f' stroke-dasharray="{dash}"' if dash else ""
-        g.append(f'<circle cx="{cx}" cy="34" r="22" fill="none" stroke="{col}" stroke-width="{sw}"{d}/>')
-        if double:
-            g.append(f'<circle cx="{cx}" cy="34" r="14" fill="none" stroke="{col}" stroke-width="{sw}"/>')
-        g.append(f'<text x="{cx}" y="39" text-anchor="middle" font-size="14" font-family="sans-serif" fill="{f["ink"]}">{str(r.member)[-1]}</text>')
+        x = 6 + i * step
+        key = "DEGRADED" if r.action == "OPEN_PROCEDURE" else r.action
+        g.append(f"<svg x='{x}' y='0' width='60' height='57' viewBox='-1 0 35 33'>{glyphs.orbit_inner(r.action, sc[key])}</svg>")
+        g.append(f"<text x='{x + 30}' y='74' text-anchor='middle' font-size='15' font-weight='700' font-family='sans-serif' fill='{ink}'>{str(r.member)[-1]}</text>")
         alt.append(f"{r.member}: {labels[r.action]}")
-    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {34 + len(b) * 76} 70" width="{34 + len(b) * 76}" height="70">' + "".join(g) + "</svg>"
+    W = 12 + len(b) * step
+    svg = f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {W} 82' width='{W}' height='82'>" + "".join(g) + "</svg>"
     return f"![{'; '.join(alt)}](data:image/svg+xml;base64,{base64.b64encode(svg.encode()).decode()})"
 
 

@@ -33,7 +33,9 @@ async def main():
         await shot(pg, "[data-testid='stHorizontalBlock']:has(.cs-card)", os.path.join(CROPS, "C1_crop.png"))
         await pg.evaluate("""()=>{let e=document.querySelector('.cs-action');while(e&&getComputedStyle(e).borderTopStyle==='none'||e&&e.classList.contains('cs-action'))e=e.parentElement;if(e)e.id='cs-c2'}""")
         await shot(pg, "#cs-c2", os.path.join(CROPS, "C2_crop.png"))
+        await pg.get_by_role("tab", name="Habitat (real NASA data)").click(); await pg.wait_for_timeout(1500)
         await shot(pg, ".st-key-cs-habitat", os.path.join(HERE, "captures", "C6_habitat_eda_rr1_en.png"), keep=(0, 0.52))
+        await pg.get_by_role("tab", name="Try it yourself").click(); await pg.wait_for_timeout(800)
         await day(pg, 9)
         for _ in range(2):
             await pg.get_by_role("button", name="Next").click(); await pg.wait_for_timeout(1200)
