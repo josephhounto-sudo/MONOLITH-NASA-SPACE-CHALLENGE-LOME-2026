@@ -42,6 +42,16 @@ def main():
     else:
         out = out.replace(placeholder, "<div></div>")
         print("LOGO: MISSING (captures/LOGO_ACTUEL_horizontal.png), placeholder removed")
+    # Slide 1 motion (Care Sync -> C-Sync, light) + its last frame as poster (PDF/print). 15/11 · FAIT PAR L'IA (session design)
+    for attr, mime in (("data-video", "video/mp4"), ("data-poster", "image/png")):
+        for rel in re.findall(attr + r'="([^"]+)"', out):
+            f = os.path.normpath(os.path.join(HERE, rel))
+            if os.path.exists(f):
+                b64 = base64.b64encode(open(f, "rb").read()).decode("ascii")
+                out = out.replace(f'{attr}="{rel}"', f'src="data:{mime};base64,{b64}"')
+                print(f"{attr}: inserted ({os.path.basename(f)})")
+            else:
+                print(f"{attr}: MISSING ({rel})")
     open(os.path.join(HERE, "deck_final.html"), "w", encoding="utf8").write(out)
     print("OK: pitch/deck/deck_final.html")
 
