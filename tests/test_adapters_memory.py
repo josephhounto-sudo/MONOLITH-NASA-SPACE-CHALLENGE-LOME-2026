@@ -5,7 +5,7 @@ import jsonschema
 import pytest
 
 from csync import habitat
-from csync.adapters import SCHEMA, eda_measurements
+from csync.adapters import SCHEMA, eda_measurements, pmdata_measurements
 from csync.memory import LocalMemory
 
 
@@ -25,6 +25,20 @@ def test_rr1_measurements_keep_the_153h_run_as_artifact():
     c = collections.Counter(m["quality"] for m in ms)
     assert len(ms) == 1009 and c["ARTIFACT"] >= 150 and c["MISSING"] == 0
     assert all(m["value"] == 2646.0 for m in ms if m["quality"] == "ARTIFACT" and m["timestamp_utc"] < "2014-09-27")
+
+
+def test_pmdata_adapter_keeps_a_zero_resting_rate_missing():
+    ms = pmdata_measurements("p00", [
+        {"timestamp_utc": "2019-11-11T08:06:00+00:00", "field": "sleep_duration_h", "value": 8},
+        {"timestamp_utc": "2019-11-11T00:00:00+00:00", "field": "resting_heart_rate", "value": 0},
+        {"timestamp_utc": "2019-11-12T00:00:00+00:00", "field": "resting_heart_rate", "value": 52.2},
+        {"timestamp_utc": "2019-11-11T08:06:00+00:00", "field": "mood", "value": 4},
+    ])
+    by = {(m["indicator_id"], m["timestamp_utc"][:10]): m for m in ms}
+    assert by[("PH01", "2019-11-11")]["quality"] == "MISSING" and by[("PH01", "2019-11-11")]["value"] is None
+    assert by[("PH01", "2019-11-12")]["quality"] == "OK" and by[("PH01", "2019-11-12")]["value"] == pytest.approx(52.2)
+    assert by[("PH09", "2019-11-11")]["evidence_kind"] == "SELF_REPORTED"
+    assert all(m["origin"] == "REAL_OPEN" and m["source_id"] == "PMDATA-p00" for m in ms)
 
 
 def test_memory_stores_each_record_once_and_survives_restart(tmp_path):
