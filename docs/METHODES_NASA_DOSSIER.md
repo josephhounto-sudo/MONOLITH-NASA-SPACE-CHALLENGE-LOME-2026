@@ -71,6 +71,8 @@ Temps de calcul médian par équipage de 10 jours : 11 à 13 ms pour A à G et I
 
 ## 5. Recommandations d'intégration
 
+> **PÉRIMÉ (15/11/2026).** Cette section recommande EWMA comme moteur. Le moteur réellement livré est la **règle v3** (seuil 1,5 écart-type, 2 jours consécutifs) ; EWMA n'est pas codée. Voir la section 7 et `docs/A_TRANCHER.md`. Ne citer aucune ligne de cette section dans le pitch ou la soumission.
+
 | Décision | Méthodes | Justification |
 |---|---|---|
 | **Moteur du hackathon** | Référence personnelle + EWMA, avec plancher d'écart-type et statut UNKNOWN | Meilleur compromis mesuré, simple, explicable, hors ligne, déjà testé |
