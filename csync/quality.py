@@ -30,14 +30,3 @@ def flag_plateaus(values, min_len: int = 6) -> list[dict]:
             runs.append({"start": i, "end": j, "length": j - i + 1, "value": v})
         i = j + 1
     return runs
-
-
-def mark_quality(df: pd.DataFrame, column: str = "co2_ppm", min_len: int = 6) -> pd.DataFrame:
-    """Copy of df with a 'quality' column: ARTIFACT on plateau points of `column`, OK elsewhere (MISSING if empty)."""
-    out = df.copy()
-    q = ["MISSING" if pd.isna(v) else "OK" for v in out[column]]
-    for r in flag_plateaus(out[column].tolist(), min_len):
-        for k in range(r["start"], r["end"] + 1):
-            q[k] = "ARTIFACT"
-    out["quality"] = q
-    return out

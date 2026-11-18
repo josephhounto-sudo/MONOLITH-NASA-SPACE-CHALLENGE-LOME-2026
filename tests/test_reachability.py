@@ -11,7 +11,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 ENTRY_POINTS = ["csync/ui/app.py", "scripts/run_story.py"]
 # module -> why it is still here and when it must be wired in or deleted
 KNOWN_ORPHANS = {
-    "csync.memory": "append-only local memory; to wire into beat 4 with a restart test, or delete, before the V2 release",
+    "csync.memory": "append-only local memory; consumer to be the mission simulator (on-board record that survives restart); delete if the simulator does not use it by the V2 release",
     "csync.assistant": "scripted assistant, tested but not yet shown; to wire into the story screens before the V2 release",
 }
 
@@ -75,8 +75,7 @@ def test_every_known_orphan_has_a_reason_and_an_exit():
 
 # ---- dead public functions and classes: same ratchet (used by no product code; tests alone do not count) ----
 KNOWN_UNUSED = {
-    "pmdata_measurements": "PhysioNet adapter; used by tests only; wire it into the real-data panel or delete before the V2 release",
-    "mark_quality": "quality marking helper; used by tests only; wire it into the story build or delete before the V2 release",
+    "pmdata_measurements": "PhysioNet adapter; consumer = research/analog_pmdata.py (research script, not the app); keep only while that script exists",
     "LocalMemory": "same module as csync.memory; follows its decision: wire into beat 4 with a restart test, or delete",
 }
 

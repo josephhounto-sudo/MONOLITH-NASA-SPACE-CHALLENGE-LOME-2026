@@ -4,7 +4,7 @@ import os
 
 import pandas as pd
 
-from csync.quality import flag_plateaus, mark_quality
+from csync.quality import flag_plateaus
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CSV = os.path.join(ROOT, "data", "real", "eda_rr1_iss_hourly_2014-09-26_to_10-05.csv")
@@ -17,11 +17,6 @@ def test_real_eda_single_37h_plateau():
     r = runs[0]
     assert r["value"] == 2646 and r["length"] == 37
     assert df.hour_utc[r["start"]] == "2014-09-26 00:00" and df.hour_utc[r["end"]] == "2014-09-27 12:00"
-
-
-def test_mark_quality_sets_artifact_only_on_plateau():
-    q = mark_quality(pd.read_csv(CSV)).quality
-    assert (q == "ARTIFACT").sum() == 37 and (q == "OK").sum() == len(q) - 37
 
 
 def test_short_runs_and_missing_values():
