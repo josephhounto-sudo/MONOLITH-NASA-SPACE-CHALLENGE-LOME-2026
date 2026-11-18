@@ -1,0 +1,13 @@
+---
+description: Règles de travail C-Sync V2 (branche v2)
+alwaysApply: true
+---
+- Branche de travail: `v2`. Ne jamais pousser sur `main` ni sur `m3-design`.
+- Avant tout commit: `python -m pytest -q` doit passer (262 tests au 18/11/2026). Un seul but par commit; le message dit pourquoi.
+- Ne pas modifier `contracts/` (schémas) ni `AGENTS.md` sans accord explicite de Joseph.
+- Histoire gelée: ne changer ni les heures, ni les valeurs, ni les graines (`seed 42`, jours 3/7/9/10). Seule la présentation peut changer.
+- Aucune affirmation clinique ni conseil médical. Toute donnée inventée garde l'étiquette SIMULÉ / SYNTHETIC. Aucune donnée réelle annoncée comme utilisée si elle n'entre pas dans le calcul.
+- Aucun message de développeur visible par un visiteur (« Run: python scripts/... », « not found », chemins).
+- Tout seuil a une source; ne jamais en inventer. Les chiffres de contrôle (hold-out) ne changent pas sans nouveau test.
+- Les textes de l'interface sont dans `csync/config/strings_en.json` et `strings_fr.json`: toute clé ajoutée l'est dans les deux.
+- Pas de nouveau fichier de passation ni de document long: l'état du projet est dans le projet Claude (« MAESTRO_ETAT »).
