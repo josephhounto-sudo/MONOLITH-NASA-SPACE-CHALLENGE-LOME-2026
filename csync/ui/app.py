@@ -653,6 +653,10 @@ for _c in today:
 # vertical navigation: one section = one visitor question; the global state of the crew is first
 _SECTIONS = [UI["tab_home"], UI["tab_cmd"], UI["tab_body"], UI["tab_env"], UI["tab_trends"], UI["tab_scale"], UI["tab_why"], UI["tab_nasa"], UI["tab_try"], UI["tab_sources"]]
 section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
+_USE = {UI["tab_cmd"]: "use_cmd", UI["tab_body"]: "use_body", UI["tab_env"]: "use_env", UI["tab_trends"]: "use_trends", UI["tab_scale"]: "use_scale",
+        UI["tab_why"]: "use_why", UI["tab_nasa"]: "use_nasa", UI["tab_try"]: "use_try", UI["tab_sources"]: "use_sources"}
+if section in _USE:
+    st.caption(UI[_USE[section]])
 if section == UI["tab_home"]:
     story_bar()
     # what demands action now comes first: the CRITICAL event on the dark stone surface, then the crew state
