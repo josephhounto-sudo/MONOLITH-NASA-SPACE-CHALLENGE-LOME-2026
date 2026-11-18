@@ -36,7 +36,7 @@
     "paper": "#F6F2F5",
     "glass": "#FFFFFF",
     "ink": "#141618",
-    "ink2": "#4A5357",
+    "ink2": "#343D41",
     "stone": "#1F2A3D",
     "stone2": "#2A374D",
     "cream": "#F4F0E4",
@@ -46,10 +46,10 @@
     "cool": "#64DAF4",
     "lilac": "#BFB9F5",
     "state_on_light": {
-      "NORMAL": "#0F7A55",
-      "WATCH": "#8F4D00",
-      "DEGRADED": "#A62A22",
-      "UNKNOWN": "#56636A"
+      "NORMAL": "#0A5C40",
+      "WATCH": "#753E00",
+      "DEGRADED": "#8C1D16",
+      "UNKNOWN": "#3D484E"
     },
     "chart": {
       "series": "#1F2A3D",
