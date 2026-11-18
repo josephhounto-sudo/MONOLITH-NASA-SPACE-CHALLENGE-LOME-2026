@@ -205,3 +205,16 @@ def test_story_beats_walk_the_frozen_days_in_order():
     assert seen == [3, 7, 9, 9, 10, 10]
     assert next(b for b in at.button if b.label == ui["story_next"]).disabled, "no step after the last beat"
     assert any(ui["beat6_title"] in m.value for m in at.markdown)
+
+
+def test_why_panel_reads_the_committed_research_numbers():
+    import json as _j
+    ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
+    at = AppTest.from_file(APP, default_timeout=60).run()
+    at.sidebar.radio[0].set_value(ui["tab_why"]).run()
+    assert not at.exception, at.exception
+    md = " ".join(m.value for m in at.markdown)
+    fp = _j.load(open(ROOT + "/research/fixed_vs_personal_results.json", encoding="utf8"))
+    assert f"{fp['f=2']['drift']['B_personal_2ind']['pct']:.1f} %" in md      # shown number = file number
+    assert f"{fp['f=2']['drift']['C_fixed']['pct']:.1f} %" in md
+    assert "SIMULATED" in " ".join(c.value for c in at.caption)

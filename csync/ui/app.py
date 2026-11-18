@@ -327,6 +327,28 @@ def md_table(cols, rows):
     return head + "\n".join("| " + " | ".join(esc(r[k]) for k in cols) + " |" for r in rows)
 
 
+def why_panel():
+    """Why a personal baseline, and what happens when that baseline is wrong. Numbers are read from the committed research results."""
+    base = os.path.join(ROOT, "research")
+    fp = json.load(open(os.path.join(base, "fixed_vs_personal_results.json"), encoding="utf8"))
+    hy = json.load(open(os.path.join(base, "hybrid_baseline_results.json"), encoding="utf8"))
+    cell = lambda r, kind, key: f"{r['drift'][key]['pct']:.1f} % / {r['healthy'][key]['pct']:.1f} %"
+    rows = [{"f": UI["why_spread"][int(f[2])], "p": cell(fp[f], 0, "B_personal_2ind"), "c": cell(fp[f], 0, "C_fixed"), "d": cell(fp[f], 0, "D_fixed_sleep_only")}
+            for f in ("f=0", "f=1", "f=2", "f=3")]
+    st.subheader(UI["why_title"])
+    st.markdown(UI["why_intro"])
+    st.markdown(md_table(UI["why_cols"], rows))
+    st.caption(UI["why_limits"])
+    st.subheader(UI["ref_title"])
+    st.markdown(UI["ref_intro"])
+    cell2 = lambda r, k: f"{r[k]['detect']['pct']:.1f} % / {r[k]['false_alarm']['pct']:.1f} %"
+    rows2 = [{"b": UI["ref_bias"][b], "s": cell2(hy[f"adapt=0.0,bias={b}"], "shipped"), "h": cell2(hy[f"adapt=0.0,bias={b}"], "H(g=1.0)")} for b in ("0.0", "0.5", "1.0", "1.5")]
+    st.markdown(md_table(UI["ref_cols"], rows2))
+    a5, a1 = hy["adapt=0.5,bias=0.0"]["H(g=1.0)"]["false_alarm"]["pct"], hy["adapt=1.0,bias=0.0"]["H(g=1.0)"]["false_alarm"]["pct"]
+    st.caption(UI["ref_cost"].format(a5=f"{a5:.1f}", a1=f"{a1:.1f}"))
+    st.caption(UI["why_synth"])
+
+
 @st.cache_data
 def _crew_board(day: int):
     return crew.board(day)
@@ -620,7 +642,7 @@ for _c in today:
         _m = re.search(r"zone: ([a-z]+)", _c.get("situation", ""))
         _zone = _m.group(1) if _m else None
 # vertical navigation: one section = one visitor question; the global state of the crew is first
-_SECTIONS = [UI["tab_home"], UI["tab_cmd"], UI["tab_body"], UI["tab_env"], UI["tab_trends"], UI["tab_scale"], UI["tab_nasa"], UI["tab_try"], UI["tab_sources"]]
+_SECTIONS = [UI["tab_home"], UI["tab_cmd"], UI["tab_body"], UI["tab_env"], UI["tab_trends"], UI["tab_scale"], UI["tab_why"], UI["tab_nasa"], UI["tab_try"], UI["tab_sources"]]
 section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
 if section == UI["tab_home"]:
     story_bar()
@@ -648,6 +670,8 @@ elif section == UI["tab_trends"]:
     trends_panel(day)
 elif section == UI["tab_scale"]:
     scale_panel()
+elif section == UI["tab_why"]:
+    why_panel()
 elif section == UI["tab_nasa"]:
     hazards_panel()
     countermeasures_panel()
