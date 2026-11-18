@@ -175,3 +175,15 @@ def test_daily_proposal_can_be_accepted_or_declined_by_a_human():
     next(b for b in at.button if b.label == ui["btn_decline"]).click().run()
     assert any("Declined on day 7" in s.value for s in at.success)
     assert ui["btn_accept"] not in [b.label for b in at.button], "buttons must disappear once a human has decided"
+
+
+def test_opening_hook_shows_the_day_9_problem_once_then_moves_to_day_7():
+    import json as _j
+    ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
+    at = AppTest.from_file(APP, default_timeout=60).run()
+    assert ui["hook_title"] in [s.value for s in at.subheader]
+    assert "14:10" in ui["hook_text"] and "13:00 to 19:00" in ui["hook_text"] and "19:20" in ui["hook_text"]
+    at.slider[0].set_value(3).run()
+    next(b for b in at.button if b.label == ui["hook_button"]).click().run()
+    assert ui["hook_title"] not in [s.value for s in at.subheader]
+    assert at.slider[0].value == 7

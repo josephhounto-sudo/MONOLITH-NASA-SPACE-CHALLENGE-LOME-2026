@@ -98,6 +98,22 @@ def fixed_sentence():
     st.info(strings["fixed_medical_sentence"])
 
 
+def _leave_hook():
+    st.session_state["cs-hook-done"] = True
+    st.session_state["cs-day"] = 7
+
+
+def hook_screen():
+    """Opening problem from the frozen story (day 9, 14:10 UTC), shown once above the overall state. Presentation only."""
+    if st.session_state.get("cs-hook-done"):
+        return
+    with st.container(border=True, key="cs-hook"):
+        st.markdown(f"<div class='cs-kicker'>{UI['hook_kicker']}</div>", unsafe_allow_html=True)
+        st.subheader(UI["hook_title"])
+        st.markdown(UI["hook_text"])
+        st.button(UI["hook_button"], key="hook-go", type="primary", on_click=_leave_hook)
+
+
 def decision_buttons(cap, day):
     """A human accepts or declines a proposed procedure. Recorded for this browser session only; nothing else changes."""
     act = cap.get("action", {})
@@ -549,10 +565,12 @@ def provenance_table():
 # ------------------------------------------------------------------ page
 st.set_page_config(page_title=strings["app_title"], layout="wide")
 style.inject(UI["brand_name"], UI["brand_tag"])
+if st.session_state.get("cs-nav", UI["tab_home"]) == UI["tab_home"]:
+    hook_screen()   # the opening problem comes first, above the controls
 st.warning(strings["synthetic_banner"])
 OUT = resolve_out_dir(OUT_DIR)
 caps = load_capsules(OUT)
-day = st.slider(UI["day_slider"], 1, 10, 7)
+day = st.slider(UI["day_slider"], 1, 10, 7, key="cs-day")
 today = [c for c in caps if c.get("day") == day]
 STATES_BY_DAY = {c["day"]: c["states"] for c in caps if c.get("capsule_type", "daily") == "daily" and is_valid(c)}
 _events, _link, _delay = {}, None, json.load(open(os.path.join(ROOT, "contracts", "decision.schema.json")))["properties"]["ground_delay_min"]["const"]
