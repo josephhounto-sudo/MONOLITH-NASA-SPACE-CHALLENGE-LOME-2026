@@ -98,6 +98,28 @@ def fixed_sentence():
     st.info(strings["fixed_medical_sentence"])
 
 
+def decision_buttons(cap, day):
+    """A human accepts or declines a proposed procedure. Recorded for this browser session only; nothing else changes."""
+    act = cap.get("action", {})
+    if act.get("type") != "OPEN_PROCEDURE":
+        st.caption(strings["human_decision_pending"])
+        return
+    key = f"decision_{act['procedure_id']}_{day}"
+    choice = st.session_state.get(key)
+    if choice is None:
+        st.caption(strings["human_decision_pending"])
+        a, d, _ = st.columns([1, 1, 3])
+        if a.button(UI["btn_accept"], key=f"acc_{key}", type="primary"):
+            st.session_state[key] = "accepted"
+            st.rerun()
+        if d.button(UI["btn_decline"], key=f"dec_{key}"):
+            st.session_state[key] = "declined"
+            st.rerun()
+    if choice:
+        st.success(UI["decision_" + choice].format(pid=act["procedure_id"], day=day))
+        st.caption(UI["decision_session_note"])
+
+
 def nominal(cap, day):
     st.subheader(cap["situation"])
     cols = st.columns(len(DIMENSIONS))
@@ -107,11 +129,11 @@ def nominal(cap, day):
         st.markdown(f"**{UI['why_label']}** — {cap['explanation']}")
         st.markdown(f"<div class='cs-action'><b>{UI['action_label']}</b> — {html.escape(str(cap['action'].get('text', '')))}</div>",
                     unsafe_allow_html=True)
+        decision_buttons(cap, day)
     with st.expander(UI["signals_label"]):
         st.dataframe([{k: s.get(k) for k in ("indicator_id", "name", "value", "unit", "baseline_mean", "d", "flagged")}
                       for s in cap["signals"]], hide_index=True)
         st.caption(f"{UI['evidence_label']}: {cap['evidence']}")
-    st.caption(strings["human_decision_pending"])
 
 
 def action_screen(cap):

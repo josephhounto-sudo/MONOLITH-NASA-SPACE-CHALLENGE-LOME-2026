@@ -362,6 +362,7 @@ a{color:var(--f-stone);text-underline-offset:3px}
  -webkit-mask:var(--s) center/contain no-repeat;mask:var(--s) center/contain no-repeat}
 .cs-card .dim{color:var(--f-ink2);font-size:.9rem;font-weight:600}
 .cs-card>div:nth-child(2){color:var(--c)!important;font-family:var(--f-display);font-weight:600;font-size:clamp(1.05rem,1.5vw,2.15rem)!important;overflow-wrap:normal;word-break:keep-all;hyphens:none;line-height:1.05;letter-spacing:-.015em}
+.stButton>button[kind="primary"]{background:var(--f-ink,#0b1a2b)!important;color:#fff!important;border-color:transparent!important;font-weight:700}
 .cs-card.ctx{background:rgba(255,255,255,.22);box-shadow:none;-webkit-backdrop-filter:none;backdrop-filter:none;border:1.5px dashed rgba(86,99,106,.62)}
 .cs-card.ctx>div:nth-child(2),.cs-card[data-state="UNKNOWN"]>div:nth-child(2){color:var(--f-ink2)!important;font-family:var(--f-text);font-size:.98rem!important;font-weight:500;line-height:1.3;letter-spacing:0}
 .cs-card[data-state="UNKNOWN"]:not(.ctx){border:1.5px dashed rgba(86,99,106,.62);background:rgba(255,255,255,.4)}

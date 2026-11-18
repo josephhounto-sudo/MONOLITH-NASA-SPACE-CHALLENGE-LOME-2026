@@ -163,3 +163,15 @@ def test_screen_resume_refused_day10():
     reason = STRINGS["gate_reasons"]["G3"].format(name=STRINGS["indicator_names"]["PH01"], age=14, limit=10)
     assert reason in h
     assert "heart-rate" in h and "14 min old" in h and "limit is 10 min" in h
+
+
+def test_daily_proposal_can_be_accepted_or_declined_by_a_human():
+    import json as _j
+    ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
+    at = AppTest.from_file(APP, default_timeout=60).run()
+    at.slider[0].set_value(7).run()
+    labels = [b.label for b in at.button]
+    assert ui["btn_accept"] in labels and ui["btn_decline"] in labels
+    next(b for b in at.button if b.label == ui["btn_decline"]).click().run()
+    assert any("Declined on day 7" in s.value for s in at.success)
+    assert ui["btn_accept"] not in [b.label for b in at.button], "buttons must disappear once a human has decided"
