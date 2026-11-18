@@ -98,9 +98,34 @@ def fixed_sentence():
     st.info(strings["fixed_medical_sentence"])
 
 
+# story beats (frozen story): (mission day shown, string key). None keeps the current day.
+BEATS = [(3, "beat1"), (7, "beat2"), (9, "beat3"), (9, "beat4"), (10, "beat5"), (None, "beat6")]
+
+
+def _go_beat(i):
+    i = max(0, min(len(BEATS) - 1, i))
+    st.session_state["cs-beat"] = i
+    if BEATS[i][0] is not None:
+        st.session_state["cs-day"] = BEATS[i][0]
+
+
 def _leave_hook():
     st.session_state["cs-hook-done"] = True
-    st.session_state["cs-day"] = 7
+    _go_beat(0)
+
+
+def story_bar():
+    """One idea per step: the six beats of the frozen story, advanced by a button. Presentation only."""
+    if not st.session_state.get("cs-hook-done"):
+        return
+    i = st.session_state.get("cs-beat", 0)
+    key = BEATS[i][1]
+    with st.container(border=True, key="cs-beats"):
+        st.caption(UI["story_step"].format(n=i + 1, total=len(BEATS)))   # plain text: the triangle glyph is reserved for the Degraded state
+        st.markdown(f"**{UI[key + '_title']}** — {UI[key + '_line']}")
+        b, _, n = st.columns([1, 3, 1])
+        b.button(UI["story_back"], key="beat-prev", disabled=i == 0, on_click=_go_beat, args=(i - 1,))
+        n.button(UI["story_next"], key="beat-next", type="primary", disabled=i == len(BEATS) - 1, on_click=_go_beat, args=(i + 1,))
 
 
 def hook_screen():
@@ -598,6 +623,7 @@ for _c in today:
 _SECTIONS = [UI["tab_home"], UI["tab_cmd"], UI["tab_body"], UI["tab_env"], UI["tab_trends"], UI["tab_scale"], UI["tab_nasa"], UI["tab_try"], UI["tab_sources"]]
 section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
 if section == UI["tab_home"]:
+    story_bar()
     # what demands action now comes first: the CRITICAL event on the dark stone surface, then the crew state
     for c in today:
         if c.get("capsule_type") == "emergency" and is_valid(c) and c["ui_hint"] == "ACTION":

@@ -186,4 +186,22 @@ def test_opening_hook_shows_the_day_9_problem_once_then_moves_to_day_7():
     at.slider[0].set_value(3).run()
     next(b for b in at.button if b.label == ui["hook_button"]).click().run()
     assert ui["hook_title"] not in [s.value for s in at.subheader]
-    assert at.slider[0].value == 7
+    assert at.slider[0].value == 3          # the story restarts at beat 1, day 3
+
+
+def test_story_beats_walk_the_frozen_days_in_order():
+    import json as _j
+    ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
+    at = AppTest.from_file(APP, default_timeout=60).run()
+    next(b for b in at.button if b.label == ui["hook_button"]).click().run()
+    seen = [(at.slider[0].value)]
+    for _ in range(5):
+        nxt = next(b for b in at.button if b.label == ui["story_next"])
+        if nxt.disabled:
+            break
+        nxt.click().run()
+        assert not at.exception, at.exception
+        seen.append(at.slider[0].value)
+    assert seen == [3, 7, 9, 9, 10, 10]
+    assert next(b for b in at.button if b.label == ui["story_next"]).disabled, "no step after the last beat"
+    assert any(ui["beat6_title"] in m.value for m in at.markdown)
