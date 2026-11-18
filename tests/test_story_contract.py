@@ -1,7 +1,7 @@
 """V2 story contract: the story is FROZEN (decision of 2026-11-18). Design may change; these facts may not.
 
 If one of these tests fails, the code drifted from docs/STORY.md or someone changed a beat.
-A changed beat needs a new paper test with strangers (see docs/V2_PLAN.md), not just a new constant here.
+A changed beat needs a new paper test with 7 strangers (60 s, 3 questions; threshold 5 of 7), not just a new constant here.
 """
 import importlib.util
 import os
