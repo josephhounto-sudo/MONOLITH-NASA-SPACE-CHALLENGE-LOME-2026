@@ -9,3 +9,8 @@ alwaysApply: true
 - HISTOIRE GELÉE: heures, valeurs, graines inchangées. Seule la présentation peut changer.
 - Aucune affirmation sur l'usage d'une donnée NASA que le code n'accomplit pas. Pas de promesse clinique; les limites apparaissent dans l'histoire.
 - Le visiteur avance par un bouton « Suite », pas par un curseur.
+
+## L'histoire n'est pas l'interface (décision de Joseph, 18/11/2026)
+- L'histoire sert à montrer l'utilité de C-Sync; l'interface doit fonctionner sans elle. Un visiteur qui saute l'histoire lit l'état d'un équipage, ouvre une section et comprend à quoi elle sert.
+- Chaque étape de l'histoire renvoie à un écran réel; chaque écran réel existe pour une décision d'utilisateur, pas pour illustrer une étape.
+- Test de suppression: retire l'histoire, la valeur de chaque écran reste lisible? Retire l'interface, l'histoire montre-t-elle encore le problème et le gain?
