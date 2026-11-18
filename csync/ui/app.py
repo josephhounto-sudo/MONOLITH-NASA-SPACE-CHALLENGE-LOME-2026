@@ -241,6 +241,9 @@ def resume_screen(cap):
     req = datetime.fromisoformat(gi["request_time_utc"])
     meas = [{**m, "timestamp": datetime.fromisoformat(m["timestamp"])} for m in gi["measurements"]]
     st.session_state.setdefault("resume_log", [])
+    if "resume_result" not in st.session_state and st.session_state.get("cs-beat") == 4:
+        # guided story, step 5: the visitor sees the gate answer without having to press the button (same gate, same inputs)
+        st.session_state["resume_result"] = resume_gate(req, meas, gate_proc)
     c1, c2 = st.columns(2)
     if c1.button(UI["request_resume"], key="request_resume"):
         st.session_state["resume_result"] = resume_gate(req, meas, gate_proc)

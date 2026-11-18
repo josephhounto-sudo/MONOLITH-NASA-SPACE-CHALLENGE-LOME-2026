@@ -218,3 +218,18 @@ def test_why_panel_reads_the_committed_research_numbers():
     assert f"{fp['f=2']['drift']['B_personal_2ind']['pct']:.1f} %" in md      # shown number = file number
     assert f"{fp['f=2']['drift']['C_fixed']['pct']:.1f} %" in md
     assert "SIMULATED" in " ".join(c.value for c in at.caption)
+
+
+def test_step5_shows_the_refusal_without_pressing_the_button():
+    import json as _j
+    ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
+    at = AppTest.from_file(APP, default_timeout=60).run()
+    next(b for b in at.button if b.label == ui["hook_button"]).click().run()
+    for _ in range(4):
+        next(b for b in at.button if b.label == ui["story_next"]).click().run()
+    assert not at.exception, at.exception
+    assert any("REFUSE_RESUME" in m.value for m in at.markdown), "step 5 must show the gate answer"
+    # before step 5 nothing was decided for the visitor
+    at2 = AppTest.from_file(APP, default_timeout=60).run()
+    next(b for b in at2.button if b.label == ui["hook_button"]).click().run()
+    assert "resume_result" not in at2.session_state

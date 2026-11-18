@@ -479,6 +479,11 @@ _UNSLOP = """
 .cs-card[data-state="DEGRADED"]:not(.ctx){border-left:4px solid var(--f-degraded)!important}
 .cs-card[data-state="NORMAL"]:not(.ctx){border-left:4px solid var(--f-normal)!important}
 .cs-strip .meta,.cs-orbit .tag{text-transform:none!important;letter-spacing:0!important}
+.cs-card::after{display:none!important}
+.cs-card{padding:12px 10px!important}
+.cs-card>div:nth-child(2){font-size:clamp(.9rem,1.2vw,2rem)!important}
+.cs-card .dim{overflow-wrap:normal!important;word-break:keep-all!important;hyphens:none!important}
+.cs-orbit .tag{white-space:normal!important;max-width:9ch;text-align:center;line-height:1.15}
 """
 
 def _fusion_css():
