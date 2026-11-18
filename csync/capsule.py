@@ -181,10 +181,10 @@ def build_capsule(day, states, decisions, z, reference, *, flags=None, prm: Para
     if building:
         situation = f"Day {day}: personal baseline being built (day {day} of {prm.baseline_days})."
     elif out:
-        situation = f"Day {day}: {len(out)} dimension(s) away from the personal baseline: " + \
+        situation = f"Day {day}: {len(out)} dimension(s) away from this person's own normal: " + \
                     ", ".join(f"{k} ({day_states[k]})" for k in out) + "."
     else:
-        situation = f"Day {day}: no evaluated dimension is away from the personal baseline."
+        situation = f"Day {day}: no evaluated dimension is away from this person's own normal."
     if not building and unknown:
         situation += " Not evaluated today (missing data): " + ", ".join(unknown) + "."
     if habitat is not None and habitat["state"] == "WATCH":
@@ -195,15 +195,15 @@ def build_capsule(day, states, decisions, z, reference, *, flags=None, prm: Para
         parts.append(f"Days 1 to {prm.baseline_days} build this crew member's personal baseline; no comparison is made yet.")
     else:
         for sig, run in flagged:
-            parts.append(f"{sig['name']} ({sig['indicator_id']}) is {_fmt(sig['value'], sig['unit'])} against a personal "
-                         f"baseline of {_fmt(sig['baseline_mean'], sig['unit'])} (d = {sig['d']:.1f}, unfavourable side) "
+            parts.append(f"{sig['name']} ({sig['indicator_id']}) is {_fmt(sig['value'], sig['unit'])} against this person's own normal of "
+                         f"{_fmt(sig['baseline_mean'], sig['unit'])}, {sig['d']:.1f} times their usual day-to-day spread in the worse direction, "
                          f"for {run} days in a row.")
         if not flagged:
             parts.append("No indicator is flagged today.")
         for i in missing:
             parts.append(f"{NAMES[i]} ({i}) is missing today, so its dimension is shown as UNKNOWN, never as NORMAL.")
-        parts.append(f"Rule v3: an indicator is flagged when d >= {prm.d_threshold:g} on {prm.consecutive_days} consecutive days; "
-                     "1 flagged indicator = WATCH, 2 or more = DEGRADED; 2 dimensions away from baseline open a procedure.")
+        parts.append(f"Rule v3: an indicator is flagged when it is at least {prm.d_threshold:g} times the person's usual spread worse than their own normal on {prm.consecutive_days} consecutive days; "
+                     "1 flagged indicator = WATCH, 2 or more = DEGRADED; 2 dimensions away from baseline open a procedure. Codes in brackets are measurement IDs, listed under Sources.")
     if habitat is not None:
         parts.append(habitat_sentence(habitat))
     explanation = " ".join(parts)
