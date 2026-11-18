@@ -463,6 +463,24 @@ a{color:var(--f-stone);text-underline-offset:3px}
 _FIELD = {"calm": ".06", "watch": ".22", "critical": ".62"}
 
 
+
+# Quiet chrome (unslop passes: colour, details, type, motion; heydamir/unslop, CC BY 4.0, (c) Damir Sokolovsky).
+# One neutral paper, hairline borders, no blur, no coloured glow, no tracked capitals. State is carried by word, shape and a left rail.
+_UNSLOP = """
+[data-testid="stApp"]{background:var(--f-paper)!important}
+[data-testid="stApp"]::before{display:none!important}
+.cs-bg{display:none!important}
+.cs-top,.cs-card,.cs-strip,.st-key-cs-habitat,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
+.cs-top,.cs-strip,[data-testid="stSlider"]{background:#fff!important;border:1px solid var(--f-hair)!important;border-radius:12px!important}
+.cs-card:not(.ctx){background:#fff!important;border:1px solid var(--f-hair)!important;border-radius:12px!important}
+.cs-card:not(.ctx)::before{display:none!important}
+.cs-card[data-state="WATCH"]:not(.ctx){border-left:4px solid var(--f-watch)!important}
+.cs-card[data-state="DEGRADED"]:not(.ctx){border-left:4px solid var(--f-degraded)!important}
+.cs-card[data-state="NORMAL"]:not(.ctx){border-left:4px solid var(--f-normal)!important}
+.cs-strip .meta,.cs-orbit .tag{text-transform:none!important;letter-spacing:0!important}
+"""
+
 def _fusion_css():
     f, t = THEME["fusion"], THEME
     lo = f["state_on_light"]
@@ -507,7 +525,7 @@ def inject(name, tag):
     tk = _tokens()
     style = _profile()
     if style == "fusion":
-        st.html("<style>" + _fusion_css() + "</style>")
+        st.html("<style>" + _fusion_css() + _UNSLOP + "</style>")
         st.html("<header class='cs-top'>"
                 f"<img class='mk mk-anim' alt='' aria-hidden='true' src='{_asset('csync_mark_animated.svg')}'>"
                 f"<img class='mk mk-static' alt='' aria-hidden='true' src='{_asset('csync_mark_static.svg')}'>"
