@@ -218,7 +218,7 @@ def resume_screen(cap):
     st.caption(strings["human_decision_pending"])
 
 
-def trend_svg(rows, base, thr, label, direction):
+def trend_svg(rows, base, thr, label):
     """Line chart as an SVG Markdown image with alt text (Vega marks carry no alt, axe svg-img-alt)."""
     import base64
     W, H, L, R, T, B = 640, 220, 52, 16, 16, 34
@@ -271,7 +271,7 @@ def trends_panel(day):
     frame = {UI["trend_value"]: [r["value"] for r in rows], UI["trend_base"]: [t["baseline_mean"]] * len(rows),
              UI["trend_thr"]: [t["threshold"]] * len(rows)}
     vals = [r["value"] for r in rows]
-    st.markdown(trend_svg(rows, t["baseline_mean"], t["threshold"], f"{names[ind]} ({t['unit']})", t["direction"]),
+    st.markdown(trend_svg(rows, t["baseline_mean"], t["threshold"], f"{names[ind]} ({t['unit']})"),
                 unsafe_allow_html=False)
     flagged = [str(r["day"]) for r in rows if r["flagged"]]
     st.markdown(UI["trend_flagged"].format(day=day, days=", ".join(flagged)) if flagged else UI["trend_none"].format(day=day))
