@@ -7,6 +7,7 @@ import re
 
 import pytest
 from streamlit.testing.v1 import AppTest
+from tests.helpers_app import open_app
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP = os.path.join(ROOT, "csync", "ui", "app.py")
@@ -23,7 +24,7 @@ DAY10 = {"Body": "NORMAL", "Attention": "NORMAL", "Morale": "NORMAL", "Mission":
 
 
 def page(day):
-    at = AppTest.from_file(APP, default_timeout=60).run()
+    at = open_app(APP, 60)
     at.slider[0].set_value(day).run()
     assert not at.exception, at.exception
     return at
@@ -68,7 +69,7 @@ def test_day9_six_steps_and_send_queue():
     seen = []
     for _ in range(6):
         seen.append(next(m.value for m in at.markdown if m.value.startswith("**Step ")))
-        nxt = next(b for b in at.button if b.label == "Next")
+        nxt = next(b for b in at.button if b.label == "Next" and b.key != "beat-next")
         if nxt.disabled:
             break
         nxt.click().run()
@@ -82,7 +83,7 @@ def test_day9_six_steps_and_send_queue():
 def test_day9_guided_values_shown_without_threshold():
     at = page(9)
     for _ in range(2):
-        next(b for b in at.button if b.label == "Next").click().run()
+        next(b for b in at.button if b.label == "Next" and b.key != "beat-next").click().run()
     h = html(at)
     assert "104" in h and "142 / 91" in h and "36.9" in h and "112" in h
     assert h.count("No NASA in-flight reference") == 2         # body temperature, blood glucose
@@ -168,7 +169,7 @@ def test_screen_resume_refused_day10():
 def test_daily_proposal_can_be_accepted_or_declined_by_a_human():
     import json as _j
     ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
-    at = AppTest.from_file(APP, default_timeout=60).run()
+    at = open_app(APP, 60)
     at.slider[0].set_value(7).run()
     labels = [b.label for b in at.button]
     assert ui["btn_accept"] in labels and ui["btn_decline"] in labels
@@ -183,7 +184,8 @@ def test_opening_hook_shows_the_day_9_problem_once_then_moves_to_day_7():
     at = AppTest.from_file(APP, default_timeout=60).run()
     assert ui["hook_title"] in [s.value for s in at.subheader]
     assert "14:10" in ui["hook_text"] and "13:00 to 19:00" in ui["hook_text"] and "19:20" in ui["hook_text"]
-    at.slider[0].set_value(3).run()
+    assert not at.slider, "the first screen is the problem and one button: no day-7 panel under a day-9 hook"
+    assert any("SYNTHETIC DATA" in w.value for w in at.warning), "the synthetic notice stays on the first screen"
     next(b for b in at.button if b.label == ui["hook_button"]).click().run()
     assert ui["hook_title"] not in [s.value for s in at.subheader]
     assert at.slider[0].value == 3          # the story restarts at beat 1, day 3
@@ -210,7 +212,7 @@ def test_story_beats_walk_the_frozen_days_in_order():
 def test_why_panel_reads_the_committed_research_numbers():
     import json as _j
     ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
-    at = AppTest.from_file(APP, default_timeout=60).run()
+    at = open_app(APP, 60)
     at.sidebar.radio[0].set_value(ui["tab_why"]).run()
     assert not at.exception, at.exception
     md = " ".join(m.value for m in at.markdown)
