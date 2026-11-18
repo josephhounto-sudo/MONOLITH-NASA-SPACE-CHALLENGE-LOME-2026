@@ -25,6 +25,7 @@ from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
 from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
 from csync.ui import style  # noqa: E402
+from csync.ui.why import short_verdict, why_parts  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
 theme = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
@@ -162,12 +163,20 @@ def decision_buttons(cap, day):
 
 
 def nominal(cap, day):
-    st.subheader(cap["situation"])
+    st.subheader(short_verdict(cap, strings["states"]))
     cols = st.columns(len(DIMENSIONS))
     for col, dim in zip(cols, DIMENSIONS):
         col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day, style.history(STATES_BY_DAY, dim, day)), unsafe_allow_html=True)
     with st.container(border=True):
-        st.markdown(f"**{UI['why_label']}** — {cap['explanation']}")
+        parts = why_parts(cap, UI)
+        st.markdown(f"**{UI['why_label']}**")
+        for line in parts["lines"]:
+            st.markdown(line)
+        with st.expander(UI["why_rule_label"]):
+            if parts["rule"]:
+                st.markdown(parts["rule"])
+            if cap.get("situation") and cap["situation"] != short_verdict(cap, strings["states"]):
+                st.markdown(cap["situation"])
         st.markdown(f"<div class='cs-action'><b>{UI['action_label']}</b> — {html.escape(str(cap['action'].get('text', '')))}</div>",
                     unsafe_allow_html=True)
         decision_buttons(cap, day)
@@ -259,7 +268,7 @@ def resume_screen(cap):
     st.caption(strings["human_decision_pending"])
 
 
-def trend_svg(rows, base, thr, label, direction):
+def trend_svg(rows, base, thr, label):
     """Line chart as an SVG Markdown image with alt text (Vega marks carry no alt, axe svg-img-alt)."""
     import base64
     W, H, L, R, T, B = 640, 220, 52, 16, 16, 34
@@ -312,7 +321,7 @@ def trends_panel(day):
     frame = {UI["trend_value"]: [r["value"] for r in rows], UI["trend_base"]: [t["baseline_mean"]] * len(rows),
              UI["trend_thr"]: [t["threshold"]] * len(rows)}
     vals = [r["value"] for r in rows]
-    st.markdown(trend_svg(rows, t["baseline_mean"], t["threshold"], f"{names[ind]} ({t['unit']})", t["direction"]),
+    st.markdown(trend_svg(rows, t["baseline_mean"], t["threshold"], f"{names[ind]} ({t['unit']})"),
                 unsafe_allow_html=False)
     flagged = [str(r["day"]) for r in rows if r["flagged"]]
     st.markdown(UI["trend_flagged"].format(day=day, days=", ".join(flagged)) if flagged else UI["trend_none"].format(day=day))

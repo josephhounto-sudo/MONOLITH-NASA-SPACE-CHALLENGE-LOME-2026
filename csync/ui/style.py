@@ -282,7 +282,7 @@ def _shape(body, filled=True):
     return _uri(f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'><g{paint}>{body}</g></svg>")
 
 
-def _orbit(core, dot=None, ring_extra="", dashed=False):
+def _orbit(core, dot=None, ring_extra=""):
     """C-Sync state glyph: the core keeps a distinct silhouette per state (circle / diamond / triangle / dashed square),
     the orbit says how far the crew member is from their own baseline ("in sync" -> drifting -> off the orbit). 15/11 · FAIT PAR L'IA."""
     ring = "<ellipse cx='16' cy='17' rx='14' ry='5.5' transform='rotate(-24 16 17)' fill='none' stroke='black' stroke-width='1.9'%s/>" % ring_extra
