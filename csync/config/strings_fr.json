@@ -337,5 +337,31 @@
     "G8": "La mesure de {name} a une heure dans le futur.",
     "G9": "La session est {state}, pas suspendue.",
     "G10": "Une autre demande de reprise est déjà en cours."
+  },
+  "assistant": {
+    "name": "C-Sync",
+    "crew_name": "Nia",
+    "ask_label": "Demander à C-Sync",
+    "questions": {
+      "why": "Pourquoi cette alerte ?",
+      "data": "Quelles données ?",
+      "limits": "Que ne fais-tu pas ?"
+    },
+    "learning": "J'apprends encore le normal de {crew}. Jour {n} sur 5.",
+    "calm": "Rien ne sort du normal propre à {crew} aujourd'hui.",
+    "missing": "Des mesures manquent aujourd'hui. J'affiche Inconnu, pas Normal.",
+    "drift": "{name} : {value}{unit}, habituel {mean}{unit}.",
+    "rule": "Ma règle : au moins {thr} écarts-types de la moyenne de {crew}, {days} jours de suite.",
+    "emergency": "{crew} a signalé {symptom} à {time} UTC. Les étapes guidées sont ouvertes.",
+    "resume_stale": "La mesure {name} a {age} min. La limite est {limit} min.",
+    "resume_refused": "Reprise refusée. De nouvelles mesures sont nécessaires.",
+    "data_origin": "Toutes les valeurs de l'équipage ici sont simulées.",
+    "data_origin_unstated": "L'origine de ces données n'est pas indiquée.",
+    "data_context": "Mission et habitat sont du contexte seulement. Ils ne sont pas dans mon calcul.",
+    "data_nasa": "Le contexte d'habitat vient de vraies données de capteurs NASA de l'habitat à rongeurs de l'ISS (RR-1).",
+    "limits_1": "Je compare {crew} avec {crew} des jours précédents. Je ne nomme pas ce qui ne va pas.",
+    "limits_2": "Mon seuil est un choix de conception, pas une limite clinique.",
+    "limits_3": "J'ai été réglé sur des équipages simulés seulement.",
+    "limits_4": "Un humain décide."
   }
 }

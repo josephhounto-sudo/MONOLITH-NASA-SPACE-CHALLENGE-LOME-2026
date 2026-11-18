@@ -337,5 +337,31 @@
     "G8": "The {name} reading has a time in the future.",
     "G9": "The session is {state}, not suspended.",
     "G10": "Another resume request is already being processed."
+  },
+  "assistant": {
+    "name": "C-Sync",
+    "crew_name": "Nia",
+    "ask_label": "Ask C-Sync",
+    "questions": {
+      "why": "Why this alert?",
+      "data": "What data is this?",
+      "limits": "What do you not do?"
+    },
+    "learning": "I am still learning {crew}'s normal. Day {n} of 5.",
+    "calm": "Nothing is outside {crew}'s own normal today.",
+    "missing": "Some readings are missing today. I show Unknown, not Normal.",
+    "drift": "{name}: {value}{unit}, usual {mean}{unit}.",
+    "rule": "My rule: at least {thr} spreads from {crew}'s own average, {days} days in a row.",
+    "emergency": "{crew} reported {symptom} at {time} UTC. Guided steps are open.",
+    "resume_stale": "The {name} reading is {age} min old. The limit is {limit} min.",
+    "resume_refused": "Resume refused. New measurements are needed.",
+    "data_origin": "Every crew value here is simulated.",
+    "data_origin_unstated": "The origin of this data is not stated.",
+    "data_context": "Mission and habitat are context only. They are not in my calculation.",
+    "data_nasa": "The habitat context is real NASA sensor data from the ISS rodent habitat (RR-1).",
+    "limits_1": "I compare {crew} with {crew}'s own past. I do not name what is wrong.",
+    "limits_2": "My threshold is a design choice, not a clinical limit.",
+    "limits_3": "I was tuned on simulated crews only.",
+    "limits_4": "A human decides."
   }
 }
