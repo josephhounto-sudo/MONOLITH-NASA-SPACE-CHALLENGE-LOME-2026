@@ -17,7 +17,6 @@
     "day_slider": "Jour de mission",
     "no_capsule": "Pas de capsule valide pour ce jour — rien n'est affiché comme normal.",
     "invalid_capsule": "Capsule invalide — non affichée. Rien n'est affiché comme normal.",
-    "fallback_notice": "Fichier de capsules introuvable : capsules construites en mémoire. Lancer : python scripts/run_story.py",
     "context_only": "Contexte seulement — non évalué",
     "why_label": "Pourquoi cet affichage",
     "action_label": "Action proposée",

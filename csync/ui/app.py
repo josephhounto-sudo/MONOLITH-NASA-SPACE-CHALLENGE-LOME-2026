@@ -31,27 +31,31 @@ theme = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
 strings = json.load(open(os.path.join(CFG, "strings_en.json"), encoding="utf8"))
 UI = strings["ui"]
 SCHEMA = json.load(open(os.path.join(ROOT, "contracts", "decision_capsule.schema.json"), encoding="utf8"))
+OUT_DIR = os.environ.get("CSYNC_OUT_DIR", os.path.join(ROOT, "data", "out"))   # tests point it at an empty folder (cold clone)
 DIMENSIONS = ["Body", "Attention", "Morale", "Mission", "Habitat"]
 CONTEXT_DIMENSIONS = ("Mission", "Habitat")
 
 
 # ------------------------------------------------------------------ data
-def fallback_capsules():
-    """Capsule file missing: build the same capsules in memory with scripts/run_story.py (written to a temp dir)."""
+@st.cache_resource
+def resolve_out_dir(preferred):
+    """Folder holding the generated story files. data/out/ is generated, not committed, so a clean clone (the hosted app)
+    builds them once, silently, into a temporary folder. A visitor never sees a developer message or a missing panel."""
+    needed = ("capsules_histoire.json", "trends_histoire.json")
+    if all(os.path.exists(os.path.join(preferred, n)) for n in needed):
+        return preferred
     spec = importlib.util.spec_from_file_location("run_story", os.path.join(ROOT, "scripts", "run_story.py"))
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    with tempfile.TemporaryDirectory() as d:
-        return mod.main(d)["histoire"]
+    built = tempfile.mkdtemp(prefix="csync_out_")
+    mod.main(built)
+    return built
 
 
 @st.cache_data
-def load_capsules():
-    path = os.path.join(ROOT, "data", "out", "capsules_histoire.json")
-    if os.path.exists(path):
-        with open(path, encoding="utf8") as f:
-            return json.load(f), False
-    return fallback_capsules(), True
+def load_capsules(out_dir):
+    with open(os.path.join(out_dir, "capsules_histoire.json"), encoding="utf8") as f:
+        return json.load(f)
 
 
 def is_valid(cap):
@@ -228,9 +232,7 @@ def trend_svg(rows, base, thr, label, direction):
 
 def trends_panel(day):
     """Dynamic chart per indicator up to the chosen day, against the personal baseline (reads data/out/trends_histoire.json)."""
-    path = os.path.join(ROOT, "data", "out", "trends_histoire.json")
-    if not os.path.exists(path):
-        return
+    path = os.path.join(OUT, "trends_histoire.json")
     data = json.load(open(path, encoding="utf8"))["indicators"]
     st.divider()
     st.subheader(UI["trend_title"])
@@ -507,7 +509,7 @@ def version_stamp():
     except Exception:
         v = "unknown"
     try:
-        t = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(ROOT, "data", "out", "capsules_histoire.json")), datetime.timezone.utc).strftime("%d/%m %H:%M")
+        t = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(OUT, "capsules_histoire.json")), datetime.timezone.utc).strftime("%d/%m %H:%M")
     except OSError:
         t = "unknown"
     return UI["version_label"].format(v=v, t=t)
@@ -524,9 +526,8 @@ def provenance_table():
 st.set_page_config(page_title=strings["app_title"], layout="wide")
 style.inject(UI["brand_name"], UI["brand_tag"])
 st.warning(strings["synthetic_banner"])
-caps, fallback = load_capsules()
-if fallback:
-    st.caption(UI["fallback_notice"])
+OUT = resolve_out_dir(OUT_DIR)
+caps = load_capsules(OUT)
 day = st.slider(UI["day_slider"], 1, 10, 7)
 today = [c for c in caps if c.get("day") == day]
 STATES_BY_DAY = {c["day"]: c["states"] for c in caps if c.get("capsule_type", "daily") == "daily" and is_valid(c)}

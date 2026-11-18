@@ -17,7 +17,6 @@
     "day_slider": "Mission day",
     "no_capsule": "No valid capsule for this day — nothing is shown as normal.",
     "invalid_capsule": "Invalid capsule — not displayed. Nothing is shown as normal.",
-    "fallback_notice": "Capsule file not found: capsules built in memory. Run: python scripts/run_story.py",
     "context_only": "Context only — not evaluated",
     "why_label": "Why this view",
     "action_label": "Proposed action",
