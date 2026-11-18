@@ -1,21 +1,33 @@
-# Tâches Cursor — lot 2 (19/11/2026, avant midi UTC)
+# Tâches Cursor — lot 3 « attaquer la règle » (19/11/2026, avant 12:00 UTC)
 
-Budget: 24 $ restants au 18/11 à 21:20 (dashboard cursor.com). Arrêter dès 14 $ restants et rendre compte. Mode Agent local, branche `cursor-v3` depuis `v2` (pas `v2` directement).
-Propriété: Cursor = nouveaux fichiers `csync/ui/theme_dark.py`, `scripts/`, tests de ces fichiers. Claude = `csync/ui/style.py`, textes, histoire. `AGENTS.md`, `contracts/`, histoire gelée: intouchables. Le gel du 14/11 ne s'applique pas à v2 (décision Joseph, 18/11).
+But falsifiable: un relecteur expert qui attaque la règle de dérive et la porte de reprise ne trouve aucune erreur que le dépôt n'ait déjà écrite et chiffrée.
+Budget: ~18 $ au 18/11 à 22:40. Dépenser 14 $ au plus. Arrêter à 4 $ restants et rendre compte. Mode Agent local, branche `cursor-v4` (déjà créée depuis `v2`).
+Propriété: Cursor = `tests/`, `scripts/`, `requirements-dev.txt`. INTOUCHABLES: `csync/rules.py`, `csync/gate.py`, `csync/ui/`, `csync/config/`, `contracts/`, `AGENTS.md`, histoire gelée, `requirements.txt` (l'app déployée en dépend). Règle v3 gelée: une divergence se RAPPORTE, elle ne se corrige pas.
 
-## K1 — Thème sombre rendu et mesuré (la plus grosse, ~8 $ max)
-Critère: `?theme=dark` dans l'URL affiche l'app en sombre sans modifier le thème clair par défaut; `python scripts/measure_contrast.py` à 1400, 1000 et 390 px sur le jour 7 donne zéro ligne sous le seuil écrit; trois captures PNG commitées dans `docs/captures/`.
-5 échecs à tester d'abord: paramètre absent (clair par défaut); valeur inconnue; mot d'état sur dégradé; page mobile; recharge Streamlit qui perd le paramètre.
-Couleurs de départ: `scripts/propose_dark_theme.py` (fond #14181F). Style: règles « unslop » ci-dessous.
+## Ordre et budget (valeur par dollar; un commit par tâche; tests complets verts avant chaque commit)
+T1 oracle (4 $) → T3 propriétés de la porte (2 $) → T4 faux positifs (1,5 $) → T5 contrôle à froid (1,5 $) → T2 mutations (4 $).
+Si un test échoue et que tu ne vois pas pourquoi en 2 essais: arrête cette tâche, écris-le dans le rapport, passe à la suivante.
 
-## K2 — Artefact de mesure à 390 px (~3 $)
-Au jour 7 mobile, « Attention ▲ Degraded » sort à 1,71:1 alors que le même mot est à 4,3+ à 1000 px. Trouver si c'est le script (cadrage) ou la page; corriger le script ou signaler le vrai défaut avec la capture.
+## T1 — Oracle indépendant de la règle de dérive (~4 $)
+Matière brute: la docstring de `csync/rules.py` (texte de la règle P-06) et `docs/METHODES_NASA_DOSSIER.md`. NE PAS lire `evaluate()` avant d'avoir écrit l'oracle.
+Livrable: `tests/oracle_rule.py` (≤ 60 lignes, listes Python et `statistics`, pas de pandas) + `tests/test_rule_oracle.py`: test différentiel avec Hypothesis (≥ 2000 équipages: valeurs manquantes, plateaux, écart-type nul, jours 1-5 identiques) qui compare drapeaux, états et décisions de `evaluate()` à l'oracle.
+Hypothèse la plus risquée à tester d'abord: le compteur de jours consécutifs traverse la frontière jour 5/6 (un jour de référence compte dans la série). Dis si le texte de la règle l'autorise, avec le contre-exemple minimal réduit par Hypothesis.
+Échec écrit d'avance: au moins une divergence = résultat valide. Zéro divergence sur 2000 cas = écris le nombre de cas et la graine.
 
-## K3 — Contrôle de non-régression (~1 $)
-`python -m pytest -q` + `python scripts/compare_strings.py` + `tests/test_section_use.py` verts; rendre la sortie brute.
+## T3 — Propriétés de la porte de reprise (~2 $)
+`tests/test_gate_properties.py`, Hypothesis. Propriétés: (a) jamais `RESUME_AUTHORIZED` si la dernière mesure d'un prérequis dépasse sa limite; (b) un override seul n'autorise jamais; (c) ajouter une mesure plus ancienne ne change pas la décision; (d) entrée mal formée (clé absente, horodatage None): REFUSE ou erreur explicite, JAMAIS autorisé. (d) a des chances d'échouer: ne pas corriger `gate.py`, rapporter le contre-exemple.
 
-## Règles de design à appliquer (d'après heydamir/unslop, CC BY 4.0, © Damir Sokolovsky, github.com/heydamir/unslop)
-Neuf passes dans l'ordre: espacement (grille 4 px, éléments égaux = tailles égales), couleur (neutres d'une seule rampe, un seul accent, pas de dégradé/lueur/ombre colorée), icônes (un seul jeu), texte (faits de la page seulement, pas de ton publicitaire), typo (poids 400–500, casse normale), mise en page, détails (rayons emboîtés, cartes de chiffres sans mini-graphe), visuels (pas d'orbes décoratifs), mouvement (pas de boucle ni de pulsation).
+## T4 — Faux positifs sur des graines jamais utilisées (~1,5 $)
+`scripts/null_crews.py`: 1000 équipages sains via `csync.scale.crews` avec `seed0 >= 900000` (le réglage a utilisé 50000). Taux de faux positifs avec intervalle de Wilson à 95 %, comparé au « 0,7 % » de `docs/METHODES_NASA_DOSSIER.md` §7. Ne rien régler. Échec écrit d'avance: borne haute > 3 % → écrire le vrai chiffre dans le rapport, sans l'adoucir.
+
+## T5 — Contrôle de démarrage à froid scripté (~1,5 $)
+`scripts/cold_check.py URL` (Playwright): charge l'URL, attend le premier rendu, imprime le temps et le tampon de version, sort en code 1 si l'accroche attendue est absente (lire la phrase dans `csync/config/strings_en.json`, ne pas la recopier) ou si la page contient « Run: python », « Traceback » ou « not found ». Test sur une app locale `streamlit run csync/ui/app.py`. Joseph l'exécutera sur l'URL publique après déploiement.
+
+## T2 — Mutations sur la règle et la porte (~4 $)
+`mutmut` ne tourne pas sous Windows: UN essai, puis `scripts/mutate.py` maison (≤ 80 lignes, module `ast`: `>=`→`>`, `1.5`→`1.4`/`1.6`, `and`→`or`, constantes ±1) appliqué à `rules.py` et `gate.py` en copie temporaire; relancer `tests/test_rules.py`, `tests/test_gate.py`, T1, T3. Critère: ≥ 90 % de mutants tués sur `gate.py`, ≥ 85 % sur `rules.py`; chaque survivant reçoit un test qui le tue ou une justification « équivalent ». Liste brute des survivants dans le rapport.
+
+## Règles transverses
+`hypothesis` va dans `requirements-dev.txt` seulement. `python -m pytest -q` et `python scripts/compare_strings.py` verts avant chaque commit. Aucun message technique côté utilisateur. Messages de commit: pourquoi, pas seulement quoi. Pas de push sur autre chose que `cursor-v4`.
 
 ## À rendre
-`docs/RAPPORT_CURSOR.md` (15 lignes): fait / VERIFIED avec sortie brute / UNVERIFIED / ce qui peut casser / comment annuler.
+`docs/RAPPORT_CURSOR.md` (20 lignes): par tâche, FAIT / VERIFIED (sortie brute collée) / UNVERIFIED / divergences trouvées / dollars dépensés / ce qui peut casser / comment annuler.
