@@ -4,6 +4,7 @@ import os
 
 import pytest
 from streamlit.testing.v1 import AppTest
+from tests.helpers_app import open_app
 
 from csync.language import banned_hits
 from csync.rules import DIRECTION, Params, daily_values, evaluate
@@ -49,7 +50,7 @@ def test_hazard_table_names_the_five_nasa_hazards():
 
 
 def test_app_shows_chart_up_to_the_chosen_day_only():
-    at = AppTest.from_file(ROOT + "/csync/ui/app.py", default_timeout=40).run()
+    at = open_app(ROOT + "/csync/ui/app.py", 40)
     at.sidebar.radio[0].set_value("Trends").run()
     at.slider[0].set_value(7).run()
     assert not at.exception
@@ -60,7 +61,7 @@ def test_app_shows_chart_up_to_the_chosen_day_only():
 
 
 def test_countermeasures_panel_cites_sources_and_gives_no_advice():
-    at = AppTest.from_file(ROOT + "/csync/ui/app.py", default_timeout=30).run()
+    at = open_app(ROOT + "/csync/ui/app.py", 30)
     at.sidebar.radio[0].set_value("NASA hazards and countermeasures").run()
     assert not at.exception
     assert any("countermeasures" in s.value for s in at.subheader)

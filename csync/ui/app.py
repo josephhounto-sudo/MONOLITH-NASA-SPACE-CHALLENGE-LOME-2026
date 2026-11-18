@@ -627,6 +627,8 @@ style.inject(UI["brand_name"], UI["brand_tag"])
 if st.session_state.get("cs-nav", UI["tab_home"]) == UI["tab_home"]:
     hook_screen()   # the opening problem comes first, above the controls
 st.warning(strings["synthetic_banner"])
+if not st.session_state.get("cs-hook-done") and st.session_state.get("cs-nav", UI["tab_home"]) == UI["tab_home"]:
+    st.stop()   # first screen = the problem, one button, the synthetic notice; the day-7 panel would contradict the day-9 hook
 OUT = resolve_out_dir(OUT_DIR)
 caps = load_capsules(OUT)
 day = st.slider(UI["day_slider"], 1, 10, 7, key="cs-day")

@@ -3,6 +3,7 @@ import re
 
 import pytest
 from streamlit.testing.v1 import AppTest
+from tests.helpers_app import open_app
 
 from csync import silhouette
 from csync.language import banned_hits
@@ -43,7 +44,7 @@ def _zone_pills(at):
 
 @pytest.mark.parametrize("day,preselected", [(7, None), (9, "region-chest")])
 def test_app_shows_body_map_and_preselects_symptom_zone(day, preselected):
-    at = AppTest.from_file(ROOT + "/csync/ui/app.py", default_timeout=30).run()
+    at = open_app(ROOT + "/csync/ui/app.py", 30)
     at.slider[0].set_value(day).run()
     at.sidebar.radio[0].set_value("Body map").run()
     assert not at.exception
@@ -55,7 +56,7 @@ def test_app_shows_body_map_and_preselects_symptom_zone(day, preselected):
 
 
 def test_selecting_a_zone_shows_how_why_when():
-    at = AppTest.from_file(ROOT + "/csync/ui/app.py", default_timeout=30).run()
+    at = open_app(ROOT + "/csync/ui/app.py", 30)
     at.sidebar.radio[0].set_value("Body map").run()
     _zone_pills(at)[0].set_value("region-head").run()
     md = " ".join(m.value for m in at.markdown)

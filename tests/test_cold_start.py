@@ -10,6 +10,7 @@ import time
 
 import pytest
 from streamlit.testing.v1 import AppTest
+from tests.helpers_app import open_app
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 APP = os.path.join(ROOT, "csync", "ui", "app.py")
@@ -23,7 +24,7 @@ def cold_page(tmp_path_factory):
     os.environ["CSYNC_OUT_DIR"] = str(empty)
     try:
         t0 = time.time()
-        at = AppTest.from_file(APP, default_timeout=120).run()
+        at = open_app(APP, 120)
         at.first_render_seconds = time.time() - t0
         yield at, empty
     finally:
@@ -73,3 +74,11 @@ def test_navigation_opens_every_section_without_error(cold_page):
         at.sidebar.radio[0].set_value(opt).run()
         assert not at.exception, (opt, at.exception)
         assert DEV_TEXT.search(all_visible_text(at)) is None, opt
+
+
+def test_cold_first_screen_is_the_hook_without_developer_text(cold_page):
+    _, _ = cold_page
+    at = AppTest.from_file(APP, default_timeout=120).run()
+    assert not at.exception, at.exception
+    assert UI["hook_title"] in [s.value for s in at.subheader]
+    assert DEV_TEXT.search(all_visible_text(at)) is None
