@@ -486,6 +486,13 @@ _UNSLOP = """
 .cs-orbit .tag{white-space:normal!important;max-width:9ch;text-align:center;line-height:1.15}
 """
 
+# On a phone the sidebar is collapsed and its opener lives inside the toolbar: keep the toolbar, hide only its actions.
+_NAV = """
+[data-testid="stToolbar"]{display:flex!important;visibility:visible!important}
+[data-testid="stToolbar"] [data-testid="stToolbarActions"],[data-testid="stToolbar"] [data-testid="stMainMenu"],[data-testid="stToolbar"] [data-testid="stAppDeployButton"]{display:none!important}
+[data-testid="stExpandSidebarButton"],[data-testid="stSidebarCollapsedControl"]{display:flex!important;visibility:visible!important}
+"""
+
 def _fusion_css():
     f, t = THEME["fusion"], THEME
     lo = f["state_on_light"]
@@ -530,7 +537,7 @@ def inject(name, tag):
     tk = _tokens()
     style = _profile()
     if style == "fusion":
-        st.html("<style>" + _fusion_css() + _UNSLOP + "</style>")
+        st.html("<style>" + _fusion_css() + _UNSLOP + _NAV + "</style>")
         st.html("<header class='cs-top'>"
                 f"<img class='mk mk-anim' alt='' aria-hidden='true' src='{_asset('csync_mark_animated.svg')}'>"
                 f"<img class='mk mk-static' alt='' aria-hidden='true' src='{_asset('csync_mark_static.svg')}'>"
