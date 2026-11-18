@@ -45,7 +45,7 @@
     "technical_log": "Journal technique",
     "brand_tag": "Care Sync · opérations de santé d'équipage, hors ligne",
     "brand_name": "C-Sync",
-    "habitat_title": "Habitat — données réelles de cabine ISS (NASA), contexte seulement, non noté",
+    "habitat_title": "Habitat — données réelles de cabine ISS (NASA), comparées à l'exigence NASA de CO2",
     "habitat_intro": "Télémétrie réelle de l'Environmental Data App de l'OSDR NASA, mission RR-1 (2014). Le CO2 est affiché en moyenne horaire en mmHg (ppm convertis à 760 mmHg de pression totale) face à l'exigence habitat NASA-STD-3001 (pression partielle moyenne de CO2 sur une heure de 3 mmHg ou moins). Les valeurs converties sont une approximation, pas une déclaration de conformité.",
     "habitat_flag": "Marqué ARTIFACT : le CO2 est resté exactement à {ppm:,.0f} ppm ({mm:.1f} mmHg) pendant {hours:.0f} h dans la série brute à 5 minutes. Origine inconnue (capteur ou remplissage). Ce n'est jamais affiché comme normal.",
     "habitat_series_co2": "CO2, moyenne horaire (mmHg)",
@@ -177,7 +177,7 @@
       {
         "hazard": "Milieux clos hostiles",
         "watched": "CO2, température et humidité de cabine, données ISS NASA réelles, avec marquages de qualité (panneau Habitat).",
-        "status": "Contexte seulement — non noté"
+        "status": "Calculé à partir de vraies données NASA (CO2 seulement)"
       }
     ],
     "hazard_source": "Source : NASA Human Research Program, 5 Hazards of Human Spaceflight, https://www.nasa.gov/hrp/hazards/ ; délai : NASA ASCEND 2022, NTRS 20220013418.",
@@ -239,7 +239,7 @@
     "tab_scale": "Preuves à l'échelle",
     "scale_title": "Preuves à l'échelle : calculées maintenant, pas saisies",
     "scale_real_h": "1. Télémétrie NASA réelle, retraitée depuis le fichier brut",
-    "scale_real_intro": "Fichier brut de l'Environmental Data App de l'OSDR NASA (SHA-256 vérifié). Le contrôle de qualité passe sur chaque point de 5 minutes : une série plate d'une heure ou plus est marquée ARTIFACT, jamais lue comme normale. Contexte habitat seulement : pas de physiologie d'équipage, rien de clinique.",
+    "scale_real_intro": "Fichier brut de l'Environmental Data App de l'OSDR NASA (SHA-256 vérifié). Le contrôle de qualité passe sur chaque point de 5 minutes : une série plate d'une heure ou plus est marquée ARTIFACT, jamais lue comme normale. État de l'habitat à partir du CO2 de la cabine seulement : pas de physiologie d'équipage, rien de clinique.",
     "scale_m_missions": "Missions avec télémétrie",
     "scale_m_points": "Points de 5 minutes lus",
     "scale_m_hours": "Heures de télémétrie",
@@ -357,7 +357,13 @@
     "data_origin": "Toutes les valeurs de l'équipage ici sont simulées.",
     "data_origin_unstated": "L'origine de ces données n'est pas indiquée.",
     "data_context": "Mission et habitat sont du contexte seulement. Ils ne sont pas dans mon calcul.",
-    "data_nasa": "Le contexte d'habitat vient de vraies données de capteurs NASA de l'habitat à rongeurs de l'ISS (RR-1).",
+    "data_nasa": "Le contexte d'habitat vient de vraies données de capteurs de cabine de l'ISS (mission RR-1).",
+    "habitat_watch": "Air de la cabine : {hours} h au-dessus de l'exigence NASA de {limit} mmHg de CO2 (vraies données NASA).",
+    "habitat_ok": "L'air de la cabine respecte l'exigence NASA de {limit} mmHg de CO2 (vraies données NASA).",
+    "habitat_unknown": "Les données du capteur de cabine sont inutilisables aujourd'hui. Habitat affiché Inconnu.",
+    "data_context_mission": "Mission est du contexte seulement. Il n'est pas dans mon calcul.",
+    "data_habitat_real": "L'habitat utilise de vraies données CO2 de la cabine ISS (mission RR-1), face à l'exigence NASA de {limit} mmHg.",
+    "data_habitat_scope": "Cette série n'est liée à aucun membre d'équipage et n'ouvre jamais une procédure à elle seule.",
     "limits_1": "Je compare {crew} avec {crew} des jours précédents. Je ne nomme pas ce qui ne va pas.",
     "limits_2": "Mon seuil est un choix de conception, pas une limite clinique.",
     "limits_3": "J'ai été réglé sur des équipages simulés seulement.",

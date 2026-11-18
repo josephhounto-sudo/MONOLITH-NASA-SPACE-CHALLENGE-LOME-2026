@@ -39,6 +39,9 @@ def allowed_numbers(cap):
         for k in ("value", "baseline_mean"):
             if s.get(k) is not None:        # baseline days and sensor outages carry no value or no mean
                 ok.add(f"{round(float(s[k]), 1):g}")
+    for s in cap.get("signals", []):
+        if s.get("dimension") == "Habitat":     # habitat numbers come from the computed day facts in the capsule
+            ok |= {str(s["hours_above"]), f"{round(float(s['limit']), 1):g}"}
     gi = cap.get("gate_inputs")
     if gi:
         ok.add(str(gi["max_age_min"]))
@@ -102,10 +105,27 @@ def test_missing_provenance_fails_closed(all_capsules):
     assert not any("simulated" in line for line in lines[:1])
 
 
-def test_data_answer_never_claims_nasa_data_enters_the_calculation(all_capsules):
+def test_data_answer_claims_nasa_data_in_the_calculation_only_when_the_capsule_says_so(all_capsules):
     _, cap = next(x for x in all_capsules if x[1].get("capsule_type", "daily") == "daily" and x[1]["day"] == 7)
+    assert cap["reliability"]["habitat_in_calculation"] is True
     text = " ".join(assistant.answer(cap, "data", STR["en"]))
-    assert "not in my calculation" in text and "context only" in text.lower()
+    assert "real NASA ISS cabin CO2 data" in text and "Mission is context only" in text
+    # fail closed: a capsule that does not carry the flag must not be described as using NASA data in the calculation
+    plain = json.loads(json.dumps(cap))
+    plain["reliability"]["habitat_in_calculation"] = False
+    plain["reliability"]["context_only"] = ["Mission", "Habitat"]
+    text2 = " ".join(assistant.answer(plain, "data", STR["en"]))
+    assert "uses real NASA" not in text2 and "not in my calculation" in text2
+
+
+def test_cabin_air_line_follows_the_computed_habitat_state(all_capsules):
+    caps = {(v, c.get("capsule_type", "daily"), c["day"]): c for v, c in all_capsules}
+    d9 = " ".join(assistant.answer(caps[("histoire", "daily", 9)], "why", STR["en"]))
+    assert "Cabin air: 8 h above NASA's 3 mmHg CO2 requirement (real NASA data)." in d9
+    d3 = " ".join(assistant.answer(caps[("histoire", "daily", 3)], "why", STR["en"]))
+    assert "Cabin air is within NASA's 3 mmHg CO2 requirement" in d3
+    d1 = " ".join(assistant.answer(caps[("histoire", "daily", 1)], "why", STR["en"]))
+    assert "Habitat shown as Unknown" in d1 and "within NASA" not in d1
 
 
 def test_unknown_question_is_refused(all_capsules):

@@ -45,7 +45,7 @@
     "technical_log": "Technical log",
     "brand_tag": "Care Sync · crew health operations, offline",
     "brand_name": "C-Sync",
-    "habitat_title": "Habitat — real NASA ISS cabin data (context only, not scored)",
+    "habitat_title": "Habitat — real NASA ISS cabin data, compared with the NASA CO2 requirement",
     "habitat_intro": "Real telemetry from the NASA OSDR Environmental Data App, mission RR-1 (2014). CO2 is shown as an hourly mean in mmHg (ppm converted at 760 mmHg total pressure) against the NASA-STD-3001 habitat requirement (average one-hour CO2 partial pressure of 3 mmHg or less). The converted values are an approximation, not a compliance statement.",
     "habitat_flag": "Flagged ARTIFACT: CO2 stayed at exactly {ppm:,.0f} ppm ({mm:.1f} mmHg) for {hours:.0f} h in the raw 5-minute series. Origin unknown (sensor or data fill). It is never shown as normal.",
     "habitat_series_co2": "CO2, hourly mean (mmHg)",
@@ -177,7 +177,7 @@
       {
         "hazard": "Hostile closed environments",
         "watched": "Cabin CO2, temperature and humidity from real NASA ISS data, with data-quality flags (Habitat panel).",
-        "status": "Context only — not scored"
+        "status": "Computed from real NASA data (CO2 only)"
       }
     ],
     "hazard_source": "Source: NASA Human Research Program, 5 Hazards of Human Spaceflight, https://www.nasa.gov/hrp/hazards/ ; delay: NASA ASCEND 2022, NTRS 20220013418.",
@@ -239,7 +239,7 @@
     "tab_scale": "Evidence at scale",
     "scale_title": "Evidence at scale: computed now, not typed in",
     "scale_real_h": "1. Real NASA telemetry, re-processed from the raw file",
-    "scale_real_intro": "Raw file from the NASA OSDR Environmental Data App (SHA-256 checked). Quality control runs on every 5-minute point: a flat run of one hour or more is flagged ARTIFACT, never read as normal. Habitat context only: no crew physiology, nothing clinical.",
+    "scale_real_intro": "Raw file from the NASA OSDR Environmental Data App (SHA-256 checked). Quality control runs on every 5-minute point: a flat run of one hour or more is flagged ARTIFACT, never read as normal. Habitat state from cabin CO2 only: no crew physiology, nothing clinical.",
     "scale_m_missions": "Missions with telemetry",
     "scale_m_points": "5-minute points read",
     "scale_m_hours": "Hours of telemetry",
@@ -357,7 +357,13 @@
     "data_origin": "Every crew value here is simulated.",
     "data_origin_unstated": "The origin of this data is not stated.",
     "data_context": "Mission and habitat are context only. They are not in my calculation.",
-    "data_nasa": "The habitat context is real NASA sensor data from the ISS rodent habitat (RR-1).",
+    "data_nasa": "The habitat context is real NASA ISS cabin sensor data (mission RR-1).",
+    "habitat_watch": "Cabin air: {hours} h above NASA's {limit} mmHg CO2 requirement (real NASA data).",
+    "habitat_ok": "Cabin air is within NASA's {limit} mmHg CO2 requirement (real NASA data).",
+    "habitat_unknown": "Cabin sensor data is unusable today. Habitat shown as Unknown.",
+    "data_context_mission": "Mission is context only. It is not in my calculation.",
+    "data_habitat_real": "The habitat state uses real NASA ISS cabin CO2 data (mission RR-1) against NASA's {limit} mmHg requirement.",
+    "data_habitat_scope": "That series is not tied to a crew member, and it never opens a procedure by itself.",
     "limits_1": "I compare {crew} with {crew}'s own past. I do not name what is wrong.",
     "limits_2": "My threshold is a design choice, not a clinical limit.",
     "limits_3": "I was tuned on simulated crews only.",

@@ -16,6 +16,7 @@ sys.path.insert(0, ROOT)
 
 import jsonschema  # noqa: E402
 
+from csync import habitat  # noqa: E402
 from csync.capsule import build_capsule, build_emergency_capsule, build_resume_capsule  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
 from csync.rules import daily_values, evaluate, event_rule  # noqa: E402
@@ -74,14 +75,14 @@ def send_status(report_payload):
             "ground_delay_min": 20}
 
 
-def story_events(df, states, episode_crit):
+def story_events(df, states, episode_crit, hab):
     caps = []
     for ev in event_rule(df):
         t = datetime.fromisoformat(ev["timestamp_utc"])
         day = (t - ts(1, 0)).days + 1
         ev = {**ev, "day": day}
         guided = df[(df.source_id == "GUIDED") & (df.day == day)].to_dict("records")
-        day_states = {**{k: str(v) for k, v in states.loc[day].items()}, "Mission": "UNKNOWN", "Habitat": "UNKNOWN"}
+        day_states = {**{k: str(v) for k, v in states.loc[day].items()}, "Mission": "UNKNOWN", "Habitat": hab[day]["state"]}
         report = {"day": day, "symptom": ev["trigger"],
                   "guided": [{k: g[k] for k in ("timestamp_utc", "indicator_id", "value", "value_text", "unit")} for g in guided]}
         caps.append(build_emergency_capsule(ev, guided, day_states, send_status(report)))
@@ -99,7 +100,7 @@ def story_events(df, states, episode_crit):
                        "measurements": [{**m, "timestamp": m["timestamp"].isoformat(timespec="minutes"),
                                          "age_min": round((rday - m["timestamp"]).total_seconds() / 60)} for m in meas],
                        "max_age_min": 10}
-        r_states = {**{k: str(v) for k, v in states.loc[day + 1].items()}, "Mission": "UNKNOWN", "Habitat": "UNKNOWN"}
+        r_states = {**{k: str(v) for k, v in states.loc[day + 1].items()}, "Mission": "UNKNOWN", "Habitat": hab[day + 1]["state"]}
         caps.append(build_resume_capsule(day + 1, gate_inputs["request_time_utc"], decision, reasons, gate_inputs,
                                          r_states, override_reasons=reasons_ovr, criticality=episode_crit))
     return caps
@@ -127,6 +128,7 @@ def write_trends(df, z, flags, ref, path):
 def main(out):
     os.makedirs(out, exist_ok=True)
     summary = {}
+    hab = habitat.story_days()          # real NASA ISS cabin data, days 1-10 (same for every variant)
     for variant, kw in VARIANTS:
         df = generate(variant, seed=42, **kw)
         df.to_csv(os.path.join(out, f"measurements_{variant}.csv"), index=False)
@@ -134,14 +136,15 @@ def main(out):
         states.to_csv(os.path.join(out, f"states_{variant}.csv"))
         dec.to_csv(os.path.join(out, f"decisions_{variant}.csv"), index=False)
         write_trends(df, z, flags, ref, os.path.join(out, f"trends_{variant}.json"))
-        events = story_events(df, states, "CRITICAL")
+        events = story_events(df, states, "CRITICAL", hab)
         em = [c for c in events if c["capsule_type"] == "emergency"]
         first = min((c["day"] for c in em), default=None)
         # the emergency episode stays open after its day until a human closes it (no closing event in the story)
         episode = {"procedure_id": em[0]["action"]["procedure_id"], "criticality": "CRITICAL",
                    "opened_utc": f"day {first}, {em[0]['time_utc']}"} if em else None
         caps = [build_capsule(d, states, dec, z, ref, flags=flags,
-                              open_episode=episode if (first is not None and d > first) else None) for d in states.index]
+                              open_episode=episode if (first is not None and d > first) else None,
+                              habitat=hab[int(d)]) for d in states.index]
         caps += events
         for c in caps:
             jsonschema.validate(c, SCHEMA)   # invalid capsule -> stop, never shown

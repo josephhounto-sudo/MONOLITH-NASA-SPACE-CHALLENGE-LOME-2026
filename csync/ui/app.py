@@ -33,7 +33,7 @@ UI = strings["ui"]
 SCHEMA = json.load(open(os.path.join(ROOT, "contracts", "decision_capsule.schema.json"), encoding="utf8"))
 OUT_DIR = os.environ.get("CSYNC_OUT_DIR", os.path.join(ROOT, "data", "out"))   # tests point it at an empty folder (cold clone)
 DIMENSIONS = ["Body", "Attention", "Morale", "Mission", "Habitat"]
-CONTEXT_DIMENSIONS = ("Mission", "Habitat")
+CONTEXT_DIMENSIONS = ("Mission",)   # Habitat is computed from real NASA data since V2 (decision P6, 18/11)
 
 
 # ------------------------------------------------------------------ data
@@ -80,6 +80,8 @@ def card(dim, state, day, hist=""):
     s = theme["state"][shown]
     if dim in CONTEXT_DIMENSIONS:
         label = UI["context_only"]
+    elif dim == "Habitat":
+        label = strings["states"][state] if state in strings["states"] else strings["states"]["UNKNOWN"]   # not a personal-baseline state
     elif day <= 5:
         shown = "UNKNOWN"
         s = theme["state"]["UNKNOWN"]
@@ -465,7 +467,7 @@ def body_map(symptom_zone=None, day=None):
 
 
 def habitat_panel():
-    """Real NASA ISS cabin data, context only. Reads data/real/habitat_*.csv (built by scripts/build_habitat.py)."""
+    """Real NASA ISS cabin data (the Habitat state is computed from it, see csync/habitat.py). Reads data/real/habitat_*.csv (built by scripts/build_habitat.py)."""
     with st.container(key="cs-habitat"):
         _habitat_body()
 

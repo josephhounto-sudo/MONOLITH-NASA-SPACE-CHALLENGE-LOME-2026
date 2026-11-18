@@ -108,8 +108,29 @@ def _run_lengths(z: pd.DataFrame, prm: Params) -> pd.DataFrame:
     return runs
 
 
+HABITAT_EVIDENCE = ("Habitat: REAL NASA ISS cabin data (OSDR EDA, mission RR-1, 26/09 to 05/10/2014), CO2 converted from ppm at "
+                    "760 mmHg total pressure (an approximation), compared with the NASA requirement NASA-STD-3001 Vol 2 V2 6004 "
+                    "(average one-hour CO2 partial pressure of at most 3 mmHg, as stated in NASA OCHMO-TB-004 Rev B). Sensor "
+                    "location and calibration are not documented, and the series is not tied to a crew member.")
+
+
+def habitat_sentence(h: dict) -> str:
+    """One sentence per day for the habitat state, from the computed facts only."""
+    src = "Habitat (real NASA ISS cabin data, mission RR-1)"
+    if h["state"] == "UNKNOWN":
+        return (f"{src}: only {h['valid_hours']} valid hours today (sensor plateau), so the habitat is shown as UNKNOWN, "
+                "never as NORMAL.")
+    if h["state"] == "WATCH":
+        return (f"{src}: {h['hours_above']} h of {h['valid_hours']} valid hours above the NASA requirement of {h['limit_mmhg']:g} mmHg "
+                f"for the one-hour CO2 partial pressure ({h['requirement']}); highest hour {h['max_mmhg']:g} mmHg. "
+                "The environment never opens a procedure by itself.")
+    return (f"{src}: CO2 stayed within the NASA requirement of {h['limit_mmhg']:g} mmHg on all {h['valid_hours']} valid hours "
+            f"({h['requirement']}); highest hour {h['max_mmhg']:g} mmHg.")
+
+
 def build_capsule(day, states, decisions, z, reference, *, flags=None, prm: Params = Params(),
-                  evidence: str = DEFAULT_EVIDENCE, data_origin: str = "SYNTHETIC", open_episode: dict | None = None) -> dict:
+                  evidence: str = DEFAULT_EVIDENCE, data_origin: str = "SYNTHETIC", open_episode: dict | None = None,
+                  habitat: dict | None = None) -> dict:
     """Daily DecisionCapsule for one day, from the outputs of csync.rules.evaluate().
 
     open_episode: an event episode still open on this day (e.g. the emergency, until a human closes it). The drift
@@ -126,8 +147,11 @@ def build_capsule(day, states, decisions, z, reference, *, flags=None, prm: Para
     building = day <= prm.baseline_days
 
     day_states = {dim: str(states.at[day, dim]) for dim in DRIFT_INDICATORS}
+    context_dims = list(CONTEXT_DIMENSIONS) if habitat is None else ["Mission"]   # habitat: real NASA data, in the calculation
     for dim in CONTEXT_DIMENSIONS:
-        day_states[dim] = "UNKNOWN"   # never NORMAL: not evaluated in this prototype
+        day_states[dim] = "UNKNOWN"   # never NORMAL when not evaluated
+    if habitat is not None:
+        day_states["Habitat"] = habitat["state"]
 
     signals, flagged, missing = [], [], []
     for dim, inds in DRIFT_INDICATORS.items():
@@ -146,7 +170,13 @@ def build_capsule(day, states, decisions, z, reference, *, flags=None, prm: Para
             if is_flag:
                 flagged.append((sig, int(runs.at[day, i])))
 
-    out = [k for k, v in day_states.items() if v in ("WATCH", "DEGRADED")]
+    n_crew_signals = len(signals)
+    if habitat is not None:
+        signals.append({"indicator_id": "HA01", "name": "Cabin CO2 (NASA requirement 3 mmHg)", "dimension": "Habitat",
+                        "value": habitat["max_mmhg"], "unit": "mmHg", "baseline_mean": None, "baseline_sd_used": None,
+                        "d": None, "flagged": habitat["state"] == "WATCH", "hours_above": habitat["hours_above"],
+                        "valid_hours": habitat["valid_hours"], "limit": habitat["limit_mmhg"]})
+    out = [k for k, v in day_states.items() if v in ("WATCH", "DEGRADED") and k in DRIFT_INDICATORS]
     unknown = [k for k in DRIFT_INDICATORS if day_states[k] == "UNKNOWN"]
     if building:
         situation = f"Day {day}: personal baseline being built (day {day} of {prm.baseline_days})."
@@ -157,6 +187,8 @@ def build_capsule(day, states, decisions, z, reference, *, flags=None, prm: Para
         situation = f"Day {day}: no evaluated dimension is away from the personal baseline."
     if not building and unknown:
         situation += " Not evaluated today (missing data): " + ", ".join(unknown) + "."
+    if habitat is not None and habitat["state"] == "WATCH":
+        situation += f" Habitat: {habitat['hours_above']} h above the NASA CO2 requirement."
 
     parts = []
     if building:
@@ -172,6 +204,8 @@ def build_capsule(day, states, decisions, z, reference, *, flags=None, prm: Para
             parts.append(f"{NAMES[i]} ({i}) is missing today, so its dimension is shown as UNKNOWN, never as NORMAL.")
         parts.append(f"Rule v3: an indicator is flagged when d >= {prm.d_threshold:g} on {prm.consecutive_days} consecutive days; "
                      "1 flagged indicator = WATCH, 2 or more = DEGRADED; 2 dimensions away from baseline open a procedure.")
+    if habitat is not None:
+        parts.append(habitat_sentence(habitat))
     explanation = " ".join(parts)
 
     if action == "OPEN_PROCEDURE":
@@ -181,22 +215,23 @@ def build_capsule(day, states, decisions, z, reference, *, flags=None, prm: Para
                 f"({open_episode['criticality']}) is still open until a human closes it.")
     else:
         text = "Continue the mission plan."
-    present = len(signals) - len(missing)
+    present = n_crew_signals - len(missing)
     capsule = {
         "capsule_type": "daily",
         "day": day,
         "states": day_states,
         "situation": _check(situation),
         "signals": signals,
-        "evidence": evidence,
+        "evidence": evidence + (" " + HABITAT_EVIDENCE if habitat is not None else ""),
         "explanation": _check(explanation),
-        "reliability": {"data_completeness": _num(present / len(signals), 2) if signals else None,
+        "reliability": {"data_completeness": _num(present / n_crew_signals, 2) if n_crew_signals else None,
                         "missing_indicators": missing,
                         "baseline_status": "building" if building else "ready",
                         "baseline_days": prm.baseline_days,
                         "sd_floor_applied": [i for i in sd_eff.index if not pd.isna(sd_eff[i]) and (pd.isna(sd[i]) or sd_eff[i] > sd[i])],
                         "detector": f"rule v3 (d >= {prm.d_threshold:g}, {prm.consecutive_days} consecutive days)",
-                        "context_only": CONTEXT_DIMENSIONS,
+                        "context_only": context_dims,
+                        "habitat_in_calculation": habitat is not None,
                         "data_origin": data_origin},
         "action": {"type": action, "procedure_id": pid, "criticality": crit, "text": _check(text)},
         "human_decision": "pending",

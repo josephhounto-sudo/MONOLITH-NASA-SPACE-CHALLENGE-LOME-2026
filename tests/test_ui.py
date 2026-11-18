@@ -14,11 +14,12 @@ CFG = os.path.join(ROOT, "csync", "config")
 STRINGS = json.load(open(os.path.join(CFG, "strings_en.json"), encoding="utf8"))
 THEME = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
 UI = STRINGS["ui"]
-CONTEXT = ("Mission", "Habitat")
-# Daily capsules of the story (seed 42, drift_amp 2.5): evaluated states, context dims stay UNKNOWN.
-DAY7 = {"Body": "WATCH", "Attention": "DEGRADED", "Morale": "NORMAL", "Mission": "UNKNOWN", "Habitat": "UNKNOWN"}
-DAY9 = DAY7
-DAY10 = {"Body": "NORMAL", "Attention": "NORMAL", "Morale": "NORMAL", "Mission": "UNKNOWN", "Habitat": "UNKNOWN"}
+CONTEXT = ("Mission",)      # Habitat is computed from real NASA data since V2 (decision P6)
+# Daily capsules of the story (seed 42, drift_amp 2.5): evaluated states; Mission stays UNKNOWN (context only);
+# Habitat is computed from real NASA ISS cabin CO2 against the NASA 3 mmHg requirement (story days 9-10 are above it).
+DAY7 = {"Body": "WATCH", "Attention": "DEGRADED", "Morale": "NORMAL", "Mission": "UNKNOWN", "Habitat": "NORMAL"}
+DAY9 = {**DAY7, "Habitat": "WATCH"}
+DAY10 = {"Body": "NORMAL", "Attention": "NORMAL", "Morale": "NORMAL", "Mission": "UNKNOWN", "Habitat": "WATCH"}
 
 
 def page(day):
@@ -47,13 +48,19 @@ def test_baseline_days_never_normal(day):
     h = html(page(day))
     for dim in ("Body", "Attention", "Morale"):
         assert re.search(rf">{dim}</div><div[^>]*>\? Personal baseline being built \(day {day} of 5\)<", h)
-    assert "✓ Normal" not in h
+        assert not re.search(rf">{dim}</div><div[^>]*>✓ Normal", h)      # crew dimensions only; Habitat has its own data
 
 
-def test_context_dimensions_never_normal():
+def test_mission_is_context_only_and_never_normal():
     h = html(page(8))
-    for dim in ("Mission", "Habitat"):
-        assert re.search(rf">{dim}</div><div[^>]*>\? Context only", h)
+    assert re.search(r">Mission</div><div[^>]*>\? Context only", h)
+
+
+@pytest.mark.parametrize("day,word", [(1, "Unknown"), (3, "Normal"), (9, "Watch")])
+def test_habitat_card_shows_the_computed_state_not_the_personal_baseline_message(day, word):
+    h = html(page(day))
+    assert re.search(rf">Habitat</div><div[^>]*>[^<]*{word}<", h), (day, word)
+    assert not re.search(r">Habitat</div><div[^>]*>[^<]*baseline being built", h)
 
 
 def test_day9_six_steps_and_send_queue():
