@@ -25,3 +25,13 @@ def test_fixed_rules_fire_on_two_consecutive_days_only():
     both = frame([7.2] * 5 + [6.0] * 5, [0] * 5 + [12] * 5)
     assert fixed(both) == 7
     assert fixed(frame([6.0] * 10, [0] * 10)) is None      # sleep alone never opens the two-indicator rule
+
+
+def test_reference_to_confirm_uses_the_published_thresholds():
+    from baseline_check import reference_to_confirm
+    ok = frame([7.5] * 10, [1] * 10)
+    short = frame([6.5] * 10, [1] * 10)
+    laps = frame([7.5] * 10, [12] * 10)
+    assert reference_to_confirm(ok) is False
+    assert reference_to_confirm(short) is True
+    assert reference_to_confirm(laps) is True

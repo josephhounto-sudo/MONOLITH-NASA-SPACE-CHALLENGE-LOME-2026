@@ -339,7 +339,7 @@
   },
   "assistant": {
     "name": "C-Sync",
-    "crew_name": "Nia",
+    "crew_name": "Kora",
     "ask_label": "Ask C-Sync",
     "questions": {
       "why": "Why this alert?",

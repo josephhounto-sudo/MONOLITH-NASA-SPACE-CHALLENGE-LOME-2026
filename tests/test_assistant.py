@@ -83,7 +83,7 @@ def test_story_beats_say_what_the_story_says(all_capsules):
     d7 = " ".join(assistant.answer(caps[("histoire", "daily", 7)], "why", STR["en"]))
     assert "sleep: 5.5 h, usual 7.2 h" in d7 and "Reaction time: 303.5 ms, usual 264.7 ms" in d7
     em = assistant.answer(caps[("histoire", "emergency", 9)], "why", STR["en"])
-    assert em[0] == "Nia reported chest pain at 14:10 UTC. Guided steps are open."
+    assert em[0] == "Kora reported chest pain at 14:10 UTC. Guided steps are open."
     assert em[1] == STR["en"]["fixed_medical_sentence"]
     rs = assistant.answer(caps[("histoire", "resume", 10)], "why", STR["en"])
     assert rs[0] == "The heart-rate reading is 14 min old. The limit is 10 min."
