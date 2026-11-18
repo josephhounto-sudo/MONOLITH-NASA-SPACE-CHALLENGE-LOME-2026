@@ -549,44 +549,45 @@ daily = next((c for c in today if c.get("capsule_type", "daily") == "daily"), No
 crits = {c.get("action", {}).get("criticality") for c in today if is_valid(c)}
 acting = any(c.get("action", {}).get("type") not in (None, "CONTINUE") for c in today if is_valid(c))
 style.field("critical" if "CRITICAL" in crits else "watch" if acting else "calm")
-# what demands action now comes first: the CRITICAL event on the dark stone surface, then the crew state
-for c in today:
-    if c.get("capsule_type") == "emergency" and is_valid(c) and c["ui_hint"] == "ACTION":
-        with st.container(key="cs-stone"):
-            action_screen(c)
-    elif c.get("capsule_type") == "resume" and is_valid(c):
-        with st.container(key="cs-stone"):
-            resume_screen(c)
-if daily is None:
-    st.error(UI["no_capsule"])
-elif not is_valid(daily):
-    st.error(UI["invalid_capsule"])
-else:
-    nominal(daily, day)
 _zone = None
 for _c in today:
     if _c.get("capsule_type") == "emergency":
         _m = re.search(r"zone: ([a-z]+)", _c.get("situation", ""))
         _zone = _m.group(1) if _m else None
-st.divider()
-st.subheader(UI["more_title"])
-_tabs = st.tabs([UI["tab_try"], UI["tab_cmd"], UI["tab_scale"], UI["tab_trends"], UI["tab_body"], UI["tab_nasa"], UI["tab_env"], UI["tab_sources"]])
-with _tabs[0]:
-    try_panel()
-with _tabs[1]:
+# vertical navigation: one section = one visitor question; the global state of the crew is first
+_SECTIONS = [UI["tab_home"], UI["tab_cmd"], UI["tab_body"], UI["tab_env"], UI["tab_trends"], UI["tab_scale"], UI["tab_nasa"], UI["tab_try"], UI["tab_sources"]]
+section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
+if section == UI["tab_home"]:
+    # what demands action now comes first: the CRITICAL event on the dark stone surface, then the crew state
+    for c in today:
+        if c.get("capsule_type") == "emergency" and is_valid(c) and c["ui_hint"] == "ACTION":
+            with st.container(key="cs-stone"):
+                action_screen(c)
+        elif c.get("capsule_type") == "resume" and is_valid(c):
+            with st.container(key="cs-stone"):
+                resume_screen(c)
+    if daily is None:
+        st.error(UI["no_capsule"])
+    elif not is_valid(daily):
+        st.error(UI["invalid_capsule"])
+    else:
+        nominal(daily, day)
+elif section == UI["tab_cmd"]:
     commander_panel(day)
-with _tabs[2]:
-    scale_panel()
-with _tabs[3]:
-    trends_panel(day)
-with _tabs[4]:
+elif section == UI["tab_body"]:
     body_map(_zone, day)
-with _tabs[5]:
+elif section == UI["tab_env"]:
+    habitat_panel()
+elif section == UI["tab_trends"]:
+    trends_panel(day)
+elif section == UI["tab_scale"]:
+    scale_panel()
+elif section == UI["tab_nasa"]:
     hazards_panel()
     countermeasures_panel()
-with _tabs[6]:
-    habitat_panel()
-with _tabs[7]:
+elif section == UI["tab_try"]:
+    try_panel()
+else:
     provenance_table()
     st.divider()
     st.subheader(UI["next_title"])

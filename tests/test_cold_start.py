@@ -54,6 +54,7 @@ def test_cold_start_does_not_write_into_the_repo_or_the_empty_folder(cold_page):
 
 def test_trends_panel_present_on_cold_start(cold_page):
     at, _ = cold_page
+    at.sidebar.radio[0].set_value(UI["tab_trends"]).run()
     assert UI["trend_title"] in [s.value for s in at.subheader], "the indicators-over-time panel vanished on a cold clone"
 
 
@@ -61,3 +62,14 @@ def test_cold_first_render_time_is_recorded_and_bounded(cold_page):
     at, _ = cold_page
     print(f"cold first render: {at.first_render_seconds:.1f} s")
     assert at.first_render_seconds < 60          # hosted app measured ~10 s of blank page on 2026-11-18; target < 5 s later
+
+
+def test_navigation_opens_every_section_without_error(cold_page):
+    at, _ = cold_page
+    nav = at.sidebar.radio[0]
+    assert nav.options[0] == UI["tab_home"], "the overall crew state must be the first entry"
+    assert len(nav.options) == 9
+    for opt in list(nav.options):
+        at.sidebar.radio[0].set_value(opt).run()
+        assert not at.exception, (opt, at.exception)
+        assert DEV_TEXT.search(all_visible_text(at)) is None, opt
