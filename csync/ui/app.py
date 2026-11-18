@@ -129,6 +129,33 @@ def story_bar():
         n.button(UI["story_next"], key="beat-next", type="primary", disabled=i == len(BEATS) - 1, on_click=_go_beat, args=(i + 1,))
 
 
+def _hook_timeline():
+    """The clock of the frozen day-9 story, drawn from the emergency capsule (link down/up, report time, arrival on the ground).
+    Nothing is typed in: if the capsule is missing the drawing is simply not shown."""
+    cap = next((c for c in load_capsules(resolve_out_dir(OUT_DIR)) if c.get("capsule_type") == "emergency" and is_valid(c)), None)
+    q = (cap or {}).get("send_queue") or {}
+    try:
+        t = {k: datetime.fromisoformat(q[k]) for k in ("link_down_utc", "link_up_utc", "report_received_utc")}
+        t["report"] = datetime.strptime(q["link_down_utc"][:10] + " " + cap["time_utc"], "%Y-%m-%d %H:%M")
+        t0, t1 = t["link_down_utc"], t["report_received_utc"]
+        span = (t1 - t0).total_seconds()
+        pos = {k: 100 * (v - t0).total_seconds() / span for k, v in t.items()}
+        gap = int((t["report_received_utc"] - t["report"]).total_seconds() // 60)
+    except (KeyError, TypeError, ValueError, ZeroDivisionError):
+        return
+    hm = lambda d: d.strftime("%H:%M")
+    st.markdown(
+        "<div class='cs-hooktl' role='img' aria-label='" + html.escape(UI["hook_tl_gap"].format(h=gap // 60, m=gap % 60)) + "'>"
+        f"<div class='bar'><div class='out' style='width:{pos['link_up_utc']:.1f}%'></div>"
+        f"<i style='left:{pos['report']:.1f}%'></i><i style='left:100%'></i></div>"
+        f"<div class='lab' style='left:0'>{hm(t['link_down_utc'])}<br>{UI['hook_tl_outage']}</div>"
+        f"<div class='lab mid' style='left:{pos['report']:.1f}%'>{hm(t['report'])}<br>{UI['hook_tl_report']}</div>"
+        f"<div class='lab end'>{hm(t['report_received_utc'])}<br>{UI['hook_tl_ground']}</div>"
+        "</div>"
+        f"<p class='cs-hooktl-gap'><b>{UI['hook_tl_gap'].format(h=gap // 60, m=gap % 60)}</b></p>",
+        unsafe_allow_html=True)
+
+
 def hook_screen():
     """Opening problem from the frozen story (day 9, 14:10 UTC), shown once above the overall state. Presentation only."""
     if st.session_state.get("cs-hook-done"):
@@ -137,6 +164,7 @@ def hook_screen():
         st.markdown(f"<div class='cs-kicker'>{UI['hook_kicker']}</div>", unsafe_allow_html=True)
         st.subheader(UI["hook_title"])
         st.markdown(UI["hook_text"])
+        _hook_timeline()
         st.button(UI["hook_button"], key="hook-go", type="primary", on_click=_leave_hook)
 
 

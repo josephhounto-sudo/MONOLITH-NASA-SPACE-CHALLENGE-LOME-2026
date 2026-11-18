@@ -235,3 +235,11 @@ def test_step5_shows_the_refusal_without_pressing_the_button():
     at2 = AppTest.from_file(APP, default_timeout=60).run()
     next(b for b in at2.button if b.label == ui["hook_button"]).click().run()
     assert "resume_result" not in at2.session_state
+
+
+def test_hook_draws_the_clock_from_the_capsule_not_from_typed_numbers():
+    ui = json.load(open(os.path.join(CFG, "strings_en.json"), encoding="utf8"))["ui"]
+    at = AppTest.from_file(APP, default_timeout=60).run()
+    h = html(at)
+    assert "cs-hooktl" in h and "5 h 10 min" in h and "14:10" in h and "19:20" in h and ui["hook_tl_ground"] in h
+    assert "role='img'" in h, "the drawing has a text alternative"

@@ -484,6 +484,15 @@ _UNSLOP = """
 .cs-card>div:nth-child(2){font-size:clamp(.9rem,1.2vw,2rem)!important}
 .cs-card .dim{overflow-wrap:normal!important;word-break:keep-all!important;hyphens:none!important}
 .cs-orbit .tag{white-space:normal!important;max-width:9ch;text-align:center;line-height:1.15}
+.cs-kicker::before{display:none!important}
+.cs-hooktl{position:relative;height:104px;margin:6px 4px 0}
+.cs-hooktl .bar{position:absolute;top:8px;left:0;right:0;height:10px;border-radius:5px;background:#efe9ec}
+.cs-hooktl .out{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--f-ink2,#4a5160)}
+.cs-hooktl i{position:absolute;top:-4px;width:2px;height:18px;margin-left:-1px;background:var(--f-ink,#14181f)}
+.cs-hooktl .lab{position:absolute;top:26px;font-size:.82rem;line-height:1.3;color:var(--f-ink,#14181f);max-width:34%}
+.cs-hooktl .lab.mid{top:62px}
+.cs-hooktl .lab.end{right:0;text-align:right}
+.cs-hooktl-gap{margin:2px 4px 14px;font-size:1rem}
 """
 
 # On a phone the sidebar is collapsed and its opener lives inside the toolbar: keep the toolbar, hide only its actions.
