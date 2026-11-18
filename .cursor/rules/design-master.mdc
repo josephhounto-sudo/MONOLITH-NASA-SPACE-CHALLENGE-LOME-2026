@@ -1,0 +1,12 @@
+---
+description: Design-master — l'interface se comprend avant de s'admirer
+alwaysApply: true
+---
+- Un écran = une question du visiteur. Premier écran: problème en une phrase, ce que fait le produit, un seul bouton. Aucun sigle ni valeur brute au premier regard.
+- Aucun symbole sans mot: chaque glyphe a une légende visible ou devient un mot (Normal, Attention, Urgence). Aucun état vide ni bannière de développeur.
+- Une couleur d'urgence, une d'attention, réservées à ces états; la gravité se lit aussi par le mot et la forme.
+- Mouvement qui signifie un changement d'état réel; respecter prefers-reduced-motion.
+- Deux familles de caractères au plus; une échelle d'espacement.
+- Lisibilité mesurée sur le rendu réel (captures à 390, 1000 et 1400 px), pas sur les couleurs déclarées: contraste ≥ 4,5:1 le corps, ≥ 7:1 les légendes < 14 px.
+- Paragraphe de plus de 3 lignes = défaut: découper (verdict, lignes courtes, détail replié).
+- Test de retrait (Rams): si on peut l'enlever sans perdre le sens, on l'enlève. Éviter le look générique (cartes toutes égales, dégradés sans fonction).

@@ -1,0 +1,12 @@
+---
+description: Code-master-writer — anticiper les pannes avant de coder
+alwaysApply: true
+---
+- Avant la première ligne: critère d'acceptation en une phrase; liste de 5 façons d'échouer (entrée vide, mesure périmée, doublon, démarrage à froid, fichier généré manquant, dépendance absente) avec un test écrit AVANT le code pour chacune.
+- Flux simple: pas de récursion, pas de branchements profonds; toute boucle a une borne; fonctions courtes; au moins deux validations par fonction qui touche une mesure ou une décision.
+- Aucune exception muette; vérifier toute valeur de retour qui peut échouer. Message d'erreur = quoi faire, jamais un code opaque.
+- Pas d'état global caché. Modules profonds: interface simple, complexité cachée dedans.
+- Ne jamais retirer une protection indépendante au profit d'un seul contrôle logiciel; réutiliser un module n'est pas le rendre sûr dans un nouveau contexte: retester.
+- Aucun message de développeur visible par un visiteur. Tout fichier généré dont l'app a besoin est committé ou produit au démarrage, et un test l'impose.
+- Tout seuil a une source, un jeu de réglage et un jeu de contrôle distincts, et la mention SIMULÉ quand la donnée l'est. Vérifier les licences avant d'importer un jeu de données.
+- Avant chaque commit: tests verts, aucun fichier mort, aucun secret, un seul but, message qui dit pourquoi.
