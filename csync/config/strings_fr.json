@@ -6,7 +6,7 @@
   "fixed_medical_sentence": "Suivre la check-list médicale de bord et l'officier médical de bord.",
   "waiting_link": "En attente de liaison — rapport en file",
   "delivered_once": "Remis au sol (une fois)",
-  "human_decision_pending": "Décision humaine : en attente",
+  "human_decision_pending": "Décision humaine : en attente. Le commandant ou le médecin de bord accepte ou refuse cette proposition ; C-Sync n'agit jamais seul.",
   "states": {
     "NORMAL": "Normal",
     "WATCH": "Surveillance",

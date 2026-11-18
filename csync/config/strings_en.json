@@ -6,7 +6,7 @@
   "fixed_medical_sentence": "Follow the onboard medical checklist and the crew medical officer.",
   "waiting_link": "Waiting for link — report queued",
   "delivered_once": "Delivered to ground (once)",
-  "human_decision_pending": "Human decision: pending",
+  "human_decision_pending": "Human decision: pending. The crew commander or the medical officer accepts or declines this proposal; C-Sync never acts alone.",
   "states": {
     "NORMAL": "Normal",
     "WATCH": "Watch",
