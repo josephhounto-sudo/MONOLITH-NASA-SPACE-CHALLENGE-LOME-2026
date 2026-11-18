@@ -17,7 +17,3 @@ def orbit_inner(state, color):
     d = f"<circle cx='{dot[0]}' cy='{dot[1]}' r='2.6' fill='{color}'/>" if dot else ""
     return ring + core.format(c=color) + d
 
-
-def orbit_svg(state, color, size=48, label=""):
-    aria = f" role='img' aria-label='{label}'" if label else " aria-hidden='true'"
-    return f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='-1 0 35 33' width='{size}' height='{round(size * 33 / 35)}'{aria}>{orbit_inner(state, color)}</svg>"
