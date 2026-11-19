@@ -1,5 +1,9 @@
 # Blocage — jalon 1, 19/11/2026
 
+Décision de Joseph le 19/11 : le verrou rouge est attendu. Les quatre modules sont commités sans modifier tests/test_reachability.py. Le rapport à jour est RAPPORT_CURSOR.md.
+
+## Blocage initial (dépassé)
+
 Le module `csync/analytics/changepoint.py` et `tests/test_changepoint.py` sont écrits. Les 8 tests du module passent. La suite complète ne passe pas, et les deux essais autorisés sont épuisés. Jalons 2, 3 et 4 non commencés. Les fichiers du module ne sont pas commités : un commit exige une suite verte.
 
 ## Essai 1
