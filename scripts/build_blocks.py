@@ -2,7 +2,7 @@
 Usage: python scripts/build_blocks.py [out_dir]   (default: ./out_blocks). Writes BLOC_CODE_<commit>.md
 The static part (rules, project summary, provisional values) lives in docs/blocks/code_header.md; everything else is
 read from the repository at build time and stamped with the commit."""
-import datetime, glob, json, os, re, subprocess, sys
+import datetime, glob, json, os, subprocess, sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__))); sys.path.insert(0, ROOT)
 R = lambda p: open(os.path.join(ROOT, p), encoding="utf-8").read()
 sh = lambda *a: subprocess.check_output(a, cwd=ROOT, text=True).strip()
@@ -15,7 +15,7 @@ URL = "https://github.com/josephhounto-sudo/MONOLITH-NASA-SPACE-CHALLENGE-LOME-2
 from synthetic.generator import generate
 from csync.rules import daily_values, evaluate, Params
 st = evaluate(daily_values(generate("histoire", seed=42, drift_amp=2.5, fast=True)), Params())[2]
-pt = subprocess.run([sys.executable, "-m", "pytest", "-q"], cwd=ROOT, capture_output=True, text=True)
+pt = subprocess.run([sys.executable, "-m", "pytest", "-q"], cwd=ROOT, capture_output=True, text=True, check=False)
 tests = pt.stdout.strip().splitlines()[-1] if pt.stdout.strip() else "pytest not run"
 facts = (f"## FAITS MESURÉS À LA GÉNÉRATION DE CE BLOC\n- pytest : {tests}\n- Histoire graine 42, drift_amp 2.5, Params() par défaut, jour 7 : "
          f"{json.dumps(dict(st.loc[7]))}\n- Dépôt : {URL} (le dépôt GitHub peut être vide : le code utile est dans ce bloc)\n")

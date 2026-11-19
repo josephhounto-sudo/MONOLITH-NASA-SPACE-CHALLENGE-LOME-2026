@@ -5,7 +5,7 @@ import datetime, pathlib, subprocess
 R = pathlib.Path(__file__).resolve().parent.parent
 def rd(p): return (R / p).read_text(encoding="utf8")
 try: sha = subprocess.check_output(["git", "-C", str(R), "rev-parse", "--short", "HEAD"], text=True).strip()
-except Exception: sha = "inconnu"
+except (OSError, subprocess.CalledProcessError): sha = "inconnu"
 now = datetime.datetime.now(datetime.timezone.utc).strftime("%d/%m/%Y %H:%M UTC")
 head = f"""# C-Sync — contexte pour IA (généré le {now}, base commit {sha})
 Source unique : ce dépôt public. Si ce fichier date de plus de 6 h, demande à M1 de le régénérer (P5/P8).

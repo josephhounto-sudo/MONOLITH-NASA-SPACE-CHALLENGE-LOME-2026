@@ -12,7 +12,7 @@ for name, files in targets:
         errs = list(v.iter_errors(json.load(open(f, encoding="utf8"))))
         print(("OK   " if not errs else "FAIL ") + os.path.relpath(f, ROOT), *[e.message for e in errs[:3]])
         bad += bool(errs)
-for n, s in schemas.items():
+for s in schemas.values():
     Draft202012Validator.check_schema(s)
 print(f"{len(schemas)} schemas valid; {bad} file(s) failing")
 sys.exit(1 if bad else 0)

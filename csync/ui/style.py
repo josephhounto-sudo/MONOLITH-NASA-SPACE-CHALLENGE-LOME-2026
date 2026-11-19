@@ -11,15 +11,15 @@ Rules (docs/DESIGN_DIRECTION.md):
 All colours come from csync/config/theme.json.
 """
 import base64
-import json
 import os
 from string import Template
 from urllib.parse import quote
 
 import streamlit as st
+from csync.jsonio import read_json
 
 CFG = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "config")
-THEME = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
+THEME = read_json(os.path.join(CFG, "theme.json"))
 
 
 def _rgba(hex_colour, alpha):

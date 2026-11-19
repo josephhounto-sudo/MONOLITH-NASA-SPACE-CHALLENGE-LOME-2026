@@ -14,7 +14,8 @@ from scripts.eda_load import load  # noqa: E402
 PLATEAU_MIN_H = 1.0  # a run of identical CO2 values lasting at least one hour is flagged ARTIFACT
 
 
-def main(out=os.path.join(ROOT, "data", "real")):
+def main(out=None):
+    out = os.path.join(ROOT, "data", "real") if out is None else out
     rows, rr1 = [], None
     for name, m in load().items():
         t = m.get("telemetry")

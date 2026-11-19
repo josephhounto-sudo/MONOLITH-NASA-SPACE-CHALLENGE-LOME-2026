@@ -39,8 +39,9 @@ def member_series(label: str) -> pd.DataFrame:
     return dv
 
 
-def board(day: int, prm: Params = Params()) -> pd.DataFrame:
+def board(day: int, prm: Params | None = None) -> pd.DataFrame:
     """One row per member for mission `day` (1-10), most urgent first. Columns: member, Body, Attention, Morale, action, procedure, since, flagged, human."""
+    prm = Params() if prm is None else prm
     rows = []
     for label, *_ in MEMBERS:
         z, flags, states, dec, _ref = evaluate(member_series(label), prm)

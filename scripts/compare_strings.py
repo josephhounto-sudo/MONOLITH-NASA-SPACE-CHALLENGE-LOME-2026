@@ -88,7 +88,7 @@ def gaps(en, fr, path=""):
     if isinstance(en, list):
         if len(en) != len(fr):
             found.append(f"{path}: length {len(en)} vs {len(fr)}")
-        for i, (a, b) in enumerate(zip(en, fr)):
+        for i, (a, b) in enumerate(zip(en, fr, strict=False)):   # unequal lengths are reported just above
             found.extend(gaps(a, b, f"{path}[{i}]"))
         return found
     if isinstance(en, str):

@@ -5,16 +5,16 @@ ARTIFACT (csync.quality.flag_plateaus), everything else is OK. Real NASA data ke
 """
 from __future__ import annotations
 
-import json
 import math
 import os
 
 import jsonschema
 
 from csync.quality import flag_plateaus
+from csync.jsonio import read_json
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-SCHEMA = json.load(open(os.path.join(ROOT, "contracts", "measurement.schema.json"), encoding="utf8"))
+SCHEMA = read_json(os.path.join(ROOT, "contracts", "measurement.schema.json"))
 EDA_INDICATORS = {"co2_ppm": ("HA01", "ppm"), "temp_c": ("HA02", "degC"), "rh_pct": ("HA03", "%")}
 
 
@@ -57,7 +57,7 @@ def eda_measurements(times, values, column: str, mission: str, min_len: int = 6)
     for run in flag_plateaus(values, min_len):
         flat.update(range(run["start"], run["end"] + 1))
     out = []
-    for i, (t, v) in enumerate(zip(times, values)):
+    for i, (t, v) in enumerate(zip(times, values, strict=True)):
         missing = v is None or (isinstance(v, float) and math.isnan(v))
         m = {"timestamp_utc": str(t), "indicator_id": indicator, "value": None if missing else float(v), "unit": unit,
              "quality": "MISSING" if missing else ("ARTIFACT" if i in flat else "OK"), "origin": "REAL_OPEN",

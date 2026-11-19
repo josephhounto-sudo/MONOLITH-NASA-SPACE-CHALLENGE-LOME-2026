@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import math
 
-import pandas as pd
 
 
 def flag_plateaus(values, min_len: int = 6) -> list[dict]:

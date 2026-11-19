@@ -1,0 +1,8 @@
+# Lint rules kept to defects, not style: undefined/unused names, likely bugs, silent exceptions, unclosed files.
+line-length = 200
+target-version = "py310"
+[lint]
+select = ["F", "E9", "B", "BLE", "S110", "S112", "SIM115", "PLW1510"]
+[lint.per-file-ignores]
+# rules.py is the frozen rule v3 (not edited); its shared Params() default is never mutated (tests/test_lint.py checks it).
+"csync/rules.py" = ["B008"]
