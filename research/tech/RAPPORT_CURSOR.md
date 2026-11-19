@@ -9,4 +9,4 @@ Changepoint — annuler : les fichiers ne sont pas commités ; les retirer du di
 capsule_sign — non commencé. Arrêt après le jalon 1. Rien à annuler.
 crdt_sim — non commencé. Arrêt après le jalon 1. Rien à annuler.
 hrv — non commencé. Arrêt après le jalon 1. Rien à annuler.
-Suite — le détail du blocage est dans research/tech/BLOCAGE.md. Branche tech-modules, pas de push de main.
+Suite — le détail du blocage est dans research/tech/BLOCAGE.md. glass-navy a avancé (registre, licences) : fusionné ici. Le registre n'importe pas les modules, le verrou d'orphelin reste. Pas de push de main.
