@@ -24,7 +24,7 @@ sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
 from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
-from csync.ui import icons, style, widgets  # noqa: E402
+from csync.ui import icons, style, tech_page, widgets  # noqa: E402
 from csync.ui.why import short_verdict, why_parts  # noqa: E402
 from csync.jsonio import read_json  # noqa: E402
 
@@ -663,9 +663,14 @@ for _c in today:
         _m = re.search(r"zone: ([a-z]+)", _c.get("situation", ""))
         _zone = _m.group(1) if _m else None
 # vertical navigation: one section = one visitor question; the global state of the crew is first
-_SECTIONS = [UI["tab_home"], UI["tab_cmd"], UI["tab_body"], UI["tab_env"], UI["tab_trends"], UI["tab_scale"], UI["tab_why"], UI["tab_nasa"], UI["tab_try"], UI["tab_sources"]]
+# two entries, one capsule and one rule: the role only changes the order of the sections and the one-line note
+role = st.session_state.get("cs-role", UI["role_crew"])   # the role radio sits below the navigation, so its value is read from the state
+_core = [UI["tab_body"], UI["tab_env"], UI["tab_trends"], UI["tab_tech"], UI["tab_scale"], UI["tab_why"], UI["tab_nasa"], UI["tab_try"], UI["tab_sources"]]
+_SECTIONS = [UI["tab_home"], UI["tab_cmd"]] + _core if role == UI["role_cmd"] else [UI["tab_home"]] + _core[:3] + [UI["tab_cmd"]] + _core[3:]
 section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
-_USE = {UI["tab_cmd"]: "use_cmd", UI["tab_body"]: "use_body", UI["tab_env"]: "use_env", UI["tab_trends"]: "use_trends", UI["tab_scale"]: "use_scale",
+role = st.sidebar.radio(UI["role_label"], [UI["role_crew"], UI["role_cmd"]], key="cs-role")
+st.sidebar.caption(UI["role_cmd_note"] if role == UI["role_cmd"] else UI["role_crew_note"])
+_USE = {UI["tab_cmd"]: "use_cmd", UI["tab_body"]: "use_body", UI["tab_env"]: "use_env", UI["tab_trends"]: "use_trends", UI["tab_tech"]: "use_tech", UI["tab_scale"]: "use_scale",
         UI["tab_why"]: "use_why", UI["tab_nasa"]: "use_nasa", UI["tab_try"]: "use_try", UI["tab_sources"]: "use_sources"}
 if section in _USE:
     st.caption(UI[_USE[section]])
@@ -693,6 +698,8 @@ elif section == UI["tab_env"]:
     habitat_panel()
 elif section == UI["tab_trends"]:
     trends_panel(day)
+elif section == UI["tab_tech"]:
+    tech_page.tech_panel(UI, daily, read_json(os.path.join(OUT, "trends_histoire.json")), day)
 elif section == UI["tab_scale"]:
     scale_panel()
 elif section == UI["tab_why"]:
