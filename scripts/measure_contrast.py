@@ -194,7 +194,8 @@ def _browser_opener(url):
                 if box["y"] > 1000 or box["y"] + box["height"] < 0:
                     el.scroll_into_view_if_needed(timeout=2000)
                 png = el.screenshot(timeout=3000)
-            except Exception:
+            except sync.Error as exc:   # an element that cannot be captured is reported, never silently counted as passing
+                print(f"NOT MEASURED ({width}px {role}): {text} ({type(exc).__name__})")
                 continue
             found.append({"role": role, "text": text, "font_px": round(float(font), 1), "png": png})
         return found
@@ -215,7 +216,7 @@ def _browser_opener(url):
                 pass
             try:
                 page.wait_for_selector(".cs-card", timeout=20000)
-            except Exception:
+            except sync.Error:
                 page.wait_for_timeout(3000)
             elements += grab(page.locator(".cs-card"), "state", 6, width)
             elements += grab(page.locator("[data-testid='stCaptionContainer']"), "caption", 6, width)

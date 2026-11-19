@@ -7,7 +7,7 @@ def err(m): errs.append(m)
 R = lambda p: open(os.path.join(ROOT, p), encoding="utf-8", errors="replace").read()
 
 # 1 tests
-r = subprocess.run([sys.executable, "-m", "pytest", "-q"], cwd=ROOT, capture_output=True, text=True)
+r = subprocess.run([sys.executable, "-m", "pytest", "-q"], cwd=ROOT, capture_output=True, text=True, check=False)
 if r.returncode: err("pytest fails:\n" + r.stdout[-400:])
 else: notes.append("pytest: " + r.stdout.strip().splitlines()[-1])
 
@@ -65,7 +65,7 @@ if "--blocks" in sys.argv:
     for p in sys.argv[sys.argv.index("--blocks") + 1:]:
         m = re.search(r"commit ([0-9a-f]{7})", open(p, encoding="utf-8").read()[:600])
         if not m: err(f"{p}: no commit stamp (P3)")
-        elif subprocess.run(["git", "diff", "--quiet", m.group(1), "HEAD", "--", "contracts", "csync", "synthetic", "docs/team/tasks.json", "docs/OPEN_DECISIONS.md", "docs/STORY.md"], cwd=ROOT).returncode:
+        elif subprocess.run(["git", "diff", "--quiet", m.group(1), "HEAD", "--", "contracts", "csync", "synthetic", "docs/team/tasks.json", "docs/OPEN_DECISIONS.md", "docs/STORY.md"], cwd=ROOT, check=False).returncode:
             err(f"{p}: STALE — repository inputs changed since commit {m.group(1)} (HEAD is {head}); rebuild it")
         else: notes.append(f"{p}: up to date with the inputs (stamp {m.group(1)})")
 for n in notes: print("OK  ", n)

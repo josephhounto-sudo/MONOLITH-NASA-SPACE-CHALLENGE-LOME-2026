@@ -40,7 +40,7 @@ def scenario(sid):
 
 def git_ref():
     try:
-        out = subprocess.run(["git", "describe", "--tags", "--always", "--dirty"], capture_output=True, text=True, cwd=ROOT)
+        out = subprocess.run(["git", "describe", "--tags", "--always", "--dirty"], capture_output=True, text=True, cwd=ROOT, check=False)
         return out.stdout.strip() or "inconnu"
     except OSError:
         return "inconnu"

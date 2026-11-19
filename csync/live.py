@@ -40,8 +40,9 @@ def story_day(day: int) -> dict:
     return {i: float(dv.at[day, i]) for i in INDICATORS if not math.isnan(dv.at[day, i])}
 
 
-def try_it(day6: dict, day7: dict, prm: Params = Params()) -> dict:
+def try_it(day6: dict, day7: dict, prm: Params | None = None) -> dict:
     """day6 / day7: {indicator_id: float or None}. Returns states of day 7, d per indicator, flags, decision, reference."""
+    prm = Params() if prm is None else prm
     b = baseline()
     rows = {6: day6, 7: day7}
     dv = pd.concat([b, pd.DataFrame({d: {i: (None if v.get(i) is None or (isinstance(v.get(i), float) and math.isnan(v.get(i))) else float(v[i]))

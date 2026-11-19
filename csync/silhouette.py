@@ -6,10 +6,11 @@ from __future__ import annotations
 
 import json
 import os
+from csync.jsonio import read_json
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FICHES = os.path.join(ROOT, "pitch", "silhouette", "fiches.json")
-THEME = json.load(open(os.path.join(ROOT, "csync", "config", "theme.json"), encoding="utf8"))
+THEME = read_json(os.path.join(ROOT, "csync", "config", "theme.json"))
 
 # region id -> (short label, shapes as (tag, attributes)); geometry of pitch/silhouette/silhouette.svg
 SHAPES = {

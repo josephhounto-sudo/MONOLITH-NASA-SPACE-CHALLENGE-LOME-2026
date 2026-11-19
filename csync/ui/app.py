@@ -26,12 +26,13 @@ from csync.gate import resume_gate  # noqa: E402
 from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
 from csync.ui import icons, style  # noqa: E402
 from csync.ui.why import short_verdict, why_parts  # noqa: E402
+from csync.jsonio import read_json  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
-theme = json.load(open(os.path.join(CFG, "theme.json"), encoding="utf8"))
-strings = json.load(open(os.path.join(CFG, "strings_en.json"), encoding="utf8"))
+theme = read_json(os.path.join(CFG, "theme.json"))
+strings = read_json(os.path.join(CFG, "strings_en.json"))
 UI = strings["ui"]
-SCHEMA = json.load(open(os.path.join(ROOT, "contracts", "decision_capsule.schema.json"), encoding="utf8"))
+SCHEMA = read_json(os.path.join(ROOT, "contracts", "decision_capsule.schema.json"))
 OUT_DIR = os.environ.get("CSYNC_OUT_DIR", os.path.join(ROOT, "data", "out"))   # tests point it at an empty folder (cold clone)
 DIMENSIONS = ["Body", "Attention", "Morale", "Mission", "Habitat"]
 CONTEXT_DIMENSIONS = ("Mission",)   # Habitat is computed from real NASA data since V2 (decision P6, 18/11)
@@ -193,7 +194,7 @@ def decision_buttons(cap, day):
 def nominal(cap, day):
     st.subheader(short_verdict(cap, strings["states"]))
     cols = st.columns(len(DIMENSIONS))
-    for col, dim in zip(cols, DIMENSIONS):
+    for col, dim in zip(cols, DIMENSIONS, strict=True):
         col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day, style.history(STATES_BY_DAY, dim, day)), unsafe_allow_html=True)
     with st.container(border=True):
         parts = why_parts(cap, UI)
@@ -338,7 +339,7 @@ def trend_svg(rows, base, thr, label):
 def trends_panel(day):
     """Dynamic chart per indicator up to the chosen day, against the personal baseline (reads data/out/trends_histoire.json)."""
     path = os.path.join(OUT, "trends_histoire.json")
-    data = json.load(open(path, encoding="utf8"))["indicators"]
+    data = read_json(path)["indicators"]
     st.divider()
     st.subheader(UI["trend_title"])
     st.markdown(UI["trend_intro"])
@@ -349,9 +350,6 @@ def trends_panel(day):
         return
     t = data[ind]
     rows = [r for r in t["days"] if r["day"] <= day]
-    frame = {UI["trend_value"]: [r["value"] for r in rows], UI["trend_base"]: [t["baseline_mean"]] * len(rows),
-             UI["trend_thr"]: [t["threshold"]] * len(rows)}
-    vals = [r["value"] for r in rows]
     st.markdown(trend_svg(rows, t["baseline_mean"], t["threshold"], f"{names[ind]} ({t['unit']})"),
                 unsafe_allow_html=False)
     flagged = [str(r["day"]) for r in rows if r["flagged"]]
@@ -370,8 +368,8 @@ def md_table(cols, rows):
 def why_panel():
     """Why a personal baseline, and what happens when that baseline is wrong. Numbers are read from the committed research results."""
     base = os.path.join(ROOT, "research")
-    fp = json.load(open(os.path.join(base, "fixed_vs_personal_results.json"), encoding="utf8"))
-    hy = json.load(open(os.path.join(base, "hybrid_baseline_results.json"), encoding="utf8"))
+    fp = read_json(os.path.join(base, "fixed_vs_personal_results.json"))
+    hy = read_json(os.path.join(base, "hybrid_baseline_results.json"))
     cell = lambda r, kind, key: f"{r['drift'][key]['pct']:.1f} % / {r['healthy'][key]['pct']:.1f} %"
     rows = [{"f": UI["why_spread"][int(f[2])], "p": cell(fp[f], 0, "B_personal_2ind"), "c": cell(fp[f], 0, "C_fixed"), "d": cell(fp[f], 0, "D_fixed_sleep_only")}
             for f in ("f=0", "f=1", "f=2", "f=3")]
@@ -464,7 +462,7 @@ def try_panel():
     edited = st.data_editor(frame, hide_index=True, disabled=[UI["try_col_ind"]], width="stretch",
                             key="try_editor_" + ("b" if choice == UI["try_preset_base"] else "s"))
     def col(c):
-        return {i: (None if pd.isna(v) else float(v)) for i, v in zip(live.INDICATORS, edited[c])}
+        return {i: (None if pd.isna(v) else float(v)) for i, v in zip(live.INDICATORS, edited[c], strict=True)}
     day6, day7 = col(UI["try_col_a"]), col(UI["try_col_b"])
     with st.expander(UI["ad_title"]):
         st.caption(UI["ad_help"])
@@ -479,7 +477,7 @@ def try_panel():
     out = live.try_it(day6, day7)
     st.markdown(f"**{UI['try_result']}**")
     cols = st.columns(3)
-    for c, dim in zip(cols, ("Body", "Attention", "Morale")):
+    for c, dim in zip(cols, ("Body", "Attention", "Morale"), strict=True):
         c.markdown(card(dim, out["states"][dim], 7).replace("✓ ", ""), unsafe_allow_html=True)   # word + shape; the tick is kept for the slider day only
     rows = [{"n": names[i], "d": "–" if out["z"][i] is None else f"{out['z'][i]:+.1f}",
              "f": "✓ " + UI["try_flagged"] if out["flagged"][i] else ""} for i in live.INDICATORS]
@@ -543,7 +541,7 @@ def scale_panel():
         n0, n1 = (100, 50) if size == UI["scale_run_q"] else (300, 150)
         with st.spinner("…"):
             out = scale.crews(n0, n1)
-        pub = json.load(open(os.path.join(ROOT, "research", "pilot", "holdout_results.json"), encoding="utf8"))
+        pub = read_json(os.path.join(ROOT, "research", "pilot", "holdout_results.json"))
         def line(label, k, key):
             d = out[k]
             return {"set": label, "hits": f"{d['hits']}/{d['n']}", "pct": f"{100 * d['hits'] / d['n']:.1f}",
@@ -632,8 +630,9 @@ def version_stamp():
     """Which code and data this page shows (a stale browser tab or an old clone is visible at a glance)."""
     import subprocess, datetime
     try:
-        v = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True, timeout=3).stdout.strip() or "unknown"
-    except Exception:
+        v = subprocess.run(["git", "rev-parse", "--short", "HEAD"], cwd=ROOT, capture_output=True, text=True, timeout=3,
+                           check=False).stdout.strip() or "unknown"
+    except (OSError, subprocess.SubprocessError):   # no git on the host: the stamp says unknown, the page still renders
         v = "unknown"
     try:
         t = datetime.datetime.fromtimestamp(os.path.getmtime(os.path.join(OUT, "capsules_histoire.json")), datetime.timezone.utc).strftime("%d/%m %H:%M")
@@ -662,7 +661,7 @@ caps = load_capsules(OUT)
 day = st.slider(UI["day_slider"], 1, 10, 7, key="cs-day")
 today = [c for c in caps if c.get("day") == day]
 STATES_BY_DAY = {c["day"]: c["states"] for c in caps if c.get("capsule_type", "daily") == "daily" and is_valid(c)}
-_events, _link, _delay = {}, None, json.load(open(os.path.join(ROOT, "contracts", "decision.schema.json")))["properties"]["ground_delay_min"]["const"]
+_events, _link, _delay = {}, None, read_json(os.path.join(ROOT, "contracts", "decision.schema.json"))["properties"]["ground_delay_min"]["const"]
 for c in caps:
     if c.get("capsule_type") == "emergency" and is_valid(c):
         _events[c["day"]] = UI["event_emergency"]
