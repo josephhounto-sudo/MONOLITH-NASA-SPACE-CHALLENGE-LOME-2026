@@ -30,6 +30,9 @@ def page(day):
     return at
 
 
+ICO = "(?:<svg class='cs-ico'(?:(?!</div>).)*?</svg>)?"   # state icons are inline SVG, followed by the state word; never spans two cards
+
+
 def html(at):
     return " ".join(m.value for m in at.markdown)
 
@@ -41,27 +44,27 @@ def test_banner_always_shown():
 
 def test_day7_attention_degraded():
     h = html(page(7))
-    assert re.search(r">Attention</div><div[^>]*>▲ Degraded<", h)
+    assert re.search(r">Attention</div><div[^>]*>"+ICO+r" Degraded<", h)
 
 
 @pytest.mark.parametrize("day", [1, 3, 5])
 def test_baseline_days_never_normal(day):
     h = html(page(day))
     for dim in ("Body", "Attention", "Morale"):
-        assert re.search(rf">{dim}</div><div[^>]*>\? Personal baseline being built \(day {day} of 5\)<", h)
-        assert not re.search(rf">{dim}</div><div[^>]*>✓ Normal", h)      # crew dimensions only; Habitat has its own data
+        assert re.search(rf">{dim}</div><div[^>]*>"+ICO+rf" Personal baseline being built \(day {day} of 5\)<", h)
+        assert not re.search(rf">{dim}</div><div[^>]*>"+ICO+r" Normal", h)      # crew dimensions only; Habitat has its own data
 
 
 def test_mission_is_context_only_and_never_normal():
     h = html(page(8))
-    assert re.search(r">Mission</div><div[^>]*>\? Context only", h)
+    assert re.search(r">Mission</div><div[^>]*>"+ICO+r" Context only", h)
 
 
 @pytest.mark.parametrize("day,word", [(1, "Unknown"), (3, "Normal"), (9, "Watch")])
 def test_habitat_card_shows_the_computed_state_not_the_personal_baseline_message(day, word):
     h = html(page(day))
-    assert re.search(rf">Habitat</div><div[^>]*>[^<]*{word}<", h), (day, word)
-    assert not re.search(r">Habitat</div><div[^>]*>[^<]*baseline being built", h)
+    assert re.search(rf">Habitat</div><div[^>]*>"+ICO+rf"[^<]*{word}<", h), (day, word)
+    assert not re.search(r">Habitat</div><div[^>]*>"+ICO+r"[^<]*baseline being built", h)
 
 
 def test_day9_six_steps_and_send_queue():
@@ -128,7 +131,7 @@ def assert_dimensions(h, states):
         look = THEME["state"][state]
         label = dimension_label(dim, state)
         assert re.search(
-            rf">{dim}</div><div style='color:{look['color']};font-size:1.1em'>{re.escape(look['icon'])} {re.escape(label)}<",
+            rf">{dim}</div><div style='color:{look['color']};font-size:1.1em'><svg class='cs-ico'[^>]*aria-hidden='true'[^>]*>.*?</svg> {re.escape(label)}<",
             h,
         ), dim
 

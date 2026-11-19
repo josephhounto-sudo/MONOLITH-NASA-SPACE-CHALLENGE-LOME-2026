@@ -204,11 +204,19 @@ def _browser_opener(url):
             browser = p.chromium.launch(headless=True)
             page = browser.new_page(viewport={"width": width, "height": 1000})
             page.goto(url, wait_until="domcontentloaded", timeout=60000)
+            elements = []
+            try:   # first screen is the day-9 hook: measure it, then go past it to the day-7 state cards (story step 2)
+                page.get_by_role("button").filter(has_text="See how it started").first.wait_for(timeout=20000)
+                elements += grab(page.locator("[data-testid='stMarkdownContainer'] p, h1, h2, h3"), "body", 8, width)
+                page.get_by_role("button").filter(has_text="See how it started").first.click()
+                page.wait_for_timeout(2000)
+                page.get_by_role("button").filter(has_text="Next").first.click()
+            except Exception:
+                pass
             try:
                 page.wait_for_selector(".cs-card", timeout=20000)
             except Exception:
                 page.wait_for_timeout(3000)
-            elements = []
             elements += grab(page.locator(".cs-card"), "state", 6, width)
             elements += grab(page.locator("[data-testid='stCaptionContainer']"), "caption", 6, width)
             body = page.locator("[data-testid='stMarkdownContainer'] p, h1, h2, h3")

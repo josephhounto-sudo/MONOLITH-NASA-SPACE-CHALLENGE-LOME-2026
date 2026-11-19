@@ -24,7 +24,7 @@ sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
 from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
-from csync.ui import style  # noqa: E402
+from csync.ui import icons, style  # noqa: E402
 from csync.ui.why import short_verdict, why_parts  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
@@ -92,7 +92,7 @@ def card(dim, state, day, hist=""):
     ctx = " ctx" if dim in CONTEXT_DIMENSIONS else ""
     return (f"<div class='cs-card{ctx}' data-state='{shown}' style='{style.card_vars(s['color'])}'>"
             f"<div class='dim'>{dim}</div>"
-            f"<div style='color:{s['color']};font-size:1.1em'>{s['icon']} {label}</div>{hist}</div>")
+            f"<div style='color:{s['color']};font-size:1.1em'>{icons.state_icon(shown)} {label}</div>{hist}</div>")
 
 
 def fixed_sentence():

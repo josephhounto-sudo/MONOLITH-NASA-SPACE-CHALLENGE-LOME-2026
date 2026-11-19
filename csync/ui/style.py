@@ -485,6 +485,9 @@ _UNSLOP = """
 .cs-card .dim{overflow-wrap:normal!important;word-break:keep-all!important;hyphens:none!important}
 .cs-orbit .tag{white-space:normal!important;max-width:9ch;text-align:center;line-height:1.15}
 .cs-kicker::before{display:none!important}
+.cs-ico{vertical-align:-.2em;margin-right:.1em}
+.cs-card.ctx>div:nth-child(2){color:var(--f-ink,#14181f)!important}
+.cs-card.ctx{background:#fbfafb!important}
 .cs-hooktl{position:relative;height:104px;margin:6px 4px 0}
 .cs-hooktl .bar{position:absolute;top:8px;left:0;right:0;height:10px;border-radius:5px;background:#efe9ec}
 .cs-hooktl .out{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--f-ink2,#4a5160)}
