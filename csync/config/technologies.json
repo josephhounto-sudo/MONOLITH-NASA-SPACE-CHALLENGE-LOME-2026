@@ -1,0 +1,17 @@
+{
+  "statuses": {"BUILT": "Built and tested", "PROTOTYPE": "Prototype on simulated data", "ANNOUNCED": "Technology under construction"},
+  "items": [
+    {"id": "changepoint", "name": "Drift detection", "status": "ANNOUNCED", "module": "csync.analytics.changepoint",
+     "purpose": "Spots a change of slope in a personal series before a fixed threshold is crossed.", "data": "SIMULATED"},
+    {"id": "signed_capsule", "name": "Signed capsule", "status": "ANNOUNCED", "module": "csync.crypto.capsule_sign",
+     "purpose": "Detects any change made to a capsule after it was signed.", "data": "SIMULATED"},
+    {"id": "offline_sync", "name": "Offline sync", "status": "ANNOUNCED", "module": "csync.sync.crdt_sim",
+     "purpose": "Two copies of the capsule, Earth and spacecraft, merge after a communication outage.", "data": "SIMULATED"},
+    {"id": "hrv", "name": "Heart rhythm variability", "status": "ANNOUNCED", "module": "csync.physio.hrv",
+     "purpose": "Computes beat-to-beat variability from a heart rhythm series.", "data": "SIMULATED"},
+    {"id": "dtn", "name": "Delay-tolerant messaging", "status": "ANNOUNCED", "module": null,
+     "purpose": "Store-and-forward messages across a long Earth-spacecraft delay.", "data": "NONE"},
+    {"id": "camera_pulse", "name": "Pulse from a camera", "status": "ANNOUNCED", "module": null,
+     "purpose": "Estimates pulse from video on the device. Fragile in real light.", "data": "NONE"}
+  ]
+}

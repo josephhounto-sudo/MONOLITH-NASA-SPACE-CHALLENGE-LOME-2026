@@ -62,4 +62,4 @@ Aucun jeu PhysioNet chargé tant que la licence n'est pas confirmée par researc
 Tests: valeurs calculées à la main sur 4 intervalles; ValueError; déterminisme; stress plus haut = RMSSD plus bas (sur 20 graines, pas une seule).
 
 ## Acceptation commune
-`python -m pytest -q` vert, `ruff check csync tests` propre, aucun message de développeur affiché, couverture des lignes ajoutées, une phrase de rapport par module: quoi, vérifié comment, non vérifié.
+`python -m pytest -q` vert, `ruff check csync <vos fichiers de test>` propre, aucun message de développeur affiché, couverture des lignes ajoutées, une phrase de rapport par module: quoi, vérifié comment, non vérifié.

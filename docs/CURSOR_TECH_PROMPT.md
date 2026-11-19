@@ -5,7 +5,7 @@ Modèle: choisi à la main (Claude, GPT ou Gemini), jamais Auto.
 Lis AGENTS.md, puis docs/CONTRACTS_TECH.md en entier. Ignore la mention de gel des fonctions de AGENTS.md: décision de Joseph du 19/11, le gel ne s'applique plus.
 Branche: tech-modules, créée depuis glass-navy (git fetch; git checkout -b tech-modules origin/glass-navy).
 
-Travail en 4 jalons, dans cet ordre. Après CHAQUE jalon: python -m pytest -q vert, ruff check csync tests propre, un commit "TECH: <module>", puis passe au suivant. Si un jalon échoue après 2 essais, arrête-toi et écris le blocage dans research/tech/BLOCAGE.md au lieu de contourner.
+Travail en 4 jalons, dans cet ordre. Après CHAQUE jalon: python -m pytest -q vert, ruff check csync <vos fichiers de test> propre, un commit "TECH: <module>", puis passe au suivant. Si un jalon échoue après 2 essais, arrête-toi et écris le blocage dans research/tech/BLOCAGE.md au lieu de contourner.
 1. csync/analytics/changepoint.py (+ tests/test_changepoint.py)
 2. csync/crypto/capsule_sign.py (+ tests/test_capsule_sign.py)
 3. csync/sync/crdt_sim.py (+ tests/test_crdt_sim.py)
