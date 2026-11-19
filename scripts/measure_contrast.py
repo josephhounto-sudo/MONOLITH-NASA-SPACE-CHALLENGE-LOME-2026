@@ -212,8 +212,8 @@ def _browser_opener(url):
                 page.get_by_role("button").filter(has_text="See how it started").first.click()
                 page.wait_for_timeout(2000)
                 page.get_by_role("button").filter(has_text="Next").first.click()
-            except Exception:
-                pass
+            except sync.Error as exc:   # no hook (older version): measure the page as it opens, and say so
+                print(f"hook not found at {width}px, measuring the page as it opens ({type(exc).__name__})")
             try:
                 page.wait_for_selector(".cs-card", timeout=20000)
             except sync.Error:

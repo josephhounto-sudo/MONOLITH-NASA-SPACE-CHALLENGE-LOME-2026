@@ -27,7 +27,7 @@ JS = """() => {
 
 
 def main(url):
-    from playwright.sync_api import sync_playwright
+    from playwright.sync_api import Error as PWError, sync_playwright
     bad = 0
     with sync_playwright() as p:
         b = p.chromium.launch()
@@ -41,7 +41,7 @@ def main(url):
                         try:
                             pg.locator('section[data-testid="stSidebar"]').get_by_text(name, exact=True).first.click(timeout=3000)
                             break
-                        except Exception:
+                        except PWError:   # sidebar collapsed on narrow screens: open it, then retry once
                             pg.locator('[data-testid="stSidebarCollapsedControl"], [data-testid="stExpandSidebarButton"]').first.click(timeout=3000)
                             pg.wait_for_timeout(600)
                     pg.wait_for_timeout(2500)
