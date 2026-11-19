@@ -65,5 +65,6 @@
     "baseline": "#5B6670",
     "threshold": "#B25E00",
     "ring": "#FFFFFF"
-  }
+  },
+  "navy": {"note": "Dark glass on navy (19/11, validated by Joseph). Panel luminance under any text stays <= 0.07; coral only for DEGRADED/urgent; cream is the action and focus colour.", "paper": "#14213D", "deep": "#0B1426", "cream": "#F4EDE0", "cream2": "#C9CFDB", "coral": "#FF6B5B", "normal": "#4CD6A0", "watch": "#F2A33A", "degraded": "#FF6B5B", "unknown": "#B4BFCE", "veil": "rgba(8,14,28,.78)", "edge": "rgba(244,237,224,.20)", "chart": {"ink": "#C9CFDB", "value": "#F4EDE0", "baseline": "#C9CFDB", "threshold": "#F2A33A", "flagged": "#FF6B5B", "ring": "#14213D", "series": "#6FB1F0", "limit": "#C9CFDB", "flag_line": "#F2A33A"}}
 }

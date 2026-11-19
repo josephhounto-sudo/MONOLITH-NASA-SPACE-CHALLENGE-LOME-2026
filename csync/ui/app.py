@@ -24,7 +24,7 @@ sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
 from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
-from csync.ui import icons, style  # noqa: E402
+from csync.ui import icons, style, widgets  # noqa: E402
 from csync.ui.why import short_verdict, why_parts  # noqa: E402
 from csync.jsonio import read_json  # noqa: E402
 
@@ -196,6 +196,17 @@ def nominal(cap, day):
     cols = st.columns(len(DIMENSIONS))
     for col, dim in zip(cols, DIMENSIONS, strict=True):
         col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day, style.history(STATES_BY_DAY, dim, day)), unsafe_allow_html=True)
+    sig = widgets.pick_signal(cap, day)
+    trend = read_json(os.path.join(OUT, "trends_histoire.json"))["indicators"].get(sig["indicator_id"]) if sig else None
+    rows = [r for r in trend["days"] if r["day"] <= day] if trend else []
+    if rows and rows[-1]["day"] == day and rows[-1]["value"] is not None:   # no card when the history does not reach the shown day
+        left, right = st.columns([1, 1.3])
+        left.markdown(widgets.indicator_card(sig, cap["states"][sig["dimension"]], rows, trend["threshold"], day, UI, strings["states"],
+                                             theme["navy"]["chart"]), unsafe_allow_html=True)
+        with right.container(border=True):
+            st.markdown(f"**{sig['name']}** ({sig['unit']})")
+            st.caption(UI["ind_curve_legend"])
+            st.markdown(widgets.curve_image(rows, sig["baseline_mean"], trend["threshold"], sig["name"], theme["navy"]["chart"], "Mission day"))
     with st.container(border=True):
         parts = why_parts(cap, UI)
         st.markdown(f"**{UI['why_label']}**")
@@ -301,39 +312,8 @@ def resume_screen(cap):
 
 
 def trend_svg(rows, base, thr, label):
-    """Line chart as an SVG Markdown image with alt text (Vega marks carry no alt, axe svg-img-alt)."""
-    import base64
-    W, H, L, R, T, B = 640, 220, 52, 16, 16, 34
-    vals = [r["value"] for r in rows if r["value"] is not None]
-    lo, hi = min(vals + [base, thr]), max(vals + [base, thr])
-    pad = (hi - lo) * 0.1 or 1
-    lo, hi = lo - pad, hi + pad
-    n = max(len(rows) - 1, 1)
-    X = lambda i: L + (W - L - R) * i / n
-    Y = lambda v: T + (H - T - B) * (1 - (v - lo) / (hi - lo))
-    ch = theme["chart"]
-    c_val, c_base, c_thr, txt = ch["value"], ch["baseline"], ch["threshold"], ch["ink"]
-    g = []
-    for v in (lo + pad, (lo + hi) / 2, hi - pad):
-        g.append(f'<text x="{L-6}" y="{Y(v)+4:.0f}" font-size="11" text-anchor="end" fill="{txt}" font-family="sans-serif">{v:.3g}</text>')
-    for i, r in enumerate(rows):
-        g.append(f'<text x="{X(i):.0f}" y="{H-14}" font-size="11" text-anchor="middle" fill="{txt}" font-family="sans-serif">{r["day"]}</text>')
-    g.append(f'<text x="{(L+W-R)/2:.0f}" y="{H-1}" font-size="11" text-anchor="middle" fill="{txt}" font-family="sans-serif">Mission day</text>')
-    g.append(f'<line x1="{L}" x2="{W-R}" y1="{Y(base):.1f}" y2="{Y(base):.1f}" stroke="{c_base}" stroke-width="1.5" stroke-dasharray="2 4"/>')
-    g.append(f'<line x1="{L}" x2="{W-R}" y1="{Y(thr):.1f}" y2="{Y(thr):.1f}" stroke="{c_thr}" stroke-width="1.5" stroke-dasharray="6 4"/>')
-    pts = " ".join(f"{X(i):.1f},{Y(r['value']):.1f}" for i, r in enumerate(rows) if r["value"] is not None)
-    g.append(f'<polyline points="{pts}" fill="none" stroke="{c_val}" stroke-width="2"/>')
-    for i, r in enumerate(rows):
-        if r["value"] is None:
-            continue
-        fill = c_thr if r["flagged"] else c_val
-        g.append(f'<circle cx="{X(i):.1f}" cy="{Y(r["value"]):.1f}" r="{5 if r["flagged"] else 3}" fill="{fill}" stroke="{ch["ring"]}" stroke-width="2"/>')
-    svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">' + "".join(g) + "</svg>"
-    flagged = [str(r["day"]) for r in rows if r["flagged"]]
-    alt = (f"{label}, days {rows[0]['day']} to {rows[-1]['day']}: values {min(vals):.3g} to {max(vals):.3g}; personal baseline {base:.3g}, "
-           f"threshold {thr:.3g}" + (f"; flagged days {', '.join(flagged)}." if flagged else "; no flagged day."))
-    uri = "data:image/svg+xml;base64," + base64.b64encode(svg.encode()).decode()
-    return f"![{alt}]({uri})"
+    """Trend curve as an SVG Markdown image with alt text (Vega marks carry no alt, axe svg-img-alt). Drawing code: csync/ui/widgets.py."""
+    return widgets.curve_image(rows, base, thr, label, theme["navy"]["chart"], "Mission day")
 
 
 def trends_panel(day):

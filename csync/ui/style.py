@@ -464,39 +464,100 @@ _FIELD = {"calm": ".06", "watch": ".22", "critical": ".62"}
 
 
 
-# Quiet chrome (unslop passes: colour, details, type, motion; heydamir/unslop, CC BY 4.0, (c) Damir Sokolovsky).
-# One neutral paper, hairline borders, no blur, no coloured glow, no tracked capitals. State is carried by word, shape and a left rail.
-_UNSLOP = """
-[data-testid="stApp"]{background:var(--f-paper)!important}
-[data-testid="stApp"]::before{display:none!important}
+# Structure rules kept from the quiet pass (unslop, heydamir/unslop, CC BY 4.0, (c) Damir Sokolovsky): state icons are inline SVG, so no decorative
+# glyph on the card, wrapped labels never overlap, and the hook draws its clock. Look (colour, glass) lives in _NAVY.
+_STRUCT = """
 .cs-bg{display:none!important}
-.cs-top,.cs-card,.cs-strip,.st-key-cs-habitat,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{
- -webkit-backdrop-filter:none!important;backdrop-filter:none!important;box-shadow:none!important}
-.cs-top,.cs-strip,[data-testid="stSlider"]{background:#fff!important;border:1px solid var(--f-hair)!important;border-radius:12px!important}
-.cs-card:not(.ctx){background:#fff!important;border:1px solid var(--f-hair)!important;border-radius:12px!important}
-.cs-card:not(.ctx)::before{display:none!important}
-.cs-card[data-state="WATCH"]:not(.ctx){border-left:4px solid var(--f-watch)!important}
-.cs-card[data-state="DEGRADED"]:not(.ctx){border-left:4px solid var(--f-degraded)!important}
-.cs-card[data-state="NORMAL"]:not(.ctx){border-left:4px solid var(--f-normal)!important}
-.cs-strip .meta,.cs-orbit .tag{text-transform:none!important;letter-spacing:0!important}
 .cs-card::after{display:none!important}
-.cs-card{padding:12px 10px!important}
-.cs-card>div:nth-child(2){font-size:clamp(.9rem,1.2vw,2rem)!important}
+.cs-strip .meta,.cs-orbit .tag{text-transform:none!important;letter-spacing:0!important}
+.cs-card>div:nth-child(2){font-size:clamp(.95rem,1.35vw,1.7rem)!important}
 .cs-card .dim{overflow-wrap:normal!important;word-break:keep-all!important;hyphens:none!important}
 .cs-orbit .tag{white-space:normal!important;max-width:9ch;text-align:center;line-height:1.15}
 .cs-kicker::before{display:none!important}
 .cs-ico{vertical-align:-.2em;margin-right:.1em}
-.cs-card.ctx>div:nth-child(2){color:var(--f-ink,#14181f)!important}
-.cs-card.ctx{background:#fbfafb!important}
 .cs-hooktl{position:relative;height:104px;margin:6px 4px 0}
-.cs-hooktl .bar{position:absolute;top:8px;left:0;right:0;height:10px;border-radius:5px;background:#efe9ec}
-.cs-hooktl .out{position:absolute;left:0;top:0;bottom:0;border-radius:5px;background:var(--f-ink2,#4a5160)}
-.cs-hooktl i{position:absolute;top:-4px;width:2px;height:18px;margin-left:-1px;background:var(--f-ink,#14181f)}
-.cs-hooktl .lab{position:absolute;top:26px;font-size:.82rem;line-height:1.3;color:var(--f-ink,#14181f);max-width:34%}
+.cs-hooktl .bar{position:absolute;top:8px;left:0;right:0;height:10px;border-radius:5px}
+.cs-hooktl .out{position:absolute;left:0;top:0;bottom:0;border-radius:5px}
+.cs-hooktl i{position:absolute;top:-4px;width:2px;height:18px;margin-left:-1px}
+.cs-hooktl .lab{position:absolute;top:26px;font-size:.82rem;line-height:1.3;max-width:34%}
 .cs-hooktl .lab.mid{top:62px}
 .cs-hooktl .lab.end{right:0;text-align:right}
 .cs-hooktl-gap{margin:2px 4px 14px;font-size:1rem}
 """
+
+# Glass on navy (19/11, validated by Joseph). Rule measured on his reference images: text on a panel darker than luminance 0.07 passes 4.5:1,
+# text on a clear or translucent panel (0.10 to 0.38) failed every time. So: glass and colour everywhere EXCEPT under text, where the veil is dark.
+# Cream is the action colour (primary buttons, the action bar, the selected day); coral only for DEGRADED; the state word and icon always stay.
+_NAVY = """
+@font-face{font-family:Doto;font-weight:700;src:url(data:font/woff2;base64,$doto) format("woff2");font-display:swap}
+:root{--f-paper:$paper;--f-ink:$cream;--f-ink2:$cream2;--f-stone:$deep;--f-stone2:#16264A;--f-cream:$cream;--f-cream2:$cream2;
+ --f-glass:$veil;--f-line:$edge;--f-hair:rgba(244,237,224,.16);
+ --f-normal:$normal;--f-watch:$watch;--f-degraded:$degraded;--f-unknown:$unknown;--f-d-watch:$watch;--f-d-degraded:$degraded}
+html,body,[data-testid="stApp"]{color:$cream;background:
+ radial-gradient(640px 520px at 8% 4%,rgba(47,76,140,.62),transparent 70%),
+ radial-gradient(560px 520px at 96% 80%,color-mix(in srgb,#C2493D calc(var(--f-warm-o)*55% + 12%),transparent),transparent 70%),
+ radial-gradient(520px 420px at 45% 108%,rgba(31,111,139,.42),transparent 70%),$paper!important;background-attachment:fixed}
+[data-testid="stApp"]::before{display:none!important}
+[data-testid="stSidebar"]{background:rgba(8,14,28,.84)!important;border-right:1px solid var(--f-line);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px)}
+a{color:$cream}
+.cs-top,[data-testid="stSlider"],.cs-strip,.st-key-cs-habitat,[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{
+ background-color:var(--f-glass)!important;background-image:linear-gradient(135deg,rgba(244,237,224,.09),rgba(244,237,224,0) 38%)!important;background-blend-mode:normal!important;
+ border:1px solid var(--f-line)!important;box-shadow:inset 1px 1px 0 rgba(244,237,224,.18),0 20px 50px rgba(0,0,0,.34)!important;
+ -webkit-backdrop-filter:blur(22px) saturate(140%)!important;backdrop-filter:blur(22px) saturate(140%)!important}
+.cs-top{border-radius:22px}
+[data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{background:rgba(8,14,28,.86)!important;border:1px solid var(--f-line)!important}
+[data-testid="stAlert"] p{color:$cream!important}
+.cs-card:not(.ctx){background-color:var(--f-glass)!important;border:1px solid var(--f-line)!important;border-radius:26px!important;padding:16px 18px!important;
+ background-image:linear-gradient(160deg,color-mix(in srgb,var(--c) 16%,transparent),transparent 58%),linear-gradient(135deg,rgba(244,237,224,.10),rgba(244,237,224,0) 38%)!important;
+ background-blend-mode:normal!important;
+ box-shadow:inset 1px 1px 0 rgba(244,237,224,.22),inset 0 0 28px rgba(244,237,224,.03),0 24px 60px rgba(0,0,0,.38)!important;
+ -webkit-backdrop-filter:blur(22px) saturate(140%)!important;backdrop-filter:blur(22px) saturate(140%)!important}
+.cs-card[data-state="DEGRADED"]:not(.ctx){background-image:linear-gradient(160deg,color-mix(in srgb,var(--c) 26%,transparent),transparent 62%),linear-gradient(135deg,rgba(244,237,224,.10),rgba(244,237,224,0) 38%)!important}
+.cs-card:not(.ctx)::before{background:radial-gradient(closest-side,rgba(244,237,224,.12),rgba(244,237,224,0))!important;opacity:.5}
+.cs-card:not(.ctx):hover{box-shadow:inset 1px 1px 0 rgba(244,237,224,.3),0 30px 70px rgba(0,0,0,.45)!important}
+.cs-card.ctx,.cs-card[data-state="UNKNOWN"]:not(.ctx){background:rgba(8,14,28,.58)!important;border:1.5px dashed rgba(201,207,219,.6)!important;border-radius:26px!important;box-shadow:none!important}
+.cs-card.ctx>div:nth-child(2),.cs-card[data-state="UNKNOWN"]>div:nth-child(2){color:var(--f-ink2)!important}
+.cs-card .hist i.fut{background:rgba(244,237,224,.38)}
+.cs-orbit .arc{border-color:rgba(244,237,224,.30)}
+.cs-orbit .halo{border-color:rgba(244,237,224,.6)}
+.cs-orbit .nd.fut{background:rgba(244,237,224,.42)}
+.cs-hooktl .bar{background:rgba(244,237,224,.16)}
+.cs-hooktl .out{background:$cream2}
+.cs-hooktl i{background:$cream}
+.cs-hooktl .lab{color:$cream}
+.stButton>button{background:rgba(244,237,224,.07)!important;color:$cream!important;border:1px solid var(--f-line)!important}
+.stButton>button p{color:inherit!important}
+.stButton>button:disabled{opacity:.6}
+.stButton>button[kind="primary"]{background:$cream!important;color:$deep!important;border-color:transparent!important;box-shadow:0 0 0 4px rgba(244,237,224,.12),0 10px 30px rgba(244,237,224,.16)}
+.stButton>button:focus-visible{outline:2px solid $cream;outline-offset:3px}
+.cs-action{background:$cream!important;color:$deep!important;border:0!important;border-radius:20px!important;box-shadow:0 0 0 1px rgba(244,237,224,.5),0 14px 40px rgba(244,237,224,.14)}
+.cs-action,.cs-action *{color:$deep!important}
+.st-key-cs-stone{border:1px solid color-mix(in srgb,var(--f-degraded) 45%,transparent)}
+.st-key-cs-habitat h3::before{background:$cream;color:$deep}
+.cs-ind{position:relative;margin:4px 0 14px;padding:20px 22px 14px;border-radius:28px;background-color:var(--f-glass);
+ background-image:linear-gradient(160deg,color-mix(in srgb,var(--c) 18%,transparent),transparent 55%),linear-gradient(135deg,rgba(244,237,224,.10),rgba(244,237,224,0) 38%);
+ border:1px solid var(--f-line);box-shadow:inset 1px 1px 0 rgba(244,237,224,.22),0 24px 60px rgba(0,0,0,.38);-webkit-backdrop-filter:blur(22px) saturate(140%);backdrop-filter:blur(22px) saturate(140%)}
+.cs-ind[data-state="NORMAL"]{--c:var(--f-normal)}.cs-ind[data-state="WATCH"]{--c:var(--f-watch)}.cs-ind[data-state="DEGRADED"]{--c:var(--f-degraded)}.cs-ind[data-state="UNKNOWN"]{--c:var(--f-unknown)}
+.cs-ind .row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.cs-ind .lab{font-weight:600;font-size:1.05rem;color:$cream}
+.cs-ind .chip{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:999px;border:1px solid var(--c);color:var(--c);font-weight:700;font-size:.92rem;background:rgba(0,0,0,.25)}
+.cs-ind .big{font-family:Doto,monospace;font-weight:700;font-size:clamp(64px,9vw,92px);line-height:1;display:flex;align-items:baseline;gap:10px;margin:12px 0 2px;color:$cream}
+.cs-ind .big small{font-family:var(--f-text);font-size:1.15rem;font-weight:500;color:$cream2}
+.cs-ind .big .arr{font-family:var(--f-text);font-size:1.8rem;color:var(--c)}
+.cs-ind .why{font-size:.98rem;color:$cream;margin:4px 0 8px}
+.cs-ind img{width:100%!important;max-width:none!important;height:auto!important;display:block}
+.cs-ind .ticks{display:flex;justify-content:space-between;font-size:.88rem;color:$cream2}
+@media (prefers-reduced-transparency:reduce){
+ .cs-top,.cs-card,.cs-ind,.cs-strip,.st-key-cs-habitat,[data-testid="stSlider"],[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"]{
+  -webkit-backdrop-filter:none!important;backdrop-filter:none!important;background-color:$deep!important;background-image:none!important}}
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){.cs-top,.cs-card,.cs-ind,[data-testid="stSlider"]{background-color:$deep!important}}
+"""
+
+
+def _navy_css():
+    n = THEME["navy"]
+    return Template(_NAVY).substitute(doto=_font("Doto-700.woff2"), **{k: n[k] for k in ("paper", "deep", "cream", "cream2", "normal", "watch", "degraded", "unknown", "veil", "edge")})
+
 
 # On a phone the sidebar is collapsed and its opener lives inside the toolbar: keep the toolbar, hide only its actions.
 _NAV = """
@@ -549,7 +610,7 @@ def inject(name, tag):
     tk = _tokens()
     style = _profile()
     if style == "fusion":
-        st.html("<style>" + _fusion_css() + _UNSLOP + _NAV + "</style>")
+        st.html("<style>" + _fusion_css() + _STRUCT + _navy_css() + _NAV + "</style>")
         st.html("<header class='cs-top'>"
                 f"<img class='mk mk-anim' alt='' aria-hidden='true' src='{_asset('csync_mark_animated.svg')}'>"
                 f"<img class='mk mk-static' alt='' aria-hidden='true' src='{_asset('csync_mark_static.svg')}'>"
@@ -577,10 +638,10 @@ def worst(states):
 
 
 def chart_colors(theme):
-    """Habitat chart colours: legible on the light glass for the fusion profile (graphics >= 3:1)."""
+    """Habitat chart colours: legible on the navy glass for the fusion profile (graphics >= 3:1)."""
     if _profile() == "fusion":
-        c = theme["fusion"]["chart"]
-        return [c["series"], c["limit"], c["flagged"]]
+        c = theme["navy"]["chart"]
+        return [c["series"], c["limit"], c["flag_line"]]
     return [theme["interactive"], theme["text_secondary"], theme["state"]["UNKNOWN"]["color"]]
 
 

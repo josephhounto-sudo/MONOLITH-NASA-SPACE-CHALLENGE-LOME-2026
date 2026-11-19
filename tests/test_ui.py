@@ -246,3 +246,22 @@ def test_hook_draws_the_clock_from_the_capsule_not_from_typed_numbers():
     h = html(at)
     assert "cs-hooktl" in h and "5 h 10 min" in h and "14:10" in h and "19:20" in h and ui["hook_tl_ground"] in h
     assert "role='img'" in h, "the drawing has a text alternative"
+
+
+def test_indicator_card_day7_is_real_markup_with_text_alternative():
+    """The watch-style card (reaction time, day 7) shows the capsule's state, an <img> with alt text, and never raw markdown or base64 as visible text."""
+    at = page(7)
+    cards = [m.value for m in at.markdown if "class='cs-ind'" in m.value]
+    assert len(cards) == 1, "exactly one indicator card on day 7"
+    h = cards[0]
+    assert "data-state='DEGRADED'" in h, "reaction time belongs to Attention, DEGRADED on day 7"
+    assert "Reaction time" in h and "Degraded" in h, "name and state word are written"
+    assert re.search(r"<img src='data:image/svg\+xml;base64,[A-Za-z0-9+/=]+' alt='[^']{20,}'>", h), "history drawing is an <img> with an alt text"
+    assert "![" not in h, "markdown image syntax would show as raw text inside an HTML block"
+    assert "304" in h and "ms" in h, "last value and unit"
+
+
+def test_no_indicator_card_while_baseline_builds():
+    """Days 1 to 5: nothing is flagged and the baseline is still being built, so no card and no empty frame."""
+    at = page(3)
+    assert not [m for m in at.markdown if "class='cs-ind'" in m.value]
