@@ -245,6 +245,7 @@
     "ind_beyond": "beyond the threshold",
     "ind_tick": "Day {d}",
     "ind_dots_alt": "{name}, days {a} to {b}: last value {v} {unit}; personal normal {base}, threshold {thr}; days beyond the threshold: {days}.",
+    "ind_delta": "{v} {unit} vs personal normal",
     "ind_curve_legend": "Dotted lines: personal normal and threshold.",
     "tab_why": "Why a personal baseline?",
     "why_title": "Why compare a person with their own normal?",

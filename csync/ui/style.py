@@ -544,6 +544,7 @@ a{color:$cream}
 .cs-ind .big{font-family:Doto,monospace;font-weight:700;font-size:clamp(64px,9vw,92px);line-height:1;display:flex;align-items:baseline;gap:10px;margin:12px 0 2px;color:$cream}
 .cs-ind .big small{font-family:var(--f-text);font-size:1.15rem;font-weight:500;color:$cream2}
 .cs-ind .big .arr{font-family:var(--f-text);font-size:1.8rem;color:var(--c)}
+.cs-ind .delta{margin:2px 0 6px}.cs-ind .delta span{display:inline-block;padding:3px 12px;border-radius:999px;background:rgba(255,107,91,.16);border:1px solid rgba(255,107,91,.5);color:$cream;font-weight:600;font-size:.92rem}
 .cs-ind .why{font-size:.98rem;color:$cream;margin:4px 0 8px}
 .cs-ind img{width:100%!important;max-width:none!important;height:auto!important;display:block}
 .cs-ind .ticks{display:flex;justify-content:space-between;font-size:.88rem;color:$cream2}

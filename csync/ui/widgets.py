@@ -82,13 +82,14 @@ def indicator_card(sig, state, rows, thr, day, ui, states_words, ch):
     chip = f"{icons.state_icon(state)} {html.escape(states_words[state])}"
     name = html.escape(sig["name"])
     dist = f"{abs(sig['d']):.1f}"
+    delta = ui["ind_delta"].format(v=f"{sig['value'] - base:+.0f}", unit=html.escape(unit))
     why = ui["ind_why"].format(base=_num(base), thr=_num(thr), unit=html.escape(unit), d=dist)
     t0, t1 = ui["ind_tick"].format(d=rows[0]["day"]), ui["ind_tick"].format(d=day)
     return (f"<section class='cs-ind' data-state='{state}' aria-label='{name}'>"
             f"<div class='row'><span class='lab'>{name}</span><span class='chip'>{chip}</span></div>"
             f"<div class='big'><span>{_num(sig['value'])}</span><small>{html.escape(unit)}</small>"
             f"<span class='arr' aria-label='{html.escape(ui['ind_beyond'])}'>{arrow}</span></div>"
-            f"<p class='why'>{why}</p>"
+            f"<p class='delta'><span>{delta}</span></p><p class='why'>{why}</p>"
             f"{dots_image(rows, base, thr, ch, alt)}"
             f"<div class='ticks'><span>{t0}</span><span>{t1}</span></div></section>")
 
