@@ -172,3 +172,12 @@ Les huit autres risques (os, muscles, vision, immunité, microbes, nutrition, so
 | 8 | Aucun inconnu n'a testé l'app | Le travail fermé a toujours priorité sur le retour extérieur | À faire (Joseph) : 5 à 7 inconnus, 60 s, trois questions |
 
 Ce qui a marché : pré-enregistrer le rejeu avant de calculer ; tester le pari le plus risqué en premier (flux ISS) ; déployer tôt et vérifier sur l'URL publique.
+
+## 14. Rétrospective n°2 et avancement (20/11/2026, 07:50 UTC) — main = b78093b
+| Constat | Cause | Action |
+|---|---|---|
+| La frise « Mars transit » était un dessin d'orbite sans fait | Décor hérité de la V2 | Remplacée par une barre d'opérations (temps, liaison, délai) + ligne de temps plate, mêmes champs en direct et dans l'histoire |
+| Risque d'intégrité : le lien soumis pointe sur `main`, qui change après la date limite | Lien de soumission = dépôt vivant ; étiquette de soumission jamais publiée (push refusé) | Note de version en tête du README (commit soumis `de0b5be`) ; PDF soumis jamais modifié ; Joseph doit publier l'étiquette via GitHub > Releases |
+| Urgence et questions de la vidéo : affirmées de mémoire auparavant | — | Vérifiées en ligne (`pitch/v3/QUESTIONS_ET_ECRANS.md`) |
+
+Avancement mesurable du plan V3 : lots 1 à 7 faits et vérifiés en ligne ; lot 8 (mode démo) partiel : le dialogue est dans l'histoire, la vidéo V3 n'est pas tournée ; lot 9 partiel : tests, contrôle à froid et contraste de l'accueil faits, aucun inconnu. Côté soumission : vidéo V3 décrite, diapos V3 écrites (contenu, pas encore mises en page), message au local lead rédigé (non envoyé).
