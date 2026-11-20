@@ -68,8 +68,8 @@ def test_cold_first_render_time_is_recorded_and_bounded(cold_page):
 def test_navigation_opens_every_section_without_error(cold_page):
     at, _ = cold_page
     nav = at.sidebar.radio[0]
-    assert nav.options[0] == UI["tab_home"], "the overall crew state must be the first entry"
-    assert len(nav.options) == 11
+    assert nav.options[0] == UI["tab_live"], "V3 (20/11): the live station console opens the app"
+    assert len(nav.options) == 12
     for opt in list(nav.options):
         at.sidebar.radio[0].set_value(opt).run()
         assert not at.exception, (opt, at.exception)
@@ -80,5 +80,8 @@ def test_cold_first_screen_is_the_hook_without_developer_text(cold_page):
     _, _ = cold_page
     at = AppTest.from_file(APP, default_timeout=120).run()
     assert not at.exception, at.exception
-    assert UI["hook_title"] in [s.value for s in at.subheader]
+    assert UI["live_title"] in [s.value for s in at.subheader]   # V3: live console + guide bot first
+    at.sidebar.radio[0].set_value(UI["tab_home"]).run()
+    assert not at.exception, at.exception
+    assert UI["hook_title"] in [s.value for s in at.subheader]   # the drift story is one click away
     assert DEV_TEXT.search(all_visible_text(at)) is None

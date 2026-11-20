@@ -11,3 +11,9 @@ License-Expression read from the installed package metadata of cryptography 50.0
 
 ## Doto font (csync/ui/fonts/Doto-700.woff2)
 SIL Open Font License 1.1. Doto, dot-matrix typeface (Oliver Lalan / Google Fonts). Used only for the large number on the indicator card. Licence text: https://openfontlicense.org. Copyright holder line to confirm against the font's own OFL.txt (UNVERIFIED here).
+
+## Lucide icons (lucide-static 0.460.0) — navigation icons
+Files: csync/ui/assets/lucide/*.svg. ISC License, Copyright (c) for portions of Lucide are held by Cole Bemis 2013-2022 as part of Feather (MIT); all other copyright (c) for Lucide are held by Lucide Contributors 2022. Same ISC text as above.
+
+## Lightstreamer web client 9.2.3 (loaded from unpkg in the visitor's browser) — live ISS telemetry
+Apache License 2.0. Data: NASA ISSLive public feed (push.lightstreamer.com, adapter ISSLIVE). Terms of use of the public server: NOT VERIFIED.

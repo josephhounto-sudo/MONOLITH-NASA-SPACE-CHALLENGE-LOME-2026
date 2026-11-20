@@ -181,10 +181,19 @@ def test_daily_proposal_can_be_accepted_or_declined_by_a_human():
     assert ui["btn_accept"] not in [b.label for b in at.button], "buttons must disappear once a human has decided"
 
 
+def _story_cold():
+    """V3: the app opens on the live console; the drift story (with its hook) is the Demo story section."""
+    from tests.helpers_app import STORY_TAB
+    at = AppTest.from_file(APP, default_timeout=60)
+    at.session_state["cs-nav"] = STORY_TAB
+    at.session_state["cs-bot-done"] = True
+    return at.run()
+
+
 def test_opening_hook_shows_the_day_9_problem_once_then_moves_to_day_7():
     import json as _j
     ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
-    at = AppTest.from_file(APP, default_timeout=60).run()
+    at = _story_cold()
     assert ui["hook_title"] in [s.value for s in at.subheader]
     assert "14:10" in ui["hook_text"] and "13:00 to 19:00" in ui["hook_text"] and "19:20" in ui["hook_text"]
     assert not at.slider, "the first screen is the problem and one button: no day-7 panel under a day-9 hook"
@@ -197,7 +206,7 @@ def test_opening_hook_shows_the_day_9_problem_once_then_moves_to_day_7():
 def test_story_beats_walk_the_frozen_days_in_order():
     import json as _j
     ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
-    at = AppTest.from_file(APP, default_timeout=60).run()
+    at = _story_cold()
     next(b for b in at.button if b.label == ui["hook_button"]).click().run()
     seen = [(at.slider[0].value)]
     for _ in range(5):
@@ -228,21 +237,21 @@ def test_why_panel_reads_the_committed_research_numbers():
 def test_step5_shows_the_refusal_without_pressing_the_button():
     import json as _j
     ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
-    at = AppTest.from_file(APP, default_timeout=60).run()
+    at = _story_cold()
     next(b for b in at.button if b.label == ui["hook_button"]).click().run()
     for _ in range(4):
         next(b for b in at.button if b.label == ui["story_next"]).click().run()
     assert not at.exception, at.exception
     assert any("REFUSE_RESUME" in m.value for m in at.markdown), "step 5 must show the gate answer"
     # before step 5 nothing was decided for the visitor
-    at2 = AppTest.from_file(APP, default_timeout=60).run()
+    at2 = _story_cold()
     next(b for b in at2.button if b.label == ui["hook_button"]).click().run()
     assert "resume_result" not in at2.session_state
 
 
 def test_hook_draws_the_clock_from_the_capsule_not_from_typed_numbers():
     ui = json.load(open(os.path.join(CFG, "strings_en.json"), encoding="utf8"))["ui"]
-    at = AppTest.from_file(APP, default_timeout=60).run()
+    at = _story_cold()
     h = html(at)
     assert "cs-hooktl" in h and "5 h 10 min" in h and "14:10" in h and "19:20" in h and ui["hook_tl_ground"] in h
     assert "role='img'" in h, "the drawing has a text alternative"

@@ -621,7 +621,8 @@ def inject(name, tag):
     tk = _tokens()
     style = _profile()
     if style == "fusion":
-        st.html("<style>" + _fusion_css() + _STRUCT + _navy_css() + _NAV + "</style>")
+        from csync.ui import bookings
+        st.html("<style>" + _fusion_css() + _STRUCT + _navy_css() + _NAV + bookings.css() + "</style>")
         st.html("<header class='cs-top'>"
                 f"<img class='mk mk-anim' alt='' aria-hidden='true' src='{_asset('csync_mark_animated.svg')}'>"
                 f"<img class='mk mk-static' alt='' aria-hidden='true' src='{_asset('csync_mark_static.svg')}'>"

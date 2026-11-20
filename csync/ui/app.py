@@ -26,7 +26,7 @@ from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
 from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
 from csync.physio import hrv  # noqa: E402
-from csync.ui import icons, style, tech_page, widgets  # noqa: E402
+from csync.ui import bookings, icons, live, style, tech_page, widgets  # noqa: E402
 from csync.ui.why import short_verdict, why_parts  # noqa: E402
 from csync.jsonio import read_json  # noqa: E402
 
@@ -675,12 +675,27 @@ def provenance_table():
 # ------------------------------------------------------------------ page
 st.set_page_config(page_title=strings["app_title"], layout="wide")
 style.inject(UI["brand_name"], UI["brand_tag"])
-if st.session_state.get("cs-nav", UI["tab_home"]) == UI["tab_home"]:
+# vertical navigation: one section = one visitor question; the global state of the crew is first
+# two entries, one capsule and one rule: the role only changes the order of the sections and the one-line note
+role = st.session_state.get("cs-role", UI["role_crew"])   # the role radio sits below the navigation, so its value is read from the state
+_core = ["tab_body", "tab_env", "tab_trends", "tab_tech", "tab_scale", "tab_why", "tab_nasa", "tab_try", "tab_sources"]
+# V3 (Joseph, 20/11): the live console opens the app; the drift story is one demo among the sections, not the base
+_KEYS = ["tab_live", "tab_home", "tab_cmd"] + _core if role == UI["role_cmd"] else ["tab_live", "tab_home"] + _core[:3] + ["tab_cmd"] + _core[3:]
+_SECTIONS = [UI[k] for k in _KEYS]
+st.html("<style>" + bookings.nav_css(UI, _KEYS, ["role_crew", "role_cmd"]) + "</style>")
+section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
+role = st.sidebar.radio(UI["role_label"], [UI["role_crew"], UI["role_cmd"]], key="cs-role")
+st.sidebar.caption(UI["role_cmd_note"] if role == UI["role_cmd"] else UI["role_crew_note"])
+OUT = resolve_out_dir(OUT_DIR)
+if section == UI["tab_live"]:
+    live.panel(UI)   # real NASA station data, live, context only; the guide bot opens here on a first visit
+    st.caption(version_stamp())
+    st.stop()
+if section == UI["tab_home"]:
     hook_screen()   # the opening problem comes first, above the controls
 st.warning(strings["synthetic_banner"])
-if not st.session_state.get("cs-hook-done") and st.session_state.get("cs-nav", UI["tab_home"]) == UI["tab_home"]:
+if not st.session_state.get("cs-hook-done") and section == UI["tab_home"]:
     st.stop()   # first screen = the problem, one button, the synthetic notice; the day-7 panel would contradict the day-9 hook
-OUT = resolve_out_dir(OUT_DIR)
 caps = load_capsules(OUT)
 day = st.slider(UI["day_slider"], 1, 10, 7, key="cs-day")
 today = [c for c in caps if c.get("day") == day]
@@ -707,14 +722,6 @@ for _c in today:
     if _c.get("capsule_type") == "emergency":
         _m = re.search(r"zone: ([a-z]+)", _c.get("situation", ""))
         _zone = _m.group(1) if _m else None
-# vertical navigation: one section = one visitor question; the global state of the crew is first
-# two entries, one capsule and one rule: the role only changes the order of the sections and the one-line note
-role = st.session_state.get("cs-role", UI["role_crew"])   # the role radio sits below the navigation, so its value is read from the state
-_core = [UI["tab_body"], UI["tab_env"], UI["tab_trends"], UI["tab_tech"], UI["tab_scale"], UI["tab_why"], UI["tab_nasa"], UI["tab_try"], UI["tab_sources"]]
-_SECTIONS = [UI["tab_home"], UI["tab_cmd"]] + _core if role == UI["role_cmd"] else [UI["tab_home"]] + _core[:3] + [UI["tab_cmd"]] + _core[3:]
-section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
-role = st.sidebar.radio(UI["role_label"], [UI["role_crew"], UI["role_cmd"]], key="cs-role")
-st.sidebar.caption(UI["role_cmd_note"] if role == UI["role_cmd"] else UI["role_crew_note"])
 _USE = {UI["tab_cmd"]: "use_cmd", UI["tab_body"]: "use_body", UI["tab_env"]: "use_env", UI["tab_trends"]: "use_trends", UI["tab_tech"]: "use_tech", UI["tab_scale"]: "use_scale",
         UI["tab_why"]: "use_why", UI["tab_nasa"]: "use_nasa", UI["tab_try"]: "use_try", UI["tab_sources"]: "use_sources"}
 if section in _USE:

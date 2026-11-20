@@ -27,7 +27,7 @@ def resume_gate(request_time, measurements, procedure, session_state="SUSPENDED"
         if not cands:
             ok = False; reasons.append(f"G2: {ind} missing"); continue
         m = max(cands, key=lambda x: x["timestamp"])
-        if m["timestamp"] > now:
+        if m["timestamp"] >= now:
             ok = False; reasons.append(f"G8: {ind} timestamped in the future"); continue
         if m["quality"] != "OK":
             ok = False; reasons.append(f"G4: {ind} quality is {m['quality']}"); continue
