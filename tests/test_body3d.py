@@ -37,5 +37,14 @@ def test_every_body_region_of_the_sheets_has_parts_in_3d():
 def test_viewer_page_carries_the_fallback_and_the_pinned_engine():
     page = body3d.viewer_html("region-chest", "Selected zone: Chest", "Drag to turn")
     assert "three@0.187.0" in page and "<svg" in page and "region-chest" in page
+    assert "importmap" in page and "CesiumMan.glb" in page and "CC BY 4.0" in page   # licence credit shown with the model
     with pytest.raises(AssertionError):
         body3d.viewer_html("region-tail", "x", "y")
+
+
+@needs_node
+def test_model_zones_cover_every_band_and_match_the_sheets():
+    z = lambda ax, y: _node(f"B.zoneOf({ax},{y})")   # noqa: E731
+    assert [z(0, .9), z(.05, .7), z(.2, .6), z(.35, .55), z(.05, .5), z(.07, .2)] == [
+        "region-head", "region-chest", "region-arm", "region-hand", "region-abdomen", "region-legs"]
+    assert set(_node("B.ZONE_IDS")) == set(silhouette.fiches()) - {"region-body", "region-habitat"}

@@ -255,7 +255,7 @@
         "role_crew_note": "Vue équipage : ta propre trajectoire d'abord, en mots simples.",
         "role_cmd_note": "Vue commandant : l'état de l'équipage et la décision à prendre, d'abord.",
         "tech_title": "Technologies derrière C-Sync",
-        "tech_intro": "Chaque carte dit ce qui est construit, ce qui est un prototype et ce qui n'est pas encore construit. Toutes les données affichées ici sont SIMULÉES.",
+        "tech_intro": "Construit et testé, prototypes, et concepts. Un concept est une promesse : chacun dit le test qui le tranchera et ce qui nous ferait l'abandonner. Toutes les données ici sont SIMULÉES.",
         "tech_data": "Données : {d}",
         "tech_building": "Technologie en cours de construction. L'animation montre le principe seulement ; rien n'est mesuré ici.",
         "tech_cp_head": "Détection de dérive sur le temps de réaction",
@@ -561,7 +561,10 @@
         "ops_delay_val": "{m} min (démo)",
         "ops_link_up": "Établie, aucune coupure",
         "ops_link_down": "Coupée {a}–{b} UTC · rapport en file",
-        "live_delay": "Quasi temps réel (orbite basse)"
+        "live_delay": "Quasi temps réel (orbite basse)",
+        "tech_promise": "Ce qu'elle apporterait",
+        "tech_test": "Comment nous saurons",
+        "tech_drop": "Nous l'abandonnons si"
     },
     "indicator_names": {
         "PH01": "fréquence cardiaque",

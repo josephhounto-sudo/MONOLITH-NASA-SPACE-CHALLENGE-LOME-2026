@@ -255,7 +255,7 @@
         "role_crew_note": "Crew view: your own trajectory first, in plain words.",
         "role_cmd_note": "Commander view: crew state and the decision to take, first.",
         "tech_title": "Technologies behind C-Sync",
-        "tech_intro": "Each card says what is built, what is a prototype and what is not built yet. All data shown here is SIMULATED.",
+        "tech_intro": "Built and tested, prototypes, and concepts. A concept is a promise: each one says the test that will decide it and what would make us drop it. All data shown here is SIMULATED.",
         "tech_data": "Data: {d}",
         "tech_building": "Technology under construction. The animation shows the principle only; nothing here is measured.",
         "tech_cp_head": "Drift detection on reaction time",
@@ -561,7 +561,10 @@
         "ops_delay_val": "{m} min (demo)",
         "ops_link_up": "Up, no outage",
         "ops_link_down": "Down {a}–{b} UTC · report queued",
-        "live_delay": "Near real time (low Earth orbit)"
+        "live_delay": "Near real time (low Earth orbit)",
+        "tech_promise": "What it would bring",
+        "tech_test": "How we will know",
+        "tech_drop": "We drop it if"
     },
     "indicator_names": {
         "PH01": "heart-rate",

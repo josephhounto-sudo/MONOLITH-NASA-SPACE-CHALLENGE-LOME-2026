@@ -2,7 +2,7 @@
   "statuses": {
     "BUILT": "Built and tested",
     "PROTOTYPE": "Prototype on simulated data",
-    "ANNOUNCED": "Technology under construction"
+    "ANNOUNCED": "Concept: a promise, with the test that will decide it"
   },
   "items": [
     {
@@ -43,7 +43,9 @@
       "status": "ANNOUNCED",
       "module": null,
       "purpose": "Store-and-forward messages across a long Earth-spacecraft delay.",
-      "data": "NONE"
+      "data": "NONE",
+      "test": "Send 1,000 simulated reports through a 6-hour outage and a 20-minute delay: every report arrives once, in order.",
+      "drop_if": "Any report lost or duplicated."
     },
     {
       "id": "camera_pulse",
@@ -51,7 +53,49 @@
       "status": "ANNOUNCED",
       "module": null,
       "purpose": "Estimates pulse from video on the device. Fragile in real light.",
-      "data": "NONE"
+      "data": "NONE",
+      "test": "Compare camera pulse with a chest strap on three people, including darker skin and low light.",
+      "drop_if": "Error above 5 beats per minute on any of them."
+    },
+    {
+      "id": "eye_blink",
+      "name": "Fatigue from eye blinks",
+      "status": "ANNOUNCED",
+      "module": null,
+      "data": "NONE",
+      "purpose": "Adds an eyelid-closure score, computed on the device and never recorded, as one more attention signal.",
+      "test": "Ten seconds eyes open, ten seconds closed, on three people including darker skin and low light: the score separates the two.",
+      "drop_if": "It fails on any of the three, or it needs video to leave the device."
+    },
+    {
+      "id": "common_signal",
+      "name": "Crew-wide or individual?",
+      "status": "ANNOUNCED",
+      "module": null,
+      "data": "NONE",
+      "purpose": "When several crew members drift together during a cabin CO2 episode, says 'shared signal, check the air' instead of pointing at one person.",
+      "test": "Simulated crews on seeds never used for tuning, with a shared and an individual shift: at least 90 % correct attribution.",
+      "drop_if": "Below 90 %."
+    },
+    {
+      "id": "exposure_ledger",
+      "name": "Exposure ledger",
+      "status": "ANNOUNCED",
+      "module": null,
+      "data": "NONE",
+      "purpose": "One gauge per crew member: 7-day cabin CO2 against NASA's 2.5 mmHg level and cumulative radiation dose, from real ISS data.",
+      "test": "Replay the 24 ISS missions: the cumulative dose shown equals the NASA data column, day by day.",
+      "drop_if": "Any mismatch with the NASA file."
+    },
+    {
+      "id": "onboard_explainer",
+      "name": "Offline explainer",
+      "status": "ANNOUNCED",
+      "module": null,
+      "data": "NONE",
+      "purpose": "A small language model on the device that retells each capsule in plain words, adding nothing medical.",
+      "test": "200 generated explanations: every number traces to a capsule field and every sentence passes the forbidden-word filter.",
+      "drop_if": "A single invented number."
     }
   ]
 }

@@ -111,11 +111,12 @@ def _hrv(UI):
 
 
 def _building(UI, item):
+    """A concept is a promise with its test: what it would bring, how we will know, and what would make us drop it."""
+    assert item.get("test") and item.get("drop_if"), f"concept {item['id']} has no test: a promise without a test is not shown"
     if item["id"] == "dtn":
         st.markdown(_ANIM + "<div class='cs-dtn'><i></i><i></i><i></i></div>", unsafe_allow_html=True)
-        st.caption(UI["tech_building"])
-    else:
-        st.caption(UI["tech_building_static"])
+    st.markdown(f"**{UI['tech_test']}:** {item['test']}  \n**{UI['tech_drop']}:** {item['drop_if']}")
+    st.caption(UI["tech_building"] if item["id"] == "dtn" else UI["tech_building_static"])
 
 
 def tech_panel(UI, daily, trends, day):

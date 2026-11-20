@@ -17,3 +17,6 @@ Files: csync/ui/assets/lucide/*.svg. ISC License, Copyright (c) for portions of 
 
 ## Lightstreamer web client 9.2.3 (loaded from unpkg in the visitor's browser) — live ISS telemetry
 Apache License 2.0. Data: NASA ISSLive public feed (push.lightstreamer.com, adapter ISSLIVE). Terms of use of the public server: NOT VERIFIED.
+
+## "Cesium Man" 3D model — body viewer
+Cesium Man © Cesium 2017, from the Khronos glTF Sample Assets (commit f0920f5), licensed under Creative Commons Attribution 4.0 International (https://creativecommons.org/licenses/by/4.0/). Loaded at run time in the visitor's browser from a pinned CDN copy; not stored in this repository. Changes: the model's texture (including the Cesium logo, which the licence excludes) is not used; its head is hidden and replaced by a sphere; materials and zone colouring are ours. Credit is shown under the viewer.

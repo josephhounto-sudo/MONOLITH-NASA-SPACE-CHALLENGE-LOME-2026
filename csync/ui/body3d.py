@@ -10,6 +10,11 @@ from csync import silhouette
 
 ASSETS = os.path.join(os.path.dirname(os.path.abspath(__file__)), "assets")
 THREE = "https://unpkg.com/three@0.187.0/build/three.module.js"
+ADDONS = "https://unpkg.com/three@0.187.0/examples/jsm/"
+# "Cesium Man" (Khronos glTF Sample Assets, commit f0920f5), CC BY 4.0 (c) Cesium 2017; texture and logo are not used
+MODEL = ("https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@f0920f5b32d172a30efe3f9257e965918831e6ea"
+         "/Models/CesiumMan/glTF-Binary/CesiumMan.glb")
+MODEL_CREDIT = "3D figure: Cesium Man by Cesium, CC BY 4.0 (Khronos glTF Sample Assets)"
 HEIGHT = 640
 
 
@@ -22,7 +27,7 @@ def viewer_html(selected: str | None, caption: str, hint: str) -> str:
     with open(os.path.join(ASSETS, "body3d.js"), encoding="utf-8") as fh:
         js = fh.read()
     labels = {rid: silhouette.label(rid) for rid in status}
-    cfg = {"three": THREE, "status": status, "selected": selected, "fallback": silhouette.svg(selected),
+    cfg = {"model": MODEL, "status": status, "selected": selected, "fallback": silhouette.svg(selected),
            "labels": labels, "words": silhouette.STATUS_WORD, "measuredWord": "Measured", "offWord": "Not monitored yet"}
     return f"""<!doctype html><html><head><meta charset='utf-8'><style>
 html,body{{margin:0;height:100%;background:transparent;font:14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;color:#FFFDFD}}
@@ -39,5 +44,6 @@ html,body{{margin:0;height:100%;background:transparent;font:14px/1.4 system-ui,-
 </style></head><body><div id='wrap' role='img' aria-label='{html.escape(caption)}'><div id='stage'></div>
 <div id='tip' style='position:absolute;pointer-events:none;opacity:0;transition:opacity .15s;padding:6px 12px;border-radius:999px;
  background:#FFFDFD;color:#2E2621;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.3)'></div><svg id='leaders' style='position:absolute;inset:0 0 58px 0;width:100%;height:calc(100% - 58px);pointer-events:none'></svg>
-<div id='callouts' style='position:absolute;inset:0 0 58px 0;pointer-events:none'></div><div id='cap'><b>{html.escape(caption)}</b><span>{html.escape(hint)}</span></div></div>
+<div id='callouts' style='position:absolute;inset:0 0 58px 0;pointer-events:none'></div><div id='cap'><b>{html.escape(caption)}</b><span>{html.escape(hint)}</span><small style='opacity:.85'>{html.escape(MODEL_CREDIT)}</small></div></div>
+<script type='importmap'>{json.dumps({"imports": {"three": THREE, "three/addons/": ADDONS}})}</script>
 <script>window.CS_BODY={json.dumps(cfg)};</script><script>{js}</script></body></html>"""

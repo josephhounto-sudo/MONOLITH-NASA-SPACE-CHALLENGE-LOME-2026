@@ -43,9 +43,24 @@ const CALLOUTS = { "region-head": [0, 2.62, 0.2, "L"], "region-chest": [0.15, 1.
 const FOCUS = { "region-head": 2.55, "region-chest": 1.9, "region-abdomen": 1.2, "region-arm": 1.6, "region-hand": 1.0,
                 "region-legs": 0.45, "region-body": 1.35, "region-habitat": 0.6 };
 
+// Embedded model (V3): "Cesium Man", Khronos glTF Sample Assets, CC BY 4.0 (c) Cesium 2017, loaded from a pinned CDN copy.
+// The mesh is one piece, so zones are drawn by position bands (normalised by the figure height H), measured on its A-pose.
+// Same thresholds in JS (picking, tests) and in the shader (highlight); its texture and logo are never used.
+const ZONE_IDS = ["region-head", "region-chest", "region-abdomen", "region-arm", "region-hand", "region-legs"];
+function zoneOf(ax, y) {   // ax = |x| / H, y = height / H
+  if (ax >= 0.312) return "region-hand";
+  if (ax >= 0.093 && y > 0.53) return "region-arm";
+  if (y > 0.777) return "region-head";
+  if (y > 0.584) return "region-chest";
+  if (y > 0.418) return "region-abdomen";
+  return "region-legs";
+}
+const CALLOUTS_MODEL = { "region-head": [0, 0.88, "L"], "region-chest": [0.05, 0.68, "R"], "region-arm": [-0.2, 0.66, "L"],
+                         "region-hand": [0.355, 0.55, "R"], "region-abdomen": [0, 0.50, "L"], "region-legs": [0.07, 0.22, "R"] };
+
 function partsFor(region) { return PARTS[region] || []; }
 
-if (typeof module !== "undefined") module.exports = { zoneLook, partsFor, PARTS, PROFILES, FOCUS, CALLOUTS, LOOK, SELECTED_GLOW };
+if (typeof module !== "undefined") module.exports = { zoneOf, ZONE_IDS, CALLOUTS_MODEL, zoneLook, partsFor, PARTS, PROFILES, FOCUS, CALLOUTS, LOOK, SELECTED_GLOW };
 
 if (typeof document !== "undefined" && window.CS_BODY) {
   (async () => {
@@ -53,7 +68,7 @@ if (typeof document !== "undefined" && window.CS_BODY) {
     const host = document.getElementById("stage");
     let THREE;
     try {
-      THREE = await import(cfg.three);
+      THREE = await import("three");   // resolved by the page's import map (pinned version)
       const probe = document.createElement("canvas");
       if (!(probe.getContext("webgl2") || probe.getContext("webgl"))) throw new Error("no webgl");
     } catch (e) {
@@ -77,29 +92,74 @@ if (typeof document !== "undefined" && window.CS_BODY) {
     body.position.y = 0.14;
     scene.add(body);
     const pickable = [];
-    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 0.2, 24),
-      new THREE.MeshPhysicalMaterial({ color: 0xC9B4A2, roughness: 0.45 }));
-    neck.position.set(0, 2.36, 0); body.add(neck);
     // soft contact shadow drawn on a canvas (no texture file)
     const sc = document.createElement("canvas"); sc.width = sc.height = 128;
     const g2 = sc.getContext("2d"); const gr = g2.createRadialGradient(64, 64, 4, 64, 64, 62);
     gr.addColorStop(0, "rgba(0,0,0,.55)"); gr.addColorStop(1, "rgba(0,0,0,0)"); g2.fillStyle = gr; g2.fillRect(0, 0, 128, 128);
     const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.0), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sc), transparent: true, depthWrite: false }));
     shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.012; scene.add(shadow);
+    const HM = 2.75;   // figure height in scene units
+    let model = null;
+    if (cfg.model) {
+      try {
+        const { GLTFLoader } = await import("three/addons/loaders/GLTFLoader.js");
+        const gltf = await new GLTFLoader().loadAsync(cfg.model);
+        model = gltf.scene;
+        const b0 = new THREE.Box3().setFromObject(model);
+        model.scale.setScalar(HM / b0.getSize(new THREE.Vector3()).y);
+        const b1 = new THREE.Box3().setFromObject(model), c1 = b1.getCenter(new THREE.Vector3());
+        model.position.set(-c1.x, -b1.min.y, -c1.z);
+        const sel = ZONE_IDS.indexOf(cfg.selected);
+        const off = ZONE_IDS.map((z) => (cfg.status[z] === "measured" ? 0 : 1));
+        const uni = { uH: { value: HM }, uSel: { value: sel }, uOff: { value: off }, uBodyInv: { value: new THREE.Matrix4() } };
+        model.traverse((o) => {
+          if (!o.isMesh) return;
+          const mat = new THREE.MeshPhysicalMaterial({ color: 0xE9D7C6, roughness: 0.34, clearcoat: 0.75, clearcoatRoughness: 0.3, transparent: true });
+          mat.onBeforeCompile = (sh) => {
+            Object.assign(sh.uniforms, uni);
+            sh.vertexShader = "uniform mat4 uBodyInv;\nvarying vec3 vLoc;\n" + sh.vertexShader.replace("#include <skinning_vertex>",
+              "#include <skinning_vertex>\n vLoc = (uBodyInv * modelMatrix * vec4(transformed, 1.0)).xyz;");
+            sh.fragmentShader = "uniform float uH; uniform float uSel; uniform float uOff[6];\nvarying vec3 vLoc;\n" +
+              "float zoneOf(float ax, float y){ if (ax >= 0.312) return 4.0; if (ax >= 0.093 && y > 0.53) return 3.0;" +
+              " if (y > 0.777) return 0.0; if (y > 0.584) return 1.0; if (y > 0.418) return 2.0; return 5.0; }\n" +
+              sh.fragmentShader.replace("#include <color_fragment>", "#include <color_fragment>\n float zz = zoneOf(abs(vLoc.x) / uH, vLoc.y / uH);" +
+                "\n if (vLoc.y / uH > 0.765) discard;" +   // the model's head is a flat logo disc: replaced by a sphere below
+                "\n if (uOff[int(zz)] > 0.5) { diffuseColor.rgb *= 0.55; diffuseColor.a *= 0.38; }" +
+                "\n if (abs(zz - uSel) < 0.5) diffuseColor.rgb = mix(diffuseColor.rgb, vec3(1.0, 0.45, 0.2), 0.85);")
+              .replace("#include <emissivemap_fragment>", "#include <emissivemap_fragment>\n if (abs(zz - uSel) < 0.5) totalEmissiveRadiance += vec3(1.0, 0.42, 0.16) * 0.7;");
+          };
+          o.material = mat;
+          o.userData.model = true;
+          pickable.push(o);
+        });
+        body.add(model);
+        body.userData.uni = uni;
+        const hl = zoneLook(cfg.status["region-head"], cfg.selected === "region-head");
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.1 * HM, 48, 32), new THREE.MeshPhysicalMaterial({ color: hl.color,
+          roughness: 0.34, clearcoat: 0.75, emissive: hl.emissive, emissiveIntensity: hl.emissive ? 0.9 : 0 }));
+        head.scale.set(0.9, 1.08, 0.95); head.position.set(0, 0.862 * HM, 0.01); head.userData.region = "region-head";
+        pickable.push(head); body.add(head);
+      } catch (e) { model = null; }   // the code-built mannequin below takes over, never a blank frame
+    }
+    if (!model) {
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 0.2, 24),
+        new THREE.MeshPhysicalMaterial({ color: 0xC9B4A2, roughness: 0.45 }));
+      neck.position.set(0, 2.36, 0); body.add(neck);
     for (const [region, status] of Object.entries(cfg.status)) {
-      const look = zoneLook(status, region === cfg.selected);
-      for (const [kind, x, y, z, r, len, rot, sx, sy, sz] of partsFor(region)) {
-        const geo = kind === "sphere" ? new THREE.SphereGeometry(r, 40, 28)
-          : kind === "capsule" ? new THREE.CapsuleGeometry(r, len, 10, 28)
-          : new THREE.LatheGeometry(PROFILES[kind].map(([px, py]) => new THREE.Vector2(px, py)), 48);
-        const mat = new THREE.MeshPhysicalMaterial({ color: look.color, roughness: 0.32, clearcoat: 0.8, clearcoatRoughness: 0.25,
-          transparent: look.opacity < 1, opacity: look.opacity, emissive: look.emissive, emissiveIntensity: look.emissive ? 0.9 : 0 });
-        const m = new THREE.Mesh(geo, mat);
-        m.position.set(x, y, z); m.rotation.z = rot || 0;
-        if (sx) m.scale.set(sx, sy, sz);
-        m.userData.region = region;
-        pickable.push(m);
-        body.add(m);
+        const look = zoneLook(status, region === cfg.selected);
+        for (const [kind, x, y, z, r, len, rot, sx, sy, sz] of partsFor(region)) {
+          const geo = kind === "sphere" ? new THREE.SphereGeometry(r, 40, 28)
+            : kind === "capsule" ? new THREE.CapsuleGeometry(r, len, 10, 28)
+            : new THREE.LatheGeometry(PROFILES[kind].map(([px, py]) => new THREE.Vector2(px, py)), 48);
+          const mat = new THREE.MeshPhysicalMaterial({ color: look.color, roughness: 0.32, clearcoat: 0.8, clearcoatRoughness: 0.25,
+            transparent: look.opacity < 1, opacity: look.opacity, emissive: look.emissive, emissiveIntensity: look.emissive ? 0.9 : 0 });
+          const m = new THREE.Mesh(geo, mat);
+          m.position.set(x, y, z); m.rotation.z = rot || 0;
+          if (sx) m.scale.set(sx, sy, sz);
+          m.userData.region = region;
+          pickable.push(m);
+          body.add(m);
+        }
       }
     }
     // floor: the whole-body ring (measured) and the habitat disc (context only)
@@ -125,14 +185,19 @@ if (typeof document !== "undefined" && window.CS_BODY) {
       ray.setFromCamera(ptr, cam);
       const hit = ray.intersectObjects(pickable)[0];
       if (hit && tip) {
-        const rid = hit.object.userData.region;
+        let rid = hit.object.userData.region;
+        if (hit.object.userData.model) {
+          const p = body.worldToLocal(hit.point.clone());
+          rid = zoneOf(Math.abs(p.x) / HM, p.y / HM);
+        }
         tip.textContent = (cfg.labels[rid] || rid) + " — " + (cfg.words[cfg.status[rid]] || "");
         tip.style.left = (e.clientX - r.left + 14) + "px"; tip.style.top = (e.clientY - r.top + 10) + "px"; tip.style.opacity = 1;
       } else if (tip) { tip.style.opacity = 0; }
     });
     // callouts: projected each frame; the selected zone's label is highlighted
     const overlay = document.getElementById("callouts");
-    const calls = Object.entries(CALLOUTS).map(([rid, [x, y, z, side]]) => {
+    const anchors = model ? Object.fromEntries(Object.entries(CALLOUTS_MODEL).map(([k, [x, y, sd]]) => [k, [x * HM, y * HM, 0.1, sd]])) : CALLOUTS;
+    const calls = Object.entries(anchors).map(([rid, [x, y, z, side]]) => {
       const el = document.createElement("div");
       el.className = "co" + (rid === cfg.selected ? " sel" : "") + (cfg.status[rid] === "measured" ? "" : " off");
       el.innerHTML = "<b>" + (cfg.labels[rid] || rid) + "</b><span>" + (cfg.status[rid] === "measured" ? cfg.measuredWord : cfg.offWord) + "</span>";
@@ -145,7 +210,7 @@ if (typeof document !== "undefined" && window.CS_BODY) {
     function placeCallouts() {
       const Wd = renderer.domElement.clientWidth, Hd = renderer.domElement.clientHeight;
       calls.forEach((c, i) => {
-        const p = c.v.clone(); p.applyAxisAngle(new THREE.Vector3(0, 1, 0), body.rotation.y); p.y += body.position.y; p.project(cam);
+        const p = body.localToWorld(c.v.clone()); p.project(cam);
         const px = (p.x * 0.5 + 0.5) * Wd, py = (-p.y * 0.5 + 0.5) * Hd;
         const lx = c.side === "L" ? 14 : Wd - 14 - c.el.offsetWidth;
         const ly = Math.max(6, Math.min(Hd - 40, py - 16));
@@ -160,6 +225,7 @@ if (typeof document !== "undefined" && window.CS_BODY) {
     (function loop() {
       if (spin) angle += 0.004;
       body.rotation.y = angle;
+      if (body.userData.uni) { body.updateMatrixWorld(); body.userData.uni.uBodyInv.value.copy(body.matrixWorld).invert(); }
       lookY += (focusY - lookY) * 0.06; camY += (focusY + 0.15 - camY) * 0.06; dist += ((near ? 6.6 : 7.4) - dist) * 0.06;
       cam.position.set(0, camY, dist); cam.lookAt(0, lookY, 0);
       renderer.render(scene, cam);

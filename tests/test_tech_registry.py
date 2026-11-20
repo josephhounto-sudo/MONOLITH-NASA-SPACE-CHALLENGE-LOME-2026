@@ -42,3 +42,13 @@ def test_forbidden_words_not_in_registry_text():
         text = f.read().lower()
     for w in ("cause", "diagnos", "prove", "guarantee", "disease"):
         assert w not in text
+
+
+def test_every_concept_is_a_promise_with_its_test_and_its_drop_rule():
+    """V3 (Joseph, 20/11): concepts are shown as promises; a promise without a test that can fail is not shown."""
+    reg = registry.load()
+    concepts = [i for i in reg["items"] if i["status"] == "ANNOUNCED"]
+    assert len(concepts) >= 4
+    for it in concepts:
+        assert it.get("test") and it.get("drop_if"), it["id"]
+        assert it["data"] == "NONE" and not it.get("module"), it["id"]   # a concept never shows measured data
