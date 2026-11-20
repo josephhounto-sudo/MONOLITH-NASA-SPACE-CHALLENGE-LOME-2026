@@ -1,4 +1,6 @@
 # Dossier de soumission finale — C-Sync, équipe MONOLITH · 15/11/2026
+
+> **20/11/2026 :** le PDF lié par le formulaire (`pitch/deck/C-Sync_pitch_7_slides.pdf`, même adresse) est remplacé par le diaporama V3 (7 diapos, logo MONOLITH). La version soumise reste lisible au commit `de0b5be`. Les PowerPoint de secours de l'ancienne version sont retirés.
 FAIT PAR L'IA — À VALIDER PAR M1. SOUMIS le 15/11 à 17:42 (voir docs/MAJ_LOG.md). Règles : `docs/PROGRAMME_OFFICIEL.md` (clôture dimanche 23:59, seule la dernière soumission est jugée) et le guide officiel lu le 14/11.
 
 ## Contenu du dossier
@@ -6,7 +8,6 @@ FAIT PAR L'IA — À VALIDER PAR M1. SOUMIS le 15/11 à 17:42 (voir docs/MAJ_LOG
 |---|---|---|---|
 | 8 champs du formulaire, textes finaux en anglais | `submission/FORM_FIELDS_EN.md` | nom, résumé, lien démo, lien projet, détails, usage de l'IA, données NASA, références | prêt, chiffres alignés sur le jeu tenu à l'écart (0/300, 92,7 %, 57,3 %) et 211 tests |
 | Démo : 7 diapos en anglais (ou vidéo ≤ 30 s) | `submission/C-Sync_pitch_7_slides.pdf` (copie de `pitch/deck/`) | 7 diapos au plus, titre compris, anglais, lien ouvert sans compte | prêt, 7 diapos, test du deck vert |
-| Secours PowerPoint | `submission/C-Sync_pitch_SECOURS_images.pptx` | — | images seulement |
 | Dépôt public | https://github.com/josephhounto-sudo/MONOLITH-NASA-SPACE-CHALLENGE-LOME-2026 | public, sans mot de passe | public, `main` à jour |
 | Déclaration d'IA | `AI_USAGE.md` | nommer outils et usage ; images IA avec filigrane visible | mise à jour 15/11 ; ligne visible sur la diapo 1 |
 | Sources | `SOURCES.md`, `README.md` | références, données NASA citées | à jour |

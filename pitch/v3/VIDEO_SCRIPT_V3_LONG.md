@@ -11,7 +11,7 @@
 |---|---|---|---|---|
 | 1 | 0–15 s | Flow : bourdon en vol, macro, ralenti | A legend says a sign at NASA’s entrance reads: the bumblebee cannot fly. It is only a legend. | Image générée par IA |
 | 2 | 15–30 s | App : écran d’arrivée (trois lignes) | The calculation was wrong, not the bee. It assumed fixed wings. An average astronaut is the same mistake. | Vrai (Dickinson et al., 1999) |
-| 3 | 30–48 s | App : Habitat, rejeu des missions | Daily averages hid hours that mattered. In real cabin data from fourteen ISS missions, eight had hours above 3 millimetres of mercury that the daily average concealed. | RÉEL (`research/retro/RESULTS.md` : 370 h sur 8 missions sur 14, seuil 3 mmHg de notre analyse, capteur de cabine, pas l'air respiré) |
+| 3 | 30–48 s | App : Habitat, rejeu des missions | Daily averages hid hours that mattered. In real cabin data from fourteen ISS missions, eight had hours above 3 millimetres of mercury that the daily average concealed. | RÉEL (`research/retro/RESULTS.md` : 370 h sur 8 missions sur 14 au-dessus de 3 mmHg, limite NASA d'une heure, NASA-STD-3001 Vol 2 V2 6004 ; capteur de cabine, pas l'air respiré) |
 | 4 | 48–66 s | App : console en direct, âge de la mesure | This is the live station. Every value shows its age. NASA data here is context, never a decision. | Réel, en direct ; âge affiché |
 | 5 | 66–95 s | App : histoire, jour 7 puis jour 9, liaison coupée | Meet Kora, simulated. C-Sync compares her to her own normal. On day nine, the link to Earth drops. | SIMULÉ |
 | 6 | 95–113 s | App : guide d’urgence, Pip | Help is twenty minutes away. The steps are already on board, and Pip walks the crew through them. | Étapes sourcées NASA ; 20 min = paramètre de démo |
@@ -32,7 +32,7 @@ Texte exact de la voix : « A legend says a sign at NASA's entrance reads: the b
 - Aucune personne identifiable, aucun logo NASA. Le logo d’équipe MONOLITH a été généré par IA avant l’événement : le dire dans le carton final et dans `AI_USAGE.md`.
 - Le CO2 en direct change à chaque prise : ne jamais le citer à voix haute.
 - Mots interdits dans les sous-titres : cause, diagnostic, prouve, garantie, maladie.
-- Toute affirmation chiffrée à voix haute renvoie à un fichier du dépôt (ici : 8 missions sur 14, 370 h au-dessus de 3 mmHg → `research/retro/RESULTS.md` ; 3 mmHg est le seuil de notre analyse, pas la limite NASA, qui est 2,5 mmHg selon OCHMO-TB-004).
+- Toute affirmation chiffrée à voix haute renvoie à un fichier du dépôt (ici : 8 missions sur 14, 370 h au-dessus de 3 mmHg → `research/retro/RESULTS.md`. 3 mmHg = limite NASA sur une heure (NASA-STD-3001 Vol 2 V2 6004) ; 2,5 mmHg = niveau NASA sur 7 jours (OCHMO-TB-004). Ne pas confondre les deux.).
 
 ## Contrôles (aucun ne dépend de nous)
 - Lecture à froid du texte par une autre IA, puis 7 inconnues : elles regardent une fois, racontent en 3 phrases. Cible : 5 sur 7 disent « il compare l’astronaute à lui-même » et « une personne décide ». Noter la première hésitation, mots exacts.
