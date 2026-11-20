@@ -41,12 +41,15 @@ def console_html(ui: dict) -> str:
                      f"<div class='num'><span class='v' id='v-{key}'>--</span><small>{html.escape(unit)}</small>{delta}</div>"
                      f"<div class='meta'><span class='st' id='s-{key}'>Connecting</span> <span class='why' id='w-{key}'>waiting for the first reading from the station</span></div>"
                      + (f"<div class='ctx' id='ctx-{key}'></div>" if ctx else "") + "</div>")
+    ops = (f"<div class='ops'><div class='clk'><span class='z'>{e('ops_link')}</span><span class='t2' id='link'>Connecting</span></div>"
+           f"<div class='clk'><span class='z'>{e('ops_delay')}</span><span class='t2'>{e('live_delay')}</span></div></div>")
     return f"""<!doctype html><html><head><meta charset='utf-8'><style>
 @font-face{{font-family:Doto;font-weight:700;src:url(data:font/woff2;base64,{style._font('Doto-700.woff2')}) format("woff2")}}
 body{{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:{bookings.INK};background:transparent}}
 .clocks{{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 14px}}
 .clk{{border-radius:999px;padding:8px 14px;background:rgba(34,27,23,.82);border:1px solid rgba(255,253,253,.18);display:flex;flex-direction:column}}
 .clk .z{{font-size:13px;opacity:.95}} .clk .t,.v{{font-family:Doto,monospace;font-weight:700}} .clk .t{{font-size:22px;letter-spacing:.04em}}
+.ops{{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:-6px 0 14px}} .t2{{font-weight:700;font-size:15px}}
 .grid{{display:grid;grid-template-columns:1fr 1fr;gap:12px}}
 .pill{{position:relative;border-radius:40px;padding:16px 20px 14px;background-color:rgba(34,27,23,.90);
  background-image:radial-gradient(55% 90% at 106% 50%,rgba(215,154,118,.62),transparent 72%);border:1px solid rgba(255,253,253,.18);
@@ -62,7 +65,7 @@ body{{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:
 .src{{margin:12px 2px 0;font-size:13.5px}} #feed,#unit{{font-size:13.5px}}
 @media (max-width:560px){{.clocks{{grid-template-columns:1fr 1fr}}.grid{{grid-template-columns:1fr}}.v{{font-size:40px}}}}
 </style></head><body>
-<div class='clocks' role='group' aria-label='Mission clocks'>{clocks}</div>
+<div class='clocks' role='group' aria-label='Mission clocks'>{clocks}</div>{ops}
 <div class='grid'>{''.join(cards)}</div>
 <p class='src'>{e('live_source')} <span id='feed'></span> <span id='unit'></span></p>
 <script src='{LS_CLIENT}'></script><script>{_js()}</script></body></html>"""

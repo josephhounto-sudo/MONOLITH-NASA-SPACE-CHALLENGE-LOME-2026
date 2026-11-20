@@ -672,34 +672,32 @@ def history(states_by_day, dim, day, n_days=10):
 
 
 def mission_strip(ui, states_by_day, events, day, link, delay_min, n_days=10):
-    """Fusion only: corner metadata and an orbital trajectory of the mission (one node per day, shaped by its highest state)."""
+    """Operations bar (V3, NASA-engineer review 20/11): the three facts a flight controller reads first (mission time, ground link,
+    one-way delay) above a flat mission timeline (one cell per day, coloured by the day's highest state, never the future),
+    in the spirit of the time strip of NASA's Open MCT. The same bar is used on every story section, so it reads the same everywhere."""
     if _profile() != "fusion":
         return
-    import math
-    nodes, labels = [], []
+    assert 1 <= day <= n_days
+    cells = []
     for d in range(1, n_days + 1):
-        x = 4 + (d - 1) * 92 / (n_days - 1)
-        y = 12 + 74 - 74 * math.sqrt(max(0.0, 1 - ((x - 50) / 50) ** 2))   # on the ellipse drawn by .arc
-        now = " now" if d == day else ""
-        if d > day:   # days to come: planned trajectory only, no state, no event (the screen never shows the future)
-            nodes.append(f"<span class='nd fut' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
-            labels.append(f"<span class='dn fut' style='left:{x:.2f}%;top:{y + 14:.1f}px'>{d}</span>")
+        x = (d - 0.5) * 100 / n_days
+        if d > day:   # days to come: planned only, no state, no event (the screen never shows the future)
+            cells.append(f"<span class='nd fut' style='left:{x:.2f}%'></span><span class='dn fut' style='left:{x:.2f}%'>{d}</span>")
             continue
         s = worst(states_by_day.get(d, {}))
         word = s.title() if s != "UNKNOWN" else ("learning the personal normal" if d <= 5 else "no reading yet")   # never a bare "Unknown"
-        lab = ui["node_label"].format(d=d, state=word)
-        if d == day:
-            nodes.append(f"<span class='halo' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
+        now = " now" if d == day else ""
+        cells.append(f"<span class='nd sh-{s}{now}' role='img' aria-label='{ui['node_label'].format(d=d, state=word)}' style='left:{x:.2f}%'></span>"
+                     f"<span class='dn{now}' style='left:{x:.2f}%'>{d}</span>")
         if d in events:
-            nodes.append(f"<span class='evt' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
-            labels.append(f"<span class='tag crit' style='left:{x:.2f}%;top:{y - 40:.1f}px'>{events[d]}</span>")
-        nodes.append(f"<span class='nd sh-{s}{now}' role='img' aria-label='{lab}' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
-        labels.append(f"<span class='dn{now}' style='left:{x:.2f}%;top:{y + 14:.1f}px'>{d}</span>")
-    xb = 4 + 2 * 92 / (n_days - 1)
-    labels.append(f"<span class='tag base' style='left:{xb:.2f}%;top:{12 + 74 - 74 * math.sqrt(1 - ((xb - 50) / 50) ** 2) + 32:.1f}px'>{ui['baseline_short']} 1–5</span>")
-    link_txt = (f"<span class='down'>{ui['link_status_down'].format(a=link[0], b=link[1])}</span>" if link else ui["link_status_ok"])
+            cells.append(f"<span class='tag crit' style='left:{x:.2f}%'>{events[d]}</span>")
+    now_x = (day - 0.5) * 100 / n_days
+    base_w = 5 * 100 / n_days
+    link_txt = (f"<b class='down'>{ui['ops_link_down'].format(a=link[0], b=link[1])}</b>" if link else f"<b>{ui['ops_link_up']}</b>")
     st.html(
-        f"<section class='cs-strip' aria-label='{ui['trajectory_label']}'>"
-        f"<div class='meta'><span><b>{ui['mission_name']}</b> · {ui['day_of'].format(d=day, n=n_days)}</span>"
-        f"<span>{link_txt} · {ui['ground_delay'].format(m=delay_min)}</span></div>"
-        f"<div class='cs-orbit'><div class='arc'></div>{''.join(nodes)}{''.join(labels)}</div></section>")
+        f"<section class='cs-strip cs-ops' aria-label='{ui['trajectory_label']}'>"
+        f"<div class='ops'><div><small>{ui['ops_time']}</small><b>{ui['day_of'].format(d=day, n=n_days)}</b><i>{ui['mission_name']}</i></div>"
+        f"<div><small>{ui['ops_link']}</small>{link_txt}</div>"
+        f"<div><small>{ui['ops_delay']}</small><b>{ui['ops_delay_val'].format(m=delay_min)}</b></div></div>"
+        f"<div class='tl'><span class='base' style='left:0;width:{base_w:.2f}%'>{ui['baseline_short']} 1–5</span>"
+        f"<span class='nowline' style='left:{now_x:.2f}%'></span>{''.join(cells)}</div></section>")

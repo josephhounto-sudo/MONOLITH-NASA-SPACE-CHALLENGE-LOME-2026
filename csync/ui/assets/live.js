@@ -93,6 +93,9 @@ if (typeof document !== "undefined") {
     $("d-co2lab").textContent = up ? deltaText(toMmhg(raw.co2lab, mode)) : "";
     $("d-co2n3").textContent = up ? deltaText(toMmhg(raw.co2n3, mode)) : "";
     $("ctx-co2n3").textContent = up ? co2Context(toMmhg(raw.co2n3, mode)) : "";
+    if (recv.clock === undefined) $("link").textContent = "Connecting";
+    else if ((now - recv.clock) / 1000 <= STALE_S) $("link").textContent = "Up (station signal acquired)";
+    else $("link").textContent = "Lost since " + new Date(recv.clock).toISOString().slice(11, 16) + " UTC (normal on the station)";
     $("unit").textContent = (raw.cabin !== undefined && mode === "unknown") ? "Units not recognised: values hidden." : "";
   }
 

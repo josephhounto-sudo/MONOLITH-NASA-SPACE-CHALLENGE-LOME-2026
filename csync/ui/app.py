@@ -590,7 +590,7 @@ def body_map(symptom_zone=None, day=None):
         st.markdown(UI["body_map_symptom"].format(day=day, zone=symptom_zone))
     choice = st.pills(UI["body_map_select"], list(labels), format_func=labels.get, selection_mode="single",
                       default=preset or "region-chest", key=f"body_zone_{day}")   # never an empty panel on arrival
-    left, right = st.columns([1, 1])
+    left, right = st.columns([3, 2])
     with left:   # V3: 3D mannequin built in code (three.js in the browser); the flat map is its fallback inside the frame
         cap = UI["body3d_cap"].format(zone=labels[choice] if choice else "none")
         page = body3d.viewer_html(choice, cap, UI["body3d_hint"])

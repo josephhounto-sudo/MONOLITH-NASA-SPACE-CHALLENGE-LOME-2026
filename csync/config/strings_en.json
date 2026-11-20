@@ -68,7 +68,7 @@
             "pct_hours_above_3mmhg": "Hours above 3 mmHg (%)",
             "sensor_zero_or_cap": "Zero or capped values"
         },
-        "mission_name": "Mars transit · demo story",
+        "mission_name": "Mars transit, demo story",
         "day_of": "Day {d:02d} / {n:02d}",
         "link_status_down": "Ground link down {a}–{b} UTC · report queued",
         "link_status_ok": "Ground link: no outage recorded",
@@ -554,7 +554,14 @@
         "week_next": "Next week",
         "body3d_pick": "Pick a zone above: it lights up on the body, and its sheet opens here.",
         "habitat_card_unknown": "Sensor data unusable",
-        "habitat_unknown": "Cabin sensor data is unusable today (too few valid hours): no cabin-air verdict."
+        "habitat_unknown": "Cabin sensor data is unusable today (too few valid hours): no cabin-air verdict.",
+        "ops_time": "Mission time",
+        "ops_link": "Ground link",
+        "ops_delay": "One-way delay",
+        "ops_delay_val": "{m} min (demo)",
+        "ops_link_up": "Up, no outage",
+        "ops_link_down": "Down {a}–{b} UTC · report queued",
+        "live_delay": "Near real time (low Earth orbit)"
     },
     "indicator_names": {
         "PH01": "heart-rate",

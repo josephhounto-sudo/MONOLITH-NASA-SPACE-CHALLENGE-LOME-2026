@@ -37,12 +37,15 @@ const PROFILES = {
   torso: [[0.001, 0], [0.30, 0.02], [0.29, 0.18], [0.31, 0.34], [0.38, 0.50], [0.42, 0.62], [0.40, 0.70], [0.20, 0.76], [0.001, 0.77]],
   pelvis: [[0.001, 0], [0.28, 0.02], [0.33, 0.14], [0.32, 0.30], [0.29, 0.40], [0.001, 0.42]],
 };
+// callout anchors (body space) and label side, like an anatomical chart: a leader line from the zone to its label
+const CALLOUTS = { "region-head": [0, 2.62, 0.2, "L"], "region-chest": [0.15, 1.95, 0.3, "R"], "region-arm": [-0.57, 1.6, 0.05, "L"],
+                   "region-hand": [0.62, 0.96, 0.1, "R"], "region-abdomen": [0, 1.15, 0.3, "L"], "region-legs": [0.18, 0.45, 0.12, "R"] };
 const FOCUS = { "region-head": 2.55, "region-chest": 1.9, "region-abdomen": 1.2, "region-arm": 1.6, "region-hand": 1.0,
                 "region-legs": 0.45, "region-body": 1.35, "region-habitat": 0.6 };
 
 function partsFor(region) { return PARTS[region] || []; }
 
-if (typeof module !== "undefined") module.exports = { zoneLook, partsFor, PARTS, PROFILES, FOCUS, LOOK, SELECTED_GLOW };
+if (typeof module !== "undefined") module.exports = { zoneLook, partsFor, PARTS, PROFILES, FOCUS, CALLOUTS, LOOK, SELECTED_GLOW };
 
 if (typeof document !== "undefined" && window.CS_BODY) {
   (async () => {
@@ -127,15 +130,40 @@ if (typeof document !== "undefined" && window.CS_BODY) {
         tip.style.left = (e.clientX - r.left + 14) + "px"; tip.style.top = (e.clientY - r.top + 10) + "px"; tip.style.opacity = 1;
       } else if (tip) { tip.style.opacity = 0; }
     });
-    const focusY = FOCUS[cfg.selected] ?? 1.45;
+    // callouts: projected each frame; the selected zone's label is highlighted
+    const overlay = document.getElementById("callouts");
+    const calls = Object.entries(CALLOUTS).map(([rid, [x, y, z, side]]) => {
+      const el = document.createElement("div");
+      el.className = "co" + (rid === cfg.selected ? " sel" : "") + (cfg.status[rid] === "measured" ? "" : " off");
+      el.innerHTML = "<b>" + (cfg.labels[rid] || rid) + "</b><span>" + (cfg.status[rid] === "measured" ? cfg.measuredWord : cfg.offWord) + "</span>";
+      overlay.appendChild(el);
+      const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      line.setAttribute("class", "ld" + (rid === cfg.selected ? " sel" : ""));
+      document.getElementById("leaders").appendChild(line);
+      return { rid, v: new THREE.Vector3(x, y, z), side, el, line };
+    });
+    function placeCallouts() {
+      const Wd = renderer.domElement.clientWidth, Hd = renderer.domElement.clientHeight;
+      calls.forEach((c, i) => {
+        const p = c.v.clone(); p.applyAxisAngle(new THREE.Vector3(0, 1, 0), body.rotation.y); p.y += body.position.y; p.project(cam);
+        const px = (p.x * 0.5 + 0.5) * Wd, py = (-p.y * 0.5 + 0.5) * Hd;
+        const lx = c.side === "L" ? 14 : Wd - 14 - c.el.offsetWidth;
+        const ly = Math.max(6, Math.min(Hd - 40, py - 16));
+        c.el.style.left = lx + "px"; c.el.style.top = ly + "px";
+        const ex = c.side === "L" ? lx + c.el.offsetWidth : lx;
+        c.line.setAttribute("d", `M${ex},${ly + 16} L${(ex + px) / 2},${ly + 16} L${px},${py}`);
+      });
+    }
+    const focusY = 1.25 + 0.25 * ((FOCUS[cfg.selected] ?? 1.45) - 1.45);
     let lookY = 1.45, camY = 1.6, dist = 7.2;
     const near = cfg.selected && cfg.selected !== "region-body" && cfg.selected !== "region-habitat";
     (function loop() {
       if (spin) angle += 0.004;
       body.rotation.y = angle;
-      lookY += (focusY - lookY) * 0.06; camY += (focusY + 0.15 - camY) * 0.06; dist += ((near ? 5.6 : 7.2) - dist) * 0.06;
+      lookY += (focusY - lookY) * 0.06; camY += (focusY + 0.15 - camY) * 0.06; dist += ((near ? 6.6 : 7.4) - dist) * 0.06;
       cam.position.set(0, camY, dist); cam.lookAt(0, lookY, 0);
       renderer.render(scene, cam);
+      placeCallouts();
       requestAnimationFrame(loop);
     })();
   })();

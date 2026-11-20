@@ -99,6 +99,25 @@ html,body,[data-testid="stApp"]{{background:
 /* on a computer the navigation stays open: on the hosted app a collapsed sidebar (remembered by the browser) came back
    with no button to reopen it (seen 20/11/2026 06:50 UTC); phones keep their close button */
 @media (min-width:900px){{[data-testid="stSidebarCollapseButton"]{{display:none!important}}}}
+/* operations bar: three telemetry fields + flat timeline (replaces the decorative orbit) */
+.cs-ops{{padding:14px 18px 16px!important}}
+.cs-ops .ops{{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px}}
+.cs-ops .ops>div{{border-radius:999px;padding:8px 16px;background:rgba(255,253,253,.06);border:1px solid rgba(255,253,253,.16);display:flex;flex-direction:column;min-width:0}}
+.cs-ops .ops small{{font-size:12.5px;opacity:.9}} .cs-ops .ops b{{font-family:Doto,monospace;font-weight:700;font-size:18px;letter-spacing:.02em}}
+.cs-ops .ops b.down{{color:#F2C14E;font-family:inherit;font-size:14px}} .cs-ops .ops i{{font-style:normal;font-size:12.5px}}
+.cs-ops .tl{{position:relative;height:74px;margin:0 2px}}
+.cs-ops .tl::before{{content:"";position:absolute;left:0;right:0;top:34px;height:2px;background:rgba(255,253,253,.18);border-radius:2px}}
+.cs-ops .tl .base{{position:absolute;top:0;height:20px;border-top:2px solid rgba(255,253,253,.35);font-size:12.5px;padding-top:2px;text-align:center}}
+.cs-ops .tl .nowline{{position:absolute;top:18px;bottom:6px;width:2px;margin-left:-1px;background:{INK};box-shadow:0 0 12px {CURVE}}}
+.cs-ops .tl .nd{{position:absolute;top:27px;width:16px;height:16px;margin-left:-8px;border-radius:999px;border:1px solid rgba(255,253,253,.5);background:rgba(255,253,253,.12)}}
+.cs-ops .tl .nd.fut{{background:transparent;border-style:dashed;opacity:.6}}
+.cs-ops .tl .nd.sh-NORMAL{{background:#4CD6A0;border-color:#4CD6A0}} .cs-ops .tl .nd.sh-WATCH{{background:#F2C14E;border-color:#F2C14E}}
+.cs-ops .tl .nd.sh-DEGRADED{{background:#FF6B5B;border-color:#FF6B5B}}
+.cs-ops .tl .nd.now{{box-shadow:0 0 0 5px rgba(255,253,253,.18),0 0 18px {CURVE}}}
+.cs-ops .tl .dn{{position:absolute;top:48px;transform:translateX(-50%);font-family:Doto,monospace;font-weight:700;font-size:14px}}
+.cs-ops .tl .dn.now{{color:{INK}}} .cs-ops .tl .dn.fut{{opacity:.55}}
+.cs-ops .tl .tag{{position:absolute;top:2px;transform:translateX(-50%);font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;background:#FF6B5B;color:#2E2621}}
+@media (max-width:640px){{.cs-ops .ops{{grid-template-columns:1fr}} .cs-ops .ops>div{{border-radius:22px}}}}
 .cs-card.ctx{{background:rgba(34,27,23,.86)!important;border:1.5px dashed rgba(255,253,253,.38)!important}}
 """
 

@@ -68,7 +68,7 @@
             "pct_hours_above_3mmhg": "Heures au-dessus de 3 mmHg (%)",
             "sensor_zero_or_cap": "Valeurs nulles ou plafonnées"
         },
-        "mission_name": "Transit vers Mars · histoire de démo",
+        "mission_name": "Transit vers Mars, histoire de démo",
         "day_of": "Jour {d:02d} / {n:02d}",
         "link_status_down": "Liaison sol coupée {a}–{b} UTC · rapport en file",
         "link_status_ok": "Liaison sol : aucune coupure enregistrée",
@@ -554,7 +554,14 @@
         "week_next": "Semaine suivante",
         "body3d_pick": "Choisissez une zone au-dessus : elle s'allume sur le corps et sa fiche s'ouvre ici.",
         "habitat_card_unknown": "Données du capteur inutilisables",
-        "habitat_unknown": "Les données du capteur de cabine sont inutilisables aujourd'hui (trop peu d'heures valides) : pas de verdict sur l'air."
+        "habitat_unknown": "Les données du capteur de cabine sont inutilisables aujourd'hui (trop peu d'heures valides) : pas de verdict sur l'air.",
+        "ops_time": "Temps de mission",
+        "ops_link": "Liaison sol",
+        "ops_delay": "Délai aller",
+        "ops_delay_val": "{m} min (démo)",
+        "ops_link_up": "Établie, aucune coupure",
+        "ops_link_down": "Coupée {a}–{b} UTC · rapport en file",
+        "live_delay": "Quasi temps réel (orbite basse)"
     },
     "indicator_names": {
         "PH01": "fréquence cardiaque",
