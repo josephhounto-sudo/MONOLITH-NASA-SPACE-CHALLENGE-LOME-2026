@@ -10,3 +10,4 @@ scipy>=1.11
 cryptography>=42   # Ed25519 capsule envelope; license expression read from the package metadata
 # hosted-sync 81cf6eacfc5cbfd12aac8f5307caf6e5e101b227
 # hosted-sync 5a5b8215584ee05d19699dcc05b804d2b5b4916c
+# hosted-sync 402de906ad6f953c0c062e811fab6ea1bfa8b6d6
