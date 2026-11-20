@@ -181,3 +181,8 @@ Ce qui a marché : pré-enregistrer le rejeu avant de calculer ; tester le pari 
 | Urgence et questions de la vidéo : affirmées de mémoire auparavant | — | Vérifiées en ligne (`pitch/v3/QUESTIONS_ET_ECRANS.md`) |
 
 Avancement mesurable du plan V3 : lots 1 à 7 faits et vérifiés en ligne ; lot 8 (mode démo) partiel : le dialogue est dans l'histoire, la vidéo V3 n'est pas tournée ; lot 9 partiel : tests, contrôle à froid et contraste de l'accueil faits, aucun inconnu. Côté soumission : vidéo V3 décrite, diapos V3 écrites (contenu, pas encore mises en page), message au local lead rédigé (non envoyé).
+
+## 15. Corps intégré et promesses (20/11/2026, 08:10 UTC) — main = 2a302be
+- Corps : modèle ouvert « Cesium Man » (Khronos glTF Sample Assets, CC BY 4.0, licence lue dans le fichier LICENSE du dépôt d'origine), chargé depuis un CDN épinglé (278 Ko, vérifié sur l'URL publique), zones par bandes dans le shader, tête-logo remplacée par une sphère, étiquettes à trait de rappel, crédit sous la vue ; secours : mannequin en code puis 2D.
+- Technologies : 6 concepts affichés comme promesses (clignement, signal commun à l'équipage, registre d'exposition, explicateur hors ligne, messagerie DTN, pouls par caméra), chacun avec « comment nous saurons » et « nous l'abandonnons si » ; test qui interdit une promesse sans test.
+- Skills : améliorations proposées pour design-master, code-master-writer et maestro (cartes à valider par Joseph).
