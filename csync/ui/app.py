@@ -673,7 +673,7 @@ def _habitat_body():
     st.altair_chart(alt.Chart(long).mark_line().encode(
         x=alt.X("hour_utc:T", title=None), y=alt.Y("mmHg:Q", title=None),
         color=alt.Color("series:N", sort=cols, scale=alt.Scale(domain=cols, range=style.chart_colors(theme)),
-                        legend=alt.Legend(orient="bottom", direction="vertical", columns=1, title=None, labelLimit=0))), use_container_width=True)   # one legend row per series: nothing is cut on a phone
+                        legend=alt.Legend(orient="bottom", direction="vertical", columns=1, title=None, labelLimit=0))), width="stretch")   # one legend row per series: nothing is cut on a phone
     if len(flat):
         run = habitat.missions().set_index("mission").loc["RR-1"]
         ppm = float(run["longest_run_ppm"])
@@ -805,9 +805,10 @@ _PLAIN = [(re.compile(r"\bREFUSE_RESUME\b"), "resume refused"), (re.compile(r"\b
 
 def tech_standalone():
     """Technologies without the demo day bar: the cards that need a capsule read the demo story's day 9 (the drift day)."""
-    caps = load_capsules(resolve_out_dir(OUT_DIR))
+    out = resolve_out_dir(OUT_DIR)   # the hosted app has no data/out: the story files are built on first use (20/11 crash)
+    caps = load_capsules(out)
     daily = next((c for c in caps if c.get("capsule_type", "daily") == "daily" and c.get("day") == 9 and is_valid(c)), None)
-    tech_page.tech_panel(UI, daily, read_json(os.path.join(resolve_out_dir(OUT_DIR), "trends_histoire.json")), 10)
+    tech_page.tech_panel(UI, daily, read_json(os.path.join(out, "trends_histoire.json")), 10, caps)
 
 
 def nav_groups(commander: bool) -> list[tuple[str, list[str]]]:

@@ -189,13 +189,11 @@ def _ledger(UI):
     st.caption(UI["tech_led_note"])
 
 
-def _explainer(UI):
-    import json
-    import os
+def _explainer(UI, all_caps):
     st.write(UI["tech_ex_what"])
-    path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "out", "capsules_histoire.json")
-    with open(path, encoding="utf-8") as fh:
-        caps = {c["day"]: c for c in json.load(fh) if c.get("capsule_type", "daily") == "daily"}
+    caps = {c["day"]: c for c in all_caps or [] if c.get("capsule_type", "daily") == "daily"}
+    if not caps:
+        return   # no capsule, no retelling: never an empty frame or a developer message
     day = st.select_slider(UI["tech_ex_pick"], sorted(caps), value=9 if 9 in caps else max(caps), key="tech_ex_day")
     cap = caps[day]
     lines = explainer.explain(cap)
@@ -241,7 +239,7 @@ def _building(UI, item):
     st.caption(UI["tech_building"] if item["id"] == "dtn" else UI["tech_building_static"])
 
 
-def tech_panel(UI, daily, trends, day):
+def tech_panel(UI, daily, trends, day, caps=None):
     """Render all technology cards. `daily` is the shown day's capsule (or None)."""
     reg = registry.load()
     problems = registry.audit(reg)
@@ -276,7 +274,7 @@ def tech_panel(UI, daily, trends, day):
                 _camera(UI, "pulse" if item["id"] == "camera_pulse" else "blink")
                 _promise_lines(UI, item)
             elif item["id"] == "onboard_explainer":
-                _explainer(UI)
+                _explainer(UI, caps)
                 _promise_lines(UI, item)
             elif item["id"] == "exposure_ledger":
                 _ledger(UI)

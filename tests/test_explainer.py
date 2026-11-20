@@ -11,10 +11,24 @@ from csync.proto import explainer as ex
 OUT = os.path.join(os.path.dirname(__file__), "..", "data", "out")
 
 
+def _out():
+    """data/out is generated, not committed: build the story files like the hosted app does when they are missing."""
+    if os.path.exists(os.path.join(OUT, "capsules_histoire.json")):
+        return OUT
+    import importlib.util
+    import tempfile
+    spec = importlib.util.spec_from_file_location("run_story", os.path.join(os.path.dirname(OUT), "..", "scripts", "run_story.py"))
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    built = tempfile.mkdtemp(prefix="csync_out_")
+    mod.main(built)
+    return built
+
+
 def _daily():
-    caps = []
+    caps, out = [], _out()
     for f in ("capsules_histoire.json", "capsules_temoin.json", "capsules_capteur.json"):
-        with open(os.path.join(OUT, f), encoding="utf-8") as fh:
+        with open(os.path.join(out, f), encoding="utf-8") as fh:
             caps += [c for c in json.load(fh) if c.get("capsule_type", "daily") == "daily"]
     assert caps
     return caps
