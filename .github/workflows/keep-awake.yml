@@ -1,0 +1,19 @@
+name: Keep the hosted app awake
+# Streamlit Community Cloud hibernates free apps after hours without a visit; a real browser visit every 6 hours keeps it up.
+on:
+  schedule:
+    - cron: "17 */6 * * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visit:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - run: pip install playwright==1.48.0 && python -m playwright install --with-deps chromium
+      - run: python scripts/keep_awake.py

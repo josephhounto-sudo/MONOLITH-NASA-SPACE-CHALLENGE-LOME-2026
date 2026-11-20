@@ -32,8 +32,12 @@ from csync.jsonio import read_json  # noqa: E402
 
 CFG = os.path.join(ROOT, "csync", "config")
 theme = read_json(os.path.join(CFG, "theme.json"))
-strings = read_json(os.path.join(CFG, "strings_en.json"))
+# Language (20/11): English for the jury, French for the local lead and the testers. Same keys in both files (tested).
+LANGS = {"English": "en", "Français": "fr"}
+LANG = LANGS.get(st.session_state.get("cs-lang", "English"), "en")
+strings = read_json(os.path.join(CFG, f"strings_{LANG}.json"))
 UI = strings["ui"]
+_OTHER = read_json(os.path.join(CFG, f"strings_{'fr' if LANG == 'en' else 'en'}.json"))["ui"]
 SCHEMA = read_json(os.path.join(ROOT, "contracts", "decision_capsule.schema.json"))
 OUT_DIR = os.environ.get("CSYNC_OUT_DIR", os.path.join(ROOT, "data", "out"))   # tests point it at an empty folder (cold clone)
 DIMENSIONS = ["Body", "Attention", "Morale", "Mission", "Habitat"]
@@ -852,6 +856,19 @@ style.inject(UI["brand_name"], UI["brand_tag"])
 # V3 (Joseph, 20/11, final pass): the role is chosen first ("who are you?") and decides what the navigation offers.
 # The commander board is the commander's: a crew member never sees it in the navigation (one capsule, one rule, two entries).
 # Sections are grouped by the visitor's path: Now (live), Tour (what C-Sync does), Proof (where it comes from).
+st.sidebar.radio("Language · Langue", list(LANGS), key="cs-lang", horizontal=True)
+if st.session_state.get("cs-lang-prev", "English") != st.session_state.get("cs-lang", "English"):
+    # the visitor switched language: widgets that hold a label in the other language are carried over by key, or reset
+    keep = {"cs-lang", "cs-intro-done", "cs-bot-done", "cs-hook-done", "cs-pip-min", "cs-bot-i"}
+    for _k in list(st.session_state.keys()):
+        if _k in ("cs-nav", "cs-role"):
+            _key = next((k for k, v in _OTHER.items() if v == st.session_state[_k] and k in UI), None)
+            st.session_state[_k] = UI[_key] if _key else None
+            if st.session_state[_k] is None:
+                del st.session_state[_k]
+        elif _k not in keep:
+            del st.session_state[_k]
+    st.session_state["cs-lang-prev"] = st.session_state.get("cs-lang", "English")
 role = st.sidebar.radio(UI["role_label"], [UI["role_crew"], UI["role_cmd"]], key="cs-role", horizontal=True)
 st.sidebar.caption(UI["role_cmd_note"] if role == UI["role_cmd"] else UI["role_crew_note"])
 NAV_GROUPS = nav_groups(role == UI["role_cmd"])

@@ -12,7 +12,7 @@ import sys
 PH = re.compile(r"\{[^{}]+\}")
 
 # Whole values that are the same string in French. A new identical sentence is a gap.
-SAME_IN_BOTH = {
+SAME_IN_BOTH = {"Version {v}", 
     "C-Sync",
     "Pip",
     "Mission",
