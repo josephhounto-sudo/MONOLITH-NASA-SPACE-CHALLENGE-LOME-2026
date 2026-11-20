@@ -42,3 +42,14 @@ def clean_rr(rr_ms: list[float], low: float = 300.0, high: float = 2000.0) -> tu
     """Drops out-of-range intervals; returns (kept, dropped_count)."""
     kept = [value for value in rr_ms if low <= value <= high]
     return kept, len(rr_ms) - len(kept)
+
+
+def story_rhythm(day: int, distance: float) -> dict:
+    """SIMULATED heart-rhythm summary for one story day. `distance` is the day's largest distance from the personal normal, read from the
+    capsule (never typed by hand); stress = distance / 4 clipped to [0, 1], halved so the illustrative drop stays moderate (not a measured
+    effect size). The seed is fixed so that only stress differs between days."""
+    if day < 1:
+        raise ValueError("day starts at 1")
+    stress = 0.5 * min(1.0, max(0.0, float(distance) / 4.0))
+    rr, _ = clean_rr(simulated_rr(120, 62.0, 1000, stress))
+    return {"day": day, "stress": round(stress, 2), "rmssd": rmssd(rr), "sdnn": sdnn(rr), "simulated": True}

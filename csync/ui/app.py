@@ -17,6 +17,7 @@ import tempfile
 from datetime import datetime
 
 import jsonschema
+import altair as alt
 import streamlit as st
 
 ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -24,6 +25,7 @@ sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
 from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
+from csync.physio import hrv  # noqa: E402
 from csync.ui import icons, style, tech_page, widgets  # noqa: E402
 from csync.ui.why import short_verdict, why_parts  # noqa: E402
 from csync.jsonio import read_json  # noqa: E402
@@ -91,7 +93,7 @@ def card(dim, state, day, hist=""):
     else:
         label = strings["states"][state]
     ctx = " ctx" if dim in CONTEXT_DIMENSIONS else ""
-    return (f"<div class='cs-card{ctx}' data-state='{shown}' style='{style.card_vars(s['color'])}'>"
+    return (f"<div class='cs-card{ctx}' data-state='{shown}' data-dim='{dim}' style='{style.card_vars(s['color'])}'>"
             f"<div class='dim'>{dim}</div>"
             f"<div style='color:{s['color']};font-size:1.1em'>{icons.state_icon(shown)} {label}</div>{hist}</div>")
 
@@ -191,8 +193,49 @@ def decision_buttons(cap, day):
         st.caption(UI["decision_session_note"])
 
 
+def action_block(cap, day):
+    """Why this view, the proposed action and the human decision buttons."""
+    with st.container(border=True):
+        parts = why_parts(cap, UI)
+        st.markdown(f"**{UI['why_label']}**")
+        for line in parts["lines"]:
+            st.markdown(line)
+        with st.expander(UI["why_rule_label"]):
+            if parts["rule"]:
+                st.markdown(parts["rule"])
+            if cap.get("situation") and cap["situation"] != short_verdict(cap, strings["states"]):
+                st.markdown(cap["situation"])
+        st.markdown(f"<div class='cs-action'><b>{UI['action_label']}</b> — {html.escape(str(cap['action'].get('text', '')))}</div>",
+                    unsafe_allow_html=True)
+        decision_buttons(cap, day)
+
+
+def rhythm_panel(day):
+    """Simulated heart-rhythm variability tied to the story through the capsule's distances. Context only: no state, no procedure."""
+    def dist(d):
+        c = DAILY_BY_DAY.get(d)
+        ds = [s["d"] for s in (c or {}).get("signals", []) if s.get("d") is not None]
+        return max([0.0] + ds)
+    rows = [hrv.story_rhythm(d, dist(d)) for d in range(1, day + 1)]
+    base_days = [hrv.story_rhythm(d, dist(d))["rmssd"] for d in range(1, min(day, 5) + 1)]
+    base = sum(base_days) / len(base_days)
+    with st.container(border=True):
+        st.markdown(f"**{UI['rhythm_title']}**")
+        st.write(UI["rhythm_now"].format(v=f"{rows[-1]['rmssd']:.0f}", b=f"{base:.0f}"))
+        st.caption(UI["rhythm_legend"])
+        st.markdown(widgets.curve_image([{"day": r["day"], "value": r["rmssd"], "flagged": False} for r in rows], base, None,
+                                        UI["rhythm_curve"], theme["navy"]["chart"], "Mission day"))
+        st.caption(UI["rhythm_note"])
+
+
 def nominal(cap, day):
+    cmd = st.session_state.get("cs-role") == UI["role_cmd"]   # two entries, one capsule: only the order differs
     st.subheader(short_verdict(cap, strings["states"]))
+    if cmd:
+        cmd_summary_line(day)
+        action_block(cap, day)
+    else:
+        st.caption(UI["crew_own"])
     cols = st.columns(len(DIMENSIONS))
     for col, dim in zip(cols, DIMENSIONS, strict=True):
         col.markdown(card(dim, cap["states"].get(dim, "UNKNOWN"), day, style.history(STATES_BY_DAY, dim, day)), unsafe_allow_html=True)
@@ -207,19 +250,9 @@ def nominal(cap, day):
             st.markdown(f"**{sig['name']}** ({sig['unit']})")
             st.caption(UI["ind_curve_legend"])
             st.markdown(widgets.curve_image(rows, sig["baseline_mean"], trend["threshold"], sig["name"], theme["navy"]["chart"], "Mission day"))
-    with st.container(border=True):
-        parts = why_parts(cap, UI)
-        st.markdown(f"**{UI['why_label']}**")
-        for line in parts["lines"]:
-            st.markdown(line)
-        with st.expander(UI["why_rule_label"]):
-            if parts["rule"]:
-                st.markdown(parts["rule"])
-            if cap.get("situation") and cap["situation"] != short_verdict(cap, strings["states"]):
-                st.markdown(cap["situation"])
-        st.markdown(f"<div class='cs-action'><b>{UI['action_label']}</b> — {html.escape(str(cap['action'].get('text', '')))}</div>",
-                    unsafe_allow_html=True)
-        decision_buttons(cap, day)
+    rhythm_panel(day)
+    if not cmd:
+        action_block(cap, day)
     with st.expander(UI["signals_label"]):
         st.dataframe([{k: s.get(k) for k in ("indicator_id", "name", "value", "unit", "baseline_mean", "d", "flagged")}
                       for s in cap["signals"]], hide_index=True)
@@ -392,13 +425,18 @@ def state_glyphs(b, labels):
     return f"![{'; '.join(alt)}](data:image/svg+xml;base64,{base64.b64encode(svg.encode()).decode()})"
 
 
+def cmd_summary_line(day):
+    b = _crew_board(day)
+    n = lambda k: int((b.action == k).sum())
+    st.markdown(f"**{UI['cmd_summary'].format(day=day, n_open=n('OPEN_PROCEDURE'), n_deg=n('DEGRADED'), n_watch=n('WATCH'), n_unk=n('UNKNOWN'))}**")
+
+
 def commander_panel(day):
     """Crew-level view for the commander: the same rule on six synthetic members, sorted by urgency. Decides nothing."""
     st.subheader(UI["cmd_title"])
     st.markdown(UI["cmd_intro"])
     b = _crew_board(day)
-    n = lambda k: int((b.action == k).sum())
-    st.markdown(f"**{UI['cmd_summary'].format(day=day, n_open=n('OPEN_PROCEDURE'), n_deg=n('DEGRADED'), n_watch=n('WATCH'), n_unk=n('UNKNOWN'))}**")
+    cmd_summary_line(day)
     w, names = UI["cmd_status"], UI["try_names"]
     rows = [{"m": r.member, "b": w[r.Body.upper()] if r.Body.upper() in w else r.Body, "a": w[r.Attention.upper()], "o": w[r.Morale.upper()],
              "s": w[r.action], "t": UI["cmd_since"].format(d=int(r.since)) if r.since == r.since and r.since else "—",
@@ -584,7 +622,12 @@ def _habitat_body():
     chart = df.set_index("hour_utc")[["co2_mmhg"]].rename(columns={"co2_mmhg": UI["habitat_series_co2"]})
     chart[UI["habitat_series_limit"]] = habitat.LIMIT_MMHG
     chart[UI["habitat_series_flat"]] = df.set_index("hour_utc")["co2_mmhg"].where(df.set_index("hour_utc")["artifact"])
-    st.line_chart(chart, color=style.chart_colors(theme))
+    cols = list(chart.columns)
+    long = chart.reset_index().melt("hour_utc", var_name="series", value_name="mmHg").dropna()
+    st.altair_chart(alt.Chart(long).mark_line().encode(
+        x=alt.X("hour_utc:T", title=None), y=alt.Y("mmHg:Q", title=None),
+        color=alt.Color("series:N", sort=cols, scale=alt.Scale(domain=cols, range=style.chart_colors(theme)),
+                        legend=alt.Legend(orient="bottom", direction="vertical", columns=1, title=None, labelLimit=0))), use_container_width=True)   # one legend row per series: nothing is cut on a phone
     if len(flat):
         run = habitat.missions().set_index("mission").loc["RR-1"]
         ppm = float(run["longest_run_ppm"])
@@ -641,7 +684,8 @@ OUT = resolve_out_dir(OUT_DIR)
 caps = load_capsules(OUT)
 day = st.slider(UI["day_slider"], 1, 10, 7, key="cs-day")
 today = [c for c in caps if c.get("day") == day]
-STATES_BY_DAY = {c["day"]: c["states"] for c in caps if c.get("capsule_type", "daily") == "daily" and is_valid(c)}
+DAILY_BY_DAY = {c["day"]: c for c in caps if c.get("capsule_type", "daily") == "daily" and is_valid(c)}
+STATES_BY_DAY = {d: c["states"] for d, c in DAILY_BY_DAY.items()}
 _events, _link, _delay = {}, None, read_json(os.path.join(ROOT, "contracts", "decision.schema.json"))["properties"]["ground_delay_min"]["const"]
 for c in caps:
     if c.get("capsule_type") == "emergency" and is_valid(c):

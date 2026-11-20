@@ -567,6 +567,12 @@ def _navy_css():
 _NAV = """
 [data-testid="stToolbar"]{display:flex!important;visibility:visible!important}
 [data-testid="stToolbar"] [data-testid="stToolbarActions"],[data-testid="stToolbar"] [data-testid="stMainMenu"],[data-testid="stToolbar"] [data-testid="stAppDeployButton"]{display:none!important}
+/* one cool tint per category, on the label only: the state keeps its own colour, icon and word */
+.cs-card[data-dim=Body] .dim{color:#7FD1E8}.cs-card[data-dim=Attention] .dim{color:#B7A6F2}.cs-card[data-dim=Morale] .dim{color:#F2B6CF}
+.cs-card[data-dim=Mission] .dim{color:#9DB4D6}.cs-card[data-dim=Habitat] .dim{color:#8FD9C9}
+.cs-card .dim::before{content:"";display:inline-block;width:8px;height:8px;border-radius:50%;background:currentColor;margin-right:8px;vertical-align:middle}
+/* tables scroll sideways on a phone instead of being cut */
+[data-testid="stMarkdownContainer"] table{display:block;max-width:100%;overflow-x:auto}
 @media (max-width:640px){.cs-top{padding-left:44px!important}}
 [data-testid="stExpandSidebarButton"],[data-testid="stSidebarCollapsedControl"]{display:flex!important;visibility:visible!important}
 """

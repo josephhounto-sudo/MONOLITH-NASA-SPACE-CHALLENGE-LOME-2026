@@ -49,7 +49,8 @@ def dots_image(rows, base, thr, ch, alt):
     """Watch-style history: one dot per day between two dotted lines (personal normal and threshold), the current day ringed. Image tag with a text alternative."""
     W, H = 300, 96
     vals = [r["value"] for r in rows if r["value"] is not None]
-    lo, hi = min(vals + [base, thr]), max(vals + [base, thr])
+    ext = [base] + ([thr] if thr is not None else [])
+    lo, hi = min(vals + ext), max(vals + ext)
     pad = (hi - lo) * 0.18 or 1
     lo, hi = lo - pad, hi + pad
     X = lambda i: 12 + (W - 52) * i / 9
@@ -98,7 +99,8 @@ def curve_image(rows, base, thr, label, ch, day_word):
     """Trend curve: smooth line, soft area, two dotted lines, a glowing point on the last day. Markdown image with a text alternative (used on its own, outside an HTML block)."""
     W, H, L, R, T, B = 480, 230, 48, 14, 22, 44
     vals = [r["value"] for r in rows if r["value"] is not None]
-    lo, hi = min(vals + [base, thr]), max(vals + [base, thr])
+    ext = [base] + ([thr] if thr is not None else [])
+    lo, hi = min(vals + ext), max(vals + ext)
     pad = (hi - lo) * 0.14 or 1
     lo, hi = lo - pad, hi + pad
     n = max(len(rows) - 1, 1)
@@ -114,6 +116,8 @@ def curve_image(rows, base, thr, label, ch, day_word):
         g.append(f'<text x="{X(i):.0f}" y="{H-22}" font-size="15" text-anchor="middle" fill="{ch["ink"]}" font-family="sans-serif">{r["day"]}</text>')
     g.append(f'<text x="{(L+W-R)/2:.0f}" y="{H-4}" font-size="15" text-anchor="middle" fill="{ch["ink"]}" font-family="sans-serif">{html.escape(day_word)}</text>')
     for v, col in ((base, ch["baseline"]), (thr, ch["flag_line"])):
+        if v is None:
+            continue
         g.append(f'<line x1="{L}" x2="{W-R}" y1="{Y(v):.1f}" y2="{Y(v):.1f}" stroke="{col}" stroke-opacity=".8" stroke-width="1.6" stroke-dasharray="1 5" stroke-linecap="round"/>')
     if len(pts) >= 2:
         line = smooth_path(pts)
@@ -130,5 +134,5 @@ def curve_image(rows, base, thr, label, ch, day_word):
     svg = f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" width="{W}" height="{H}">' + "".join(g) + "</svg>"
     flagged = [str(r["day"]) for r in rows if r["flagged"]]
     alt = (f"{label}, days {rows[0]['day']} to {rows[-1]['day']}: values {min(vals):.3g} to {max(vals):.3g}; personal baseline {base:.3g}, "
-           f"threshold {thr:.3g}" + (f"; flagged days {', '.join(flagged)}." if flagged else "; no flagged day."))
+           + (f"threshold {thr:.3g}" if thr is not None else "no threshold") + (f"; flagged days {', '.join(flagged)}." if flagged else "; no flagged day."))
     return f"![{alt}]({_uri(svg)})"
