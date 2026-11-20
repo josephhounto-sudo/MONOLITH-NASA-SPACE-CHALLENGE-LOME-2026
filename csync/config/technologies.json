@@ -70,9 +70,9 @@
     {
       "id": "common_signal",
       "name": "Crew-wide or individual?",
-      "status": "ANNOUNCED",
-      "module": null,
-      "data": "NONE",
+      "status": "PROTOTYPE",
+      "module": "csync.proto.common_signal",
+      "data": "SIMULATED",
       "purpose": "When several crew members drift together during a cabin CO2 episode, says 'shared signal, check the air' instead of pointing at one person.",
       "test": "Simulated crews on seeds never used for tuning, with a shared and an individual shift: at least 90 % correct attribution.",
       "drop_if": "Below 90 %."
@@ -80,9 +80,9 @@
     {
       "id": "exposure_ledger",
       "name": "Exposure ledger",
-      "status": "ANNOUNCED",
-      "module": null,
-      "data": "NONE",
+      "status": "PROTOTYPE",
+      "module": "csync.proto.exposure_ledger",
+      "data": "REAL",
       "purpose": "One gauge per crew member: 7-day cabin CO2 against NASA's 2.5 mmHg level and cumulative radiation dose, from real ISS data.",
       "test": "Replay the 24 ISS missions: the cumulative dose shown equals the NASA data column, day by day.",
       "drop_if": "Any mismatch with the NASA file."

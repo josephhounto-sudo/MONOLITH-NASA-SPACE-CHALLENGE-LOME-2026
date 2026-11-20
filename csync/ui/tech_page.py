@@ -9,6 +9,7 @@ from csync.analytics.changepoint import bocpd, cusum
 from csync.crypto.capsule_sign import generate_keypair, sign_capsule, verify_capsule
 from csync.physio.hrv import clean_rr, rmssd, sdnn, simulated_rr
 from csync.sync.crdt_sim import Replica, simulate_link
+from csync.proto import common_signal, exposure_ledger
 from csync.tech import registry
 
 _ANIM = """<style>
@@ -110,6 +111,40 @@ def _hrv(UI):
     st.caption(UI["tech_hrv_note"])
 
 
+@st.cache_data(show_spinner=False)
+def _cs_scores():
+    return common_signal.accuracy(range(0, 200)), common_signal.accuracy(range(1000, 1300))
+
+
+def _common(UI):
+    a, b = _cs_scores()
+    st.write(UI["tech_cs_result"].format(a=100 * a, b=100 * b))
+    z, _ = common_signal.simulate(1003)
+    marks = {}
+    for r in common_signal.attribute(z):
+        if r["kind"] != "none":
+            marks[r["day"]] = ("#F2C14E" if r["kind"] == "shared" else "#E9A27A", r["kind"])
+            word = UI["tech_cs_shared"] if r["kind"] == "shared" else UI["tech_cs_individual"].format(m=", ".join(r["members"]))
+            st.caption(UI["tech_cs_day"].format(s=1003, d=r["day"], k=word))
+    st.html(_DOTS + _strip(10, marks))
+
+
+def _ledger(UI):
+    import altair as alt
+    led = exposure_ledger.ledger()
+    c1, c2 = st.columns(2)
+    for col, field, title, colour in ((c1, "radiation_mgy_cum", UI["tech_led_rad"], "#E9A27A"), (c2, "co2_7d_mmhg", UI["tech_led_co2"], "#F2C14E")):
+        col.caption(title)
+        col.altair_chart(alt.Chart(led.dropna(subset=[field])).mark_line(color=colour, strokeWidth=2.5).encode(
+            x=alt.X("date:T", title=None), y=alt.Y(f"{field}:Q", title=None, scale=alt.Scale(zero=False))).properties(height=150), use_container_width=True)
+    st.caption(UI["tech_led_note"])
+
+
+def _promise_lines(UI, item):
+    if item.get("test"):
+        st.markdown(f"**{UI['tech_test']}:** {item['test']}  \n**{UI['tech_drop']}:** {item['drop_if']}")
+
+
 def _building(UI, item):
     """A concept is a promise with its test: what it would bring, how we will know, and what would make us drop it."""
     assert item.get("test") and item.get("drop_if"), f"concept {item['id']} has no test: a promise without a test is not shown"
@@ -141,3 +176,9 @@ def tech_panel(UI, daily, trends, day):
                 _sync(UI)
             elif item["id"] == "hrv":
                 _hrv(UI)
+            elif item["id"] == "common_signal":
+                _common(UI)
+                _promise_lines(UI, item)
+            elif item["id"] == "exposure_ledger":
+                _ledger(UI)
+                _promise_lines(UI, item)
