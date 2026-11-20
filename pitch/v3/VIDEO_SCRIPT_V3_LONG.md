@@ -1,4 +1,4 @@
-# Vidéo C-Sync : version complète (≈ 2 min 40), format « revue de conception »
+# Vidéo C-Sync : version complète (1 min 38 montée), format « revue de conception »
 
 **Pourquoi cette version :** la limite de 30 s concernait la soumission, qui est close. Cette vidéo est pour le responsable local et pour toute personne qui veut comprendre le produit en une séance. Elle suit l'ordre d'une revue d'ingénieur : besoin → preuve → démonstration → limites. La version 30 s (`VIDEO_SCRIPT_V3.md`) reste valable comme bande-annonce.
 
@@ -18,7 +18,9 @@
 | 7 | 113–140 s | App : Technologies | Every piece can be touched, and each says: tested, in development, or still a promise. | SIMULÉ ; prototype clignement « en développement » |
 | 8 | 140–160 s | Flow : la Terre depuis l’orbite, puis logo C-Sync + MONOLITH | Not validated on real crews. Measure the astronaut, not the average. | Carton : « AI-generated shots: 1, 8 · AI voice » |
 
-**Durée de voix :** ≈ 330 mots à 130 mots/min ≈ 2 min 30 ; le reste est la musique seule (début et fin).
+**Montage réel (20/11, 13:35) :** voix ElevenLabs (Roger) de 92,4 s sur le texte ci-dessous, 1,5 s de musique avant, logo et carton final à la fin : 97,7 s, −16 LUFS. Deux fichiers : voix anglaise + sous-titres anglais, voix anglaise + sous-titres français. Les durées par plan sont calées sur les pauses mesurées dans la voix (ffmpeg silencedetect), pas sur une estimation.
+Texte exact de la voix : « A legend says a sign at NASA's entrance reads: the bumblebee cannot fly. It is only a legend. The calculation was wrong, not the bee. It assumed fixed wings. An average astronaut is the same mistake. Daily averages hid hours that mattered. In real cabin data from fourteen space station missions, eight had hours above three millimetres of mercury that the daily average concealed. The hour shows what the day hides. This is the live station. Every value shows its age. NASA data here is context, never a decision. Choose a role: crew member or commander. Same data, same words, a different first question. Meet Kora. She is simulated, and every screen says so. C-Sync compares her to her own normal, so a slow drift shows before any single number looks wrong. On day nine, the link to Earth drops. Help is twenty minutes away. The steps are already on board, and Pip walks the crew through them. A person decides. C-Sync keeps the steps ready. Every piece can be touched, and each one says: tested, in development, or still a promise. One prototype reads blinking from the visitor's own camera. It is marked in development, with the reason: not validated. Nothing is recorded. This is a demonstration on synthetic data and public NASA data. Not validated on real crews. Measure the astronaut, not the average. »
+**Défaut connu :** le plan « live station » a été filmé depuis un serveur qui ne joint pas le flux de la station : les cartes affichent « Connecting ». À remplacer par une capture de 8 s de la console en direct faite depuis un navigateur ordinaire.
 
 ## Prompts de production
 **Flow (Veo), plan 1, 8 s :** « Extreme macro of a single bumblebee hovering in front of a dark background, wings beating, visible wing rotation, slow motion, warm amber rim light, shallow depth of field, cinematic, no text, no people. »
