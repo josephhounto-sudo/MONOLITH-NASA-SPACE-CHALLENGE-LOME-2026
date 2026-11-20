@@ -11,7 +11,7 @@ from csync.habitat import LIMIT_MMHG, ppm_to_mmhg  # noqa: E402
 from csync.quality import flag_plateaus  # noqa: E402
 from scripts.eda_load import load  # noqa: E402
 
-LAW_HEADACHE, COLE_CONGESTION = 2.0, 1.5
+NASA_TB004_HEADACHE, COLE_CONGESTION = 2.5, 1.5   # OCHMO-TB-004: 7-day mean < 2.5 mmHg keeps headache risk < 1 %
 
 
 def mission_rows():
@@ -41,7 +41,7 @@ def mission_rows():
                "episodes": len(ep), "longest_ep_h": int(ep.max()) if len(ep) else 0,
                "days_mean_above_3": int((day > LIMIT_MMHG).sum()), "days": len(day),
                "hours_hidden_by_daily_mean": hidden,
-               "pct_days_7d_above_2.0": round(100 * (r7 > LAW_HEADACHE).mean(), 1) if len(r7) else None,
+               "pct_days_7d_above_2.5": round(100 * (r7 > NASA_TB004_HEADACHE).mean(), 1) if len(r7) else None,
                "pct_days_7d_above_1.5": round(100 * (r7 > COLE_CONGESTION).mean(), 1) if len(r7) else None,
                "max_7d_mmhg": round(float(r7.max()), 2) if len(r7) else None}
 

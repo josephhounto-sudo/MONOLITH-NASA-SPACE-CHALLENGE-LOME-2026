@@ -79,7 +79,7 @@ Règle V3 : on garde l'aspect, mais tout texte de moins de 24 px se pose sur une
 ## 5. Encore NON VÉRIFIÉ
 - Capture caméra réelle dans l'app déployée.
 - Connexion au flux ISS depuis notre composant ; unité brute ; conditions d'usage du serveur public.
-- Seuil de 2,0 mmHg de Law 2014 : lu dans le résumé de presse seulement.
+- Seuil 7 jours corrigé à 2,5 mmHg (OCHMO-TB-004, source NASA) ; le 2,0 du résumé de presse est abandonné.
 - Accès à Gemini aujourd'hui.
 - Aucun inconnu n'a encore testé quoi que ce soit.
 
@@ -107,3 +107,36 @@ Recommandation : B pour l'accueil, A derrière le bot.
 Aucune bibliothèque nécessaire : `Intl.DateTimeFormat` du navigateur.
 Fuseaux retenus : heure de bord ISS = UTC (choix des agences partenaires) ; Houston (America/Chicago, centre de contrôle NASA) ; Moscou (Europe/Moscow, centre de contrôle russe) ; Lomé (Africa/Lome, l'équipe, UTC+0 donc à l'heure de la station). Ajout : temps écoulé de la mission démo (jour et heure), et délai de liaison simulé de Mars.
 Critère : écart de moins d'une seconde avec l'horloge système ; test des quatre fuseaux.
+
+## 10. Revue d'ingénieur NASA (20/11, 06:00 UTC)
+Matière : les 18 risques HRP copiés le 15/11 (`data/nasa_official/`), l'énoncé du défi, les champs bruts de l'EDA (24 missions), le flux ISS en direct, les fiches techniques OCHMO.
+
+### 10.1 Traçabilité risque NASA → C-Sync
+| Risque HRP (liste officielle) | Fonction C-Sync | Donnée | Statut |
+|---|---|---|---|
+| Inadequate Sleep and Irregular Schedules | dérive d'attention, clignement | simulée ; caméra | couvert (simulé, en développement) |
+| Behavioral Changes and Psychiatric Disorders | indicateur Morale | simulée | couvert (simulé) |
+| Cardiovascular Adaptations | rythme cardiaque, variabilité | simulée | couvert (simulé) |
+| Inadequate Systems Operations Support | capsule hors ligne, procédures, file d'envoi | conception | couvert |
+| Danger « environnement fermé ou hostile » | Habitat CO2 | RÉELLE (EDA + direct) | couvert |
+| Radiation-Induced Cancers | aucune | dose quotidienne RÉELLE dans l'EDA, 24 missions, inutilisée | MANQUE |
+| Hypoxia | aucune | ppO2 et pression RÉELS en direct | MANQUE |
+| Decompression Sickness | aucune | pression du sas en direct (préparation de sortie) | piste seulement |
+| Inadequate Teamwork | aucune | — | hors portée |
+Les huit autres risques (os, muscles, vision, immunité, microbes, nutrition, sorties, charges) n'ont aucune donnée accessible : on les nomme, on n'y touche pas.
+
+### 10.2 Données mal utilisées ou oubliées
+1. Radiation : `eda_rr1_radiation_daily.csv` (rayons cosmiques, anomalie de l'Atlantique Sud, dose cumulée) n'entre dans rien. La ressource de l'ASC sur la radiation, citée par le défi, est inutilisée. Attention : l'EDA donne une dose absorbée (mGy) ; la limite NASA de carrière (600 mSv, NASA-STD-3001) est une dose efficace. On affiche la dose cumulée réelle, sans conversion inventée.
+2. CO2 : seule la limite d'une heure est utilisée ; l'exposition sur 7 jours (OCHMO-TB-004 : < 2,5 mmHg) est absente de l'app.
+3. Température et humidité de cabine : tracées, jamais évaluées. Les plages NASA restent à trouver (NON VÉRIFIÉ).
+4. Jalons de mission de l'EDA (lancement, arrivée, retour) : inutilisés ; ils permettent d'aligner les événements sur les courbes.
+5. Capteur de cabine ≠ air respiré : le CO2 peut stagner près du visage (Aerospace Medicine and Human Performance, 2025). À écrire sous chaque valeur.
+
+### 10.3 Idées techniques que nos données rendent possibles
+| # | Idée | Antériorité | Essai d'une heure qui peut échouer |
+|---|---|---|---|
+| I1 | Séparer « signal partagé par l'équipage » et « signal individuel » : si plusieurs membres dérivent ensemble pendant un épisode de CO2, la carte dit « signal commun, voir l'air de cabine » plutôt que d'accuser une personne. Johnston et Dietlein (1974) notent déjà qu'on ne savait pas séparer l'effet du vol de la variation individuelle. | Aucun outil de ce type trouvé en une recherche : NON PROUVÉ comme nouveau | Équipages simulés (graines jamais utilisées) avec un décalage commun et un individuel ; il faut au moins 90 % de bonnes attributions, sinon on abandonne. |
+| I2 | Grand livre d'exposition, comme une jauge : CO2 sur 7 jours face à 2,5 mmHg, dose de radiation cumulée réelle | La NASA suit déjà la dose (dosimètres) ; ce qui est nouveau, c'est la vue côté équipage, hors ligne et combinée | Rejeu des 24 missions : le cumul affiché doit égaler la colonne `accumulated` de l'EDA. |
+| I3 | Contrôle d'intégrité du flux en direct : notre détecteur de plateaux (ARTIFACT) appliqué au flux ISS signale une valeur figée comme suspecte | Réutilisation de notre propre code | Une heure de flux : si le CO2 reste identique (comme ce matin), la carte doit dire « valeur figée depuis X min ». |
+| I4 | Rejeu de mission dans l'app : le jury choisit une des 14 missions réelles et voit ce que C-Sync aurait signalé | Notre rejeu pré-enregistré | Les chiffres affichés doivent égaler `replay_results.csv`. |
+| I5 | Fraction d'O2 en direct = ppO2 ÷ pression totale (LAB ce matin : 165,8 ÷ 751,9 ≈ 22,1 %), face à la règle normoxique NASA | Calcul simple ; les seuils de vol restent à sourcer (la norme dit que les limites physiologiques de vol sont inconnues) | Comparer au même moment avec ISS Mimic. |
