@@ -69,7 +69,7 @@ def test_navigation_opens_every_section_without_error(cold_page):
     at, _ = cold_page
     nav = at.sidebar.radio[0]
     assert nav.options[0] == UI["tab_live"], "V3 (20/11): the live station console opens the app"
-    assert len(nav.options) == 12
+    assert len(nav.options) == 13   # + Emergency guide (20/11)
     for opt in list(nav.options):
         at.sidebar.radio[0].set_value(opt).run()
         assert not at.exception, (opt, at.exception)

@@ -1,0 +1,165 @@
+{
+  "_header": "Emergency guide V3 (20/11/2026). Every step cites a NASA source read on 20/11/2026; a step without a source is refused by tests/test_emergency_guide.py. C-Sync proposes no treatment and no drug. The station's own alarms and the onboard checklists come first; C-Sync keeps the steps, the clock, the headcount and the report.",
+  "sources": {
+    "TOBIAS2023": "Tobias B., McMillan C., Evolution of Hardware and Philosophy of Emergency Response Actions on the ISS, SpaceOps 2023, NASA NTRS 20220019247",
+    "TB004": "NASA OCHMO-TB-004, Carbon Dioxide technical brief (NASA-STD-3001)",
+    "TB037": "NASA OCHMO-TB-037, Decompression Sickness Risk Mitigation technical brief",
+    "PROC01": "C-Sync procedure PROC-EMERGENCY-01 (sources in docs/HELP_CARD_SOURCES.md)",
+    "DESIGN": "C-Sync design choice (not a NASA procedure)"
+  },
+  "cases": [
+    {
+      "id": "medical",
+      "title": "Medical: a crew member reports a symptom (chest pain in the demo)",
+      "trigger": "A crew member reports a symptom and its body zone.",
+      "csync_role": "Opens the guided procedure, takes the measurements one by one with their time, queues the report for the ground.",
+      "steps": [
+        {
+          "text": "Stop the current task and alert the crew.",
+          "src": "PROC01"
+        },
+        {
+          "text": "Mark the body zone where the symptom is felt.",
+          "src": "PROC01"
+        },
+        {
+          "text": "Take the measurements one at a time on the onboard devices (heart rate, blood pressure, temperature, glucose); C-Sync records each value with its time.",
+          "src": "PROC01"
+        },
+        {
+          "text": "Follow the onboard medical checklist and the crew medical officer.",
+          "src": "PROC01"
+        },
+        {
+          "text": "The report is built from the recorded values only and queued for the ground; it is delivered once when the link returns.",
+          "src": "PROC01"
+        }
+      ],
+      "never": "C-Sync never interprets the symptom and never proposes a treatment or a drug."
+    },
+    {
+      "id": "depress",
+      "title": "Rapid depressurization (air leak)",
+      "trigger": "Cabin pressure falling: station alarm, or C-Sync sees the pressure drop on two readings.",
+      "csync_role": "Computes the time left before the cabin reaches 490 mmHg from two pressure readings, and keeps the headcount.",
+      "steps": [
+        {
+          "text": "Warn: the station alarm sounds; anyone can also trigger it.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Gather: everyone meets at the designated point and is counted.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Compute the time left before cabin pressure reaches 490 mmHg (9.5 psia) from a gauge and a timer.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Check that the return vehicle is leak-tight before anything else.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Close hatches to isolate modules until the leak is found. Never close a hatch between the crew and the return vehicle.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "When ten minutes or less remain: stop isolating and retreat to the safe haven.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Afterwards, report any joint pain, tingling, numbness, skin rash, weakness, confusion or balance trouble to the crew medical officer (decompression sickness signs).",
+          "src": "TB037"
+        }
+      ],
+      "never": "C-Sync does not command hatches or valves; it computes and records."
+    },
+    {
+      "id": "fire",
+      "title": "Fire or smoke",
+      "trigger": "Station smoke alarm or crew report.",
+      "csync_role": "Keeps the headcount, the clock of each step and the log; the station removes power and fans on its own.",
+      "steps": [
+        {
+          "text": "Warn and gather: confirm a safe haven and account for everyone.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Put on breathing masks to leave the area; switch to respirators with fire cartridges once in the safe haven.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Locate the source with station telemetry and air samples.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Remove power from the equipment behind the panel.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Use the extinguisher the onboard procedure names for that location.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "If the fire persists: power down the module and leave it.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "After the fire: the air is scrubbed before the crew returns.",
+          "src": "TOBIAS2023"
+        }
+      ],
+      "never": "C-Sync does not judge whether the fire is out; the crew decides."
+    },
+    {
+      "id": "toxic",
+      "title": "Toxic leak (ammonia)",
+      "trigger": "Station alarm or crew report of a smell or leak.",
+      "csync_role": "Shows the memorized response in order, keeps the headcount and the log.",
+      "steps": [
+        {
+          "text": "Put on protective masks.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Leave the contaminated segment for the safe segment or the return vehicle.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Close the hatches to isolate the contaminated segment.",
+          "src": "TOBIAS2023"
+        },
+        {
+          "text": "Switch to filtering respirators as the procedure says.",
+          "src": "TOBIAS2023"
+        }
+      ],
+      "never": "C-Sync does not decide when the air is safe again."
+    },
+    {
+      "id": "co2",
+      "title": "Cabin CO2 too high",
+      "trigger": "CO2 above NASA's 3 mmHg one-hour limit (C-Sync reads it live) or crew headaches.",
+      "csync_role": "Cross-checks two cabin sensors, records who reports symptoms, and alerts once per episode.",
+      "steps": [
+        {
+          "text": "Check that the reading is real: compare two cabin sensors before alerting.",
+          "src": "DESIGN"
+        },
+        {
+          "text": "Alert the crew and the ground: NASA limits the one-hour average to 3 mmHg.",
+          "src": "TB004"
+        },
+        {
+          "text": "Each crew member reports headache, fatigue, poor sleep or nausea; C-Sync records who and when.",
+          "src": "TB004"
+        },
+        {
+          "text": "The ground and crew adjust the air system by their own procedure; C-Sync follows the value until it is back under the limit.",
+          "src": "DESIGN"
+        }
+      ],
+      "never": "C-Sync does not change the air system."
+    }
+  ]
+}

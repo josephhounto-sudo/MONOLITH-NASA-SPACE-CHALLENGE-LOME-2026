@@ -16,6 +16,7 @@ SAME_IN_BOTH = {
     "C-Sync",
     "Pip",
     "Mission",
+    "Source",
     "Commander",  # speaker id in the demo dialogue (shown as speaker_cmd)  # name of the guide bot (20/11/2026)
     "Normal",
     "Mission",

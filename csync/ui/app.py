@@ -24,7 +24,7 @@ ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)
 sys.path.insert(0, ROOT)
 from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
-from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
+from csync import crew, devicefeed as adapters, emergency_guide, habitat, silhouette  # noqa: E402
 from csync.physio import hrv  # noqa: E402
 from csync.ui import body3d, bookings, bot, icons, live, style, tech_page, widgets  # noqa: E402
 from csync.ui.why import short_verdict, why_parts  # noqa: E402
@@ -711,6 +711,58 @@ def replay_panel():
     st.caption(UI["replay_note"])
 
 
+def emergency_panel():
+    """Several kinds of emergency, steps in order with a NASA source each (csync/emergency_guide.py). Presentation only."""
+    g = emergency_guide.load()
+    st.subheader(UI["em_title"])
+    st.markdown(UI["em_intro"])
+    cases = {c["id"]: c for c in g["cases"]}
+    cid = st.pills(UI["em_pick"], list(cases), format_func=lambda k: cases[k]["title"], selection_mode="single", default="medical", key="cs-em-case")
+    c = cases[cid or "medical"]
+    a, b, d = st.columns(3)
+    a.markdown(f"**{UI['em_trigger']}**  \n{c['trigger']}")
+    b.markdown(f"**{UI['em_role']}**  \n{c['csync_role']}")
+    d.markdown(f"**{UI['em_never']}**  \n{c['never']}")
+    key = f"cs-em-step-{c['id']}"
+    i = max(0, min(int(st.session_state.get(key, 0)), len(c["steps"]) - 1))
+    s = c["steps"][i]
+    with st.container(key="cs-em-step"):
+        st.caption(UI["em_step"].format(i=i + 1, n=len(c["steps"])))
+        st.html("<div class='cs-dots'>" + "".join(f"<span class='cs-dot{' on' if k == i else ''}'>{k + 1}</span>"
+                                                   for k in range(len(c["steps"]))) + "</div>")
+        st.markdown(f"### {s['text']}")
+        st.caption(f"{UI['em_src']}: {g['sources'][s['src']]}")
+        p1, _, p2 = st.columns([1, 2, 1])
+        if p1.button(UI["em_back"], key=f"{key}-b", disabled=i == 0):
+            st.session_state[key] = i - 1
+            st.rerun()
+        if p2.button(UI["em_next"], key=f"{key}-n", type="primary", disabled=i == len(c["steps"]) - 1):
+            st.session_state[key] = i + 1
+            st.rerun()
+        if i == len(c["steps"]) - 1:
+            st.success(UI["em_done"])
+    if c["id"] in ("depress", "fire", "toxic"):
+        st.markdown(f"**{UI['em_headcount']}**")
+        cols = st.columns(len(UI["em_crew"]))
+        k = sum(1 for n, col in zip(UI["em_crew"], cols, strict=True) if col.checkbox(n, key=f"cs-em-hc-{c['id']}-{n}"))
+        st.caption(UI["em_counted"].format(k=k, n=len(UI["em_crew"])))
+    if c["id"] == "depress":
+        st.markdown(f"**{UI['em_tres_title']}**")
+        x1, x2 = st.columns(2)
+        pb = x1.number_input(UI["em_p_before"], 400.0, 800.0, 752.0, 0.5, key="cs-em-pb")
+        pn = x2.number_input(UI["em_p_now"], 400.0, 800.0, 748.0, 0.5, key="cs-em-pn")
+        t = emergency_guide.time_to_reserve(pb, pn, 1.0)
+        if t is None:
+            st.info(UI["em_tres_none"])
+        else:
+            st.html(f"<div class='cs-wk-v'><span class='cs-num'>{t:.0f}</span><small>min</small></div>")
+            st.markdown(UI["em_tres_out"].format(m=t))
+            if t <= emergency_guide.STOP_ISOLATING_MIN:
+                st.warning(UI["em_tres_stop"])
+        st.caption(UI["em_tres_note"])
+    st.info(strings["fixed_medical_sentence"])
+
+
 def sources_panel():
     provenance_table()
     st.divider()
@@ -749,7 +801,8 @@ style.inject(UI["brand_name"], UI["brand_tag"])
 role = st.session_state.get("cs-role", UI["role_crew"])   # the role radio sits below the navigation, so its value is read from the state
 _core = ["tab_body", "tab_env", "tab_trends", "tab_tech", "tab_scale", "tab_why", "tab_nasa", "tab_try", "tab_sources"]
 # V3 (Joseph, 20/11): the live console opens the app; the drift story is one demo among the sections, not the base
-_KEYS = ["tab_live", "tab_home", "tab_cmd"] + _core if role == UI["role_cmd"] else ["tab_live", "tab_home"] + _core[:3] + ["tab_cmd"] + _core[3:]
+_KEYS = (["tab_live", "tab_emergency", "tab_home", "tab_cmd"] + _core if role == UI["role_cmd"]
+         else ["tab_live", "tab_emergency", "tab_home"] + _core[:3] + ["tab_cmd"] + _core[3:])
 _SECTIONS = [UI[k] for k in _KEYS]
 st.html("<style>" + bookings.nav_css(UI, _KEYS, ["role_crew", "role_cmd"]) + "</style>")
 section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
@@ -764,13 +817,14 @@ if section == UI["tab_live"]:
 # real NASA habitat data, the evidence, the hazards and the sources they mixed a simulated day with unrelated facts
 # (design rule "one screen, one moment"), so those sections open without them.
 _USE_KEYS = {UI[k]: "use_" + {"tab_cmd": "cmd", "tab_body": "body", "tab_env": "env", "tab_trends": "trends", "tab_tech": "tech",
-             "tab_scale": "scale", "tab_why": "why", "tab_nasa": "nasa", "tab_try": "try", "tab_sources": "sources"}[k]
-             for k in ("tab_cmd", "tab_body", "tab_env", "tab_trends", "tab_tech", "tab_scale", "tab_why", "tab_nasa", "tab_try", "tab_sources")}
+             "tab_scale": "scale", "tab_why": "why", "tab_nasa": "nasa", "tab_try": "try", "tab_sources": "sources", "tab_emergency": "emergency"}[k]
+             for k in ("tab_cmd", "tab_body", "tab_env", "tab_trends", "tab_tech", "tab_scale", "tab_why", "tab_nasa", "tab_try", "tab_sources",
+                       "tab_emergency")}
 _STORY_SECTIONS = (UI["tab_home"], UI["tab_cmd"], UI["tab_trends"], UI["tab_tech"])
 if section not in _STORY_SECTIONS:
     _STANDALONE = {UI["tab_body"]: lambda: body_map(None, None), UI["tab_env"]: habitat_panel, UI["tab_scale"]: scale_panel,
                    UI["tab_why"]: why_panel, UI["tab_nasa"]: lambda: (hazards_panel(), countermeasures_panel()),
-                   UI["tab_try"]: try_panel, UI["tab_sources"]: sources_panel}
+                   UI["tab_try"]: try_panel, UI["tab_sources"]: sources_panel, UI["tab_emergency"]: emergency_panel}
     st.caption(UI[_USE_KEYS[section]])
     _STANDALONE[section]()
     st.caption(version_stamp())

@@ -12,7 +12,7 @@ def _sections():
 
 
 def test_each_section_has_use_line_and_home_does_not_need_one():
-    for name in _sections()[2:]:   # V3: live console and demo story come first and carry their own intro
+    for name in [n for n in _sections() if n not in ("Live station", "Demo story")]:   # V3: those two carry their own intro
         at = open_app(APP, 60)
         at.sidebar.radio[0].set_value(name).run()
         assert not at.exception, name

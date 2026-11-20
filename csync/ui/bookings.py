@@ -118,13 +118,16 @@ html,body,[data-testid="stApp"]{{background:
 .cs-ops .tl .dn.now{{color:{INK}}} .cs-ops .tl .dn.fut{{opacity:.55}}
 .cs-ops .tl .tag{{position:absolute;top:2px;transform:translateX(-50%);font-size:12px;font-weight:700;padding:1px 8px;border-radius:999px;background:#FF6B5B;color:#2E2621}}
 @media (max-width:640px){{.cs-ops .ops{{grid-template-columns:1fr}} .cs-ops .ops>div{{border-radius:22px}}}}
+.cs-dot.on{{background:{INK}!important;color:{SMOKE_DARK}!important}}
+.cs-dots{{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px}}
+.cs-dot{{min-width:30px;height:30px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-family:Doto,monospace;font-weight:700;font-size:14px;border:1px solid rgba(255,253,253,.28)}}
 .cs-card.ctx{{background:rgba(34,27,23,.86)!important;border:1.5px dashed rgba(255,253,253,.38)!important}}
 """
 
 
 NAV_ICONS = {"tab_home": "house", "tab_cmd": "users", "tab_body": "person-standing", "tab_env": "wind", "tab_trends": "activity",
              "tab_tech": "cpu", "tab_scale": "grid-3x3", "tab_why": "circle-help", "tab_nasa": "rocket", "tab_try": "hand",
-             "tab_sources": "book-open", "tab_live": "radio", "role_crew": "person-standing", "role_cmd": "users"}
+             "tab_sources": "book-open", "tab_live": "radio", "tab_emergency": "siren", "role_crew": "person-standing", "role_cmd": "users"}
 
 
 def nav_css(ui: dict, nav_keys: list[str], role_keys: list[str]) -> str:
