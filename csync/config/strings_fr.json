@@ -599,7 +599,11 @@
         "tech_cs_individual": "individuel ({m})",
         "tech_led_rad": "Dose de radiation cumulée dans la cabine (mGy, absorbée)",
         "tech_led_co2": "CO2 moyen de cabine sur 7 jours (mmHg)",
-        "tech_led_note": "Données NASA réelles, mission RR-1. La dose absorbée en mGy n'est pas la limite de carrière de 600 mSv (une dose efficace) : aucune comparaison n'est faite."
+        "tech_led_note": "Données NASA réelles, mission RR-1. La dose absorbée en mGy n'est pas la limite de carrière de 600 mSv (une dose efficace) : aucune comparaison n'est faite.",
+        "tech_ex_what": "Construit d'abord : le contrôle que chaque phrase doit passer (chaque nombre retrouvé dans la capsule, aucun mot médical interdit), avec un modèle de phrases simple comme base. Un modèle de langage n'est ajouté que s'il passe le même contrôle.",
+        "tech_ex_day": "Récit du jour 9 de la démo (données synthétiques) :",
+        "tech_ex_ok": "Contrôle sur ce texte : aucun problème.",
+        "tech_ex_trap": "Même contrôle sur une phrase inventée : bloquée ({n} problème)."
     },
     "indicator_names": {
         "PH01": "fréquence cardiaque",

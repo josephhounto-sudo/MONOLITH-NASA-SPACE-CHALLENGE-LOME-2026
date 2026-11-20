@@ -48,7 +48,7 @@ def test_every_concept_is_a_promise_with_its_test_and_its_drop_rule():
     """V3 (Joseph, 20/11): concepts are shown as promises; a promise without a test that can fail is not shown."""
     reg = registry.load()
     concepts = [i for i in reg["items"] if i["status"] == "ANNOUNCED"]
-    assert len(concepts) >= 4
+    assert len(concepts) >= 3   # 20/11: three promises became prototypes (common_signal, exposure_ledger, onboard_explainer)
     for it in concepts:
         assert it.get("test") and it.get("drop_if"), it["id"]
         assert it["data"] == "NONE" and not it.get("module"), it["id"]   # a concept never shows measured data

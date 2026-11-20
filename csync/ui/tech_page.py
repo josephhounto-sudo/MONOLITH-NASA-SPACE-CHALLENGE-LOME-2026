@@ -9,7 +9,7 @@ from csync.analytics.changepoint import bocpd, cusum
 from csync.crypto.capsule_sign import generate_keypair, sign_capsule, verify_capsule
 from csync.physio.hrv import clean_rr, rmssd, sdnn, simulated_rr
 from csync.sync.crdt_sim import Replica, simulate_link
-from csync.proto import common_signal, exposure_ledger
+from csync.proto import common_signal, explainer, exposure_ledger
 from csync.tech import registry
 
 _ANIM = """<style>
@@ -106,7 +106,7 @@ def _hrv(UI):
     import pandas as pd
     beats = pd.DataFrame({"beat": range(1, 61), "ms": rr[:60]})
     st.altair_chart(alt.Chart(beats).mark_line(color="#E9A27A", strokeWidth=2.5).encode(   # zero is off the axis: the variation is the signal
-        x=alt.X("beat:Q", title=None), y=alt.Y("ms:Q", title=None, scale=alt.Scale(zero=False))).properties(height=150), use_container_width=True)
+        x=alt.X("beat:Q", title=None), y=alt.Y("ms:Q", title=None, scale=alt.Scale(zero=False))).properties(height=150), width="stretch")
     st.caption(UI["tech_hrv_dropped"].format(n=dropped))
     st.caption(UI["tech_hrv_note"])
 
@@ -136,8 +136,23 @@ def _ledger(UI):
     for col, field, title, colour in ((c1, "radiation_mgy_cum", UI["tech_led_rad"], "#E9A27A"), (c2, "co2_7d_mmhg", UI["tech_led_co2"], "#F2C14E")):
         col.caption(title)
         col.altair_chart(alt.Chart(led.dropna(subset=[field])).mark_line(color=colour, strokeWidth=2.5).encode(
-            x=alt.X("date:T", title=None), y=alt.Y(f"{field}:Q", title=None, scale=alt.Scale(zero=False))).properties(height=150), use_container_width=True)
+            x=alt.X("date:T", title=None), y=alt.Y(f"{field}:Q", title=None, scale=alt.Scale(zero=False))).properties(height=150), width="stretch")
     st.caption(UI["tech_led_note"])
+
+
+def _explainer(UI):
+    import json
+    import os
+    st.write(UI["tech_ex_what"])
+    path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "out", "capsules_histoire.json")
+    with open(path, encoding="utf-8") as fh:
+        cap = next(c for c in json.load(fh) if c.get("capsule_type", "daily") == "daily" and c["day"] == 9)
+    lines = explainer.explain(cap)
+    st.caption(UI["tech_ex_day"])
+    st.markdown("\n".join(f"> {x}" for x in lines))
+    assert explainer.check(lines, cap) == []
+    st.caption(UI["tech_ex_ok"])
+    st.caption(UI["tech_ex_trap"].format(n=len(explainer.check(["Reaction time: 512 today."], cap))))
 
 
 def _promise_lines(UI, item):
@@ -178,6 +193,9 @@ def tech_panel(UI, daily, trends, day):
                 _hrv(UI)
             elif item["id"] == "common_signal":
                 _common(UI)
+                _promise_lines(UI, item)
+            elif item["id"] == "onboard_explainer":
+                _explainer(UI)
                 _promise_lines(UI, item)
             elif item["id"] == "exposure_ledger":
                 _ledger(UI)

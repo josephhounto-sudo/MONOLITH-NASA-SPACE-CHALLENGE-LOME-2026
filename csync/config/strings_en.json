@@ -599,7 +599,11 @@
         "tech_cs_individual": "individual ({m})",
         "tech_led_rad": "Cumulative radiation dose in the cabin (mGy, absorbed)",
         "tech_led_co2": "7-day mean cabin CO2 (mmHg)",
-        "tech_led_note": "Real NASA data, mission RR-1. Absorbed dose in mGy is not the 600 mSv career limit (an effective dose): no comparison is made."
+        "tech_led_note": "Real NASA data, mission RR-1. Absorbed dose in mGy is not the 600 mSv career limit (an effective dose): no comparison is made.",
+        "tech_ex_what": "Built first: the check every sentence must pass (each number found in the capsule, no banned medical word), with a plain template as the baseline. A language model is added only if it passes the same check.",
+        "tech_ex_day": "Retelling of demo day 9 (synthetic data):",
+        "tech_ex_ok": "Check on this text: no problem found.",
+        "tech_ex_trap": "Same check on an invented sentence: blocked ({n} problem)."
     },
     "indicator_names": {
         "PH01": "heart-rate",

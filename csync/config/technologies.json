@@ -90,9 +90,9 @@
     {
       "id": "onboard_explainer",
       "name": "Offline explainer",
-      "status": "ANNOUNCED",
-      "module": null,
-      "data": "NONE",
+      "status": "PROTOTYPE",
+      "module": "csync.proto.explainer",
+      "data": "SIMULATED",
       "purpose": "A small language model on the device that retells each capsule in plain words, adding nothing medical.",
       "test": "200 generated explanations: every number traces to a capsule field and every sentence passes the forbidden-word filter.",
       "drop_if": "A single invented number."
