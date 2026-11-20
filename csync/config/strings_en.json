@@ -333,7 +333,7 @@
         "use_sources": "Use: every number and threshold, with where it comes from and whether it is real or simulated.",
         "tab_home": "Demo story",
         "nav_label": "Go to",
-        "version_label": "Version {v} · capsules generated {t} UTC",
+        "version_label": "Version {v} · demo data built {t} UTC",
         "body_map_pubmed": "Peer-reviewed context (PubMed, read by the team; not a clinical threshold)",
         "tab_try": "Try it yourself",
         "try_title": "Try it: type two days, the same rule answers",
@@ -592,7 +592,14 @@
             "Crew D"
         ],
         "em_counted": "{k} of {n} counted",
-        "em_done": "All steps done: the log and the report are ready for the ground."
+        "em_done": "All steps done: the log and the report are ready for the ground.",
+        "tech_cs_result": "On simulated crews: {a:.0f} % correct on the seeds used to choose the rule, {b:.0f} % on 300 seeds never used (the promise asks for 90 %).",
+        "tech_cs_day": "Simulated crew, seed {s}: day {d} is {k}.",
+        "tech_cs_shared": "shared (check the cabin)",
+        "tech_cs_individual": "individual ({m})",
+        "tech_led_rad": "Cumulative radiation dose in the cabin (mGy, absorbed)",
+        "tech_led_co2": "7-day mean cabin CO2 (mmHg)",
+        "tech_led_note": "Real NASA data, mission RR-1. Absorbed dose in mGy is not the 600 mSv career limit (an effective dose): no comparison is made."
     },
     "indicator_names": {
         "PH01": "heart-rate",

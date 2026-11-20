@@ -333,7 +333,7 @@
         "use_sources": "Usage : chaque chiffre et chaque seuil, d'où il vient, réel ou simulé.",
         "tab_home": "Histoire de démo",
         "nav_label": "Aller à",
-        "version_label": "Version {v} · capsules générées {t} UTC",
+        "version_label": "Version {v} · données de démo construites le {t} UTC",
         "body_map_pubmed": "Contexte relu par des pairs (PubMed, lu par l'équipe ; pas un seuil clinique)",
         "tab_try": "Essayer",
         "try_title": "Essayer : saisir deux jours, la même règle répond",
@@ -592,7 +592,14 @@
             "Équipier D"
         ],
         "em_counted": "{k} sur {n} comptés",
-        "em_done": "Toutes les étapes sont faites : le journal et le rapport sont prêts pour le sol."
+        "em_done": "Toutes les étapes sont faites : le journal et le rapport sont prêts pour le sol.",
+        "tech_cs_result": "Sur des équipages simulés : {a:.0f} % justes sur les graines qui ont servi à choisir la règle, {b:.0f} % sur 300 graines jamais utilisées (la promesse demande 90 %).",
+        "tech_cs_day": "Équipage simulé, graine {s} : le jour {d} est {k}.",
+        "tech_cs_shared": "commun (vérifier la cabine)",
+        "tech_cs_individual": "individuel ({m})",
+        "tech_led_rad": "Dose de radiation cumulée dans la cabine (mGy, absorbée)",
+        "tech_led_co2": "CO2 moyen de cabine sur 7 jours (mmHg)",
+        "tech_led_note": "Données NASA réelles, mission RR-1. La dose absorbée en mGy n'est pas la limite de carrière de 600 mSv (une dose efficace) : aucune comparaison n'est faite."
     },
     "indicator_names": {
         "PH01": "fréquence cardiaque",

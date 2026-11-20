@@ -324,11 +324,11 @@ def resume_screen(cap):
     if c2.button(UI["commander_override"], key="override"):
         d, reasons = resume_gate(req, meas, gate_proc, override={"by": "Commander"})
         st.session_state["resume_result"] = (d, reasons)
-        st.session_state["resume_log"].append(UI["override_logged"].format(t=gi["request_time_utc"][11:16], d=d))
+        st.session_state["resume_log"].append(UI["override_logged"].format(t=gi["request_time_utc"][11:16], d=plain(d)))
     if "resume_result" in st.session_state:
         d, reasons = st.session_state["resume_result"]
         colour = theme["state"]["DEGRADED" if d == "REFUSE_RESUME" else "NORMAL"]["color"]
-        st.markdown(f"<div class='cs-decision' style='color:{colour};{style.card_vars(colour)}'>{UI['decision']}: {d}</div>",
+        st.markdown(f"<div class='cs-decision' style='color:{colour};{style.card_vars(colour)}'>{UI['decision']}: {plain(d)}</div>",
                     unsafe_allow_html=True)
         with st.container(border=True):
             st.markdown(f"**{UI['reasons']}**")
@@ -795,6 +795,26 @@ def provenance_table():
 
 # ------------------------------------------------------------------ page
 st.set_page_config(page_title=strings["app_title"], layout="wide")
+# Novice audit (20/11): engine codes reached the visitor ("REFUSE_RESUME", "WATCH", "Rule v3", "d >= 1.5"). The words below are
+# the same facts in plain language; HTML blocks (cards) keep their own wording. The capsules and the rule are unchanged.
+_PLAIN = [(re.compile(r"\bREFUSE_RESUME\b"), "resume refused"), (re.compile(r"\bOPEN_PROCEDURE\b"), "procedure open"),
+          (re.compile(r"\bRule v3\b"), "The C-Sync rule"), (re.compile(r"\b[Rr]ule v3\b"), "the C-Sync rule"),
+          (re.compile(r"\bWATCH\b"), "Watch"), (re.compile(r"\bDEGRADED\b"), "Degraded"), (re.compile(r"\bUNKNOWN\b"), "No reading yet"),
+          (re.compile(r"\bNORMAL\b"), "Normal"), (re.compile(r"\bd ≥ 1\.5\b"), "at least 1.5 times the usual spread")]
+
+
+def plain(text):
+    """Same fact, visitor's words. Raw HTML is left alone."""
+    if not isinstance(text, str) or text.lstrip().startswith("<"):
+        return text
+    for rx, word in _PLAIN:
+        text = rx.sub(word, text)
+    return text
+
+
+for _name in ("markdown", "caption", "info", "warning", "success", "write", "text"):
+    _orig = getattr(st, _name)
+    setattr(st, _name, (lambda f: (lambda body, *a, **k: f(plain(body), *a, **k)))(_orig))
 style.inject(UI["brand_name"], UI["brand_tag"])
 # vertical navigation: one section = one visitor question; the global state of the crew is first
 # two entries, one capsule and one rule: the role only changes the order of the sections and the one-line note

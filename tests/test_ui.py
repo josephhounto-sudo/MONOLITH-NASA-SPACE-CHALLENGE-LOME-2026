@@ -96,17 +96,17 @@ def test_day9_guided_values_shown_without_threshold():
 
 def test_day10_resume_refused_even_with_override():
     at = page(10)
-    assert "REFUSE_RESUME" not in html(at)            # the decision is revealed only by the button (pitch moment)
+    assert "resume refused" not in html(at)            # the decision is revealed only by the button (pitch moment)
     next(b for b in at.button if b.label == "Request resume").click().run()
     h = html(at)
-    assert "Gate decision: REFUSE_RESUME" in h
+    assert "Gate decision: resume refused" in h
     assert "The heart-rate reading is 14 min old; the limit is 10 min." in h
     assert "G3" not in h                                      # the code stays in the technical log
     assert any(t.value == "G3: PH01 is stale (14 min > 10 min)" for t in at.text)
     next(b for b in at.button if b.label == "Commander override").click().run()
     h = html(at)
-    assert "Gate decision: REFUSE_RESUME" in h
-    assert any("Commander override logged. Decision unchanged: REFUSE_RESUME" in t.value for t in at.text)
+    assert "Gate decision: resume refused" in h
+    assert any("Commander override logged. Decision unchanged: resume refused" in t.value for t in at.text)
     assert "A Commander override was logged. It cannot authorise a resume on its own." in html(at)
 
 
@@ -242,7 +242,7 @@ def test_step5_shows_the_refusal_without_pressing_the_button():
     for _ in range(4):
         next(b for b in at.button if b.label == ui["story_next"]).click().run()
     assert not at.exception, at.exception
-    assert any("REFUSE_RESUME" in m.value for m in at.markdown), "step 5 must show the gate answer"
+    assert any("resume refused" in m.value for m in at.markdown), "step 5 must show the gate answer"
     # before step 5 nothing was decided for the visitor
     at2 = _story_cold()
     next(b for b in at2.button if b.label == ui["hook_button"]).click().run()
