@@ -1,13 +1,13 @@
 # AGENTS.md — lire en premier (Cursor et toute IA du dépôt)
 
-> **Reprise de session : lire d'abord `docs/HANDOFF_TOTAL.md` (état au 15/11/2026 06:15, remplace `docs/CURSOR_HANDOFF.md`).**
+> **Reprise de session (20/11/2026) : lire d'abord `docs/PLAN_V3.md` (§16 = dernier état et rétrospective). `main` porte la V3 ; l'app hébergée lit `m3-design`, synchronisée automatiquement par `.github/workflows/sync-hosted-app.yml` à chaque push sur `v3`. Les documents de processus anciens sont dans `docs/archive/`.**
 Projet : C-Sync, NASA Space Apps 2026 Lomé, équipe MONOLITH. Réponds en français. Texte produit/affiché : anglais (jury), sauf docs d'équipe.
 
-**Lis d'abord** : `docs/CURSOR_HANDOFF.md` (état, tâches, décisions), puis `docs/CONTEXTE_IA.md` (contexte complet à jour).
+**Historique** : `docs/HANDOFF_TOTAL.md` et `docs/CONTEXTE_IA.md` décrivent l'état au 15/11 (version soumise de0b5be).
 
 ## Règles non négociables
 1. Une branche par tâche. `git pull --rebase` avant tout push. Depuis le 19/11/2026 (décision de Joseph), une branche aux tests verts peut être avancée sur `main` en avance rapide.
-2. `python -m pytest -q` doit passer avant tout commit (342 tests au 20/11).
+2. `python -m pytest -q` doit passer avant tout commit (392 tests au 20/11, 09:30).
 3. Message de commit : `M<n>: ce que tu as fait`, puis une ligne qui dit pourquoi.
 4. Jamais de nom, téléphone, clé, donnée personnelle. Mots interdits dans README/chaînes/procédures : cause, diagnos*, prove/proves, guarantee, disease.
 5. Contrats (`contracts/`) : changement seulement avec l'accord de M1.
@@ -21,5 +21,5 @@ Projet : C-Sync, NASA Space Apps 2026 Lomé, équipe MONOLITH. Réponds en fran�
 - L'orange de la référence est utilisé (capter l'attention). Les états restent toujours écrits en mot et icône.
 - La dérive n'est pas la base du produit. L'accueil est une console en direct ; la dérive est un moteur parmi d'autres, montré surtout en mode démo.
 - Aucune photo de personne identifiable.
-- Clignement des yeux (PERCLOS) : affiché « en développement », avec une note courte qui dit pourquoi.
+- Clignement des yeux : premier prototype sur la caméra du visiteur (Technologies, Mesurer), toujours dit « en développement » sur la console, avec la raison (non validé).
 - Données NASA en direct : contexte seulement, jamais une décision ; âge de la mesure toujours affiché.
