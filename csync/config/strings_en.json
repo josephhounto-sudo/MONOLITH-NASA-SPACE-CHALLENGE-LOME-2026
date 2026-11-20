@@ -451,7 +451,7 @@
         "live_phys_hr": "Heart rhythm of the crew",
         "live_phys_hr_note": "No astronaut data is public in real time, so this channel runs on simulated values in the demo story.",
         "live_phys_blink": "Fatigue from eye blinks",
-        "live_phys_blink_note": "Built on the device camera, nothing recorded. Kept in development: eyelid closure alone is not yet a validated fatigue measure, and it must be tested on several skin tones and lights first.",
+        "live_phys_blink_note": "A first prototype runs in Technologies, Measure, on your own camera; nothing recorded. Still in development: eyelid closure alone is not a validated fatigue measure, and it must be tested on several skin tones and lights.",
         "live_simulated": "SIMULATED",
         "live_in_dev": "IN DEVELOPMENT",
         "bot_name": "Pip",

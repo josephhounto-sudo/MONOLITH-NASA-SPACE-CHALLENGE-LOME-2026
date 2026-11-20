@@ -451,7 +451,7 @@
         "live_phys_hr": "Rythme cardiaque de l'équipage",
         "live_phys_hr_note": "Aucune donnée d'astronaute n'est publique en temps réel : ce canal utilise des valeurs simulées dans l'histoire de démo.",
         "live_phys_blink": "Fatigue par les clignements",
-        "live_phys_blink_note": "Construit sur la caméra de l'appareil, rien n'est enregistré. Gardé en développement : la fermeture des paupières seule n'est pas encore une mesure de fatigue validée, et elle doit d'abord être testée sur plusieurs teintes de peau et éclairages.",
+        "live_phys_blink_note": "Un premier prototype tourne dans Technologies, Mesurer, sur ta propre caméra ; rien n'est enregistré. Toujours en développement : la fermeture des paupières seule n'est pas une mesure de fatigue validée, et elle doit être testée sur plusieurs teintes de peau et éclairages.",
         "live_simulated": "SIMULÉ",
         "live_in_dev": "EN DÉVELOPPEMENT",
         "bot_name": "Pip",
