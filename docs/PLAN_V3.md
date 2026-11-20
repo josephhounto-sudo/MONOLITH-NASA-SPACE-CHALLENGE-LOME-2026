@@ -82,3 +82,28 @@ Règle V3 : on garde l'aspect, mais tout texte de moins de 24 px se pose sur une
 - Seuil de 2,0 mmHg de Law 2014 : lu dans le résumé de presse seulement.
 - Accès à Gemini aujourd'hui.
 - Aucun inconnu n'a encore testé quoi que ce soit.
+
+## 6. Décisions de Joseph (20/11, 05:35 UTC)
+1. Référence reprise, textures comprises. 2. Orange utilisé (attention du public) ; les états restent écrits en mot et icône. 3. La dérive n'est pas la base : console en direct à l'accueil. 4. Pas de photo de personne : fond sans personne (§8). 5. Clignement : « en développement », avec note courte. 6. Épisodes Habitat : expliqués à Joseph, en attente. Horloge mondiale demandée (§9). 7. AGENTS.md mis à jour.
+
+## 7. Inventaire du temps réel (relevé ISS Mimic, 05:3x et 05:4x UTC)
+| Indicateur | Source | Statut |
+|---|---|---|
+| CO2 partiel LAB et Node 3 (mmHg) | NASA ISS, flux public | RÉEL. Valeur identique sur deux relevés à environ 10 min d'écart (2,435 et 2,950) : cadence de mise à jour NON VÉRIFIÉE. |
+| O2 et N2 partiels, pression cabine, température LAB | NASA ISS, flux public | RÉEL. La température a changé entre les relevés (23,32 → 23,45 °C). |
+| Réservoirs d'eau, production d'oxygène (OGA), recyclage d'eau | NASA ISS, flux public | RÉEL |
+| Signal sol (acquis / perte prochaine) | NASA ISS, flux public | RÉEL. Le flux s'interrompt pendant les pertes de signal : âge de la mesure obligatoire. |
+| Physiologie d'un astronaute | aucune source publique en direct | N'EXISTE PAS en réel |
+| Clignement des yeux de l'utilisateur | caméra de l'appareil | EN DÉVELOPPEMENT |
+| Rythme cardiaque de l'équipage | simulé | SIMULÉ |
+
+## 8. Fond sans photo de personne (propositions)
+- A : casque de combinaison vu de dos, dessiné en SVG (forme simple, pas un individu), flouté, avec les halos orange de la référence.
+- B : limbe d'une planète (arc sombre et lueur orange de l'atmosphère), généré en CSS : rappelle Mars et la mission.
+- C : la station en silhouette géométrique, floutée, qui avance lentement selon la position réelle (flux public).
+Recommandation : B pour l'accueil, A derrière le bot.
+
+## 9. Horloge mondiale
+Aucune bibliothèque nécessaire : `Intl.DateTimeFormat` du navigateur.
+Fuseaux retenus : heure de bord ISS = UTC (choix des agences partenaires) ; Houston (America/Chicago, centre de contrôle NASA) ; Moscou (Europe/Moscow, centre de contrôle russe) ; Lomé (Africa/Lome, l'équipe, UTC+0 donc à l'heure de la station). Ajout : temps écoulé de la mission démo (jour et heure), et délai de liaison simulé de Mars.
+Critère : écart de moins d'une seconde avec l'horloge système ; test des quatre fuseaux.
