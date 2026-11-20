@@ -30,3 +30,16 @@ def test_every_section_opens_in_french():
         at.radio(key="cs-nav").set_value(opt).run()
         assert not at.exception, (opt, at.exception)
     assert fr["tab_live"] in at.radio(key="cs-nav").options
+
+
+def test_language_choice_on_first_screen():
+    """The first screen offers English and Français without opening the sidebar; choosing Français switches the text."""
+    from streamlit.testing.v1 import AppTest
+    at = AppTest.from_file(str(APP), default_timeout=60).run()
+    assert not at.exception
+    labels = [b.label for b in at.button]
+    assert "English" in labels and "Français" in labels
+    next(b for b in at.button if b.label == "Français").click().run()
+    assert not at.exception
+    assert at.session_state["cs-lang"] == "Français"
+    assert "Entrer" in " ".join(b.label for b in at.button) or "station" in " ".join(b.label for b in at.button).lower()

@@ -807,8 +807,21 @@ _PLAIN = [(re.compile(r"\bREFUSE_RESUME\b"), "resume refused"), (re.compile(r"\b
           (re.compile(r"\bNORMAL\b"), "Normal"), (re.compile(r"\bd ≥ 1\.5\b"), "at least 1.5 times the usual spread")]
 
 
+def _set_lang(name):
+    st.session_state["cs-lang"] = name   # runs as a callback, before the sidebar radio is built: allowed
+
+
+def _lang_choice():
+    """Language choice on the very first screen (21/11): the sidebar is closed on a phone, so it cannot be the only place."""
+    cols = st.columns([1, 1, 6])
+    for col, name in zip(cols[:2], LANGS, strict=True):
+        col.button(name, key=f"cs-intro-lang-{LANGS[name]}", on_click=_set_lang, args=(name,),
+                   type="primary" if LANGS[name] == LANG else "secondary", width="stretch")
+
+
 def intro_screen():
     """Transition on arrival: three lines appear one after the other, then one button. Still under reduced motion."""
+    _lang_choice()
     lines = "".join(f"<p class='cs-intro-l' style='animation-delay:{0.2 + 1.6 * i:.1f}s'>{html.escape(UI[f'intro_{i + 1}'])}</p>" for i in range(3))
     st.html("<style>.cs-intro{max-width:760px;margin:12vh auto 28px;text-align:left}"
             ".cs-intro-l{font-size:clamp(1.3rem,3.2vw,2.1rem);line-height:1.3;font-weight:600;margin:0 0 .9em;opacity:0;"
