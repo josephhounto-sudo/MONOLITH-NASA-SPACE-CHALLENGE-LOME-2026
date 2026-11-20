@@ -89,6 +89,7 @@ DOCK_CSS = """<style>
  background:rgba(34,27,23,.985);border:1px solid rgba(255,253,253,.28);border-radius:26px;padding:12px 14px 10px;
  box-shadow:0 18px 40px rgba(0,0,0,.45);gap:8px!important}
 @media (min-width:900px){.st-key-cs-pip{left:calc(var(--cs-sidebar-w,300px) + 16px)}}
+.st-key-cs-pip:has(.st-key-cs-pip-open){width:auto!important;padding:6px!important}
 .st-key-cs-pip .cs-pipline{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;line-height:1.35}
 .st-key-cs-pip .cs-pipline img{flex:none;filter:drop-shadow(0 6px 14px rgba(255,154,92,.45))}
 .st-key-cs-pip .cs-pipline b{display:block;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
