@@ -9,7 +9,8 @@ from csync.analytics.changepoint import bocpd, cusum
 from csync.crypto.capsule_sign import generate_keypair, sign_capsule, verify_capsule
 from csync.physio.hrv import clean_rr, rmssd, sdnn, simulated_rr
 from csync.sync.crdt_sim import Replica, simulate_link
-from csync.proto import common_signal, explainer, exposure_ledger
+from csync.proto import common_signal, dtn, explainer, exposure_ledger
+from csync.ui import camera_lab
 from csync.tech import registry
 
 _ANIM = """<style>
@@ -43,7 +44,8 @@ _DOTS = """<style>.cs-dots{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px}
 def _banner(UI, item, reg):
     st.markdown(f"**{item['name']}** · {registry.label(reg, item)}")
     st.caption(item["purpose"])
-    st.caption(UI["tech_data"].format(d=UI["tech_data_none"] if item["data"] == "NONE" else item["data"]))
+    word = {"NONE": UI["tech_data_none"], "ON_DEVICE": UI["tech_data_device"]}.get(item["data"], item["data"])
+    st.caption(UI["tech_data"].format(d=word))
 
 
 def _changepoint(UI, trends, sig, day):
@@ -70,6 +72,27 @@ def _changepoint(UI, trends, sig, day):
         if idx is not None:
             st.write(UI["tech_cp_bocpd"].format(d=rows[idx]["day"]))
     st.caption(UI["tech_cp_note"])
+    _changepoint_try(UI)
+
+
+def _changepoint_try(UI):
+    import numpy as np
+    from csync.rules import Params
+    k = Params().d_threshold
+    slope = st.slider(UI["tech_cp_try"], 0.0, 12.0, 4.0, 1.0, key="tech_cp_slope")
+    rng = np.random.default_rng(11)
+    mean, sd = 265.0, 13.0
+    vals = [mean + rng.normal(0, sd) + (slope * (d - 5) if d > 5 else 0) for d in range(1, 21)]
+    fixed = next((i + 1 for i in range(1, 20) if (vals[i] - mean) / sd >= k and (vals[i - 1] - mean) / sd >= k), None)
+    res = cusum(vals, mean, sd)
+    alarm = res["alarm_index"] + 1 if res["alarm_index"] is not None else None
+    marks = {}
+    if fixed:
+        marks[fixed] = ("#F2C14E", UI["tech_cp_mark_fixed"])
+    if alarm:
+        marks[alarm] = ("#E9A27A", UI["tech_cp_mark_cusum"])
+    st.html(_DOTS + _strip(20, marks))
+    st.caption(UI["tech_cp_try_res"].format(f=fixed or "–", c=alarm or "–"))
 
 
 def _signature(UI, cap):
@@ -79,7 +102,14 @@ def _signature(UI, cap):
     env = sign_capsule(cap, private, None)
     st.caption(UI["tech_sig_hash"].format(h=env["payload_sha256"][:16]))
     tampered = st.button(UI["tech_sig_btn"], key="tech_tamper")
-    target = {**copy.deepcopy(cap), "day": cap["day"] + 1} if tampered else cap
+    what = st.radio(UI["tech_sig_pick"], UI["tech_sig_opts"], key="tech_sig_what", horizontal=True)
+    target = copy.deepcopy(cap)
+    if tampered or what == UI["tech_sig_opts"][1]:
+        target["day"] = cap["day"] + 1
+    elif what == UI["tech_sig_opts"][2]:
+        target["states"] = {**target["states"], next(iter(target["states"])): "NORMAL"}
+    elif what == UI["tech_sig_opts"][3] and target.get("signals"):
+        target["signals"][0] = {**target["signals"][0], "value": (target["signals"][0].get("value") or 0) + 1}
     ok, why = verify_capsule(target, env, None)
     st.metric(UI["tech_sig_metric"], env["payload_sha256"][:8], UI["tech_sig_valid"] if ok else UI["tech_sig_broken"],
               delta_color="normal" if ok else "inverse")
@@ -88,11 +118,12 @@ def _signature(UI, cap):
 
 def _sync(UI):
     a, b = Replica("earth"), Replica("ship")
-    out = (6, 14)
-    rec = simulate_link(a, b, 2, out, 24, 7)
+    out = st.slider(UI["tech_sync_cut"], 0, 20, (6, 14), key="tech_sync_out")
+    delay = st.slider(UI["tech_sync_delay"], 0, 4, 2, key="tech_sync_delay")
+    rec = simulate_link(a, b, delay, out, 24, 7)
     first = next((r["step"] for r in rec if r["step"] >= out[1] and r["converged"]), None)
     st.html(_DOTS + _strip(24, {first: ("#4CD6A0", UI["tech_sync_mark"])} if first else {}, off=out))
-    st.write(UI["tech_sync_text"].format(a=out[0], b=out[1]))
+    st.write(UI["tech_sync_text"].format(a=out[0], b=out[1], d=delay))
     st.write(UI["tech_sync_ok"].format(s=first) if first is not None else UI["tech_sync_ko"])
 
 
@@ -113,25 +144,43 @@ def _hrv(UI):
 
 @st.cache_data(show_spinner=False)
 def _cs_scores():
-    return common_signal.accuracy(range(0, 200)), common_signal.accuracy(range(1000, 1300))
+    return (common_signal.accuracy(range(0, 200)), common_signal.accuracy(range(5000, 6000)),
+            common_signal.accuracy_all_days(range(5000, 6000)))
 
 
 def _common(UI):
-    a, b = _cs_scores()
+    import numpy as np
+    a, b, c = _cs_scores()
     st.write(UI["tech_cs_result"].format(a=100 * a, b=100 * b))
-    z, _ = common_signal.simulate(1003)
+    st.caption(UI["tech_cs_all"].format(c=100 * c))
+    k = st.slider(UI["tech_cs_k"], 1, 4, 3, key="tech_cs_k")
+    size = st.slider(UI["tech_cs_size"], 0.5, 3.0, 2.2, 0.1, key="tech_cs_size")
+    rng = np.random.default_rng(5)
+    z = {f"Crew {chr(65 + i)}": list(rng.normal(0, 1, 10) * 0.6) for i in range(4)}
+    for m in list(z)[:k]:
+        z[m][4] += size
+    st.caption(UI["tech_cs_try"].format(k=k))
     marks = {}
     for r in common_signal.attribute(z):
         if r["kind"] != "none":
             marks[r["day"]] = ("#F2C14E" if r["kind"] == "shared" else "#E9A27A", r["kind"])
             word = UI["tech_cs_shared"] if r["kind"] == "shared" else UI["tech_cs_individual"].format(m=", ".join(r["members"]))
-            st.caption(UI["tech_cs_day"].format(s=1003, d=r["day"], k=word))
+            st.caption(UI["tech_cs_day"].format(d=r["day"], k=word))
     st.html(_DOTS + _strip(10, marks))
 
 
 def _ledger(UI):
     import altair as alt
     led = exposure_ledger.ledger()
+    days = [d.strftime("%d %b %Y") for d in led["date"]]
+    pick = st.select_slider(UI["tech_led_pick"], days, value=days[-1], key="tech_led_day")
+    row = led.iloc[days.index(pick)]
+    m1, m2 = st.columns(2)
+    m1.metric(UI["tech_led_rad"], f"{row['radiation_mgy_cum']:.2f} mGy")
+    co2 = row["co2_7d_mmhg"]
+    m2.metric(UI["tech_led_co2"], "–" if co2 != co2 else f"{co2:.2f} mmHg",
+              None if co2 != co2 else (UI["tech_led_above"] if row["co2_7d_above_2_5"] else UI["tech_led_below"]),
+              delta_color="inverse" if co2 == co2 and row["co2_7d_above_2_5"] else "off")
     c1, c2 = st.columns(2)
     for col, field, title, colour in ((c1, "radiation_mgy_cum", UI["tech_led_rad"], "#E9A27A"), (c2, "co2_7d_mmhg", UI["tech_led_co2"], "#F2C14E")):
         col.caption(title)
@@ -146,13 +195,36 @@ def _explainer(UI):
     st.write(UI["tech_ex_what"])
     path = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))), "data", "out", "capsules_histoire.json")
     with open(path, encoding="utf-8") as fh:
-        cap = next(c for c in json.load(fh) if c.get("capsule_type", "daily") == "daily" and c["day"] == 9)
+        caps = {c["day"]: c for c in json.load(fh) if c.get("capsule_type", "daily") == "daily"}
+    day = st.select_slider(UI["tech_ex_pick"], sorted(caps), value=9 if 9 in caps else max(caps), key="tech_ex_day")
+    cap = caps[day]
     lines = explainer.explain(cap)
-    st.caption(UI["tech_ex_day"])
+    st.caption(UI["tech_ex_day"].format(d=day))
     st.markdown("\n".join(f"> {x}" for x in lines))
     assert explainer.check(lines, cap) == []
     st.caption(UI["tech_ex_ok"])
-    st.caption(UI["tech_ex_trap"].format(n=len(explainer.check(["Reaction time: 512 today."], cap))))
+    mine = st.text_input(UI["tech_ex_try"], UI["tech_ex_try_default"], key="tech_ex_mine", max_chars=200)
+    probs = explainer.check([mine], cap) if mine.strip() else []
+    st.caption(UI["tech_ex_pass"] if not probs else UI["tech_ex_block"].format(r="; ".join(p.split(":")[0] for p in probs)))
+
+
+def _dtn(UI):
+    c1, c2, c3 = st.columns(3)
+    hours = c1.slider(UI["tech_dtn_out"], 0, 12, 6, key="tech_dtn_out")
+    delay = c2.slider(UI["tech_dtn_delay"], 0, 24, 20, key="tech_dtn_delay")
+    loss = c3.slider(UI["tech_dtn_loss"], 0, 30, 10, 5, key="tech_dtn_loss")
+    r = dtn.simulate(200, 3, (60, 60 + 60 * hours), delay, loss / 100, seed=4)
+    m1, m2, m3 = st.columns(3)
+    m1.metric(UI["tech_dtn_m_ok"], UI["tech_dtn_yes"] if r["all_once_in_order"] else UI["tech_dtn_no"])
+    m2.metric(UI["tech_dtn_m_tx"], r["transmissions"])
+    m3.metric(UI["tech_dtn_m_dup"], r["duplicates_dropped"])
+    st.caption(UI["tech_dtn_res"].format(h=r["last_arrival_min"] // 60, m=r["last_arrival_min"] % 60))
+
+
+def _camera(UI, mode):
+    w = {k[len("tech_camw_"):]: v for k, v in UI.items() if k.startswith("tech_camw_")}
+    w["note"] = UI["tech_cam_note_" + mode]
+    st.iframe(camera_lab.page(mode, w, UI["tech_cam_unit_" + mode]), height=camera_lab.HEIGHT)
 
 
 def _promise_lines(UI, item):
@@ -177,7 +249,10 @@ def tech_panel(UI, daily, trends, day):
     st.subheader(UI["tech_title"])
     st.caption(UI["tech_intro"])
     sig = next((s for s in (daily or {}).get("signals", []) if s.get("indicator_id") == "CO01"), None)
-    for item in reg["items"]:
+    groups = {UI["tech_g_measure"]: "measure", UI["tech_g_decide"]: "decide", UI["tech_g_deliver"]: "deliver"}
+    g = st.segmented_control(UI["tech_g_label"], list(groups), default=list(groups)[1], key="tech_group") or list(groups)[1]
+    st.caption(UI["tech_g_why_" + groups[g]])
+    for item in [i for i in reg["items"] if i.get("group") == groups[g]]:
         with st.container(border=True):
             _banner(UI, item, reg)
             live = item["status"] in ("BUILT", "PROTOTYPE") and registry.module_exists(item.get("module"))
@@ -193,6 +268,12 @@ def tech_panel(UI, daily, trends, day):
                 _hrv(UI)
             elif item["id"] == "common_signal":
                 _common(UI)
+                _promise_lines(UI, item)
+            elif item["id"] == "dtn":
+                _dtn(UI)
+                _promise_lines(UI, item)
+            elif item["id"] in ("camera_pulse", "eye_blink"):
+                _camera(UI, "pulse" if item["id"] == "camera_pulse" else "blink")
                 _promise_lines(UI, item)
             elif item["id"] == "onboard_explainer":
                 _explainer(UI)

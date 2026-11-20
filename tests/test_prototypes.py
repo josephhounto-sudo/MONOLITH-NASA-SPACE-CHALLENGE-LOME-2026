@@ -4,11 +4,13 @@ from csync.proto import exposure_ledger as el
 
 
 def test_common_signal_meets_its_promise_on_seeds_never_used():
-    assert cs.accuracy(range(1000, 1300)) >= 0.90   # promise: at least 90 % correct attribution (held-out, SIMULATED)
+    # promise: at least 90 % correct attribution on seeds never used for tuning (rule chosen on 0-199 only, see module doc)
+    assert cs.accuracy(range(5000, 6000)) >= 0.90
+    assert cs.accuracy_all_days(range(5000, 6000)) >= 0.95   # quiet days count too: a false alarm is an error
 
 
 def test_common_signal_rule_on_a_hand_made_crew():
-    z = {"A": [0, 2, 0], "B": [0, 2, 0], "C": [0, 2, 2], "D": [0, 0, 0]}
+    z = {"A": [0, 2, 0], "B": [0, 2, 0], "C": [0, 0, 2], "D": [0, 0, 0]}
     kinds = [r["kind"] for r in cs.attribute(z)]
     assert kinds == ["none", "shared", "individual"]
 

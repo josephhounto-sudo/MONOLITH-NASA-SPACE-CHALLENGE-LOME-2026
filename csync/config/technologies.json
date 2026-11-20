@@ -1,7 +1,7 @@
 {
   "statuses": {
     "BUILT": "Built and tested",
-    "PROTOTYPE": "Prototype on simulated data",
+    "PROTOTYPE": "Prototype: works in the demo, not yet validated",
     "ANNOUNCED": "Concept: a promise, with the test that will decide it"
   },
   "items": [
@@ -11,7 +11,8 @@
       "status": "BUILT",
       "module": "csync.analytics.changepoint",
       "purpose": "Adds up small deviations from a personal normal to flag a sustained upward drift.",
-      "data": "SIMULATED"
+      "data": "SIMULATED",
+      "group": "decide"
     },
     {
       "id": "signed_capsule",
@@ -19,7 +20,8 @@
       "status": "BUILT",
       "module": "csync.crypto.capsule_sign",
       "purpose": "Detects any change made to a capsule after it was signed.",
-      "data": "SIMULATED"
+      "data": "SIMULATED",
+      "group": "deliver"
     },
     {
       "id": "offline_sync",
@@ -27,7 +29,8 @@
       "status": "PROTOTYPE",
       "module": "csync.sync.crdt_sim",
       "purpose": "Two copies of the capsule, Earth and spacecraft, merge after a communication outage.",
-      "data": "SIMULATED"
+      "data": "SIMULATED",
+      "group": "deliver"
     },
     {
       "id": "hrv",
@@ -35,37 +38,41 @@
       "status": "BUILT",
       "module": "csync.physio.hrv",
       "purpose": "Computes beat-to-beat variability from a heart rhythm series.",
-      "data": "SIMULATED"
+      "data": "SIMULATED",
+      "group": "measure"
     },
     {
       "id": "dtn",
       "name": "Delay-tolerant messaging",
-      "status": "ANNOUNCED",
-      "module": null,
+      "status": "PROTOTYPE",
+      "module": "csync.proto.dtn",
       "purpose": "Store-and-forward messages across a long Earth-spacecraft delay.",
-      "data": "NONE",
+      "data": "SIMULATED",
       "test": "Send 1,000 simulated reports through a 6-hour outage and a 20-minute delay: every report arrives once, in order.",
-      "drop_if": "Any report lost or duplicated."
+      "drop_if": "Any report lost or duplicated.",
+      "group": "deliver"
     },
     {
       "id": "camera_pulse",
       "name": "Pulse from a camera",
-      "status": "ANNOUNCED",
-      "module": null,
+      "status": "PROTOTYPE",
+      "module": "csync.ui.camera_lab",
       "purpose": "Estimates pulse from video on the device. Fragile in real light.",
-      "data": "NONE",
+      "data": "ON_DEVICE",
       "test": "Compare camera pulse with a chest strap on three people, including darker skin and low light.",
-      "drop_if": "Error above 5 beats per minute on any of them."
+      "drop_if": "Error above 5 beats per minute on any of them.",
+      "group": "measure"
     },
     {
       "id": "eye_blink",
       "name": "Fatigue from eye blinks",
-      "status": "ANNOUNCED",
-      "module": null,
-      "data": "NONE",
+      "status": "PROTOTYPE",
+      "module": "csync.ui.camera_lab",
+      "data": "ON_DEVICE",
       "purpose": "Adds an eyelid-closure score, computed on the device and never recorded, as one more attention signal.",
       "test": "Ten seconds eyes open, ten seconds closed, on three people including darker skin and low light: the score separates the two.",
-      "drop_if": "It fails on any of the three, or it needs video to leave the device."
+      "drop_if": "It fails on any of the three, or it needs video to leave the device.",
+      "group": "measure"
     },
     {
       "id": "common_signal",
@@ -75,7 +82,8 @@
       "data": "SIMULATED",
       "purpose": "When several crew members drift together during a cabin CO2 episode, says 'shared signal, check the air' instead of pointing at one person.",
       "test": "Simulated crews on seeds never used for tuning, with a shared and an individual shift: at least 90 % correct attribution.",
-      "drop_if": "Below 90 %."
+      "drop_if": "Below 90 %.",
+      "group": "decide"
     },
     {
       "id": "exposure_ledger",
@@ -85,7 +93,8 @@
       "data": "REAL",
       "purpose": "One gauge per crew member: 7-day cabin CO2 against NASA's 2.5 mmHg level and cumulative radiation dose, from real ISS data.",
       "test": "Replay the 24 ISS missions: the cumulative dose shown equals the NASA data column, day by day.",
-      "drop_if": "Any mismatch with the NASA file."
+      "drop_if": "Any mismatch with the NASA file.",
+      "group": "decide"
     },
     {
       "id": "onboard_explainer",
@@ -95,7 +104,8 @@
       "data": "SIMULATED",
       "purpose": "A small language model on the device that retells each capsule in plain words, adding nothing medical.",
       "test": "200 generated explanations: every number traces to a capsule field and every sentence passes the forbidden-word filter.",
-      "drop_if": "A single invented number."
+      "drop_if": "A single invented number.",
+      "group": "decide"
     }
   ]
 }

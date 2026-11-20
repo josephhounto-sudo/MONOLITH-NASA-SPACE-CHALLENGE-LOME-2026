@@ -20,3 +20,9 @@ Apache License 2.0. Data: NASA ISSLive public feed (push.lightstreamer.com, adap
 
 ## "Cesium Man" 3D model — body viewer
 Cesium Man © Cesium 2017, from the Khronos glTF Sample Assets (commit f0920f5), licensed under Creative Commons Attribution 4.0 International (https://creativecommons.org/licenses/by/4.0/). Loaded at run time in the visitor's browser from a pinned CDN copy; not stored in this repository. Changes: the model's texture (including the Cesium logo, which the licence excludes) is not used; its head is hidden and replaced by a sphere; materials and zone colouring are ours. Credit is shown under the viewer.
+
+## MediaPipe Tasks Vision 1.2.3 (loaded from jsDelivr in the visitor's browser) — eye-blink prototype
+© Google LLC, Apache License 2.0 (https://www.apache.org/licenses/LICENSE-2.0). The face landmarker model is fetched from Google's public model storage at run time, only after the visitor clicks "Start the camera". No frame is stored or sent by C-Sync. Not stored in this repository.
+
+## three.js 0.187.0 (loaded from unpkg in the visitor's browser) — 3D body viewer
+© 2010-2025 three.js authors, MIT License (https://github.com/mrdoob/three.js/blob/dev/LICENSE). Includes the GLTFLoader and RoomEnvironment add-ons from the same release. Not stored in this repository.
