@@ -5,6 +5,10 @@
 
 > When the ground is 20 minutes away, who protects the decision?
 
+> **Version note (for judges).** The version submitted to Space Apps is commit `de0b5be` (15 Nov 2026, 17:42 UTC, before the 23:59 deadline): browse it at <https://github.com/josephhounto-sudo/MONOLITH-NASA-SPACE-CHALLENGE-LOME-2026/tree/de0b5be>. Everything below the line "After the deadline" was built later (V3, 16–20 Nov) and is shown for transparency; if the rules judge the submitted version only, please use that commit.
+>
+> **After the deadline (V3):** the live app (<https://monolith-nasa-space-challenge-lome-kwtv79qy52ihwgezt8byuy.streamlit.app/>) now opens on **real ISS cabin air, live from NASA's public ISSLive feed** (CO2, oxygen share, cabin pressure, ground-link status, four mission clocks), with a guide bot (Pip), a pre-registered **replay of the frozen rule on 14 real ISS missions** (`research/retro/`), a 3D body built in code, and an operations bar (mission time, ground link, one-way delay). Live NASA data is context only: it never opens a procedure.
+
 C-Sync helps a crew on a deep-space mission notice unusual changes in health and performance, guides them step by step in an emergency, and protects the decision to resume work — **without needing the ground**. It compares each astronaut to **their own personal baseline**, shows how sure it is, and never shows missing data as normal. The decision stays human by design.
 
 **What C-Sync does, and where it stops:** C-Sync flags what changed against the astronaut's own baseline and proposes the next step. It points to fixed procedure files, shows how sure it is, and leaves every decision to the crew and the crew medical officer. It proposes no treatment or drug and uses no clinical threshold. NASA has not reviewed C-Sync, and it has no clinical validation.
