@@ -55,7 +55,7 @@
         "habitat_series_co2": "CO2, moyenne horaire (mmHg)",
         "habitat_series_limit": "Exigence NASA-STD-3001 (3 mmHg)",
         "habitat_series_flat": "Marqué ARTIFACT (valeur constante)",
-        "habitat_table_title": "Le même contrôle sur chaque mission avec un CO2 utilisable",
+        "habitat_table_title": "Toutes les missions, qualité du capteur (tableau)",
         "habitat_table_note": "{n} missions. Une série constante d'au moins 1 h existe dans {k} d'entre elles. Les valeurs nulles ou plafonnées sont marquées. Capteurs d'installation de recherche sur les rongeurs, lieu et étalonnage non documentés : ne pas lire ces lignes comme une exposition d'équipage.",
         "habitat_credit": "Données et visualisations fournies par l'Environmental Data App (EDA), https://visualization.osdr.nasa.gov/eda/. Exigence : NASA OCHMO-TB-004 Rev B (NASA-STD-3001 Vol. 2 Rev C, V2 6004).",
         "habitat_columns": {
@@ -467,7 +467,15 @@
         "bot_next": "Suivant",
         "bot_done": "C'est parti",
         "bot_skip": "Passer le guide",
-        "bot_replay": "Revoir le guide"
+        "bot_replay": "Revoir le guide",
+        "habitat_read": "**Lecture :** sur {days} jours, le CO2 de la cabine est resté sous la limite NASA d'une heure dans {pct_under} % des heures valides. Il l'a dépassée en {episodes} épisodes, le plus long de {longest_h} h. Pendant {pct_7d_above} % des jours, la moyenne sur 7 jours dépassait 2,5 mmHg, le niveau que la NASA donne pour garder les maux de tête sous 1 %.",
+        "replay_title": "Rejeu de mission : ce que C-Sync aurait montré",
+        "replay_intro": "CO2 réel de 14 missions ISS, rejoué avec la règle gelée. Le protocole a été commité avant tout calcul de résultat.",
+        "replay_pick": "Mission",
+        "replay_hidden": "Heures au-dessus de la limite cachées par une moyenne journalière",
+        "replay_episodes": "Épisodes d'alerte (un par suite, pas un par heure)",
+        "replay_7d": "Jours avec moyenne 7 jours au-dessus de 2,5 mmHg",
+        "replay_note": "Capteur de cabine, pas l'air respiré. Les symptômes des équipages ne sont pas publics : aucun effet sur la santé n'est revendiqué. Source : NASA OSDR Environmental Data App ; NASA OCHMO-TB-004."
     },
     "indicator_names": {
         "PH01": "fréquence cardiaque",

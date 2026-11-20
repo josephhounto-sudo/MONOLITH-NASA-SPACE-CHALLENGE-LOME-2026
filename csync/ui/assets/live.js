@@ -5,8 +5,10 @@
 
 const LIMIT_PPCO2_MMHG = 3.0;          // NASA-STD-3001 Vol 2 V2 6004 (1-hour average), compared to a single live reading: context only
 const PSI_TO_MMHG = 51.7149;
-const STALE_S = 120;                   // no update for 2 min -> Unknown (design parameter, not NASA)
-const FROZEN_MIN = 15;                 // same value for 15 min -> flagged as possibly frozen (design parameter)
+const STALE_S = 30;                    // station clock silent for 30 s -> signal lost -> Unknown (design parameter, not NASA)
+const FROZEN_MIN = 60;                 // same value for 60 min while the signal is up -> flagged (design parameter)
+// The feed sends a value only when it changes (MERGE mode), so a quiet CO2 is not a stale CO2. Freshness is judged from
+// the station clock item (TIME_000001), which ticks continuously while the ground has signal.
 
 // The feed dictionary labels these PSIA, but the values seen on 20/11/2026 (cabin ~752) are mmHg-sized.
 // Decide from the cabin pressure itself: 600-900 = mmHg, 10-17 = psi. Anything else = units unknown.
@@ -23,13 +25,14 @@ function toMmhg(v, mode) {
 }
 
 // state of one live reading: words, never colour alone
-function readingState(value, receivedAt, changedAt, now) {
-  if (value === null || receivedAt === null) return { word: "Unknown", why: "no live reading" };
-  const age = (now - receivedAt) / 1000;
-  if (age > STALE_S) return { word: "Unknown", why: "no update for " + Math.round(age / 60) + " min (signal loss is normal on the station)" };
+function readingState(value, clockAt, changedAt, now) {
+  if (value === null) return { word: "Unknown", why: "no live reading", show: false };
+  if (clockAt === null) return { word: "Unknown", why: "waiting for the station signal", show: false };
+  const silent = (now - clockAt) / 1000;
+  if (silent > STALE_S) return { word: "Unknown", why: "signal lost " + Math.max(1, Math.round(silent / 60)) + " min ago (normal on the station); last value hidden", show: false };
   const still = (now - changedAt) / 60000;
-  if (still >= FROZEN_MIN) return { word: "Check", why: "same value for " + Math.round(still) + " min: sensor or feed may be frozen" };
-  return { word: "Live", why: "received " + Math.round(age) + " s ago" };
+  if (still >= FROZEN_MIN) return { word: "Check", why: "same value for " + Math.round(still) + " min while the signal is up: sensor or feed may be frozen", show: true };
+  return { word: "Live", why: still < 1 ? "changed less than a minute ago" : "stable for " + Math.round(still) + " min, signal up", show: true };
 }
 
 function co2Context(mmhg) {
@@ -53,7 +56,7 @@ if (typeof module !== "undefined") {
 }
 
 if (typeof document !== "undefined") {
-  const ITEMS = { co2lab: "USLAB000055", co2n3: "NODE3000003", o2lab: "USLAB000053", cabin: "USLAB000058", temp: "USLAB000059" };
+  const ITEMS = { co2lab: "USLAB000055", co2n3: "NODE3000003", o2lab: "USLAB000053", cabin: "USLAB000058", clock: "TIME_000001" };
   const raw = {}, recv = {}, changed = {};
   const $ = (id) => document.getElementById(id);
 
@@ -70,14 +73,15 @@ if (typeof document !== "undefined") {
     ];
     rows.forEach(([key, v, dp]) => {
       const src = key === "o2" ? "o2lab" : key;
-      const st = readingState(v, recv[src] ?? null, changed[src] ?? now, now);
-      $("v-" + key).textContent = v === null ? "--" : v.toFixed(dp);
+      const st = readingState(v, recv.clock ?? null, changed[src] ?? now, now);
+      $("v-" + key).textContent = (v === null || !st.show) ? "--" : v.toFixed(dp);
       $("s-" + key).textContent = st.word;
       $("w-" + key).textContent = st.why;
       $("c-" + key).dataset.state = st.word;
     });
-    $("ctx-co2lab").textContent = co2Context(toMmhg(raw.co2lab, mode));
-    $("ctx-co2n3").textContent = co2Context(toMmhg(raw.co2n3, mode));
+    const up = recv.clock !== undefined && (now - recv.clock) / 1000 <= STALE_S;
+    $("ctx-co2lab").textContent = up ? co2Context(toMmhg(raw.co2lab, mode)) : "";
+    $("ctx-co2n3").textContent = up ? co2Context(toMmhg(raw.co2n3, mode)) : "";
     $("unit").textContent = (raw.cabin !== undefined && mode === "unknown") ? "Units not recognised: values hidden." : "";
   }
 

@@ -55,7 +55,7 @@
         "habitat_series_co2": "CO2, hourly mean (mmHg)",
         "habitat_series_limit": "NASA-STD-3001 requirement (3 mmHg)",
         "habitat_series_flat": "Flagged ARTIFACT (constant value)",
-        "habitat_table_title": "Same check on every mission with usable CO2 data",
+        "habitat_table_title": "All missions, sensor quality (table)",
         "habitat_table_note": "{n} missions. A constant run of at least 1 h exists in {k} of them. Zero or capped sensor values are marked. Rodent-research facility sensors, location and calibration not documented: do not read these rows as crew exposure.",
         "habitat_credit": "Data and visualizations are courtesy of the Environmental Data App (EDA), https://visualization.osdr.nasa.gov/eda/. Requirement: NASA OCHMO-TB-004 Rev B (NASA-STD-3001 Vol. 2 Rev C, V2 6004).",
         "habitat_columns": {
@@ -467,7 +467,15 @@
         "bot_next": "Next",
         "bot_done": "Let's go",
         "bot_skip": "Skip the guide",
-        "bot_replay": "Show the guide again"
+        "bot_replay": "Show the guide again",
+        "habitat_read": "**Reading:** over {days} days, the cabin CO2 stayed under NASA's 1-hour limit in {pct_under} % of valid hours. It went above in {episodes} episodes, the longest lasting {longest_h} h. On {pct_7d_above} % of days the 7-day average was above 2.5 mmHg, the level NASA gives to keep headaches under 1 %.",
+        "replay_title": "Mission replay: what C-Sync would have shown",
+        "replay_intro": "Real CO2 from 14 ISS missions, replayed with the frozen rule. The protocol was committed before any result was computed.",
+        "replay_pick": "Mission",
+        "replay_hidden": "Hours above the limit hidden by a daily average",
+        "replay_episodes": "Alert episodes (one per run, not one per hour)",
+        "replay_7d": "Days with 7-day average above 2.5 mmHg",
+        "replay_note": "Cabin sensor, not the air a person breathes. Crew symptoms are not public, so no health effect is claimed. Source: NASA OSDR Environmental Data App; NASA OCHMO-TB-004."
     },
     "indicator_names": {
         "PH01": "heart-rate",

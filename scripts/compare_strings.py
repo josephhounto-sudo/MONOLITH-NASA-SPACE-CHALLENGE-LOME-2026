@@ -14,7 +14,8 @@ PH = re.compile(r"\{[^{}]+\}")
 # Whole values that are the same string in French. A new identical sentence is a gap.
 SAME_IN_BOTH = {
     "C-Sync",
-    "Pip",  # name of the guide bot (20/11/2026)
+    "Pip",
+    "Mission",  # name of the guide bot (20/11/2026)
     "Normal",
     "Mission",
     "Source",

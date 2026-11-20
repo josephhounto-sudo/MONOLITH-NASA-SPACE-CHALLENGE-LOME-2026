@@ -619,6 +619,8 @@ def _habitat_body():
     st.markdown(UI["habitat_intro"])
     df = habitat.rr1_hourly()
     flat = df[df["artifact"]]
+    sm = habitat.summary(df)
+    st.markdown(UI["habitat_read"].format(**sm))   # what the chart shows, in one sentence, computed from the data
     chart = df.set_index("hour_utc")[["co2_mmhg"]].rename(columns={"co2_mmhg": UI["habitat_series_co2"]})
     chart[UI["habitat_series_limit"]] = habitat.LIMIT_MMHG
     chart[UI["habitat_series_flat"]] = df.set_index("hour_utc")["co2_mmhg"].where(df.set_index("hour_utc")["artifact"])
@@ -644,10 +646,25 @@ def _habitat_body():
         st.bar_chart(rad.set_index("date")[["total_mgy_day"]].rename(columns={"total_mgy_day": UI["habitat_rad"]}),
                      color=[theme["interactive"]])
         st.caption(UI["habitat_rad_note"].format(acc=float(rad["accumulated_mgy"].iloc[-1])))
-    st.markdown(f"**{UI['habitat_table_title']}**")
-    st.dataframe(m[list(UI["habitat_columns"])].rename(columns=UI["habitat_columns"]), hide_index=True)
-    st.caption(UI["habitat_table_note"].format(n=len(m), k=int((m["artifact_runs_ge_1h"] > 0).sum())))
+    replay_panel()
+    with st.expander(UI["habitat_table_title"]):
+        st.dataframe(m[list(UI["habitat_columns"])].rename(columns=UI["habitat_columns"]), hide_index=True)
+        st.caption(UI["habitat_table_note"].format(n=len(m), k=int((m["artifact_runs_ge_1h"] > 0).sum())))
     st.caption(UI["habitat_credit"])
+
+
+def replay_panel():
+    """Mission replay: pick one real ISS mission, see what the frozen rule would have flagged (pre-registered, research/retro)."""
+    r = habitat.replay()
+    st.subheader(UI["replay_title"])
+    st.caption(UI["replay_intro"])
+    pick = st.selectbox(UI["replay_pick"], list(r["mission"]), index=int((r["mission"] == "RR-28").idxmax()), key="cs-replay")
+    row = r.set_index("mission").loc[pick]
+    c1, c2, c3 = st.columns(3)
+    c1.metric(UI["replay_hidden"], int(row["hours_hidden_by_daily_mean"]))
+    c2.metric(UI["replay_episodes"], int(row["episodes"]))
+    c3.metric(UI["replay_7d"], f"{row['pct_days_7d_above_2.5']:.0f} %")
+    st.caption(UI["replay_note"])
 
 
 def version_stamp():

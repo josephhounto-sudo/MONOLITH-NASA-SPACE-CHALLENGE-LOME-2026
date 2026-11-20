@@ -82,3 +82,43 @@ def story_days(n: int = 10) -> dict:
     """{story day: day_fact} for days 1..n, read once."""
     df = rr1_hourly()
     return {d: day_fact(d, df) for d in range(1, n + 1)}
+
+
+SEVEN_DAY_MMHG = 2.5   # NASA OCHMO-TB-004: 7-day average below 2.5 mmHg keeps the headache risk under 1 % (context only)
+REPLAY = os.path.join(ROOT, "research", "retro", "replay_results.csv")
+
+
+def episodes(df: pd.DataFrame | None = None, limit: float = LIMIT_MMHG) -> list[dict]:
+    """Runs of consecutive valid hours above the limit (an episode = one alert, not one per hour; replay of 20/11/2026).
+    ARTIFACT hours never count and break a run."""
+    df = rr1_hourly() if df is None else df
+    assert {"hour_utc", "co2_mmhg", "artifact"} <= set(df.columns)
+    out, cur = [], None
+    for h, v, art in zip(df["hour_utc"], df["co2_mmhg"].round(2), df["artifact"].astype(bool), strict=True):
+        above = (not art) and v > limit
+        if above and cur and h - cur["end"] <= pd.Timedelta(hours=1):
+            cur["end"], cur["hours"], cur["peak"] = h, cur["hours"] + 1, max(cur["peak"], float(v))
+        elif above:
+            cur = {"start": h, "end": h, "hours": 1, "peak": float(v)}
+            out.append(cur)
+        else:
+            cur = None
+    return out
+
+
+def summary(df: pd.DataFrame | None = None) -> dict:
+    """Numbers for the one-sentence reading of the Habitat chart (all computed, none typed)."""
+    df = rr1_hourly() if df is None else df
+    ok = df[~df["artifact"].astype(bool)]
+    assert len(ok) > 0
+    ep = episodes(df)
+    day = ok.set_index("hour_utc")["co2_mmhg"].resample("1D").mean().dropna()
+    r7 = day.rolling(7, min_periods=5).mean().dropna()
+    return {"days": int(len(day)), "pct_under": round(100 * float((ok["co2_mmhg"].round(2) <= LIMIT_MMHG).mean()), 1),
+            "episodes": len(ep), "longest_h": max((e["hours"] for e in ep), default=0),
+            "pct_7d_above": round(100 * float((r7 > SEVEN_DAY_MMHG).mean()), 1) if len(r7) else None}
+
+
+def replay() -> pd.DataFrame:
+    """Pre-registered replay of the frozen rule on every ISS mission (research/retro, commit 9c4994b)."""
+    return pd.read_csv(REPLAY)

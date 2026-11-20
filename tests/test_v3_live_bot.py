@@ -40,10 +40,14 @@ def _node(expr):
 @needs_node
 def test_reading_states_never_show_a_stale_or_frozen_value_as_live():
     now = 10_000_000
-    assert _node(f"L.readingState(2.4, {now - 5000}, {now - 5000}, {now})")["word"] == "Live"
-    assert _node(f"L.readingState(2.4, {now - 130000}, {now - 130000}, {now})")["word"] == "Unknown"
-    assert _node(f"L.readingState(2.4, {now - 5000}, {now - 16 * 60000}, {now})")["word"] == "Check"
-    assert _node(f"L.readingState(null, null, {now}, {now})")["word"] == "Unknown"
+    # the feed only sends changes: a quiet value with the station clock ticking is Live, not stale
+    live = _node(f"L.readingState(2.4, {now - 2000}, {now - 20 * 60000}, {now})")
+    assert live["word"] == "Live" and live["show"]
+    lost = _node(f"L.readingState(2.4, {now - 5 * 60000}, {now - 5000}, {now})")
+    assert lost["word"] == "Unknown" and not lost["show"], "after signal loss the last value is hidden, never shown as fresh"
+    assert _node(f"L.readingState(2.4, {now - 2000}, {now - 61 * 60000}, {now})")["word"] == "Check"
+    assert _node(f"L.readingState(2.4, null, {now}, {now})")["word"] == "Unknown"
+    assert _node(f"L.readingState(null, {now}, {now}, {now})")["word"] == "Unknown"
 
 
 @needs_node
