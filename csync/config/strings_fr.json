@@ -710,7 +710,12 @@
         "pip_say_tab_nasa": "Les risques NASA auxquels répond C-Sync, et ce que l'équipage peut faire.",
         "pip_say_tab_try": "Entre tes propres valeurs et vois ce que dirait la règle.",
         "pip_say_tab_sources": "Toutes les sources derrière les nombres. Vérifie ce dont tu doutes.",
-        "tech_cs_all": "En comptant aussi les jours calmes (une fausse alerte est une erreur) : {c:.0f} % de tous les jours justes sur les mêmes 1 000 graines neuves."
+        "tech_cs_all": "En comptant aussi les jours calmes (une fausse alerte est une erreur) : {c:.0f} % de tous les jours justes sur les mêmes 1 000 graines neuves.",
+        "intro_1": "Dans les années 1930, un calcul rapide « montrait » qu'un bourdon ne peut pas voler.",
+        "intro_2": "Le bourdon a volé quand même. Le calcul avait oublié comment ses ailes battent vraiment.",
+        "intro_3": "C-Sync part de ce qui est mesuré sur chaque astronaute, pas d'une moyenne.",
+        "intro_go": "Entrer dans la station",
+        "intro_src": "La « preuve » du bourdon est un mythe connu ; le vol des insectes a été expliqué par la rotation des ailes et l'écoulement instationnaire (Dickinson, Lehmann et Sane, Science 1999). Son lien avec la NASA remonte à une rumeur."
     },
     "indicator_names": {
         "PH01": "fréquence cardiaque",

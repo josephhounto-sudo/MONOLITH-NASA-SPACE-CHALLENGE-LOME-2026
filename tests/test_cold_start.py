@@ -83,7 +83,10 @@ def test_cold_first_screen_is_the_hook_without_developer_text(cold_page):
     _, _ = cold_page
     at = AppTest.from_file(APP, default_timeout=120).run()
     assert not at.exception, at.exception
-    assert UI["live_title"] in [s.value for s in at.subheader]   # V3: live console + guide bot first
+    assert UI["live_title"] not in [s.value for s in at.subheader]   # 20/11: a true story first, then the station
+    assert DEV_TEXT.search(all_visible_text(at)) is None
+    at.button(key="cs-intro-go").click().run()
+    assert UI["live_title"] in [s.value for s in at.subheader]   # V3: live console + guide bot after the arrival screen
     at.radio(key="cs-nav").set_value(UI["tab_home"]).run()
     assert not at.exception, at.exception
     assert UI["hook_title"] in [s.value for s in at.subheader]   # the drift story is one click away

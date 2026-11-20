@@ -803,6 +803,21 @@ _PLAIN = [(re.compile(r"\bREFUSE_RESUME\b"), "resume refused"), (re.compile(r"\b
           (re.compile(r"\bNORMAL\b"), "Normal"), (re.compile(r"\bd ≥ 1\.5\b"), "at least 1.5 times the usual spread")]
 
 
+def intro_screen():
+    """Transition on arrival: three lines appear one after the other, then one button. Still under reduced motion."""
+    lines = "".join(f"<p class='cs-intro-l' style='animation-delay:{0.2 + 1.6 * i:.1f}s'>{html.escape(UI[f'intro_{i + 1}'])}</p>" for i in range(3))
+    st.html("<style>.cs-intro{max-width:760px;margin:12vh auto 28px;text-align:left}"
+            ".cs-intro-l{font-size:clamp(1.3rem,3.2vw,2.1rem);line-height:1.3;font-weight:600;margin:0 0 .9em;opacity:0;"
+            "animation:cs-in .9s ease forwards}.cs-intro-l:last-child{color:var(--cs-accent,currentColor)}"
+            "@keyframes cs-in{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}"
+            "@media (prefers-reduced-motion:reduce){.cs-intro-l{animation:none;opacity:1}}</style>"
+            f"<div class='cs-intro'>{lines}</div>")
+    if st.button(UI["intro_go"], key="cs-intro-go", type="primary"):
+        st.session_state["cs-intro-done"] = True
+        st.rerun()
+    st.caption(UI["intro_src"])
+
+
 def tech_standalone():
     """Technologies without the demo day bar: the cards that need a capsule read the demo story's day 9 (the drift day)."""
     out = resolve_out_dir(OUT_DIR)   # the hosted app has no data/out: the story files are built on first use (20/11 crash)
@@ -855,6 +870,9 @@ _SECTION_KEY = dict(zip(_SECTIONS, _KEYS, strict=True))[section]
 if section != UI["tab_live"] or st.session_state.get("cs-bot-done"):   # on a first visit the tutorial speaks; Pip's corner comes after
     bot.dock(UI, _SECTION_KEY, _KEYS)
 OUT = resolve_out_dir(OUT_DIR)
+if section == UI["tab_live"] and not st.session_state.get("cs-intro-done"):
+    intro_screen()   # first visit: one true story, then the station (Joseph 20/11; the popular NASA "quote" is a myth, see intro_src)
+    st.stop()
 if section == UI["tab_live"]:
     live.panel(UI)   # real NASA station data, live, context only; the guide bot opens here on a first visit
     st.caption(version_stamp())

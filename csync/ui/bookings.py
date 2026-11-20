@@ -53,6 +53,7 @@ html,body,[data-testid="stApp"]{{background:
  background:linear-gradient(180deg,rgba(75,64,57,.90),rgba(46,38,33,.93) 45%,rgba(34,27,23,.95))!important;
  border:1px solid rgba(255,253,253,.22);box-shadow:inset 1px 1px 0 rgba(255,253,253,.18),0 40px 90px rgba(46,38,33,.45);
  -webkit-backdrop-filter:none!important;backdrop-filter:none!important}}
+:root{{--cs-accent:#FF8A4C}}
 /* no blur on the main panel: it is 90-95 % opaque (blur invisible) and a backdrop-filter traps fixed children such as Pip's corner */
 @media (max-width:640px){{[data-testid="stMainBlockContainer"]{{margin:10px 6px 24px;padding:18px 14px 22px!important;border-radius:30px}}}}
 .cs-top,[data-testid="stSlider"],.cs-strip,.st-key-cs-habitat,[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"],.cs-ind{{

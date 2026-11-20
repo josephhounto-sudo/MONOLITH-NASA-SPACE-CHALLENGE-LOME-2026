@@ -16,6 +16,7 @@ def open_app(path, timeout=60, section=STORY_TAB):
     at = AppTest.from_file(path, default_timeout=timeout)
     at.session_state["cs-hook-done"] = True
     at.session_state["cs-bot-done"] = True
+    at.session_state["cs-intro-done"] = True
     if section:
         at.session_state["cs-nav"] = section
     return at.run()

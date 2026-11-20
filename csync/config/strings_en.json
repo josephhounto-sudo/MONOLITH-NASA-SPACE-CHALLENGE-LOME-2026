@@ -710,7 +710,12 @@
         "pip_say_tab_nasa": "The NASA risks C-Sync answers, and what the crew can do about them.",
         "pip_say_tab_try": "Enter your own values and see what the rule would say.",
         "pip_say_tab_sources": "Every source behind the numbers. Check anything you doubt.",
-        "tech_cs_all": "Counting quiet days too (a false alarm is an error): {c:.0f} % of all days right on the same 1,000 new seeds."
+        "tech_cs_all": "Counting quiet days too (a false alarm is an error): {c:.0f} % of all days right on the same 1,000 new seeds.",
+        "intro_1": "In the 1930s, a quick calculation “showed” that a bumblebee cannot fly.",
+        "intro_2": "The bee flew anyway. The calculation had left out how its wings really beat.",
+        "intro_3": "C-Sync starts from what is measured on each astronaut, not from an average.",
+        "intro_go": "Enter the station",
+        "intro_src": "The bumblebee “proof” is a known myth; insect flight was explained by wing rotation and unsteady airflow (Dickinson, Lehmann & Sane, Science 1999). Its link to NASA traces back to a rumour."
     },
     "indicator_names": {
         "PH01": "heart-rate",
