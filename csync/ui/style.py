@@ -544,7 +544,10 @@ a{color:$cream}
 .cs-ind .big{font-family:Doto,monospace;font-weight:700;font-size:clamp(64px,9vw,92px);line-height:1;display:flex;align-items:baseline;gap:10px;margin:12px 0 2px;color:$cream}
 .cs-ind .big small{font-family:var(--f-text);font-size:1.15rem;font-weight:500;color:$cream2}
 .cs-ind .big .arr{font-family:var(--f-text);font-size:1.8rem;color:var(--c)}
-.cs-ind .delta{margin:2px 0 6px}.cs-ind .delta span{display:inline-block;padding:3px 12px;border-radius:999px;background:rgba(255,107,91,.16);border:1px solid rgba(255,107,91,.5);color:$cream;font-weight:600;font-size:.92rem}
+.cs-ind .delta{margin:2px 0 6px}.cs-ind .delta span{display:inline-block;padding:3px 12px;border-radius:999px;background:rgba(244,237,224,.08);border:1px solid $edge;color:$cream;font-weight:600;font-size:.92rem}
+.cs-ind[data-state=WATCH] .delta span{border-color:$watch;background:rgba(255,255,255,.04)}
+.cs-ind[data-state=DEGRADED] .delta span{border-color:$degraded;background:rgba(255,255,255,.04)}
+.cs-ind[data-state=NORMAL] .delta span{border-color:$normal}
 .cs-ind .why{font-size:.98rem;color:$cream;margin:4px 0 8px}
 .cs-ind img{width:100%!important;max-width:none!important;height:auto!important;display:block}
 .cs-ind .ticks{display:flex;justify-content:space-between;font-size:.88rem;color:$cream2}
@@ -564,6 +567,7 @@ def _navy_css():
 _NAV = """
 [data-testid="stToolbar"]{display:flex!important;visibility:visible!important}
 [data-testid="stToolbar"] [data-testid="stToolbarActions"],[data-testid="stToolbar"] [data-testid="stMainMenu"],[data-testid="stToolbar"] [data-testid="stAppDeployButton"]{display:none!important}
+@media (max-width:640px){.cs-top{padding-left:44px!important}}
 [data-testid="stExpandSidebarButton"],[data-testid="stSidebarCollapsedControl"]{display:flex!important;visibility:visible!important}
 """
 

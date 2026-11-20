@@ -53,3 +53,17 @@ def test_both_roles_show_the_same_capsule_state_and_differ_only_in_order():
     assert crew.sidebar.radio[0].options != cmd.sidebar.radio[0].options
     for w in ("Watch", "Degraded"):
         assert w in _text(crew) and w in _text(cmd)
+
+
+def test_body_map_box_zones_carry_their_names():
+    from csync import silhouette
+    svg = silhouette.svg(None)
+    assert ">Habitat</text>" in svg and ">Whole body</text>" in svg   # no unlabeled box on the figure
+
+
+def test_construction_cards_do_not_claim_an_animation_they_lack():
+    at = open_app(APP, 40)
+    at.sidebar.radio[0].set_value(UI["tab_tech"]).run()
+    txt = _text(at)
+    assert txt.count(UI["tech_building"]) == 1 and UI["tech_building_static"] in txt   # only the messaging card has the animation
+    assert UI["tech_data_none"] in txt and "Data: NONE" not in txt

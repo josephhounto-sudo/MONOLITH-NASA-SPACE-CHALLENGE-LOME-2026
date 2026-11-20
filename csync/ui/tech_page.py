@@ -24,7 +24,7 @@ _ANIM = """<style>
 def _banner(UI, item, reg):
     st.markdown(f"**{item['name']}** · {registry.label(reg, item)}")
     st.caption(item["purpose"])
-    st.caption(UI["tech_data"].format(d=item["data"]))
+    st.caption(UI["tech_data"].format(d=UI["tech_data_none"] if item["data"] == "NONE" else item["data"]))
 
 
 def _changepoint(UI, trends, sig, day):
@@ -80,7 +80,9 @@ def _hrv(UI):
 def _building(UI, item):
     if item["id"] == "dtn":
         st.markdown(_ANIM + "<div class='cs-dtn'><i></i><i></i><i></i></div>", unsafe_allow_html=True)
-    st.caption(UI["tech_building"])
+        st.caption(UI["tech_building"])
+    else:
+        st.caption(UI["tech_building_static"])
 
 
 def tech_panel(UI, daily, trends, day):

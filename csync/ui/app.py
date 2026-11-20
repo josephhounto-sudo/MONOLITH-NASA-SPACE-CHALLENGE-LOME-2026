@@ -377,8 +377,9 @@ def state_glyphs(b, labels):
     circle normal, diamond watch, triangle degraded or procedure open, dashed square unknown. Colour only reinforces the shape."""
     import base64
     from csync import glyphs
-    sc = theme["fusion"]["state_on_light"]
-    ink = theme["fusion"]["ink"]
+    nv = theme["navy"]
+    sc = {"NORMAL": nv["normal"], "WATCH": nv["watch"], "DEGRADED": nv["degraded"], "UNKNOWN": nv["unknown"]}   # dark panel: light state colours
+    ink = nv["cream"]
     step, g, alt = 92, [], []
     for i, r in enumerate(b.itertuples()):
         x = 6 + i * step

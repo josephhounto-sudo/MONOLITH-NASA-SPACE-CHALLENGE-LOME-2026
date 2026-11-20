@@ -283,6 +283,8 @@
     "tech_hrv_note": "Simulated heartbeat intervals. Higher simulated stress lowers the variability.",
     "tech_dtn_head": "Delay-tolerant messaging",
     "tech_cam_head": "Pulse from a camera",
+    "tech_building_static": "Technology under construction. Nothing here is measured.",
+    "tech_data_none": "none yet",
     "tab_why": "Why a personal baseline?",
     "why_title": "Why compare a person with their own normal?",
     "why_intro": "Fixed published limits (sleep under 7 h, 11 or more reaction-time lapses) ignore that people differ. In 150 simulated crews per row, each cell shows how often the rule opens a procedure on a crew whose condition worsens / on a healthy crew. The personal rule uses the same two signals as the fixed one. A single fixed limit catches every drift, but it also wrongly opens procedures on healthy crews.",

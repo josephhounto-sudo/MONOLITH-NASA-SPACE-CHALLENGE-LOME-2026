@@ -81,6 +81,8 @@ def svg(selected: str | None = None) -> str:
             out.append(f'<{tag} {attrs} fill="{t["panel"]}" stroke="{stroke}" stroke-width="{width}"{dash}/>')
             if not habitat:
                 out.append(f'<{tag} {attrs} fill="url(#{grad})" stroke="none"/>')
+    for rid, (cx, cy) in (("region-body", (71, 46)), ("region-habitat", (200, 602))):   # the two box zones carry their name inside
+        out.append(f'<text x="{cx}" y="{cy}" text-anchor="middle" font-size="18" font-weight="600" font-family="sans-serif" fill="#F4EDE0">{label(rid)}</text>')
     out.append("</svg>")
     return "".join(out)
 
