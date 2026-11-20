@@ -92,7 +92,7 @@
       "module": "csync.proto.exposure_ledger",
       "data": "REAL",
       "purpose": "One gauge per crew member: 7-day cabin CO2 against NASA's 2.5 mmHg level and cumulative radiation dose, from real ISS data.",
-      "test": "Replay the 24 ISS missions: the cumulative dose shown equals the NASA data column, day by day.",
+      "test": "On every mission of the NASA file (RR-1 shown here; 14 missions in the replay): the cumulative dose shown equals the NASA data column, day by day.",
       "drop_if": "Any mismatch with the NASA file.",
       "group": "decide"
     },
