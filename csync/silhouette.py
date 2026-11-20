@@ -63,7 +63,7 @@ def svg(selected: str | None = None) -> str:
            '<radialGradient id="gnd" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".28"/>'
            '<stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>'
            '<filter id="soft" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="3"/></filter></defs>',
-           f'<rect width="400" height="640" fill="{t["surface"]}"/>',
+           f'<rect width="400" height="640" rx="36" fill="{t.get("body_surface", t["surface"])}"/>',
            '<ellipse cx="200" cy="552" rx="128" ry="16" fill="url(#gnd)"/>',
            f'<rect x="186" y="104" width="28" height="20" rx="6" fill="{t["panel"]}" stroke="{t["text_secondary"]}" stroke-width="2"/>',
            '<rect x="186" y="104" width="28" height="20" rx="6" fill="url(#vol)"/>']

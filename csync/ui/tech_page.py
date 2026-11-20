@@ -21,6 +21,24 @@ _ANIM = """<style>
 </style>"""
 
 
+def _strip(n, marks, off=None):
+    """A row of numbered dots (days or steps): the technology shows its effect as a picture, not as prose.
+    marks: {index: (css colour, word)}; off: (start, end) range drawn as a cut link."""
+    assert 1 <= n <= 40
+    cells = []
+    for i in range(1, n + 1):
+        colour, word = marks.get(i, (None, ""))
+        cut = off and off[0] <= i < off[1]
+        style = (f"background:{colour};color:#2E2621" if colour else "background:rgba(255,253,253,.06)") + (";opacity:.45;border-style:dashed" if cut else "")
+        cells.append(f"<span class='cs-dot' style='{style}' title='{word}'>{i}</span>")
+    return "<div class='cs-dots'>" + "".join(cells) + "</div>"
+
+
+_DOTS = """<style>.cs-dots{display:flex;flex-wrap:wrap;gap:6px;margin:8px 0 6px}
+.cs-dot{min-width:30px;height:30px;border-radius:999px;display:inline-flex;align-items:center;justify-content:center;font-family:Doto,monospace;font-weight:700;
+ font-size:14px;border:1px solid rgba(255,253,253,.28);color:#FFFDFD}</style>"""
+
+
 def _banner(UI, item, reg):
     st.markdown(f"**{item['name']}** · {registry.label(reg, item)}")
     st.caption(item["purpose"])
@@ -37,6 +55,12 @@ def _changepoint(UI, trends, sig, day):
     vals = [r["value"] for r in rows]
     fixed = next((r["day"] for r in rows if r["value"] > t["threshold"]), None)
     res = cusum(vals, t["baseline_mean"], sd)
+    marks = {}
+    if fixed:
+        marks[fixed] = ("#F2C14E", UI["tech_cp_mark_fixed"])
+    if res["alarm_index"] is not None:
+        marks[rows[res["alarm_index"]]["day"]] = ("#E9A27A", UI["tech_cp_mark_cusum"])
+    st.html(_DOTS + _strip(len(rows), marks))
     st.write(UI["tech_cp_fixed"].format(d=fixed) if fixed else UI["tech_cp_none"].format(d=day))
     st.write(UI["tech_cp_cusum"].format(d=rows[res["alarm_index"]]["day"]) if res["alarm_index"] is not None else UI["tech_cp_cusum_none"])
     if len(vals) >= 3:
@@ -56,6 +80,8 @@ def _signature(UI, cap):
     tampered = st.button(UI["tech_sig_btn"], key="tech_tamper")
     target = {**copy.deepcopy(cap), "day": cap["day"] + 1} if tampered else cap
     ok, why = verify_capsule(target, env, None)
+    st.metric(UI["tech_sig_metric"], env["payload_sha256"][:8], UI["tech_sig_valid"] if ok else UI["tech_sig_broken"],
+              delta_color="normal" if ok else "inverse")
     st.write(UI["tech_sig_ok"] if ok else UI["tech_sig_bad"].format(r=why))
 
 
@@ -64,6 +90,7 @@ def _sync(UI):
     out = (6, 14)
     rec = simulate_link(a, b, 2, out, 24, 7)
     first = next((r["step"] for r in rec if r["step"] >= out[1] and r["converged"]), None)
+    st.html(_DOTS + _strip(24, {first: ("#4CD6A0", UI["tech_sync_mark"])} if first else {}, off=out))
     st.write(UI["tech_sync_text"].format(a=out[0], b=out[1]))
     st.write(UI["tech_sync_ok"].format(s=first) if first is not None else UI["tech_sync_ko"])
 
@@ -71,8 +98,14 @@ def _sync(UI):
 def _hrv(UI):
     stress = st.slider(UI["tech_hrv_stress"], 0.0, 1.0, 0.0, 0.1, key="tech_stress")
     rr, dropped = clean_rr(simulated_rr(120, 62.0, 5, stress))
-    st.write(UI["tech_hrv_rmssd"].format(v=f"{rmssd(rr):.0f}"))
-    st.write(UI["tech_hrv_sdnn"].format(v=f"{sdnn(rr):.0f}"))
+    c1, c2 = st.columns(2)
+    c1.metric(UI["tech_hrv_rmssd_lab"], f"{rmssd(rr):.0f} ms")
+    c2.metric(UI["tech_hrv_sdnn_lab"], f"{sdnn(rr):.0f} ms")
+    import altair as alt
+    import pandas as pd
+    beats = pd.DataFrame({"beat": range(1, 61), "ms": rr[:60]})
+    st.altair_chart(alt.Chart(beats).mark_line(color="#E9A27A", strokeWidth=2.5).encode(   # zero is off the axis: the variation is the signal
+        x=alt.X("beat:Q", title=None), y=alt.Y("ms:Q", title=None, scale=alt.Scale(zero=False))).properties(height=150), use_container_width=True)
     st.caption(UI["tech_hrv_dropped"].format(n=dropped))
     st.caption(UI["tech_hrv_note"])
 

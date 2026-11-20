@@ -475,7 +475,74 @@
         "replay_hidden": "Hours above the limit hidden by a daily average",
         "replay_episodes": "Alert episodes (one per run, not one per hour)",
         "replay_7d": "Days with 7-day average above 2.5 mmHg",
-        "replay_note": "Cabin sensor, not the air a person breathes. Crew symptoms are not public, so no health effect is claimed. Source: NASA OSDR Environmental Data App; NASA OCHMO-TB-004."
+        "replay_note": "Cabin sensor, not the air a person breathes. Crew symptoms are not public, so no health effect is claimed. Source: NASA OSDR Environmental Data App; NASA OCHMO-TB-004.",
+        "trend_read": "**Reading:** on day {day}, {name} is {v:.1f} {unit}, {d:+.1f} {unit} from her personal normal ({base:.1f}). The rule starts counting at {thr:.1f}.",
+        "tech_cp_mark_fixed": "fixed threshold crossed",
+        "tech_cp_mark_cusum": "drift alarm",
+        "tech_sig_metric": "Capsule fingerprint",
+        "tech_sig_valid": "signature valid",
+        "tech_sig_broken": "signature broken",
+        "tech_sync_mark": "copies agree again",
+        "tech_hrv_rmssd_lab": "RMSSD (beat-to-beat variation)",
+        "tech_hrv_sdnn_lab": "SDNN (overall variation)",
+        "beat1_dialogue": [
+            [
+                "Pip",
+                "Morning, Kora. Sleep and reaction time match your normal."
+            ],
+            [
+                "Kora",
+                "Good. Busy day ahead."
+            ]
+        ],
+        "beat2_dialogue": [
+            [
+                "Pip",
+                "Two short nights, slower reactions. I'm watching, not deciding."
+            ],
+            [
+                "Kora",
+                "I feel fine."
+            ]
+        ],
+        "beat3_dialogue": [
+            [
+                "Kora",
+                "There's pressure in my chest."
+            ],
+            [
+                "Pip",
+                "I'll walk you through the procedure, step by step."
+            ]
+        ],
+        "beat4_dialogue": [
+            [
+                "Pip",
+                "Commander, Earth hears this in five hours. Here's the summary."
+            ],
+            [
+                "Commander",
+                "Copy. We decide with what we have."
+            ]
+        ],
+        "beat5_dialogue": [
+            [
+                "Kora",
+                "I'm ready to get back to work."
+            ],
+            [
+                "Pip",
+                "The resume check says not yet. The commander decides."
+            ]
+        ],
+        "beat6_dialogue": [
+            [
+                "Pip",
+                "I'm not a doctor. I make drift visible; people decide."
+            ]
+        ],
+        "speaker_crew": "Kora (simulated astronaut)",
+        "speaker_cmd": "Commander"
     },
     "indicator_names": {
         "PH01": "heart-rate",

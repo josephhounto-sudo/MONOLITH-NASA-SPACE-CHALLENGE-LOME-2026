@@ -15,9 +15,11 @@ PH = re.compile(r"\{[^{}]+\}")
 SAME_IN_BOTH = {
     "C-Sync",
     "Pip",
-    "Mission",  # name of the guide bot (20/11/2026)
+    "Mission",
+    "Commander",  # speaker id in the demo dialogue (shown as speaker_cmd)  # name of the guide bot (20/11/2026)
     "Normal",
     "Mission",
+    "Commander",  # speaker id in the demo dialogue (shown as speaker_cmd)
     "Source",
     "Sources",
     "Stress",

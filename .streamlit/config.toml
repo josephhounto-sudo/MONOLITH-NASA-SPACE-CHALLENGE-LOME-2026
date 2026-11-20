@@ -1,10 +1,10 @@
-# Dark navy base for the "fusion" look (glass on navy, cream actions). Values mirror csync/config/theme.json -> navy.
+# V3 (20/11/2026): smoky glass of the "Bookings Per Day" reference (csync/ui/bookings.py). Charts and widgets sit on dark smoke.
 [theme]
 base = "dark"
-primaryColor = "#F4EDE0"
-backgroundColor = "#14213D"
-secondaryBackgroundColor = "#0B1426"
-textColor = "#F4EDE0"
+primaryColor = "#D79A76"
+backgroundColor = "#2A221D"
+secondaryBackgroundColor = "#3A302A"
+textColor = "#FFFDFD"
 font = "sans serif"
 
 [browser]

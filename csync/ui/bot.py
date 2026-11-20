@@ -67,3 +67,18 @@ def tutorial(ui: dict) -> None:
     if not last and c2.button(ui["bot_skip"], key="cs-bot-skip"):
         st.session_state["cs-bot-done"] = True
         st.rerun()
+
+
+def dialogue(ui: dict, lines: list) -> str:
+    """Demo dialogue of one story beat: Pip speaks in its bubble, the astronaut and the commander in plain cards.
+    Every line is at most 12 words (one breath, story-writer rule); the test enforces it."""
+    assert lines and all(len(t.split()) <= 12 for _, t in lines)
+    who = {"Pip": None, "Kora": ui["speaker_crew"], "Commander": ui["speaker_cmd"]}
+    out = [BOT_CSS]
+    for speaker, text in lines:
+        if who.get(speaker) is None:
+            out.append(bubble(ui, text))
+        else:
+            out.append(f"<div class='cs-bot'><div style='width:72px;flex:none'></div><div class='cs-say-h'><b>{html.escape(who[speaker])}</b>"
+                       f"<p>{html.escape(text)}</p></div></div>")
+    return "".join(out) + "<style>.cs-say-h{border-radius:28px;padding:10px 18px;background:rgba(34,27,23,.9);border:1px solid rgba(255,253,253,.22)}.cs-say-h p{margin:.2em 0 0}</style>"

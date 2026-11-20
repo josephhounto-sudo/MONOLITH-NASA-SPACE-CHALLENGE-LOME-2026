@@ -65,7 +65,7 @@ html,body,[data-testid="stApp"]{{background:
 .stButton>button[kind="primary"],.cs-action{{background:radial-gradient(circle at 50% 40%,#FFFBF5,#FFF2DA 60%,#F3D9B8)!important;color:{SMOKE_DARK}!important;
  border-radius:999px!important;box-shadow:0 0 0 6px rgba(255,242,218,.18),0 0 40px rgba(255,214,170,.55)!important}}
 .stButton>button{{border-radius:999px!important}}
-[data-testid="stMetricValue"],.cs-num,.cs-live .v,.cs-clock .t{{font-family:Doto,monospace!important;font-weight:700!important;letter-spacing:.02em}}
+[data-testid="stMetricValue"],[data-testid="stMetricValue"] *,.cs-num,.cs-live .v,.cs-clock .t{{font-family:Doto,monospace!important;font-weight:700!important;letter-spacing:.02em}}
 /* sidebar: light glass, dark ink, one Lucide icon per section, the chosen one is the white pill of the reference */
 [data-testid="stSidebar"]{{background:rgba(245,240,237,.78)!important;border-right:1px solid rgba(46,38,33,.14)!important;
  -webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}}
@@ -79,6 +79,16 @@ html,body,[data-testid="stApp"]{{background:
 [data-testid="stSidebar"] [data-testid="stRadioOption"]:hover{{background:rgba(255,253,253,.6)}}
 [data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{{background:rgba(34,27,23,.92)!important;border:1px solid rgba(255,253,253,.22)!important;border-radius:28px!important}}
 .cs-hooktl .bar{{background:rgba(255,253,253,.14)!important}}.cs-hooktl .out{{background:{CURVE}!important}}
+.st-key-cs-body3d{{perspective:1100px;padding:18px 6px 26px;position:relative}}
+.st-key-cs-body3d::after{{content:"";position:absolute;left:18%;right:18%;bottom:4px;height:26px;border-radius:50%;
+ background:radial-gradient(closest-side,rgba(215,154,118,.55),transparent);filter:blur(4px)}}
+.st-key-cs-body3d img{{transform:rotateY(-16deg) rotateX(5deg);transform-origin:50% 60%;transition:transform .5s ease;
+ filter:drop-shadow(10px 18px 0 rgba(0,0,0,.28)) drop-shadow(0 0 22px rgba(215,154,118,.35))}}
+.st-key-cs-body3d:hover img{{transform:rotateY(0) rotateX(0)}}
+@media (prefers-reduced-motion:reduce){{.st-key-cs-body3d img{{transition:none}}}}
+[data-testid="stPills"] button,[data-testid="stButtonGroup"] button{{background:rgba(255,253,253,.08)!important;border:1px solid rgba(255,253,253,.22)!important;color:{INK}!important;border-radius:999px!important}}
+[data-testid="stPills"] button[aria-checked="true"],[data-testid="stButtonGroup"] button[kind$="Active"]{{background:{INK}!important;color:{SMOKE_DARK}!important}}
+[data-testid="stPills"] button[aria-checked="true"] *,[data-testid="stButtonGroup"] button[kind$="Active"] *{{color:{SMOKE_DARK}!important}}
 .cs-card.ctx{{background:rgba(34,27,23,.86)!important;border:1.5px dashed rgba(255,253,253,.38)!important}}
 """
 

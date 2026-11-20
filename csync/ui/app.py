@@ -26,7 +26,7 @@ from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
 from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
 from csync.physio import hrv  # noqa: E402
-from csync.ui import bookings, icons, live, style, tech_page, widgets  # noqa: E402
+from csync.ui import bookings, bot, icons, live, style, tech_page, widgets  # noqa: E402
 from csync.ui.why import short_verdict, why_parts  # noqa: E402
 from csync.jsonio import read_json  # noqa: E402
 
@@ -127,6 +127,7 @@ def story_bar():
     with st.container(border=True, key="cs-beats"):
         st.caption(UI["story_step"].format(n=i + 1, total=len(BEATS)))   # plain text: the triangle glyph is reserved for the Degraded state
         st.markdown(f"**{UI[key + '_title']}** — {UI[key + '_line']}")
+        st.html(bot.dialogue(UI, UI[key + "_dialogue"]))   # the demo-video dialogue: astronaut, Pip, and briefly the commander
         b, _, n = st.columns([1, 3, 1])
         b.button(UI["story_back"], key="beat-prev", disabled=i == 0, on_click=_go_beat, args=(i - 1,))
         n.button(UI["story_next"], key="beat-next", type="primary", disabled=i == len(BEATS) - 1, on_click=_go_beat, args=(i + 1,))
@@ -363,6 +364,10 @@ def trends_panel(day):
         return
     t = data[ind]
     rows = [r for r in t["days"] if r["day"] <= day]
+    if rows:   # what the chart shows, in one computed sentence (V3: a chart is read, not only drawn)
+        last = rows[-1]
+        st.markdown(UI["trend_read"].format(day=last["day"], name=names[ind], v=last["value"], unit=t["unit"],
+                                            d=last["value"] - t["baseline_mean"], base=t["baseline_mean"], thr=t["threshold"]))
     st.markdown(trend_svg(rows, t["baseline_mean"], t["threshold"], f"{names[ind]} ({t['unit']})"),
                 unsafe_allow_html=False)
     flagged = [str(r["day"]) for r in rows if r["flagged"]]
@@ -586,7 +591,8 @@ def body_map(symptom_zone=None, day=None):
     choice = st.pills(UI["body_map_select"], list(labels), format_func=labels.get, selection_mode="single",
                       default=preset, key=f"body_zone_{day}")
     left, right = st.columns([2, 3])
-    left.markdown(silhouette.markdown_image(choice, UI["body_map_alt"].format(zone=labels[choice] if choice else "none")))
+    with left.container(key="cs-body3d"):   # 2.5D: CSS perspective and layered light, no 3D engine (V3, mode "simple first")
+        st.markdown(silhouette.markdown_image(choice, UI["body_map_alt"].format(zone=labels[choice] if choice else "none")))
     if not choice:
         return
     r = sheets[choice]

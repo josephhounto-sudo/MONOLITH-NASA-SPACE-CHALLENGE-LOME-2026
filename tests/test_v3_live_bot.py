@@ -117,3 +117,12 @@ def test_bookings_css_keeps_text_on_dark_glass():
     css = bookings.css()
     assert "stMainBlockContainer" in css and bookings.CREAM in css
     assert "rgba(46,38,33,.93)" in css   # the panel under the text stays dark (luminance <= 0.07)
+
+
+@pytest.mark.parametrize("ui", [UI_EN, UI_FR])
+def test_demo_dialogue_lines_fit_one_breath_and_name_known_speakers(ui):
+    for n in range(1, 7):
+        lines = ui[f"beat{n}_dialogue"]
+        assert lines and all(sp in ("Pip", "Kora", "Commander") for sp, _ in lines)
+        html = bot.dialogue(ui, lines)
+        assert "<svg" not in html and html.count("cs-bot'") >= len(lines)

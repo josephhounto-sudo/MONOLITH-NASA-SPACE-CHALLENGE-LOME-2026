@@ -475,7 +475,74 @@
         "replay_hidden": "Heures au-dessus de la limite cachées par une moyenne journalière",
         "replay_episodes": "Épisodes d'alerte (un par suite, pas un par heure)",
         "replay_7d": "Jours avec moyenne 7 jours au-dessus de 2,5 mmHg",
-        "replay_note": "Capteur de cabine, pas l'air respiré. Les symptômes des équipages ne sont pas publics : aucun effet sur la santé n'est revendiqué. Source : NASA OSDR Environmental Data App ; NASA OCHMO-TB-004."
+        "replay_note": "Capteur de cabine, pas l'air respiré. Les symptômes des équipages ne sont pas publics : aucun effet sur la santé n'est revendiqué. Source : NASA OSDR Environmental Data App ; NASA OCHMO-TB-004.",
+        "trend_read": "**Lecture :** au jour {day}, {name} vaut {v:.1f} {unit}, soit {d:+.1f} {unit} par rapport à sa normale personnelle ({base:.1f}). La règle commence à compter à {thr:.1f}.",
+        "tech_cp_mark_fixed": "seuil fixe franchi",
+        "tech_cp_mark_cusum": "alarme de dérive",
+        "tech_sig_metric": "Empreinte de la capsule",
+        "tech_sig_valid": "signature valide",
+        "tech_sig_broken": "signature cassée",
+        "tech_sync_mark": "les copies concordent",
+        "tech_hrv_rmssd_lab": "RMSSD (variation d'un battement à l'autre)",
+        "tech_hrv_sdnn_lab": "SDNN (variation globale)",
+        "beat1_dialogue": [
+            [
+                "Pip",
+                "Bonjour Kora. Sommeil et réflexes conformes à ta normale."
+            ],
+            [
+                "Kora",
+                "Parfait. Grosse journée."
+            ]
+        ],
+        "beat2_dialogue": [
+            [
+                "Pip",
+                "Deux nuits courtes, réflexes plus lents. Je surveille, je ne décide pas."
+            ],
+            [
+                "Kora",
+                "Je me sens bien."
+            ]
+        ],
+        "beat3_dialogue": [
+            [
+                "Kora",
+                "J'ai une pression dans la poitrine."
+            ],
+            [
+                "Pip",
+                "Je te guide dans la procédure, étape par étape."
+            ]
+        ],
+        "beat4_dialogue": [
+            [
+                "Pip",
+                "Commandant, la Terre l'apprendra dans cinq heures. Voici le résumé."
+            ],
+            [
+                "Commander",
+                "Reçu. On décide avec ce qu'on a."
+            ]
+        ],
+        "beat5_dialogue": [
+            [
+                "Kora",
+                "Je suis prête à reprendre le travail."
+            ],
+            [
+                "Pip",
+                "Le contrôle de reprise dit pas encore. Le commandant décide."
+            ]
+        ],
+        "beat6_dialogue": [
+            [
+                "Pip",
+                "Je ne suis pas médecin. Je montre la dérive, vous décidez."
+            ]
+        ],
+        "speaker_crew": "Kora (astronaute simulée)",
+        "speaker_cmd": "Commandant"
     },
     "indicator_names": {
         "PH01": "fréquence cardiaque",
