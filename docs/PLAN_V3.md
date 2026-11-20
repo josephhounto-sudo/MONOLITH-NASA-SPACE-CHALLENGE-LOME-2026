@@ -158,3 +158,17 @@ Les huit autres risques (os, muscles, vision, immunité, microbes, nutrition, so
 - Carte héros « CO2 par jour » de la référence : courbe lumineuse, pastilles de jours alignées sur les points, jour choisi en blanc, flèches de semaine, chiffre en Doto ; données réelles RR-1 (jours sans 12 h valides = manquants, jamais 0). Vérifié : capture 1400 px, URL publique.
 - Pilules en direct : icône Lucide en haut à droite et pastille d'écart à la limite (« ↓ 0,56 sous la limite »). Vérifié : URL publique.
 - Défaut trouvé et corrigé : sur l'app hébergée, une barre latérale repliée et mémorisée par le navigateur revenait sans bouton pour la rouvrir. Sur ordinateur, la barre ne se replie plus ; sur téléphone, le bouton existe (vérifié à 375 px).
+
+## 13. Rétrospective de la session (format « lessons learned » NASA : constat → cause → action), 20/11/2026 07:20 UTC
+| # | Constat | Cause racine | Action (faite ou à faire) |
+|---|---|---|---|
+| 1 | J'ai déclaré « tout est codé » alors que 7 demandes de Joseph manquaient (bot, temps réel, clignement, 3D, verre, police, techno visible) | Je vérifiais ma propre liste, pas la liste de Joseph | Faite : chaque session part du tableau des demandes (§4, §11) ; une demande non faite est écrite « non fait » |
+| 2 | Seuil 7 jours pris dans un résumé de presse (2,0) au lieu de la fiche NASA (2,5) | Matière digérée au lieu de la source | Faite : rejeu recalculé, écart déclaré ; règle inscrite dans maestro (source NASA la plus officielle) |
+| 3 | « Radiation inutilisée » affirmé à tort | Inventaire fait sur les fichiers, pas sur l'écran | Faite : corrigé ; un inventaire se fait sur le rendu |
+| 4 | Fraîcheur du direct mal jugée (valeur stable prise pour périmée) | Hypothèse sur le flux non testée (il n'envoie que les changements) | Faite : fraîcheur jugée sur l'horloge de la station, test node |
+| 5 | Barre latérale repliée sans bouton de retour sur l'app hébergée | L'app locale ne reproduisait pas l'hébergement | Faite : barre fixe sur ordinateur ; contrôle à froid de l'URL publique à chaque déploiement |
+| 6 | Curseur de jour et frise Mars au-dessus de données réelles de 2014 | Règle « un écran, un seul moment » appliquée à l'accroche seulement | Faite : frise et curseur seulement dans Histoire, Commandant, Tendances, Technologies |
+| 7 | « Unknown » et cases vides partout | Vocabulaire du code exposé au visiteur | Faite : chaque trou dit pourquoi (apprentissage, capteur, dernière valeur horodatée) ; test sur toutes les sections |
+| 8 | Aucun inconnu n'a testé l'app | Le travail fermé a toujours priorité sur le retour extérieur | À faire (Joseph) : 5 à 7 inconnus, 60 s, trois questions |
+
+Ce qui a marché : pré-enregistrer le rejeu avant de calculer ; tester le pari le plus risqué en premier (flux ISS) ; déployer tôt et vérifier sur l'URL publique.

@@ -37,9 +37,9 @@ def console_html(ui: dict) -> str:
     for key, label, unit, ctx in CARDS:
         ico = bookings.lucide(ICONS[key]).replace("<svg", "<svg class='ico' aria-hidden='true'", 1)
         delta = f"<span class='dl' id='d-{key}'></span>" if ctx else ""
-        cards.append(f"<div class='pill' id='c-{key}' data-state='Unknown'><div class='top'><span class='lab'>{e(label)}</span>{ico}</div>"
+        cards.append(f"<div class='pill' id='c-{key}' data-state='Connecting'><div class='top'><span class='lab'>{e(label)}</span>{ico}</div>"
                      f"<div class='num'><span class='v' id='v-{key}'>--</span><small>{html.escape(unit)}</small>{delta}</div>"
-                     f"<div class='meta'><span class='st' id='s-{key}'>Unknown</span> <span class='why' id='w-{key}'>no live reading</span></div>"
+                     f"<div class='meta'><span class='st' id='s-{key}'>Connecting</span> <span class='why' id='w-{key}'>waiting for the first reading from the station</span></div>"
                      + (f"<div class='ctx' id='ctx-{key}'></div>" if ctx else "") + "</div>")
     return f"""<!doctype html><html><head><meta charset='utf-8'><style>
 @font-face{{font-family:Doto;font-weight:700;src:url(data:font/woff2;base64,{style._font('Doto-700.woff2')}) format("woff2")}}
@@ -56,7 +56,7 @@ body{{margin:0;font:15px/1.45 system-ui,-apple-system,Segoe UI,sans-serif;color:
 .dl{{margin-left:auto;font-size:13px;font-weight:600;padding:3px 10px;border-radius:999px;border:1px solid rgba(255,253,253,.4);background:rgba(255,253,253,.06)}}
 .dl:empty{{display:none}} .meta{{display:flex;flex-wrap:wrap;gap:8px;align-items:center}}
 .st{{font-size:13px;font-weight:700;padding:2px 10px;border-radius:999px;border:1px solid rgba(255,253,253,.5)}}
-.pill[data-state=Live] .st{{border-color:#4CD6A0;color:#4CD6A0}} .pill[data-state=Check] .st{{border-color:#F2A33A;color:#F2A33A}}
+.pill[data-state=Live] .st{{border-color:#4CD6A0;color:#4CD6A0}} .pill[data-state=Check] .st,.pill[data-state='Last known'] .st{{border-color:#F2C14E;color:#F2C14E}}
 .num{{display:flex;align-items:baseline;gap:8px;margin:6px 0 2px}} .v{{font-size:46px;line-height:1}} .num small{{font-size:14px}}
 .why,.ctx,.note{{font-size:13.5px}} .ctx{{margin-top:2px}}
 .src{{margin:12px 2px 0;font-size:13.5px}} #feed,#unit{{font-size:13.5px}}

@@ -80,8 +80,8 @@ html,body,[data-testid="stApp"]{{background:
 [data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{{background:rgba(34,27,23,.92)!important;border:1px solid rgba(255,253,253,.22)!important;border-radius:28px!important}}
 .cs-hooktl .bar{{background:rgba(255,253,253,.14)!important}}.cs-hooktl .out{{background:{CURVE}!important}}
 [data-testid="stPills"] button,[data-testid="stButtonGroup"] button{{background:rgba(255,253,253,.08)!important;border:1px solid rgba(255,253,253,.22)!important;color:{INK}!important;border-radius:999px!important}}
-[data-testid="stPills"] button[aria-checked="true"],[data-testid="stButtonGroup"] button[kind$="Active"]{{background:{INK}!important;color:{SMOKE_DARK}!important}}
-[data-testid="stPills"] button[aria-checked="true"] *,[data-testid="stButtonGroup"] button[kind$="Active"] *{{color:{SMOKE_DARK}!important}}
+[data-testid="stButtonGroup"] button[aria-checked="true"],[data-testid="stButtonGroup"] button[kind$="Active"]{{background:{INK}!important;color:{SMOKE_DARK}!important}}
+[data-testid="stButtonGroup"] button[aria-checked="true"] *,[data-testid="stButtonGroup"] button[kind$="Active"] *{{color:{SMOKE_DARK}!important}}
 .st-key-cs-weekcard{{border-radius:44px;padding:22px 24px 14px;margin:6px 0 18px;
  background:radial-gradient(70% 60% at 60% 35%,rgba(215,154,118,.30),transparent 70%),linear-gradient(180deg,rgba(124,115,110,.55),rgba(46,38,33,.92) 55%)!important;
  border:1px solid rgba(255,253,253,.22);box-shadow:inset 1px 1px 0 rgba(255,253,253,.20),0 30px 70px rgba(0,0,0,.35)}}

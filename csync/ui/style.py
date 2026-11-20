@@ -686,7 +686,8 @@ def mission_strip(ui, states_by_day, events, day, link, delay_min, n_days=10):
             labels.append(f"<span class='dn fut' style='left:{x:.2f}%;top:{y + 14:.1f}px'>{d}</span>")
             continue
         s = worst(states_by_day.get(d, {}))
-        lab = ui["node_label"].format(d=d, state=s.title())
+        word = s.title() if s != "UNKNOWN" else ("learning the personal normal" if d <= 5 else "no reading yet")   # never a bare "Unknown"
+        lab = ui["node_label"].format(d=d, state=word)
         if d == day:
             nodes.append(f"<span class='halo' style='left:{x:.2f}%;top:{y:.1f}px'></span>")
         if d in events:

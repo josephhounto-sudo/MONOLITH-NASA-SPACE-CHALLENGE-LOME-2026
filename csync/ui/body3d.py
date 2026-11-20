@@ -21,7 +21,9 @@ def viewer_html(selected: str | None, caption: str, hint: str) -> str:
         assert selected in status, selected
     with open(os.path.join(ASSETS, "body3d.js"), encoding="utf-8") as fh:
         js = fh.read()
-    cfg = {"three": THREE, "status": status, "selected": selected, "fallback": silhouette.svg(selected)}
+    labels = {rid: silhouette.label(rid) for rid in status}
+    cfg = {"three": THREE, "status": status, "selected": selected, "fallback": silhouette.svg(selected),
+           "labels": labels, "words": silhouette.STATUS_WORD}
     return f"""<!doctype html><html><head><meta charset='utf-8'><style>
 html,body{{margin:0;height:100%;background:transparent;font:14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;color:#FFFDFD}}
 #wrap{{position:relative;height:{HEIGHT - 8}px;border-radius:36px;overflow:hidden;
@@ -31,5 +33,6 @@ html,body{{margin:0;height:100%;background:transparent;font:14px/1.4 system-ui,-
 #cap{{position:absolute;left:18px;right:18px;bottom:12px;display:flex;flex-direction:column;gap:2px;font-size:13.5px}}
 #cap b{{font-weight:600}}
 </style></head><body><div id='wrap' role='img' aria-label='{html.escape(caption)}'><div id='stage'></div>
-<div id='cap'><b>{html.escape(caption)}</b><span>{html.escape(hint)}</span></div></div>
+<div id='tip' style='position:absolute;pointer-events:none;opacity:0;transition:opacity .15s;padding:6px 12px;border-radius:999px;
+ background:#FFFDFD;color:#2E2621;font-size:13px;font-weight:600;white-space:nowrap;box-shadow:0 8px 20px rgba(0,0,0,.3)'></div><div id='cap'><b>{html.escape(caption)}</b><span>{html.escape(hint)}</span></div></div>
 <script>window.CS_BODY={json.dumps(cfg)};</script><script>{js}</script></body></html>"""

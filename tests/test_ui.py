@@ -60,7 +60,7 @@ def test_mission_is_context_only_and_never_normal():
     assert re.search(r">Mission</div><div[^>]*>"+ICO+r" Context only", h)
 
 
-@pytest.mark.parametrize("day,word", [(1, "Unknown"), (3, "Normal"), (9, "Watch")])
+@pytest.mark.parametrize("day,word", [(1, "Sensor data unusable"), (3, "Normal"), (9, "Watch")])
 def test_habitat_card_shows_the_computed_state_not_the_personal_baseline_message(day, word):
     h = html(page(day))
     assert re.search(rf">Habitat</div><div[^>]*>"+ICO+rf"[^<]*{word}<", h), (day, word)

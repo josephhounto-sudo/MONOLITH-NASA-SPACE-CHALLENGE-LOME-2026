@@ -17,19 +17,32 @@ function zoneLook(status, selected) {
   return selected ? { color: base.color, opacity: Math.max(base.opacity, 0.85), emissive: SELECTED_GLOW } : { ...base };
 }
 
-// region id -> parts: [kind, x, y, z, radius, length, rotZ]
+// region id -> parts: [kind, x, y, z, a, b, rotZ, sx, sy, sz]. kinds: sphere (a = radius), capsule (a = radius, b = length),
+// torso / pelvis (lathe profiles). Proportions follow a plain 7.5-head figure; it is a neutral shape, not a person.
 const PARTS = {
-  "region-head": [["sphere", 0, 2.62, 0, 0.30]],
-  "region-chest": [["capsule", 0, 1.86, 0, 0.40, 0.42, 0], ["sphere", -0.47, 2.17, 0, 0.15], ["sphere", 0.47, 2.17, 0, 0.15]],
-  "region-abdomen": [["capsule", 0, 1.28, 0, 0.35, 0.26, 0]],
-  "region-arm": [["capsule", -0.56, 1.72, 0, 0.12, 0.70, 0.12], ["capsule", 0.56, 1.72, 0, 0.12, 0.70, -0.12]],
-  "region-hand": [["sphere", -0.63, 1.13, 0, 0.12], ["sphere", 0.63, 1.13, 0, 0.12]],
-  "region-legs": [["capsule", -0.19, 0.50, 0, 0.15, 0.80, 0.02], ["capsule", 0.19, 0.50, 0, 0.15, 0.80, -0.02]],
+  "region-head": [["sphere", 0, 2.62, 0, 0.26, 0, 0, 0.92, 1.08, 1.0]],
+  "region-chest": [["torso", 0, 1.58, 0], ["sphere", -0.46, 2.12, 0, 0.13], ["sphere", 0.46, 2.12, 0, 0.13]],
+  "region-abdomen": [["pelvis", 0, 1.02, 0]],
+  "region-arm": [["capsule", -0.53, 1.82, 0, 0.095, 0.42, 0.10], ["capsule", 0.53, 1.82, 0, 0.095, 0.42, -0.10],
+                 ["capsule", -0.60, 1.30, 0.04, 0.08, 0.40, 0.04], ["capsule", 0.60, 1.30, 0.04, 0.08, 0.40, -0.04],
+                 ["sphere", -0.575, 1.56, 0.02, 0.092], ["sphere", 0.575, 1.56, 0.02, 0.092]],
+  "region-hand": [["sphere", -0.62, 0.96, 0.06, 0.085, 0, 0, 0.8, 1.35, 0.55], ["sphere", 0.62, 0.96, 0.06, 0.085, 0, 0, 0.8, 1.35, 0.55]],
+  "region-legs": [["capsule", -0.17, 0.66, 0, 0.13, 0.48, 0.02], ["capsule", 0.17, 0.66, 0, 0.13, 0.48, -0.02],
+                  ["capsule", -0.18, 0.18, 0, 0.10, 0.42, 0], ["capsule", 0.18, 0.18, 0, 0.10, 0.42, 0],
+                  ["sphere", -0.175, 0.41, 0.01, 0.112], ["sphere", 0.175, 0.41, 0.01, 0.112],
+                  ["sphere", -0.18, -0.12, 0.08, 0.10, 0, 0, 0.9, 0.5, 1.7], ["sphere", 0.18, -0.12, 0.08, 0.10, 0, 0, 0.9, 0.5, 1.7]],
 };
+// lathe profiles [radius, height] from bottom to top
+const PROFILES = {
+  torso: [[0.001, 0], [0.30, 0.02], [0.29, 0.18], [0.31, 0.34], [0.38, 0.50], [0.42, 0.62], [0.40, 0.70], [0.20, 0.76], [0.001, 0.77]],
+  pelvis: [[0.001, 0], [0.28, 0.02], [0.33, 0.14], [0.32, 0.30], [0.29, 0.40], [0.001, 0.42]],
+};
+const FOCUS = { "region-head": 2.55, "region-chest": 1.9, "region-abdomen": 1.2, "region-arm": 1.6, "region-hand": 1.0,
+                "region-legs": 0.45, "region-body": 1.35, "region-habitat": 0.6 };
 
 function partsFor(region) { return PARTS[region] || []; }
 
-if (typeof module !== "undefined") module.exports = { zoneLook, partsFor, PARTS, LOOK, SELECTED_GLOW };
+if (typeof module !== "undefined") module.exports = { zoneLook, partsFor, PARTS, PROFILES, FOCUS, LOOK, SELECTED_GLOW };
 
 if (typeof document !== "undefined" && window.CS_BODY) {
   (async () => {
@@ -58,18 +71,31 @@ if (typeof document !== "undefined" && window.CS_BODY) {
     const rim = new THREE.DirectionalLight(0xFF9A5C, 2.4); rim.position.set(-3, 2, -3); scene.add(rim);
 
     const body = new THREE.Group();
+    body.position.y = 0.14;
     scene.add(body);
-    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.11, 0.13, 0.22, 24),
-      new THREE.MeshPhysicalMaterial({ color: 0x9C8373, roughness: 0.5 }));
-    neck.position.set(0, 2.28, 0); body.add(neck);
+    const pickable = [];
+    const neck = new THREE.Mesh(new THREE.CylinderGeometry(0.09, 0.11, 0.2, 24),
+      new THREE.MeshPhysicalMaterial({ color: 0xC9B4A2, roughness: 0.45 }));
+    neck.position.set(0, 2.36, 0); body.add(neck);
+    // soft contact shadow drawn on a canvas (no texture file)
+    const sc = document.createElement("canvas"); sc.width = sc.height = 128;
+    const g2 = sc.getContext("2d"); const gr = g2.createRadialGradient(64, 64, 4, 64, 64, 62);
+    gr.addColorStop(0, "rgba(0,0,0,.55)"); gr.addColorStop(1, "rgba(0,0,0,0)"); g2.fillStyle = gr; g2.fillRect(0, 0, 128, 128);
+    const shadow = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 1.0), new THREE.MeshBasicMaterial({ map: new THREE.CanvasTexture(sc), transparent: true, depthWrite: false }));
+    shadow.rotation.x = -Math.PI / 2; shadow.position.y = 0.012; scene.add(shadow);
     for (const [region, status] of Object.entries(cfg.status)) {
       const look = zoneLook(status, region === cfg.selected);
-      for (const [kind, x, y, z, r, len, rot] of partsFor(region)) {
-        const geo = kind === "sphere" ? new THREE.SphereGeometry(r, 40, 28) : new THREE.CapsuleGeometry(r, len, 10, 28);
+      for (const [kind, x, y, z, r, len, rot, sx, sy, sz] of partsFor(region)) {
+        const geo = kind === "sphere" ? new THREE.SphereGeometry(r, 40, 28)
+          : kind === "capsule" ? new THREE.CapsuleGeometry(r, len, 10, 28)
+          : new THREE.LatheGeometry(PROFILES[kind].map(([px, py]) => new THREE.Vector2(px, py)), 48);
         const mat = new THREE.MeshPhysicalMaterial({ color: look.color, roughness: 0.32, clearcoat: 0.8, clearcoatRoughness: 0.25,
           transparent: look.opacity < 1, opacity: look.opacity, emissive: look.emissive, emissiveIntensity: look.emissive ? 0.9 : 0 });
         const m = new THREE.Mesh(geo, mat);
         m.position.set(x, y, z); m.rotation.z = rot || 0;
+        if (sx) m.scale.set(sx, sy, sz);
+        m.userData.region = region;
+        pickable.push(m);
         body.add(m);
       }
     }
@@ -88,9 +114,27 @@ if (typeof document !== "undefined" && window.CS_BODY) {
     renderer.domElement.addEventListener("pointerdown", (e) => { drag = e.clientX; spin = false; });
     window.addEventListener("pointerup", () => { drag = null; });
     window.addEventListener("pointermove", (e) => { if (drag !== null) { angle += (e.clientX - drag) * 0.01; drag = e.clientX; } });
+    const tip = document.getElementById("tip");
+    const ray = new THREE.Raycaster(), ptr = new THREE.Vector2();
+    renderer.domElement.addEventListener("pointermove", (e) => {
+      const r = renderer.domElement.getBoundingClientRect();
+      ptr.set(((e.clientX - r.left) / r.width) * 2 - 1, -((e.clientY - r.top) / r.height) * 2 + 1);
+      ray.setFromCamera(ptr, cam);
+      const hit = ray.intersectObjects(pickable)[0];
+      if (hit && tip) {
+        const rid = hit.object.userData.region;
+        tip.textContent = (cfg.labels[rid] || rid) + " — " + (cfg.words[cfg.status[rid]] || "");
+        tip.style.left = (e.clientX - r.left + 14) + "px"; tip.style.top = (e.clientY - r.top + 10) + "px"; tip.style.opacity = 1;
+      } else if (tip) { tip.style.opacity = 0; }
+    });
+    const focusY = FOCUS[cfg.selected] ?? 1.45;
+    let lookY = 1.45, camY = 1.6, dist = 7.2;
+    const near = cfg.selected && cfg.selected !== "region-body" && cfg.selected !== "region-habitat";
     (function loop() {
       if (spin) angle += 0.004;
       body.rotation.y = angle;
+      lookY += (focusY - lookY) * 0.06; camY += (focusY + 0.15 - camY) * 0.06; dist += ((near ? 5.6 : 7.2) - dist) * 0.06;
+      cam.position.set(0, camY, dist); cam.lookAt(0, lookY, 0);
       renderer.render(scene, cam);
       requestAnimationFrame(loop);
     })();

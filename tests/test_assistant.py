@@ -125,7 +125,7 @@ def test_cabin_air_line_follows_the_computed_habitat_state(all_capsules):
     d3 = " ".join(assistant.answer(caps[("histoire", "daily", 3)], "why", STR["en"]))
     assert "Cabin air is within NASA's 3 mmHg CO2 requirement" in d3
     d1 = " ".join(assistant.answer(caps[("histoire", "daily", 1)], "why", STR["en"]))
-    assert "Habitat shown as Unknown" in d1 and "within NASA" not in d1
+    assert "no cabin-air verdict" in d1 and "within NASA" not in d1
 
 
 def test_unknown_question_is_refused(all_capsules):

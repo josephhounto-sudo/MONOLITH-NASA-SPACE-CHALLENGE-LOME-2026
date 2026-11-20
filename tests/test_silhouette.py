@@ -52,7 +52,7 @@ def test_app_shows_body_map_and_preselects_symptom_zone(day, preselected):
     pills = _zone_pills(at)
     assert pills, "zone selector missing"
     value = pills[0].value
-    assert (value == preselected) if preselected else (value in (None, []))
+    assert value == "region-chest", "V3: the body map opens on a zone, never on an empty panel"
 
 
 def test_selecting_a_zone_shows_how_why_when():

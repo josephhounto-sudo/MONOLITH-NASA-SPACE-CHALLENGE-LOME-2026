@@ -26,7 +26,7 @@ SHAPES = {
     "region-habitat": ("Habitat", [("rect", 'x="20" y="568" width="360" height="56" rx="12"')]),
 }
 STATUS_STATE = {"measured": "NORMAL", "unknown": "UNKNOWN", "context": "UNKNOWN"}
-STATUS_WORD = {"measured": "Measured by C-Sync", "unknown": "Not measured — shown as Unknown",
+STATUS_WORD = {"measured": "Measured by C-Sync", "unknown": "Not monitored by C-Sync yet — no sensor on this zone",
                "context": "Context only — not evaluated"}
 # symptom zone words reported in capsules -> region id
 ZONE_TO_REGION = {"thorax": "region-chest", "chest": "region-chest", "head": "region-head", "abdomen": "region-abdomen",

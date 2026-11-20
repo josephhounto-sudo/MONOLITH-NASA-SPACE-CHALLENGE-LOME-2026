@@ -1,11 +1,12 @@
 /* C-Sync live console: public ISS telemetry (NASA ISSLive feed via push.lightstreamer.com, adapter "ISSLIVE"),
    world clocks (browser Intl), context only. Pure functions are exported for tests (node); the browser part runs only
-   when a document exists. Rules (docs/PLAN_V3.md): age of the reading always shown; frozen value flagged; no reading = Unknown. */
+   when a document exists. Rules (docs/PLAN_V3.md): age of the reading always shown; frozen value flagged; after a signal loss the last value stays
+   on screen with the time it was received (Joseph, 20/11: no empty box), never as a fresh value. */
 "use strict";
 
 const LIMIT_PPCO2_MMHG = 3.0;          // NASA-STD-3001 Vol 2 V2 6004 (1-hour average), compared to a single live reading: context only
 const PSI_TO_MMHG = 51.7149;
-const STALE_S = 30;                    // station clock silent for 30 s -> signal lost -> Unknown (design parameter, not NASA)
+const STALE_S = 30;                    // station clock silent for 30 s -> signal lost -> 'Last known' with its time (design parameter, not NASA)
 const FROZEN_MIN = 60;                 // same value for 60 min while the signal is up -> flagged (design parameter)
 // The feed sends a value only when it changes (MERGE mode), so a quiet CO2 is not a stale CO2. Freshness is judged from
 // the station clock item (TIME_000001), which ticks continuously while the ground has signal.
@@ -26,10 +27,12 @@ function toMmhg(v, mode) {
 
 // state of one live reading: words, never colour alone
 function readingState(value, clockAt, changedAt, now) {
-  if (value === null) return { word: "Unknown", why: "no live reading", show: false };
-  if (clockAt === null) return { word: "Unknown", why: "waiting for the station signal", show: false };
+  if (value === null || clockAt === null) return { word: "Connecting", why: "waiting for the first reading from the station", show: false };
   const silent = (now - clockAt) / 1000;
-  if (silent > STALE_S) return { word: "Unknown", why: "signal lost " + Math.max(1, Math.round(silent / 60)) + " min ago (normal on the station); last value hidden", show: false };
+  if (silent > STALE_S) {
+    const t = new Date(clockAt).toISOString().slice(11, 16);
+    return { word: "Last known", why: "received at " + t + " UTC; station signal lost " + Math.max(1, Math.round(silent / 60)) + " min ago (normal on the station)", show: true };
+  }
   const still = (now - changedAt) / 60000;
   if (still >= FROZEN_MIN) return { word: "Check", why: "same value for " + Math.round(still) + " min while the signal is up: sensor or feed may be frozen", show: true };
   return { word: "Live", why: still < 1 ? "changed less than a minute ago" : "stable for " + Math.round(still) + " min, signal up", show: true };
@@ -85,7 +88,7 @@ if (typeof document !== "undefined") {
       $("w-" + key).textContent = st.why;
       $("c-" + key).dataset.state = st.word;
     });
-    const up = recv.clock !== undefined && (now - recv.clock) / 1000 <= STALE_S;
+    const up = recv.clock !== undefined;   // context stays with the value, live or last known
     $("ctx-co2lab").textContent = up ? co2Context(toMmhg(raw.co2lab, mode)) : "";
     $("d-co2lab").textContent = up ? deltaText(toMmhg(raw.co2lab, mode)) : "";
     $("d-co2n3").textContent = up ? deltaText(toMmhg(raw.co2n3, mode)) : "";
@@ -94,7 +97,7 @@ if (typeof document !== "undefined") {
   }
 
   function start() {
-    if (typeof LightstreamerClient === "undefined") { $("feed").textContent = "Live feed unreachable from this browser: showing Unknown, never an old value."; return; }
+    if (typeof LightstreamerClient === "undefined") { $("feed").textContent = "Live feed unreachable from this browser (network or firewall). The values above stay empty rather than show an old reading."; return; }
     const client = new LightstreamerClient("https://push.lightstreamer.com", "ISSLIVE");
     const sub = new Subscription("MERGE", Object.values(ITEMS), ["Value"]);
     sub.setRequestedSnapshot("yes");

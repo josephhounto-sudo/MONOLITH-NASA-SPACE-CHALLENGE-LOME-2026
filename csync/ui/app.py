@@ -85,7 +85,7 @@ def card(dim, state, day, hist=""):
     if dim in CONTEXT_DIMENSIONS:
         label = UI["context_only"]
     elif dim == "Habitat":
-        label = strings["states"][state] if state in strings["states"] else strings["states"]["UNKNOWN"]   # not a personal-baseline state
+        label = UI["habitat_card_unknown"] if state not in ("NORMAL", "WATCH", "DEGRADED") else strings["states"][state]   # says why, never a bare "unknown"
     elif day <= 5:
         shown = "UNKNOWN"
         s = theme["state"]["UNKNOWN"]
@@ -589,7 +589,7 @@ def body_map(symptom_zone=None, day=None):
     if preset:
         st.markdown(UI["body_map_symptom"].format(day=day, zone=symptom_zone))
     choice = st.pills(UI["body_map_select"], list(labels), format_func=labels.get, selection_mode="single",
-                      default=preset, key=f"body_zone_{day}")
+                      default=preset or "region-chest", key=f"body_zone_{day}")   # never an empty panel on arrival
     left, right = st.columns([1, 1])
     with left:   # V3: 3D mannequin built in code (three.js in the browser); the flat map is its fallback inside the frame
         cap = UI["body3d_cap"].format(zone=labels[choice] if choice else "none")
@@ -711,6 +711,14 @@ def replay_panel():
     st.caption(UI["replay_note"])
 
 
+def sources_panel():
+    provenance_table()
+    st.divider()
+    st.subheader(UI["next_title"])
+    st.caption(UI["next_intro"])
+    st.markdown("\n".join(f"- {t}" for t in UI["next_items"]))
+
+
 def version_stamp():
     """Which code and data this page shows (a stale browser tab or an old clone is visible at a glance)."""
     import subprocess, datetime
@@ -750,6 +758,21 @@ st.sidebar.caption(UI["role_cmd_note"] if role == UI["role_cmd"] else UI["role_c
 OUT = resolve_out_dir(OUT_DIR)
 if section == UI["tab_live"]:
     live.panel(UI)   # real NASA station data, live, context only; the guide bot opens here on a first visit
+    st.caption(version_stamp())
+    st.stop()
+# V3 retrospective (20/11): the demo day slider and the Mars transit strip belong to the drift story only. On the body map, the
+# real NASA habitat data, the evidence, the hazards and the sources they mixed a simulated day with unrelated facts
+# (design rule "one screen, one moment"), so those sections open without them.
+_USE_KEYS = {UI[k]: "use_" + {"tab_cmd": "cmd", "tab_body": "body", "tab_env": "env", "tab_trends": "trends", "tab_tech": "tech",
+             "tab_scale": "scale", "tab_why": "why", "tab_nasa": "nasa", "tab_try": "try", "tab_sources": "sources"}[k]
+             for k in ("tab_cmd", "tab_body", "tab_env", "tab_trends", "tab_tech", "tab_scale", "tab_why", "tab_nasa", "tab_try", "tab_sources")}
+_STORY_SECTIONS = (UI["tab_home"], UI["tab_cmd"], UI["tab_trends"], UI["tab_tech"])
+if section not in _STORY_SECTIONS:
+    _STANDALONE = {UI["tab_body"]: lambda: body_map(None, None), UI["tab_env"]: habitat_panel, UI["tab_scale"]: scale_panel,
+                   UI["tab_why"]: why_panel, UI["tab_nasa"]: lambda: (hazards_panel(), countermeasures_panel()),
+                   UI["tab_try"]: try_panel, UI["tab_sources"]: sources_panel}
+    st.caption(UI[_USE_KEYS[section]])
+    _STANDALONE[section]()
     st.caption(version_stamp())
     st.stop()
 if section == UI["tab_home"]:
@@ -823,9 +846,5 @@ elif section == UI["tab_nasa"]:
 elif section == UI["tab_try"]:
     try_panel()
 else:
-    provenance_table()
-    st.divider()
-    st.subheader(UI["next_title"])
-    st.caption(UI["next_intro"])
-    st.markdown("\n".join(f"- {t}" for t in UI["next_items"]))
+    sources_panel()
 st.caption(version_stamp())
