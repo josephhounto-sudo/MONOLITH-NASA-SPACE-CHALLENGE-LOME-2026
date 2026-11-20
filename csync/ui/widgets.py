@@ -136,3 +136,40 @@ def curve_image(rows, base, thr, label, ch, day_word):
     alt = (f"{label}, days {rows[0]['day']} to {rows[-1]['day']}: values {min(vals):.3g} to {max(vals):.3g}; personal baseline {base:.3g}, "
            + (f"threshold {thr:.3g}" if thr is not None else "no threshold") + (f"; flagged days {', '.join(flagged)}." if flagged else "; no flagged day."))
     return f"![{alt}]({_uri(svg)})"
+
+
+def week_curve_image(values, selected, limit, alt, colour="#E9A27A", ink="#FFFDFD"):
+    """The 'Bookings Per Day' hero curve: seven daily values, a glowing smooth line, a soft area, a dotted guide and a glowing
+    point on the selected day, a dotted reference line (limit). None values break nothing: they are skipped, never drawn as 0."""
+    assert len(values) == 7 and 0 <= selected < 7
+    W, H, L, R, T, B = 640, 260, 18, 56, 18, 26
+    known = [v for v in values if v is not None]
+    assert known, "a week with no value is not drawn"
+    lo, hi = min(known + [limit]) - 0.3, max(known + [limit]) + 0.3
+    X = lambda i: L + (W - L - R) * i / 6   # noqa: E731
+    Y = lambda v: T + (H - T - B) * (hi - v) / (hi - lo)   # noqa: E731
+    pts = [(X(i), Y(v)) for i, v in enumerate(values) if v is not None]
+    path = smooth_path(pts) if len(pts) >= 2 else f"M{pts[0][0]:.1f},{pts[0][1]:.1f}"
+    area = path + f" L{pts[-1][0]:.1f},{H - B} L{pts[0][0]:.1f},{H - B} Z"
+    g = ["<defs><linearGradient id='a' x1='0' y1='0' x2='0' y2='1'>"
+         f"<stop offset='0' stop-color='{colour}' stop-opacity='.42'/><stop offset='1' stop-color='{colour}' stop-opacity='0'/></linearGradient>"
+         "<filter id='glow' x='-20%' y='-40%' width='140%' height='180%'><feGaussianBlur stdDeviation='4' result='b'/>"
+         "<feMerge><feMergeNode in='b'/><feMergeNode in='SourceGraphic'/></feMerge></filter>"
+         "<radialGradient id='p'><stop offset='0' stop-color='#FFFFFF'/><stop offset='.45' stop-color='#FFD9BE'/>"
+         f"<stop offset='1' stop-color='{colour}' stop-opacity='0'/></radialGradient></defs>"]
+    for k in range(5):   # faint grid, like the reference
+        y = T + (H - T - B) * k / 4
+        g.append(f"<line x1='{L}' x2='{W - R}' y1='{y:.1f}' y2='{y:.1f}' stroke='{ink}' stroke-opacity='.08'/>")
+        g.append(f"<text x='{W - R + 10}' y='{y + 4:.1f}' font-size='13' fill='{ink}' fill-opacity='.75' font-family='sans-serif'>"
+                 f"{hi - (hi - lo) * k / 4:.1f}</text>")
+    g.append(f"<line x1='{L}' x2='{W - R}' y1='{Y(limit):.1f}' y2='{Y(limit):.1f}' stroke='{ink}' stroke-opacity='.6' stroke-width='1.6' stroke-dasharray='2 6' stroke-linecap='round'/>")
+    g.append(f"<path d='{area}' fill='url(#a)'/>")
+    g.append(f"<path d='{path}' fill='none' stroke='{colour}' stroke-width='3.2' stroke-linecap='round' filter='url(#glow)'/>")
+    if values[selected] is not None:
+        x, y = X(selected), Y(values[selected])
+        g.append(f"<line x1='{x:.1f}' x2='{x:.1f}' y1='{y:.1f}' y2='{H - B}' stroke='{ink}' stroke-opacity='.55' stroke-dasharray='2 5'/>")
+        g.append(f"<circle cx='{x:.1f}' cy='{y:.1f}' r='22' fill='url(#p)' opacity='.85'/>")
+        g.append(f"<circle cx='{x:.1f}' cy='{y:.1f}' r='13' fill='none' stroke='{ink}' stroke-opacity='.45'/>")
+        g.append(f"<circle cx='{x:.1f}' cy='{y:.1f}' r='5.5' fill='#FFFFFF'/>")
+    svg = f"<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 {W} {H}' width='100%'>" + "".join(g) + "</svg>"
+    return f"<img class='cs-week' src='{_uri(svg)}' alt='{html.escape(alt, quote=True)}' style='width:100%;height:auto;display:block'>"

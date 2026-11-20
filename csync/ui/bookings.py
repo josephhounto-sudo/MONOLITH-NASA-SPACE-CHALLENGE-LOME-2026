@@ -79,16 +79,23 @@ html,body,[data-testid="stApp"]{{background:
 [data-testid="stSidebar"] [data-testid="stRadioOption"]:hover{{background:rgba(255,253,253,.6)}}
 [data-testid="stAlert"] [data-baseweb="notification"],[data-testid="stAlertContainer"]{{background:rgba(34,27,23,.92)!important;border:1px solid rgba(255,253,253,.22)!important;border-radius:28px!important}}
 .cs-hooktl .bar{{background:rgba(255,253,253,.14)!important}}.cs-hooktl .out{{background:{CURVE}!important}}
-.st-key-cs-body3d{{perspective:1100px;padding:18px 6px 26px;position:relative}}
-.st-key-cs-body3d::after{{content:"";position:absolute;left:18%;right:18%;bottom:4px;height:26px;border-radius:50%;
- background:radial-gradient(closest-side,rgba(215,154,118,.55),transparent);filter:blur(4px)}}
-.st-key-cs-body3d img{{transform:rotateY(-16deg) rotateX(5deg);transform-origin:50% 60%;transition:transform .5s ease;
- filter:drop-shadow(10px 18px 0 rgba(0,0,0,.28)) drop-shadow(0 0 22px rgba(215,154,118,.35))}}
-.st-key-cs-body3d:hover img{{transform:rotateY(0) rotateX(0)}}
-@media (prefers-reduced-motion:reduce){{.st-key-cs-body3d img{{transition:none}}}}
 [data-testid="stPills"] button,[data-testid="stButtonGroup"] button{{background:rgba(255,253,253,.08)!important;border:1px solid rgba(255,253,253,.22)!important;color:{INK}!important;border-radius:999px!important}}
 [data-testid="stPills"] button[aria-checked="true"],[data-testid="stButtonGroup"] button[kind$="Active"]{{background:{INK}!important;color:{SMOKE_DARK}!important}}
 [data-testid="stPills"] button[aria-checked="true"] *,[data-testid="stButtonGroup"] button[kind$="Active"] *{{color:{SMOKE_DARK}!important}}
+.st-key-cs-weekcard{{border-radius:44px;padding:22px 24px 14px;margin:6px 0 18px;
+ background:radial-gradient(70% 60% at 60% 35%,rgba(215,154,118,.30),transparent 70%),linear-gradient(180deg,rgba(124,115,110,.55),rgba(46,38,33,.92) 55%)!important;
+ border:1px solid rgba(255,253,253,.22);box-shadow:inset 1px 1px 0 rgba(255,253,253,.20),0 30px 70px rgba(0,0,0,.35)}}
+.cs-wk-h b{{display:block;font-size:1.5rem;font-weight:500}} .cs-wk-h span{{font-size:.95rem}}
+.st-key-cs-weekcard [data-testid="stButtonGroup"],.st-key-cs-weekcard [data-testid="stElementContainer"]:has([data-testid="stButtonGroup"]){{width:100%!important;max-width:none!important}}
+.st-key-cs-weekcard [data-testid="stButtonGroup"] [role="radiogroup"]{{display:flex!important;flex-wrap:nowrap!important;justify-content:space-between!important;
+ width:100%!important;max-width:none!important;padding:0 7.5% 0 0;box-sizing:border-box;gap:4px}}
+.st-key-cs-weekcard [data-testid="stPills"] button,.st-key-cs-weekcard [data-testid="stButtonGroup"] button{{width:46px;height:46px;min-width:46px;padding:0!important;justify-content:center;
+ background:rgba(255,253,253,.04)!important;border:1px solid rgba(255,253,253,.35)!important}}
+.st-key-cs-weekcard [data-testid="stButtonGroup"] button[aria-checked="true"]{{background:{INK}!important;color:{SMOKE_DARK}!important;box-shadow:0 0 22px rgba(255,253,253,.35)}}
+.st-key-cs-weekcard [data-testid="stButtonGroup"] button[aria-checked="true"] *{{color:{SMOKE_DARK}!important}}
+.st-key-cs-weekcard [data-testid^="stBaseButton"]{{width:44px;height:44px;min-height:44px;padding:0!important;border-radius:999px!important}}
+.cs-wk-v{{display:flex;align-items:baseline;gap:10px;margin:4px 0 0}} .cs-wk-v .cs-num{{font-size:44px;line-height:1}}
+.cs-wk-n{{font-size:.92rem;margin:.3em 0 0}} .cs-wk-r{{text-align:center;font-size:1.05rem;margin:.55em 0 0}}
 .cs-card.ctx{{background:rgba(34,27,23,.86)!important;border:1.5px dashed rgba(255,253,253,.38)!important}}
 """
 

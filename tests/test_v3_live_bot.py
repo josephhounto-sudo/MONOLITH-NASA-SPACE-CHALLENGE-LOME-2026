@@ -65,6 +65,7 @@ def test_live_co2_is_context_against_the_one_hour_limit():
     above, below = _node("L.co2Context(3.2)"), _node("L.co2Context(2.4)")
     assert "above" in above and "below" in below
     assert "context only" in above and "1-hour limit of 3 mmHg" in above
+    assert _node("L.deltaText(2.44)") == "\u2193 0.56 under limit" and _node("L.deltaText(3.2)") == "\u2191 0.20 over limit"
 
 
 @needs_node

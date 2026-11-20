@@ -41,6 +41,12 @@ function co2Context(mmhg) {
                                  : "below the NASA 1-hour limit of 3 mmHg (one reading, context only)";
 }
 
+function deltaText(mmhg) {
+  if (mmhg === null) return "";
+  const d = LIMIT_PPCO2_MMHG - mmhg;
+  return (d >= 0 ? "\u2193 " : "\u2191 ") + Math.abs(d).toFixed(2) + (d >= 0 ? " under limit" : " over limit");
+}
+
 function o2Percent(ppo2, cabin) {
   if (ppo2 === null || cabin === null || cabin <= 0) return null;
   return 100 * ppo2 / cabin;
@@ -52,7 +58,7 @@ function clockText(date, tz) {
 }
 
 if (typeof module !== "undefined") {
-  module.exports = { unitMode, toMmhg, readingState, co2Context, o2Percent, clockText, ZONES, LIMIT_PPCO2_MMHG, STALE_S, FROZEN_MIN };
+  module.exports = { deltaText, unitMode, toMmhg, readingState, co2Context, o2Percent, clockText, ZONES, LIMIT_PPCO2_MMHG, STALE_S, FROZEN_MIN };
 }
 
 if (typeof document !== "undefined") {
@@ -81,6 +87,8 @@ if (typeof document !== "undefined") {
     });
     const up = recv.clock !== undefined && (now - recv.clock) / 1000 <= STALE_S;
     $("ctx-co2lab").textContent = up ? co2Context(toMmhg(raw.co2lab, mode)) : "";
+    $("d-co2lab").textContent = up ? deltaText(toMmhg(raw.co2lab, mode)) : "";
+    $("d-co2n3").textContent = up ? deltaText(toMmhg(raw.co2n3, mode)) : "";
     $("ctx-co2n3").textContent = up ? co2Context(toMmhg(raw.co2n3, mode)) : "";
     $("unit").textContent = (raw.cabin !== undefined && mode === "unknown") ? "Units not recognised: values hidden." : "";
   }

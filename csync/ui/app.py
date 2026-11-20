@@ -26,7 +26,7 @@ from csync.capsule import human_reason  # noqa: E402
 from csync.gate import resume_gate  # noqa: E402
 from csync import crew, devicefeed as adapters, habitat, silhouette  # noqa: E402
 from csync.physio import hrv  # noqa: E402
-from csync.ui import bookings, bot, icons, live, style, tech_page, widgets  # noqa: E402
+from csync.ui import body3d, bookings, bot, icons, live, style, tech_page, widgets  # noqa: E402
 from csync.ui.why import short_verdict, why_parts  # noqa: E402
 from csync.jsonio import read_json  # noqa: E402
 
@@ -590,10 +590,16 @@ def body_map(symptom_zone=None, day=None):
         st.markdown(UI["body_map_symptom"].format(day=day, zone=symptom_zone))
     choice = st.pills(UI["body_map_select"], list(labels), format_func=labels.get, selection_mode="single",
                       default=preset, key=f"body_zone_{day}")
-    left, right = st.columns([2, 3])
-    with left.container(key="cs-body3d"):   # 2.5D: CSS perspective and layered light, no 3D engine (V3, mode "simple first")
-        st.markdown(silhouette.markdown_image(choice, UI["body_map_alt"].format(zone=labels[choice] if choice else "none")))
+    left, right = st.columns([1, 1])
+    with left:   # V3: 3D mannequin built in code (three.js in the browser); the flat map is its fallback inside the frame
+        cap = UI["body3d_cap"].format(zone=labels[choice] if choice else "none")
+        page = body3d.viewer_html(choice, cap, UI["body3d_hint"])
+        if hasattr(st, "iframe"):
+            st.iframe(page, height=body3d.HEIGHT)
+        else:
+            st.markdown(silhouette.markdown_image(choice, UI["body_map_alt"].format(zone=labels[choice] if choice else "none")))
     if not choice:
+        right.markdown(UI["body3d_pick"])
         return
     r = sheets[choice]
     state = silhouette.STATUS_STATE[r["status"]]
@@ -620,8 +626,40 @@ def habitat_panel():
         _habitat_body()
 
 
+def habitat_week():
+    """Hero card in the reference style: real ISS cabin CO2 per day, one week at a time, day pills and week arrows."""
+    days = habitat.daily_means()
+    weeks = [days.iloc[i:i + 7] for i in range(0, len(days) - 6, 7)]
+    weeks = [w for w in weeks if w.notna().sum() >= 2]
+    assert weeks, "no week with two valid days"
+    wi = max(0, min(int(st.session_state.get("cs-week", len(weeks) // 2)), len(weeks) - 1))
+    w = weeks[wi]
+    vals = [None if v != v else round(float(v), 2) for v in w.tolist()]   # NaN -> None: a missing day is never drawn as 0
+    with st.container(key="cs-weekcard"):
+        st.html(f"<div class='cs-wk-h'><div><b>{UI['week_title']}</b><span>{UI['week_sub']}</span></div></div>")
+        letters = [d.strftime("%a")[0] for d in w.index]
+        curve = st.empty()   # the curve is drawn above the day pills, as on the reference, but needs the pill choice first
+        sel = st.pills(UI["week_pick"], list(range(7)), format_func=lambda i: letters[i], selection_mode="single",
+                       default=max(i for i, v in enumerate(vals) if v is not None), key=f"cs-wday-{wi}", label_visibility="collapsed")
+        sel = sel if sel is not None else 0
+        alt = UI["week_alt"].format(a=w.index[0].strftime("%d %b"), b=w.index[-1].strftime("%d %b"))
+        curve.html(widgets.week_curve_image(vals, sel, habitat.LIMIT_MMHG, alt))
+        v = vals[sel]
+        st.html(f"<div class='cs-wk-v'><span class='cs-num'>{'--' if v is None else f'{v:.2f}'}</span><small>mmHg · "
+                f"{w.index[sel].strftime('%a %d %b %Y')}</small></div><p class='cs-wk-n'>{UI['week_note']}</p>")
+        b1, mid, b2 = st.columns([1, 3, 1])
+        if b1.button("‹", key="cs-week-prev", disabled=wi == 0, help=UI["week_prev"]):
+            st.session_state["cs-week"] = wi - 1
+            st.rerun()
+        mid.html(f"<p class='cs-wk-r'>{w.index[0].strftime('%b %d')} – {w.index[-1].strftime('%b %d, %Y')}</p>")
+        if b2.button("›", key="cs-week-next", disabled=wi == len(weeks) - 1, help=UI["week_next"]):
+            st.session_state["cs-week"] = wi + 1
+            st.rerun()
+
+
 def _habitat_body():
     st.subheader(UI["habitat_title"])
+    habitat_week()
     st.markdown(UI["habitat_intro"])
     df = habitat.rr1_hourly()
     flat = df[df["artifact"]]

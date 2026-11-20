@@ -122,3 +122,12 @@ def summary(df: pd.DataFrame | None = None) -> dict:
 def replay() -> pd.DataFrame:
     """Pre-registered replay of the frozen rule on every ISS mission (research/retro, commit 9c4994b)."""
     return pd.read_csv(REPLAY)
+
+
+def daily_means(df: pd.DataFrame | None = None) -> pd.Series:
+    """Daily mean CO2 (mmHg) over valid hours only; a day with fewer than MIN_VALID_HOURS valid hours is missing (None), never 0."""
+    df = rr1_hourly() if df is None else df
+    ok = df[~df["artifact"].astype(bool)].set_index("hour_utc")["co2_mmhg"]
+    g = ok.resample("1D")
+    mean, n = g.mean(), g.count()
+    return mean.where(n >= MIN_VALID_HOURS)

@@ -542,7 +542,17 @@
             ]
         ],
         "speaker_crew": "Kora (astronaute simulée)",
-        "speaker_cmd": "Commandant"
+        "speaker_cmd": "Commandant",
+        "body3d_hint": "Faites glisser pour tourner le corps. Plein = mesuré ; estompé = non mesuré (Inconnu).",
+        "body3d_cap": "Zone choisie : {zone}",
+        "week_title": "CO2 par jour",
+        "week_sub": "Cabine ISS · mission RR-1 (2014) · moyenne quotidienne des heures valides",
+        "week_pick": "Jour",
+        "week_alt": "CO2 moyen quotidien de la cabine du {a} au {b}, avec la limite NASA d'une heure de 3 mmHg en pointillé.",
+        "week_note": "Pointillé : limite NASA sur une heure (3 mmHg). Une moyenne journalière peut rester dessous alors que certaines heures la dépassent.",
+        "week_prev": "Semaine précédente",
+        "week_next": "Semaine suivante",
+        "body3d_pick": "Choisissez une zone au-dessus : elle s'allume sur le corps et sa fiche s'ouvre ici."
     },
     "indicator_names": {
         "PH01": "fréquence cardiaque",

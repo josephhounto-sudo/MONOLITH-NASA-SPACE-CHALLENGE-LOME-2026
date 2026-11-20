@@ -542,7 +542,17 @@
             ]
         ],
         "speaker_crew": "Kora (simulated astronaut)",
-        "speaker_cmd": "Commander"
+        "speaker_cmd": "Commander",
+        "body3d_hint": "Drag to turn the body. Solid = measured; faded = not measured (Unknown).",
+        "body3d_cap": "Selected zone: {zone}",
+        "week_title": "CO2 per day",
+        "week_sub": "ISS cabin · mission RR-1 (2014) · daily mean of valid hours",
+        "week_pick": "Day",
+        "week_alt": "Daily mean cabin CO2 from {a} to {b}, with the NASA 3 mmHg one-hour limit as a dotted line.",
+        "week_note": "Dotted line: NASA 1-hour limit (3 mmHg). A daily mean can stay under it while single hours go above.",
+        "week_prev": "Previous week",
+        "week_next": "Next week",
+        "body3d_pick": "Pick a zone above: it lights up on the body, and its sheet opens here."
     },
     "indicator_names": {
         "PH01": "heart-rate",
