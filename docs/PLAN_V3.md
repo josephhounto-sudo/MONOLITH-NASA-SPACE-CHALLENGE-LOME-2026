@@ -126,7 +126,7 @@ Matière : les 18 risques HRP copiés le 15/11 (`data/nasa_official/`), l'énonc
 Les huit autres risques (os, muscles, vision, immunité, microbes, nutrition, sorties, charges) n'ont aucune donnée accessible : on les nomme, on n'y touche pas.
 
 ### 10.2 Données mal utilisées ou oubliées
-1. Radiation : `eda_rr1_radiation_daily.csv` (rayons cosmiques, anomalie de l'Atlantique Sud, dose cumulée) n'entre dans rien. La ressource de l'ASC sur la radiation, citée par le défi, est inutilisée. Attention : l'EDA donne une dose absorbée (mGy) ; la limite NASA de carrière (600 mSv, NASA-STD-3001) est une dose efficace. On affiche la dose cumulée réelle, sans conversion inventée.
+1. Radiation (correction du 20/11, 06:30) : la dose quotidienne RR-1 est déjà tracée dans Habitat (volet replié), mais elle n'entre dans aucun état ni aucune jauge. La ressource de l'ASC sur la radiation, citée par le défi, est inutilisée. Attention : l'EDA donne une dose absorbée (mGy) ; la limite NASA de carrière (600 mSv, NASA-STD-3001) est une dose efficace. On affiche la dose cumulée réelle, sans conversion inventée.
 2. CO2 : seule la limite d'une heure est utilisée ; l'exposition sur 7 jours (OCHMO-TB-004 : < 2,5 mmHg) est absente de l'app.
 3. Température et humidité de cabine : tracées, jamais évaluées. Les plages NASA restent à trouver (NON VÉRIFIÉ).
 4. Jalons de mission de l'EDA (lancement, arrivée, retour) : inutilisés ; ils permettent d'aligner les événements sur les courbes.
@@ -140,3 +140,15 @@ Les huit autres risques (os, muscles, vision, immunité, microbes, nutrition, so
 | I3 | Contrôle d'intégrité du flux en direct : notre détecteur de plateaux (ARTIFACT) appliqué au flux ISS signale une valeur figée comme suspecte | Réutilisation de notre propre code | Une heure de flux : si le CO2 reste identique (comme ce matin), la carte doit dire « valeur figée depuis X min ». |
 | I4 | Rejeu de mission dans l'app : le jury choisit une des 14 missions réelles et voit ce que C-Sync aurait signalé | Notre rejeu pré-enregistré | Les chiffres affichés doivent égaler `replay_results.csv`. |
 | I5 | Fraction d'O2 en direct = ppO2 ÷ pression totale (LAB ce matin : 165,8 ÷ 751,9 ≈ 22,1 %), face à la règle normoxique NASA | Calcul simple ; les seuils de vol restent à sourcer (la norme dit que les limites physiologiques de vol sont inconnues) | Comparer au même moment avec ISS Mimic. |
+
+## 11. État d'exécution (20/11/2026, 06:30 UTC) — main = dab9964
+| Lot | Fait | Preuve |
+|---|---|---|
+| 1 Système Bookings | fond crème à grain, limbe de planète flou, halos orange, panneau de verre fumé, pilules avec lueur par catégorie, barre latérale claire avec icônes Lucide et pilule blanche, Doto sur horloges, valeurs en direct, métriques et bandes | captures 1400/390 ; measure_contrast « Below threshold: none » (page d'accueil seulement) |
+| 2 Console en direct | CO2 labo + Node 3, part d'O2, pression, 4 horloges ; fraîcheur jugée sur l'horloge de la station ; valeur cachée après perte de signal | URL publique 06:23 UTC : 2,44 / 2,95 mmHg, 22,1 %, 752 mmHg, état « Live » ; tests node |
+| 3 Habitat | phrase de lecture calculée, épisodes, 7 jours face à 2,5 mmHg, rejeu de 14 missions, tableau replié | tests (épisodes = rejeu de recherche) ; URL publique |
+| 4 Bot Pip | mascotte SVG originale, tutoriel 6 étapes, dialogue de démo par étape (Kora, Pip, commandant) | tests (≤ 6 étapes, ≤ 12 mots par réplique, mots interdits) ; URL publique |
+| 5 Technologies | bandes de jours/étapes, empreinte en Doto, courbe RR zoomée | capture 1400 |
+| 6 Corps 2,5D | perspective CSS + ombres + sol lumineux | capture 1400 |
+| 7 Graphes | phrase de lecture Habitat et Tendances | tests |
+| Non fait | délégation du bot à Gemini (écrit par Claude) ; détection de clignement (affichée « en développement ») ; idée I1 signal commun ; jauge radiation ; Doto sur la frise des jours | — |
