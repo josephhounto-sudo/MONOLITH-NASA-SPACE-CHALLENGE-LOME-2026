@@ -53,7 +53,7 @@ def test_commander_sees_decision_before_state_cards_and_crew_the_reverse():
     crew, cmd = open_app(APP, 40), open_app(APP, 40)
     for at in (crew, cmd):
         at.slider[0].set_value(7).run()
-    cmd.sidebar.radio[1].set_value(UI["role_cmd"]).run()
+    cmd.radio(key="cs-role").set_value(UI["role_cmd"]).run()
     assert not cmd.exception
 
     def order(at):

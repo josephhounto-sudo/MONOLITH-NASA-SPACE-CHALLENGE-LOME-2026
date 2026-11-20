@@ -52,7 +52,8 @@ html,body,[data-testid="stApp"]{{background:
 [data-testid="stMainBlockContainer"]{{max-width:1040px;margin:28px auto 40px;padding:28px 34px 34px!important;border-radius:44px;
  background:linear-gradient(180deg,rgba(75,64,57,.90),rgba(46,38,33,.93) 45%,rgba(34,27,23,.95))!important;
  border:1px solid rgba(255,253,253,.22);box-shadow:inset 1px 1px 0 rgba(255,253,253,.18),0 40px 90px rgba(46,38,33,.45);
- -webkit-backdrop-filter:blur(28px) saturate(130%);backdrop-filter:blur(28px) saturate(130%)}}
+ -webkit-backdrop-filter:none!important;backdrop-filter:none!important}}
+/* no blur on the main panel: it is 90-95 % opaque (blur invisible) and a backdrop-filter traps fixed children such as Pip's corner */
 @media (max-width:640px){{[data-testid="stMainBlockContainer"]{{margin:10px 6px 24px;padding:18px 14px 22px!important;border-radius:30px}}}}
 .cs-top,[data-testid="stSlider"],.cs-strip,.st-key-cs-habitat,[data-testid="stVerticalBlockBorderWrapper"],[data-testid="stExpander"],.cs-ind{{
  background-color:rgba(46,38,33,.72)!important;border-color:rgba(255,253,253,.18)!important;border-radius:36px!important}}
@@ -130,10 +131,15 @@ NAV_ICONS = {"tab_home": "house", "tab_cmd": "users", "tab_body": "person-standi
              "tab_sources": "book-open", "tab_live": "radio", "tab_emergency": "siren", "role_crew": "person-standing", "role_cmd": "users"}
 
 
-def nav_css(ui: dict, nav_keys: list[str], role_keys: list[str]) -> str:
-    """One icon per sidebar entry, in the order actually shown (the order changes with the role)."""
+def nav_css(ui: dict, nav_keys: list[str], role_keys: list[str], group_starts: dict[int, str] | None = None) -> str:
+    """One icon per sidebar entry, in the order actually shown (the order changes with the role); a small group title
+    above the first entry of each group (group_starts: {1-based position: title})."""
     assert nav_keys and role_keys
     rules = []
+    for i, title in (group_starts or {}).items():
+        assert 1 <= i <= len(nav_keys) and '"' not in title
+        rules.append(f'.st-key-cs-nav [role="radiogroup"]>div:nth-of-type({i})::before{{content:"{title}";display:block;margin:{18 if i > 1 else 4}px 0 6px 12px;'
+                     'font-size:.74rem;font-weight:600;letter-spacing:.08em;text-transform:uppercase;opacity:.8}')
     for group, keys in (("cs-nav", nav_keys), ("cs-role", role_keys)):
         for i, k in enumerate(keys[:20], start=1):
             ico = _uri(lucide(NAV_ICONS[k]))

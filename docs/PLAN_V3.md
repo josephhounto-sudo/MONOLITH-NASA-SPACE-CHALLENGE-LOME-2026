@@ -186,3 +186,20 @@ Avancement mesurable du plan V3 : lots 1 à 7 faits et vérifiés en ligne ; lot
 - Corps : modèle ouvert « Cesium Man » (Khronos glTF Sample Assets, CC BY 4.0, licence lue dans le fichier LICENSE du dépôt d'origine), chargé depuis un CDN épinglé (278 Ko, vérifié sur l'URL publique), zones par bandes dans le shader, tête-logo remplacée par une sphère, étiquettes à trait de rappel, crédit sous la vue ; secours : mannequin en code puis 2D.
 - Technologies : 6 concepts affichés comme promesses (clignement, signal commun à l'équipage, registre d'exposition, explicateur hors ligne, messagerie DTN, pouls par caméra), chacun avec « comment nous saurons » et « nous l'abandonnons si » ; test qui interdit une promesse sans test.
 - Skills : améliorations proposées pour design-master, code-master-writer et maestro (cartes à valider par Joseph).
+
+## 16. Dernière passe et rétrospective complète (20/11/2026, 09:30 UTC)
+Fait : rôle choisi d'abord, navigation par parcours (Maintenant / Ce que fait C-Sync / D'où ça vient), tableau commandant absent du rôle équipage (test) ; Pip ancré en bas à gauche sur chaque écran (une phrase par écran, bouton Suite qui déplace vraiment, réponses fixes « bêta », réductible) ; Technologies en trois groupes (Mesurer, Décider, Transmettre), chaque carte manipulable ; trois promesses de plus en prototypes : messagerie DTN (1 000 rapports, coupure 6 h, délai 20 min, pertes 15 % : tous une fois, dans l'ordre), pouls par caméra et clignement (fonctions pures testées sous Node ; rien n'est enregistré) ; corps 3D : méthode de mesure sur chaque étiquette, environnement studio, tissu, casque à visière.
+
+Fautes trouvées et corrigées (constat → cause → action) :
+1. Le signal commun « passait » à 90,0 % sur un seul jeu de graines et échouait (89-89,5 %) sur trois autres → succès par chance, métrique qui ignorait les fausses alertes → règle re-choisie sur les seules graines de réglage avec un critère écrit avant (≥ 95 % de tous les jours justes), jugée une fois sur 1 000 graines neuves : 94,5 % sur les jours marqués, 95,9 % sur tous les jours.
+2. Le libellé PROTOTYPE disait « sur données simulées » alors que le registre d'exposition utilise des données NASA réelles, et l'intro disait « toutes les données sont SIMULÉES » → libellé générique, chaque carte dit sa donnée.
+3. Le tableau du commandant était proposé au rôle équipage → navigation calculée depuis le rôle, test qui l'interdit et qui vérifie le retour sûr.
+4. Le flou (backdrop-filter) du panneau principal piégeait tout élément fixe (Pip collé dans le panneau) alors que le panneau est opaque à 90-95 % → flou retiré, aucun effet visible perdu.
+5. Branches inatteignables dans app.py (sections déjà autonomes, variable de zone morte) → supprimées, une assertion garde la dernière branche.
+6. La page Technologies portait la barre du jour de démo (deux moments sur un écran) → page autonome, cartes lues sur le jour 9 de la démo.
+7. Les tests dépendaient de l'ordre des boutons radio → ils ciblent les clés.
+8. Mélange tu/vous en français → tutoiement partout côté visiteur (le dialogue de Pip au commandant garde « vous »).
+9. three.js n'avait pas de notice de licence (MIT) → ajoutée, avec MediaPipe (Apache-2.0).
+10. Faute de compte rendu : j'ai écrit « avance rapide de main » alors que l'app hébergée lit la branche m3-design (main = 6b07d51, ancien) → noté dans l'état ; à décider par Joseph : faire de main la branche publique avant le jury.
+
+NON VÉRIFIÉ : caméra (pouls, clignement) sur de vrais visages, peaux foncées, faible lumière et téléphone ; chargement du modèle de visage depuis le stockage Google sur l'URL publique ; contraste mesuré des nouveaux écrans ; lisibilité du coin de Pip à 390 px quand le clavier mobile est ouvert.

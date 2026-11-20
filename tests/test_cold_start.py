@@ -55,7 +55,7 @@ def test_cold_start_does_not_write_into_the_repo_or_the_empty_folder(cold_page):
 
 def test_trends_panel_present_on_cold_start(cold_page):
     at, _ = cold_page
-    at.sidebar.radio[0].set_value(UI["tab_trends"]).run()
+    at.radio(key="cs-nav").set_value(UI["tab_trends"]).run()
     assert UI["trend_title"] in [s.value for s in at.subheader], "the indicators-over-time panel vanished on a cold clone"
 
 
@@ -67,13 +67,16 @@ def test_cold_first_render_time_is_recorded_and_bounded(cold_page):
 
 def test_navigation_opens_every_section_without_error(cold_page):
     at, _ = cold_page
-    nav = at.sidebar.radio[0]
+    nav = at.radio(key="cs-nav")
     assert nav.options[0] == UI["tab_live"], "V3 (20/11): the live station console opens the app"
-    assert len(nav.options) == 13   # + Emergency guide (20/11)
+    assert len(nav.options) == 12   # crew view: the commander board is in the commander's navigation only (20/11)
     for opt in list(nav.options):
-        at.sidebar.radio[0].set_value(opt).run()
+        at.radio(key="cs-nav").set_value(opt).run()
         assert not at.exception, (opt, at.exception)
         assert DEV_TEXT.search(all_visible_text(at)) is None, opt
+    at.radio(key="cs-role").set_value(UI["role_cmd"]).run()
+    at.radio(key="cs-nav").set_value(UI["tab_cmd"]).run()
+    assert not at.exception and DEV_TEXT.search(all_visible_text(at)) is None
 
 
 def test_cold_first_screen_is_the_hook_without_developer_text(cold_page):
@@ -81,7 +84,7 @@ def test_cold_first_screen_is_the_hook_without_developer_text(cold_page):
     at = AppTest.from_file(APP, default_timeout=120).run()
     assert not at.exception, at.exception
     assert UI["live_title"] in [s.value for s in at.subheader]   # V3: live console + guide bot first
-    at.sidebar.radio[0].set_value(UI["tab_home"]).run()
+    at.radio(key="cs-nav").set_value(UI["tab_home"]).run()
     assert not at.exception, at.exception
     assert UI["hook_title"] in [s.value for s in at.subheader]   # the drift story is one click away
     assert DEV_TEXT.search(all_visible_text(at)) is None

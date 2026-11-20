@@ -51,7 +51,7 @@ def test_hazard_table_names_the_five_nasa_hazards():
 
 def test_app_shows_chart_up_to_the_chosen_day_only():
     at = open_app(ROOT + "/csync/ui/app.py", 40)
-    at.sidebar.radio[0].set_value("Trends").run()
+    at.radio(key="cs-nav").set_value("Trends").run()
     at.slider[0].set_value(7).run()
     assert not at.exception
     md = " ".join(m.value for m in at.markdown)
@@ -62,7 +62,7 @@ def test_app_shows_chart_up_to_the_chosen_day_only():
 
 def test_countermeasures_panel_cites_sources_and_gives_no_advice():
     at = open_app(ROOT + "/csync/ui/app.py", 30)
-    at.sidebar.radio[0].set_value("NASA hazards and countermeasures").run()
+    at.radio(key="cs-nav").set_value("NASA hazards and countermeasures").run()
     assert not at.exception
     assert any("countermeasures" in s.value for s in at.subheader)
     rows = json.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]["cm_rows"]

@@ -80,7 +80,15 @@ if (typeof document !== "undefined" && window.CS_BODY) {
     renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1));
     renderer.setSize(W, H);
     host.appendChild(renderer.domElement);
+    renderer.toneMapping = THREE.ACESFilmicToneMapping; renderer.toneMappingExposure = 0.9;
+    renderer.outputColorSpace = THREE.SRGBColorSpace;
     const scene = new THREE.Scene();
+    try {   // studio reflections computed in the browser (no image file): the suit reads as a material, not as flat plastic
+      const { RoomEnvironment } = await import("three/addons/environments/RoomEnvironment.js");
+      const pm = new THREE.PMREMGenerator(renderer);
+      scene.environment = pm.fromScene(new RoomEnvironment(), 0.04).texture;
+      scene.environmentIntensity = 0.4;
+    } catch (e) { /* lights alone are enough */ }
     const cam = new THREE.PerspectiveCamera(32, W / H, 0.1, 50);
     cam.position.set(0, 1.6, 7.2);
     cam.lookAt(0, 1.45, 0);
@@ -114,7 +122,9 @@ if (typeof document !== "undefined" && window.CS_BODY) {
         const uni = { uH: { value: HM }, uSel: { value: sel }, uOff: { value: off }, uBodyInv: { value: new THREE.Matrix4() } };
         model.traverse((o) => {
           if (!o.isMesh) return;
-          const mat = new THREE.MeshPhysicalMaterial({ color: 0xE9D7C6, roughness: 0.34, clearcoat: 0.75, clearcoatRoughness: 0.3, transparent: true });
+          // a crew suit, not a doll: soft fabric sheen, matte base, a thin coat
+          const mat = new THREE.MeshPhysicalMaterial({ color: 0xD9D2C8, roughness: 0.62, sheen: 0.8, sheenRoughness: 0.45, sheenColor: 0xFFE8D2,
+            clearcoat: 0.15, clearcoatRoughness: 0.6, transparent: true });
           mat.onBeforeCompile = (sh) => {
             Object.assign(sh.uniforms, uni);
             sh.vertexShader = "uniform mat4 uBodyInv;\nvarying vec3 vLoc;\n" + sh.vertexShader.replace("#include <skinning_vertex>",
@@ -135,9 +145,13 @@ if (typeof document !== "undefined" && window.CS_BODY) {
         body.add(model);
         body.userData.uni = uni;
         const hl = zoneLook(cfg.status["region-head"], cfg.selected === "region-head");
-        const head = new THREE.Mesh(new THREE.SphereGeometry(0.1 * HM, 48, 32), new THREE.MeshPhysicalMaterial({ color: hl.color,
-          roughness: 0.34, clearcoat: 0.75, emissive: hl.emissive, emissiveIntensity: hl.emissive ? 0.9 : 0 }));
+        // the head reads as a helmet: a suit-coloured shell and a dark visor on the front that reflects the studio
+        const head = new THREE.Mesh(new THREE.SphereGeometry(0.1 * HM, 64, 48), new THREE.MeshPhysicalMaterial({
+          color: hl.color, roughness: 0.4, clearcoat: 0.6, clearcoatRoughness: 0.2, emissive: hl.emissive, emissiveIntensity: hl.emissive ? 0.6 : 0 }));
         head.scale.set(0.9, 1.08, 0.95); head.position.set(0, 0.862 * HM, 0.01); head.userData.region = "region-head";
+        const visor = new THREE.Mesh(new THREE.SphereGeometry(0.1 * HM, 48, 32, Math.PI * 0.18, Math.PI * 0.64, Math.PI * 0.3, Math.PI * 0.32),
+          new THREE.MeshPhysicalMaterial({ color: 0x241D19, roughness: 0.06, metalness: 0.2, clearcoat: 1, clearcoatRoughness: 0.03 }));
+        visor.scale.set(0.93, 1.1, 0.99); visor.position.set(0, 0.862 * HM, 0.012); body.add(visor);
         pickable.push(head); body.add(head);
       } catch (e) { model = null; }   // the code-built mannequin below takes over, never a blank frame
     }

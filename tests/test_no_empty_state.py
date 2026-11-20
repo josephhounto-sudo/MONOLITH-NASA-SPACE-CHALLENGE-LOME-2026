@@ -24,7 +24,7 @@ def test_no_unknown_word_on_any_section(day):
     at.session_state["cs-bot-done"] = True
     at.session_state["cs-day"] = day
     at.run()
-    for opt in list(at.sidebar.radio[0].options):
-        at.sidebar.radio[0].set_value(opt).run()
+    for opt in list(at.radio(key="cs-nav").options):
+        at.radio(key="cs-nav").set_value(opt).run()
         assert not at.exception, (opt, at.exception)
         assert "Unknown" not in _text(at), (day, opt)

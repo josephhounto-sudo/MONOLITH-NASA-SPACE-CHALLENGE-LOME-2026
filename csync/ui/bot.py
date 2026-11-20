@@ -82,3 +82,64 @@ def dialogue(ui: dict, lines: list) -> str:
             out.append(f"<div class='cs-bot'><div style='width:72px;flex:none'></div><div class='cs-say-h'><b>{html.escape(who[speaker])}</b>"
                        f"<p>{html.escape(text)}</p></div></div>")
     return "".join(out) + "<style>.cs-say-h{border-radius:28px;padding:10px 18px;background:rgba(34,27,23,.9);border:1px solid rgba(255,253,253,.22)}.cs-say-h p{margin:.2em 0 0}</style>"
+
+
+DOCK_CSS = """<style>
+.st-key-cs-pip{position:fixed!important;left:16px;bottom:16px;width:min(300px,calc(100vw - 32px));z-index:999990;
+ background:rgba(34,27,23,.985);border:1px solid rgba(255,253,253,.28);border-radius:26px;padding:12px 14px 10px;
+ box-shadow:0 18px 40px rgba(0,0,0,.45);gap:8px!important}
+@media (min-width:900px){.st-key-cs-pip{left:calc(var(--cs-sidebar-w,300px) + 16px)}}
+.st-key-cs-pip .cs-pipline{display:flex;gap:10px;align-items:flex-start;font-size:.92rem;line-height:1.35}
+.st-key-cs-pip .cs-pipline img{flex:none;filter:drop-shadow(0 6px 14px rgba(255,154,92,.45))}
+.st-key-cs-pip .cs-pipline b{display:block;font-size:.8rem;letter-spacing:.06em;text-transform:uppercase;opacity:.85}
+.st-key-cs-pip button{min-height:40px}.st-key-cs-pip button p{white-space:normal;text-align:left;line-height:1.25}
+[data-testid=stSidebarContent]{padding-bottom:250px}
+[data-testid=stMainBlockContainer]{padding-bottom:240px!important}
+</style>"""
+
+
+def journey(nav_keys: list[str]) -> list[str]:
+    """The visitor's path Pip pushes along: the navigation order itself (role-aware), proof sections last."""
+    assert nav_keys
+    return list(nav_keys)
+
+
+def next_key(nav_keys: list[str], current: str) -> str | None:
+    path = journey(nav_keys)
+    if current not in path:
+        return path[0]
+    i = path.index(current)
+    return path[i + 1] if i + 1 < len(path) else None
+
+
+def dock(ui: dict, current: str, nav_keys: list[str]) -> None:
+    """Pip stays in a small corner bottom-left on every screen: one sentence on what this screen is for and what to do,
+    a button to the next step of the path, and fixed answers to a few questions (beta: a guide, not an AI)."""
+    say = ui.get("pip_say_" + current)
+    assert say, f"Pip has no line for {current}"
+    st.html(DOCK_CSS)
+    with st.container(key="cs-pip"):
+        if st.session_state.get("cs-pip-min"):
+            if st.button(ui["pip_open"], key="cs-pip-open", icon=":material/chat_bubble:"):
+                st.session_state["cs-pip-min"] = False
+                st.rerun()
+            return
+        st.html(f"<div class='cs-pipline'><img src='{mascot_uri()}' alt='' width='44' height='44'>"
+                f"<div><b>{html.escape(ui['bot_name'])}</b>{html.escape(say)}</div></div>")
+        nxt = next_key(nav_keys, current)
+        if nxt:
+            def go(target=ui[nxt]):
+                st.session_state["cs-nav"] = target
+            st.button(ui["pip_next"].format(s=ui[nxt]), key="cs-pip-next", type="primary", on_click=go, width="stretch")
+        else:
+            st.caption(ui["pip_end"])
+        c1, c2 = st.columns([4, 1], vertical_alignment="center")
+        if c2.button("–", key="cs-pip-min-btn", help=ui["pip_hide"]):
+            st.session_state["cs-pip-min"] = True
+            st.rerun()
+        with c1.popover(ui["pip_ask"], width="stretch"):
+            st.caption(ui["pip_beta"])
+            qs = ui["pip_questions"]
+            pick = st.radio(ui["pip_ask"], [q for q, _ in qs], key="cs-pip-q", index=None, label_visibility="collapsed")
+            if pick:
+                st.write(dict(qs)[pick])

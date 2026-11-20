@@ -79,7 +79,8 @@ def test_day9_six_steps_and_send_queue():
     assert [s.split("**")[1] for s in seen] == [f"Step {n} of 6" for n in range(1, 7)]
     assert any("Follow the onboard medical checklist" in i.value for i in at.info)
     assert any("Waiting for link" in w.value for w in at.warning)
-    at.radio[0].set_value(at.radio[0].options[1]).run()
+    link = next(r for r in at.radio if r.key not in ("cs-nav", "cs-role", "cs-pip-q"))
+    link.set_value(link.options[1]).run()
     assert any(s.value == "Delivered to ground (once)" for s in at.success)
 
 
@@ -225,7 +226,7 @@ def test_why_panel_reads_the_committed_research_numbers():
     import json as _j
     ui = _j.load(open(ROOT + "/csync/config/strings_en.json", encoding="utf8"))["ui"]
     at = open_app(APP, 60)
-    at.sidebar.radio[0].set_value(ui["tab_why"]).run()
+    at.radio(key="cs-nav").set_value(ui["tab_why"]).run()
     assert not at.exception, at.exception
     md = " ".join(m.value for m in at.markdown)
     fp = _j.load(open(ROOT + "/research/fixed_vs_personal_results.json", encoding="utf8"))

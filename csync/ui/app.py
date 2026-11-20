@@ -803,6 +803,22 @@ _PLAIN = [(re.compile(r"\bREFUSE_RESUME\b"), "resume refused"), (re.compile(r"\b
           (re.compile(r"\bNORMAL\b"), "Normal"), (re.compile(r"\bd ≥ 1\.5\b"), "at least 1.5 times the usual spread")]
 
 
+def tech_standalone():
+    """Technologies without the demo day bar: the cards that need a capsule read the demo story's day 9 (the drift day)."""
+    caps = load_capsules(resolve_out_dir(OUT_DIR))
+    daily = next((c for c in caps if c.get("capsule_type", "daily") == "daily" and c.get("day") == 9 and is_valid(c)), None)
+    tech_page.tech_panel(UI, daily, read_json(os.path.join(resolve_out_dir(OUT_DIR), "trends_histoire.json")), 10)
+
+
+def nav_groups(commander: bool) -> list[tuple[str, list[str]]]:
+    """Navigation by the visitor's path. Pure function (tested): the commander board exists only in the commander's list."""
+    if commander:
+        return [("nav_g_now", ["tab_live", "tab_cmd"]), ("nav_g_tour", ["tab_home", "tab_emergency", "tab_body", "tab_tech"]),
+                ("nav_g_proof", ["tab_env", "tab_trends", "tab_why", "tab_scale", "tab_nasa", "tab_try", "tab_sources"])]
+    return [("nav_g_now", ["tab_live"]), ("nav_g_tour", ["tab_home", "tab_trends", "tab_emergency", "tab_body", "tab_tech"]),
+            ("nav_g_proof", ["tab_env", "tab_why", "tab_scale", "tab_nasa", "tab_try", "tab_sources"])]
+
+
 def plain(text):
     """Same fact, visitor's words. Raw HTML is left alone."""
     if not isinstance(text, str) or text.lstrip().startswith("<"):
@@ -817,17 +833,26 @@ for _name in ("markdown", "caption", "info", "warning", "success", "write", "tex
     setattr(st, _name, (lambda f: (lambda body, *a, **k: f(plain(body), *a, **k)))(_orig))
 style.inject(UI["brand_name"], UI["brand_tag"])
 # vertical navigation: one section = one visitor question; the global state of the crew is first
-# two entries, one capsule and one rule: the role only changes the order of the sections and the one-line note
-role = st.session_state.get("cs-role", UI["role_crew"])   # the role radio sits below the navigation, so its value is read from the state
-_core = ["tab_body", "tab_env", "tab_trends", "tab_tech", "tab_scale", "tab_why", "tab_nasa", "tab_try", "tab_sources"]
-# V3 (Joseph, 20/11): the live console opens the app; the drift story is one demo among the sections, not the base
-_KEYS = (["tab_live", "tab_emergency", "tab_home", "tab_cmd"] + _core if role == UI["role_cmd"]
-         else ["tab_live", "tab_emergency", "tab_home"] + _core[:3] + ["tab_cmd"] + _core[3:])
-_SECTIONS = [UI[k] for k in _KEYS]
-st.html("<style>" + bookings.nav_css(UI, _KEYS, ["role_crew", "role_cmd"]) + "</style>")
-section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
-role = st.sidebar.radio(UI["role_label"], [UI["role_crew"], UI["role_cmd"]], key="cs-role")
+# V3 (Joseph, 20/11, final pass): the role is chosen first ("who are you?") and decides what the navigation offers.
+# The commander board is the commander's: a crew member never sees it in the navigation (one capsule, one rule, two entries).
+# Sections are grouped by the visitor's path: Now (live), Tour (what C-Sync does), Proof (where it comes from).
+role = st.sidebar.radio(UI["role_label"], [UI["role_crew"], UI["role_cmd"]], key="cs-role", horizontal=True)
 st.sidebar.caption(UI["role_cmd_note"] if role == UI["role_cmd"] else UI["role_crew_note"])
+NAV_GROUPS = nav_groups(role == UI["role_cmd"])
+_KEYS = [k for _g, keys in NAV_GROUPS for k in keys]
+_SECTIONS = [UI[k] for k in _KEYS]
+if st.session_state.get("cs-nav") is not None and st.session_state["cs-nav"] not in _SECTIONS:
+    st.session_state["cs-nav"] = _SECTIONS[0]   # a crew member who was on the commander board goes back to the live station
+_starts = {}
+_i = 1
+for _g, _keys in NAV_GROUPS:
+    _starts[_i] = UI[_g]
+    _i += len(_keys)
+st.html("<style>" + bookings.nav_css(UI, _KEYS, ["role_crew", "role_cmd"], _starts) + "</style>")
+section = st.sidebar.radio(UI["nav_label"], _SECTIONS, key="cs-nav")
+_SECTION_KEY = dict(zip(_SECTIONS, _KEYS, strict=True))[section]
+if section != UI["tab_live"] or st.session_state.get("cs-bot-done"):   # on a first visit the tutorial speaks; Pip's corner comes after
+    bot.dock(UI, _SECTION_KEY, _KEYS)
 OUT = resolve_out_dir(OUT_DIR)
 if section == UI["tab_live"]:
     live.panel(UI)   # real NASA station data, live, context only; the guide bot opens here on a first visit
@@ -840,11 +865,12 @@ _USE_KEYS = {UI[k]: "use_" + {"tab_cmd": "cmd", "tab_body": "body", "tab_env": "
              "tab_scale": "scale", "tab_why": "why", "tab_nasa": "nasa", "tab_try": "try", "tab_sources": "sources", "tab_emergency": "emergency"}[k]
              for k in ("tab_cmd", "tab_body", "tab_env", "tab_trends", "tab_tech", "tab_scale", "tab_why", "tab_nasa", "tab_try", "tab_sources",
                        "tab_emergency")}
-_STORY_SECTIONS = (UI["tab_home"], UI["tab_cmd"], UI["tab_trends"], UI["tab_tech"])
+_STORY_SECTIONS = (UI["tab_home"], UI["tab_cmd"], UI["tab_trends"])   # 20/11: Technologies no longer carries the demo day bar
 if section not in _STORY_SECTIONS:
     _STANDALONE = {UI["tab_body"]: lambda: body_map(None, None), UI["tab_env"]: habitat_panel, UI["tab_scale"]: scale_panel,
                    UI["tab_why"]: why_panel, UI["tab_nasa"]: lambda: (hazards_panel(), countermeasures_panel()),
-                   UI["tab_try"]: try_panel, UI["tab_sources"]: sources_panel, UI["tab_emergency"]: emergency_panel}
+                   UI["tab_try"]: try_panel, UI["tab_sources"]: sources_panel, UI["tab_emergency"]: emergency_panel,
+                   UI["tab_tech"]: tech_standalone}
     st.caption(UI[_USE_KEYS[section]])
     _STANDALONE[section]()
     st.caption(version_stamp())
@@ -875,11 +901,6 @@ daily = next((c for c in today if c.get("capsule_type", "daily") == "daily"), No
 crits = {c.get("action", {}).get("criticality") for c in today if is_valid(c)}
 acting = any(c.get("action", {}).get("type") not in (None, "CONTINUE") for c in today if is_valid(c))
 style.field("critical" if "CRITICAL" in crits else "watch" if acting else "calm")
-_zone = None
-for _c in today:
-    if _c.get("capsule_type") == "emergency":
-        _m = re.search(r"zone: ([a-z]+)", _c.get("situation", ""))
-        _zone = _m.group(1) if _m else None
 _USE = {UI["tab_cmd"]: "use_cmd", UI["tab_body"]: "use_body", UI["tab_env"]: "use_env", UI["tab_trends"]: "use_trends", UI["tab_tech"]: "use_tech", UI["tab_scale"]: "use_scale",
         UI["tab_why"]: "use_why", UI["tab_nasa"]: "use_nasa", UI["tab_try"]: "use_try", UI["tab_sources"]: "use_sources"}
 if section in _USE:
@@ -902,23 +923,7 @@ if section == UI["tab_home"]:
         nominal(daily, day)
 elif section == UI["tab_cmd"]:
     commander_panel(day)
-elif section == UI["tab_body"]:
-    body_map(_zone, day)
-elif section == UI["tab_env"]:
-    habitat_panel()
-elif section == UI["tab_trends"]:
+else:   # only the three story sections reach this point (the others are standalone above)
+    assert section == UI["tab_trends"], section
     trends_panel(day)
-elif section == UI["tab_tech"]:
-    tech_page.tech_panel(UI, daily, read_json(os.path.join(OUT, "trends_histoire.json")), day)
-elif section == UI["tab_scale"]:
-    scale_panel()
-elif section == UI["tab_why"]:
-    why_panel()
-elif section == UI["tab_nasa"]:
-    hazards_panel()
-    countermeasures_panel()
-elif section == UI["tab_try"]:
-    try_panel()
-else:
-    sources_panel()
 st.caption(version_stamp())
