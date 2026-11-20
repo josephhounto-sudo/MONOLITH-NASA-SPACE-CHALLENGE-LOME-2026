@@ -152,3 +152,9 @@ Les huit autres risques (os, muscles, vision, immunité, microbes, nutrition, so
 | 6 Corps 2,5D | perspective CSS + ombres + sol lumineux | capture 1400 |
 | 7 Graphes | phrase de lecture Habitat et Tendances | tests |
 | Non fait | délégation du bot à Gemini (écrit par Claude) ; détection de clignement (affichée « en développement ») ; idée I1 signal commun ; jauge radiation ; Doto sur la frise des jours | — |
+
+## 12. Session longue, suite (20/11/2026, 07:00 UTC) — main = f062911
+- Corps : vrai 3D construit en code (three.js 0.187.0, sphères et capsules, aucun modèle téléchargé), zone mesurée pleine, zone non mesurée estompée, zone choisie en lueur orange, rotation au doigt ; la carte 2D reste en secours sans WebGL. Vérifié : rendu WebGL sur l'URL publique (canvas présent), tests node.
+- Carte héros « CO2 par jour » de la référence : courbe lumineuse, pastilles de jours alignées sur les points, jour choisi en blanc, flèches de semaine, chiffre en Doto ; données réelles RR-1 (jours sans 12 h valides = manquants, jamais 0). Vérifié : capture 1400 px, URL publique.
+- Pilules en direct : icône Lucide en haut à droite et pastille d'écart à la limite (« ↓ 0,56 sous la limite »). Vérifié : URL publique.
+- Défaut trouvé et corrigé : sur l'app hébergée, une barre latérale repliée et mémorisée par le navigateur revenait sans bouton pour la rouvrir. Sur ordinateur, la barre ne se replie plus ; sur téléphone, le bouton existe (vérifié à 375 px).
