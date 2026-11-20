@@ -48,3 +48,11 @@ def test_model_zones_cover_every_band_and_match_the_sheets():
     assert [z(0, .9), z(.05, .7), z(.2, .6), z(.35, .55), z(.05, .5), z(.07, .2)] == [
         "region-head", "region-chest", "region-arm", "region-hand", "region-abdomen", "region-legs"]
     assert set(_node("B.ZONE_IDS")) == set(silhouette.fiches()) - {"region-body", "region-habitat"}
+
+
+def test_every_label_says_how_the_zone_is_measured_and_never_claims_a_missing_measure():
+    status = {rid: r["status"] for rid, r in silhouette.fiches().items()}
+    for rid, word in body3d.METHOD.items():
+        assert (status[rid] == "measured") == (word != "Not monitored yet"), rid
+    page = body3d.viewer_html(None, "Body", "Drag to turn")
+    assert "read at the wrist" in page and "onboard cuff" in page

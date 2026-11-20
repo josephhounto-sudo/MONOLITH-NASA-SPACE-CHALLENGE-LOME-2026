@@ -200,13 +200,21 @@ if (typeof document !== "undefined" && window.CS_BODY) {
     const calls = Object.entries(anchors).map(([rid, [x, y, z, side]]) => {
       const el = document.createElement("div");
       el.className = "co" + (rid === cfg.selected ? " sel" : "") + (cfg.status[rid] === "measured" ? "" : " off");
-      el.innerHTML = "<b>" + (cfg.labels[rid] || rid) + "</b><span>" + (cfg.status[rid] === "measured" ? cfg.measuredWord : cfg.offWord) + "</span>";
+      el.innerHTML = "<b>" + (cfg.labels[rid] || rid) + "</b><span>" + ((cfg.methods && cfg.methods[rid]) || (cfg.status[rid] === "measured" ? cfg.measuredWord : cfg.offWord)) + "</span>";
       overlay.appendChild(el);
       const line = document.createElementNS("http://www.w3.org/2000/svg", "path");
       line.setAttribute("class", "ld" + (rid === cfg.selected ? " sel" : ""));
       document.getElementById("leaders").appendChild(line);
       return { rid, v: new THREE.Vector3(x, y, z), side, el, line };
     });
+    // sensor points: a small light where each measured zone is read (no loop, no pulse: static marks)
+    for (const rid of cfg.sensors || []) {
+      const a = anchors[rid]; if (!a || cfg.status[rid] !== "measured") continue;
+      const dot = new THREE.Mesh(new THREE.SphereGeometry(0.045, 20, 14), new THREE.MeshBasicMaterial({ color: rid === cfg.selected ? SELECTED_GLOW : 0xFFE3C8 }));
+      dot.position.set(a[0], a[1], rid === "region-head" ? 0.33 : (a[2] || 0) + 0.12); body.add(dot);
+      const halo = new THREE.Mesh(new THREE.RingGeometry(0.06, 0.085, 32), new THREE.MeshBasicMaterial({ color: 0xFF8A4C, transparent: true, opacity: 0.8, side: THREE.DoubleSide }));
+      halo.position.copy(dot.position); body.add(halo);
+    }
     function placeCallouts() {
       const Wd = renderer.domElement.clientWidth, Hd = renderer.domElement.clientHeight;
       calls.forEach((c, i) => {

@@ -16,6 +16,13 @@ MODEL = ("https://cdn.jsdelivr.net/gh/KhronosGroup/glTF-Sample-Assets@f0920f5b32
          "/Models/CesiumMan/glTF-Binary/CesiumMan.glb")
 MODEL_CREDIT = "3D figure: Cesium Man by Cesium, CC BY 4.0 (Khronos glTF Sample Assets)"
 HEIGHT = 640
+# How each zone is measured, read from the zone sheets' "how" field (pitch/silhouette/fiches.json); shown on the 3D labels
+# so the figure answers one question: what is measured where, and by what. Zones not measured say so.
+METHOD = {"region-head": "Daily check-in + reaction test", "region-chest": "Heart rate · read at the wrist, automatic",
+          "region-arm": "Blood pressure · onboard cuff, in a procedure", "region-hand": "Glucose · onboard meter, in a procedure",
+          "region-abdomen": "Not monitored yet", "region-legs": "Not monitored yet"}
+# Zones that get a light point on the figure
+SENSOR_ZONES = ("region-chest", "region-head")   # arm and hand anchors sit under their own labels at narrow widths
 
 
 def viewer_html(selected: str | None, caption: str, hint: str) -> str:
@@ -27,8 +34,11 @@ def viewer_html(selected: str | None, caption: str, hint: str) -> str:
     with open(os.path.join(ASSETS, "body3d.js"), encoding="utf-8") as fh:
         js = fh.read()
     labels = {rid: silhouette.label(rid) for rid in status}
+    for rid, word in METHOD.items():
+        assert (status[rid] == "measured") == (word != "Not monitored yet"), rid   # a label never claims a measure the sheet does not
+
     cfg = {"model": MODEL, "status": status, "selected": selected, "fallback": silhouette.svg(selected),
-           "labels": labels, "words": silhouette.STATUS_WORD, "measuredWord": "Measured", "offWord": "Not monitored yet"}
+           "labels": labels, "methods": METHOD, "sensors": list(SENSOR_ZONES), "words": silhouette.STATUS_WORD, "measuredWord": "Measured", "offWord": "Not monitored yet"}
     return f"""<!doctype html><html><head><meta charset='utf-8'><style>
 html,body{{margin:0;height:100%;background:transparent;font:14px/1.4 system-ui,-apple-system,Segoe UI,sans-serif;color:#FFFDFD}}
 #wrap{{position:relative;height:{HEIGHT - 8}px;border-radius:36px;overflow:hidden;
