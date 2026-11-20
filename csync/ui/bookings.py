@@ -96,6 +96,9 @@ html,body,[data-testid="stApp"]{{background:
 .st-key-cs-weekcard [data-testid^="stBaseButton"]{{width:44px;height:44px;min-height:44px;padding:0!important;border-radius:999px!important}}
 .cs-wk-v{{display:flex;align-items:baseline;gap:10px;margin:4px 0 0}} .cs-wk-v .cs-num{{font-size:44px;line-height:1}}
 .cs-wk-n{{font-size:.92rem;margin:.3em 0 0}} .cs-wk-r{{text-align:center;font-size:1.05rem;margin:.55em 0 0}}
+/* on a computer the navigation stays open: on the hosted app a collapsed sidebar (remembered by the browser) came back
+   with no button to reopen it (seen 20/11/2026 06:50 UTC); phones keep their close button */
+@media (min-width:900px){{[data-testid="stSidebarCollapseButton"]{{display:none!important}}}}
 .cs-card.ctx{{background:rgba(34,27,23,.86)!important;border:1.5px dashed rgba(255,253,253,.38)!important}}
 """
 
